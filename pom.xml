@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.mycompany</groupId>
+    <artifactId>joseabelSistema</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>AbsoluteLayout</groupId>
+            <artifactId>AbsoluteLayout</artifactId>
+            <version>1.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>mysql-connector-j-9.2.0</groupId>
+            <artifactId>mysql-connector-j-9.2.0</artifactId>
+            <version>9.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>NefAnimacion_V2.1_jdk18</groupId>
+            <artifactId>NefAnimacion_V2.1_jdk18</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>RojeruSan.lib</groupId>
+            <artifactId>RojeruSan.lib</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>RojeruSan.parte1</groupId>
+            <artifactId>RojeruSan.parte1</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>RSMaterialComponents_3.0</groupId>
+            <artifactId>RSMaterialComponents_3.0</artifactId>
+            <version>3.0</version>
+        </dependency>
+    </dependencies>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>23</maven.compiler.release>
+        <exec.mainClass>com.mycompany.joseabelsistema.JoseabelSistema</exec.mainClass>
+    </properties>
+</project>
