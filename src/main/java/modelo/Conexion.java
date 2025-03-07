@@ -16,7 +16,7 @@ public class Conexion {
    public static Connection getConnection() {
       Connection con = null; 
         try {
-        String myBD = "jdbc:mysql://localhost:3306/carpinteriasistena1?serverTimezone=UTC";
+        String myBD = "jdbc:mysql://localhost:3306/carpinteriasistema?serverTimezone=UTC";
          con = DriverManager.getConnection(myBD, "root", ""); 
          System.out.println("Conexión exitosa.");
         } catch (SQLException e) {
