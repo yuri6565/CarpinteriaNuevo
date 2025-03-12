@@ -63,7 +63,8 @@ public class Principal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         seis = new rojeru_san.RSButton();
-        siete = new rojeru_san.RSButton();
+        ocho = new rojeru_san.RSButton();
+        siete1 = new rojeru_san.RSButton();
         contenedor = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -180,17 +181,29 @@ public class Principal extends javax.swing.JFrame {
         });
         jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 260, 60));
 
-        siete.setBackground(new java.awt.Color(29, 30, 51));
-        siete.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        siete.setText("Gestion de usuarios");
-        siete.setColorHover(new java.awt.Color(128, 128, 128));
-        siete.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        siete.addActionListener(new java.awt.event.ActionListener() {
+        ocho.setBackground(new java.awt.Color(29, 30, 51));
+        ocho.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        ocho.setText("Gestion de clientes");
+        ocho.setColorHover(new java.awt.Color(128, 128, 128));
+        ocho.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        ocho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sieteActionPerformed(evt);
+                ochoActionPerformed(evt);
             }
         });
-        jPanel3.add(siete, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 260, 60));
+        jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 260, 60));
+
+        siete1.setBackground(new java.awt.Color(29, 30, 51));
+        siete1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        siete1.setText("Gestion de usuarios");
+        siete1.setColorHover(new java.awt.Color(128, 128, 128));
+        siete1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        siete1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                siete1ActionPerformed(evt);
+            }
+        });
+        jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 260, 60));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 260, 800));
 
@@ -224,20 +237,33 @@ public class Principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void sieteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sieteActionPerformed
-                 if(!this.siete.isSelected()) {
-   this.uno.setSelected(false);
-      this.dos.setSelected(false);
-         this.tres.setSelected(false);
+    private void ochoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ochoActionPerformed
+        if (!this.ocho.isSelected()) {
+            this.uno.setSelected(false);
+            this.dos.setSelected(false);
+            this.tres.setSelected(false);
             this.cuatro.setSelected(false);
-               this.cinco.setSelected(false);
-                  this.seis.setSelected(false);
-                   
+            this.cinco.setSelected(false);
+            this.seis.setSelected(false);
+             this.ocho.setSelected(true);
+          
+             
+            Cliente cliente = new Cliente();
+            cliente.setSize(1290, 730);
+            cliente.setLocation(0, 0);
+
+            contenedor.removeAll();
+            contenedor.add(cliente);
+            contenedor.revalidate();
+            contenedor.repaint();
+
+            
+
                   
     
                   
     } 
-    }//GEN-LAST:event_sieteActionPerformed
+    }//GEN-LAST:event_ochoActionPerformed
 
     private void seisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seisActionPerformed
          if(!this.seis.isSelected()) {
@@ -246,7 +272,7 @@ public class Principal extends javax.swing.JFrame {
          this.tres.setSelected(false);
             this.cuatro.setSelected(false);
                this.cinco.setSelected(false);
-                  this.siete.setSelected(false);
+                  this.ocho.setSelected(false);
                   
     caja box = new caja();
         box.setSize(1290,730 );
@@ -266,7 +292,7 @@ public class Principal extends javax.swing.JFrame {
          this.tres.setSelected(false);
             this.cuatro.setSelected(false);
                this.seis.setSelected(false);
-                  this.siete.setSelected(false);
+                  this.ocho.setSelected(false);
                   
     
     }    
@@ -279,7 +305,7 @@ public class Principal extends javax.swing.JFrame {
          this.tres.setSelected(false);
             this.cinco.setSelected(false);
                this.seis.setSelected(false);
-                  this.siete.setSelected(false);
+                  this.ocho.setSelected(false);
           }            
     
     }//GEN-LAST:event_cuatroActionPerformed
@@ -292,7 +318,7 @@ public class Principal extends javax.swing.JFrame {
          this.cuatro.setSelected(false);
             this.cinco.setSelected(false);
                this.seis.setSelected(false);
-                  this.siete.setSelected(false);
+                  this.ocho.setSelected(false);
 proveedores pr = new proveedores();
         pr.setSize(1290,730 );
         pr.setLocation(0,0);
@@ -307,14 +333,14 @@ proveedores pr = new proveedores();
     }//GEN-LAST:event_tresActionPerformed
 
     private void unoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unoActionPerformed
-  if(!this.uno.isSelected()) {
-    this.uno.setSelected(true);   
-   this.dos.setSelected(false);
-      this.tres.setSelected(false);
-         this.cuatro.setSelected(false);
+        if (!this.uno.isSelected()) {
+            this.uno.setSelected(true);
+            this.dos.setSelected(false);
+            this.tres.setSelected(false);
+            this.cuatro.setSelected(false);
             this.cinco.setSelected(false);
-               this.seis.setSelected(false);
-                  this.siete.setSelected(false);
+            this.seis.setSelected(false);
+            this.ocho.setSelected(false);
     Escritorio1 es = new Escritorio1();
         es.setSize(890,690 );
         es.setLocation(0,0);
@@ -335,7 +361,7 @@ proveedores pr = new proveedores();
          this.cuatro.setSelected(false);
             this.cinco.setSelected(false);
                this.seis.setSelected(false);
-                  this.siete.setSelected(false);
+                  this.ocho.setSelected(false);
                   this.dos.setSelected(true);
                   
                           // Crear y mostrar el panel de inventario
@@ -364,6 +390,10 @@ proveedores pr = new proveedores();
       
     }
     }//GEN-LAST:event_menuActionPerformed
+
+    private void siete1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siete1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_siete1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -414,8 +444,9 @@ proveedores pr = new proveedores();
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private rojeru_san.RSButton menu;
+    private rojeru_san.RSButton ocho;
     private rojeru_san.RSButton seis;
-    private rojeru_san.RSButton siete;
+    private rojeru_san.RSButton siete1;
     private rojeru_san.RSButton tres;
     private rojeru_san.RSButton uno;
     // End of variables declaration//GEN-END:variables
