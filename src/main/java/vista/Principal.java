@@ -11,6 +11,7 @@ import java.io.File;
 import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import rojeru_san.RSButton;
@@ -24,13 +25,45 @@ public class Principal extends javax.swing.JFrame {
 
     public Principal() { 
         initComponents();
- 
+        
+                // Maximizar el JFrame para que ocupe toda la pantalla
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        // Centrar el JFrame (opcional, ya que maximizarlo ocupa toda la pantalla)
+        setLocationRelativeTo(null);
+
+        // Ajustar el tamaño de los paneles al tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
+        // Ajustar el tamaño de jPanel1 (el panel principal) al tamaño de la pantalla
+        jPanel1.setPreferredSize(new Dimension(screenWidth, screenHeight));
+
+        // Ajustar el tamaño de jPanel2 (la barra superior) para que ocupe todo el ancho
+        jPanel2.setPreferredSize(new Dimension(screenWidth, 80));
+
+        // Ajustar el tamaño de jPanel3 (el menú lateral) para que tenga un ancho fijo y altura proporcional
+        jPanel3.setPreferredSize(new Dimension(260, screenHeight - 10));
+
+        // Ajustar el tamaño del contenedor para que ocupe el espacio restante
+        int contenedorWidth = screenWidth - 260; // Restar el ancho del menú lateral
+        int contenedorHeight = screenHeight - 80; // Restar la altura de la barra superior
+        contenedor.setPreferredSize(new Dimension(contenedorWidth, contenedorHeight));
+
+        // Ajustar las posiciones usando AbsoluteConstraints
+        jPanel1.removeAll(); // Limpiar el layout para reorganizar
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, screenWidth, 80));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 260, screenHeight - 10));
+        jPanel1.add(contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, contenedorWidth, contenedorHeight));
+
+        // Seleccionar el botón "uno" por defecto y cargar el panel Escritorio1
         this.uno.setSelected(true);
-        
         Escritorio1 es = new Escritorio1();
-        es.setSize(890,690 );
-        es.setLocation(0,0);
-        
+        es.setSize(contenedorWidth, contenedorHeight); // Ajustar tamaño dinámicamente
+        es.setLocation(0, 0);
+
         contenedor.removeAll();
         contenedor.add(es, BorderLayout.CENTER);
         contenedor.revalidate();
