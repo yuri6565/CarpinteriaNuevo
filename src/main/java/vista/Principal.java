@@ -232,8 +232,10 @@ public class Principal extends javax.swing.JFrame {
             this.cuatro.setSelected(false);
                this.cinco.setSelected(false);
                   this.seis.setSelected(false);
+                   
                   
     
+                  
     } 
     }//GEN-LAST:event_sieteActionPerformed
 
@@ -246,7 +248,14 @@ public class Principal extends javax.swing.JFrame {
                this.cinco.setSelected(false);
                   this.siete.setSelected(false);
                   
-    
+    caja box = new caja();
+        box.setSize(1290,730 );
+        box.setLocation(0,0);
+        
+        contenedor.removeAll();
+        contenedor.add(box);
+        contenedor.revalidate();
+        contenedor.repaint();
     } 
     }//GEN-LAST:event_seisActionPerformed
 
@@ -284,7 +293,15 @@ public class Principal extends javax.swing.JFrame {
             this.cinco.setSelected(false);
                this.seis.setSelected(false);
                   this.siete.setSelected(false);
-
+proveedores pr = new proveedores();
+        pr.setSize(1290,730 );
+        pr.setLocation(0,0);
+        
+        contenedor.removeAll();
+        contenedor.add(pr);
+        contenedor.revalidate();
+        contenedor.repaint();
+                  
           }            
            
     }//GEN-LAST:event_tresActionPerformed
