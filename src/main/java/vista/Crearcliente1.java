@@ -150,17 +150,21 @@ public class Crearcliente1 extends javax.swing.JDialog {
 
     private void rSButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButton2ActionPerformed
       
-       Cliente cliente = new Cliente();
-        Ctrl_Cliente controclie = new Ctrl_Cliente();
-      
-if(controclie.guardar(cliente )){
-     JOptionPane.showMessageDialog(null, "se guardo correctamente en la base de datos");
-        
-        
-    }else{
-     JOptionPane.showMessageDialog(null, "Error 'brayan tonto");
-}
-        
+        Cliente cliente = new Cliente();
+        cliente.setIdentificacion(identificaciontxt.getSelectedItem().toString());
+        cliente.setNumero(Integer.parseInt(numerotxt.getText()));
+        cliente.setNombre(nombretxt.getText());
+        cliente.setApellido(apellidotxt.getText());
+        cliente.setTelefono(telefonotxt.getText());
+        cliente.setDireccion(direcciontxt.getText());
+
+        Ctrl_Cliente contro = new Ctrl_Cliente();
+        if (contro.guardar(cliente)) {
+            JOptionPane.showMessageDialog(null, "Se guardó correctamente en la base de datos");
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al guardar");
+        }
+
   
     }//GEN-LAST:event_rSButton2ActionPerformed
 
