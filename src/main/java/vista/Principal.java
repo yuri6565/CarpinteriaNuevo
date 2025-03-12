@@ -156,7 +156,7 @@ public class Principal extends javax.swing.JFrame {
 
         tres.setBackground(new java.awt.Color(29, 30, 51));
         tres.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        tres.setText("Gestion de proveedores");
+        tres.setText("Proveedores");
         tres.setColorHover(new java.awt.Color(128, 128, 128));
         tres.setColorTextHover(new java.awt.Color(0, 0, 0));
         tres.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
