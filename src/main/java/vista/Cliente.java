@@ -144,8 +144,15 @@ public class Cliente extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-     CrearCliente crearcliente = new CrearCliente();
-     crearcliente.setVisible(true); 
+ Crearcliente1 dialog = new Crearcliente1(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+        
+        
+   
+   
+        
+   
        
     }//GEN-LAST:event_btnNuevoActionPerformed
 

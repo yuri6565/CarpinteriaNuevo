@@ -10,9 +10,9 @@ package modelo;
  */
 public class Cliente {
     private int codigo;
-    private String nombre;
     private String identificacion;
     private int numero;
+    private String nombre;
     private String apellido;
     private String telefono;
     private String direccion;
@@ -21,20 +21,20 @@ public class Cliente {
     
       public Cliente() {
         this.codigo = 0;
-        this.nombre = "";
         this.identificacion = "";
         this.numero = 0;
+        this.nombre = "";
         this.apellido = "";
         this.telefono = "";
         this.direccion = "";
         
       }
 
-    public Cliente(int codigo, String nombre, String identificacion, int numero, String apellido, String telefono, String direccion) {
+    public Cliente(int codigo, String identificacion, int numero, String nombre, String apellido, String telefono, String direccion) {
         this.codigo = codigo;
-        this.nombre = nombre;
         this.identificacion = identificacion;
         this.numero = numero;
+        this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.direccion = direccion;
@@ -46,14 +46,6 @@ public class Cliente {
 
     public void setCodigo(int codigo) {
         this.codigo = codigo;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public String getIdentificacion() {
@@ -70,6 +62,14 @@ public class Cliente {
 
     public void setNumero(int numero) {
         this.numero = numero;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getApellido() {
@@ -96,6 +96,7 @@ public class Cliente {
         this.direccion = direccion;
     }
 
+ 
    
     
    

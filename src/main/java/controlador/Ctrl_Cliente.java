@@ -25,7 +25,7 @@ public class Ctrl_Cliente {
      Connection cn= Conexion.getConnection();
      
      try{
-     PreparedStatement consulta = cn.prepareStatement("INSERT INTO `cliente`(`identificacion`, `numero`, `nombre`, `apellido`, `telefono`, `direccion`) VALUES ?,?,?,?,?,?'");
+     PreparedStatement consulta = cn.prepareStatement("INSERT INTO  cliente VALUES ?,?,?,?,?,?'");
      consulta.setInt(1, 0);
      consulta.setString(2, objeto.getIdentificacion());
      consulta.setInt(3, objeto.getNumero());
@@ -41,8 +41,8 @@ public class Ctrl_Cliente {
      cn.close();
          
      }catch(SQLException e){
-            System.out.println("error al conectar la base de datos, no se encuentra");
-            JOptionPane.showMessageDialog(null, "error a inciiar sesion");
+           
+            JOptionPane.showMessageDialog(null, "error no se encuentra la base de datos");
         }
         return respuesta;
     
