@@ -19,8 +19,6 @@ public class movimientos extends javax.swing.JPanel {
         initComponents();
     }
 
-
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,11 +37,11 @@ public class movimientos extends javax.swing.JPanel {
         btnNuevo = new rojeru_san.RSButtonRiple();
         btnEditar = new rojeru_san.RSButtonRiple();
 
-        setPreferredSize(new java.awt.Dimension(960, 570));
+        setPreferredSize(new java.awt.Dimension(1240, 580));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(237, 241, 255));
-        jPanel1.setPreferredSize(new java.awt.Dimension(960, 570));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1240, 580));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtBuscar.setForeground(new java.awt.Color(0, 0, 0));
@@ -72,7 +70,7 @@ public class movimientos extends javax.swing.JPanel {
                 btnEliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 500, 110, 30));
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 30, 110, 30));
 
         rSTableMetroCustom1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -112,12 +110,12 @@ public class movimientos extends javax.swing.JPanel {
         rSTableMetroCustom1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         rSTableMetroCustom1.setFontHead(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         rSTableMetroCustom1.setFontRowHover(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        rSTableMetroCustom1.setFontRowSelect(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        rSTableMetroCustom1.setFontRowSelect(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         rSTableMetroCustom1.setSelectionBackground(new java.awt.Color(67, 150, 209));
         jScrollPane2.setViewportView(rSTableMetroCustom1);
         rSTableMetroCustom1.getColumnModel().getColumn(0).setPreferredWidth(10);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 120, 960, 170));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 1130, 330));
 
         btnNuevo.setBackground(new java.awt.Color(46, 49, 82));
         btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
@@ -127,7 +125,7 @@ public class movimientos extends javax.swing.JPanel {
                 btnNuevoActionPerformed(evt);
             }
         });
-        jPanel1.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 500, 100, 30));
+        jPanel1.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 30, 100, 30));
 
         btnEditar.setBackground(new java.awt.Color(46, 49, 82));
         btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil (1).png"))); // NOI18N
@@ -137,9 +135,9 @@ public class movimientos extends javax.swing.JPanel {
                 btnEditarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 500, 100, 30));
+        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 30, 100, 30));
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, -1));
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1240, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
@@ -157,7 +155,7 @@ public class movimientos extends javax.swing.JPanel {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
 

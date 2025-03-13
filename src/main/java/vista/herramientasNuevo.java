@@ -4,42 +4,29 @@
  */
 package vista;
 
-import RSMaterialComponent.RSComboBoxMaterial;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import modelo.MaterialDatos;
-import vista.materiales;
+import modelo.HerramientaDatos;
 
 /**
  *
  * @author ZenBook
  */
-public class nuevoMateriales extends javax.swing.JDialog {
-private materiales principalPanel;
-private materiales materialesPanel;
-
-  public boolean materialGuardado = false;
-  public MaterialDatos material;
-
+public class herramientasNuevo extends javax.swing.JDialog {
+  public boolean herramientaGuardado = false;
+  public HerramientaDatos herramienta;
     /**
-     * Creates new form nuevoMateriales
+     * Creates new form herramientasNuevo
      */
-    public nuevoMateriales(java.awt.Frame parent, boolean modal) {
+    public herramientasNuevo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setTitle("Nuevo Material");
+        setTitle("Nuevo herramienta");
     }
- 
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -56,22 +43,21 @@ private materiales materialesPanel;
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         btnSubirImagen = new rojeru_san.RSButton();
         txtCodigo = new RSMaterialComponent.RSTextFieldMaterial();
-        cmbUnidad = new RSMaterialComponent.RSComboBoxMaterial();
+        cmbEstado = new RSMaterialComponent.RSComboBoxMaterial();
         txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
-        txtDescripcion = new RSMaterialComponent.RSTextFieldMaterial();
-        cmbCategoria = new RSMaterialComponent.RSComboBoxMaterial();
-        txtCantidad = new RSMaterialComponent.RSTextFieldMaterial();
+        cmbMarca = new RSMaterialComponent.RSComboBoxMaterial();
         btnCancelar = new rojeru_san.RSButtonRiple();
         btnGuardar = new rojeru_san.RSButtonRiple();
         lblImagen = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        cmbTipo = new RSMaterialComponent.RSComboBoxMaterial();
+        txtDetalles = new RSMaterialComponent.RSTextFieldOne();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         panelP.setBackground(new java.awt.Color(255, 255, 255));
         panelP.setPreferredSize(new java.awt.Dimension(500, 500));
@@ -82,7 +68,7 @@ private materiales materialesPanel;
 
         jLabel1.setFont(new java.awt.Font("Century751 BT", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Agregar material");
+        jLabel1.setText("Agregar herramienta");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         panelP.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
@@ -96,20 +82,16 @@ private materiales materialesPanel;
         panelP.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 60, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel4.setText("Categoria:");
+        jLabel4.setText("Marca:");
         panelP.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 140, -1, 20));
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel5.setText("Descripcion:");
-        panelP.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, -1));
-
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel6.setText("Unidad de medida:");
+        jLabel6.setText("Estado:");
         panelP.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel7.setText("Cantidad:");
-        panelP.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, -1, -1));
+        jLabel7.setText("Detalles");
+        panelP.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, -1, -1));
 
         btnSubirImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/up-arrow (1).png"))); // NOI18N
         btnSubirImagen.setText(" Subir imagen");
@@ -118,7 +100,7 @@ private materiales materialesPanel;
                 btnSubirImagenActionPerformed(evt);
             }
         });
-        panelP.add(btnSubirImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, 150, 30));
+        panelP.add(btnSubirImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 210, 150, 30));
 
         txtCodigo.setForeground(new java.awt.Color(0, 0, 0));
         txtCodigo.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -128,14 +110,14 @@ private materiales materialesPanel;
         txtCodigo.setSelectionColor(new java.awt.Color(0, 0, 0));
         panelP.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 200, 30));
 
-        cmbUnidad.setColorMaterial(new java.awt.Color(0, 0, 0));
-        cmbUnidad.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        cmbUnidad.addActionListener(new java.awt.event.ActionListener() {
+        cmbEstado.setColorMaterial(new java.awt.Color(0, 0, 0));
+        cmbEstado.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        cmbEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbUnidadActionPerformed(evt);
+                cmbEstadoActionPerformed(evt);
             }
         });
-        panelP.add(cmbUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, 30));
+        panelP.add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, 30));
 
         txtNombre.setForeground(new java.awt.Color(0, 0, 0));
         txtNombre.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -150,41 +132,15 @@ private materiales materialesPanel;
         });
         panelP.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 200, 30));
 
-        txtDescripcion.setForeground(new java.awt.Color(0, 0, 0));
-        txtDescripcion.setColorMaterial(new java.awt.Color(0, 0, 0));
-        txtDescripcion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtDescripcion.setPhColor(new java.awt.Color(0, 0, 0));
-        txtDescripcion.setPlaceholder("Ingrese el detalle...");
-        txtDescripcion.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtDescripcion.addActionListener(new java.awt.event.ActionListener() {
+        cmbMarca.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Categoría 1", "Categoría 2", "Categoría 3" }));
+        cmbMarca.setColorMaterial(new java.awt.Color(0, 0, 0));
+        cmbMarca.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        cmbMarca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDescripcionActionPerformed(evt);
+                cmbMarcaActionPerformed(evt);
             }
         });
-        panelP.add(txtDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 200, 30));
-
-        cmbCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Categoría 1", "Categoría 2", "Categoría 3" }));
-        cmbCategoria.setColorMaterial(new java.awt.Color(0, 0, 0));
-        cmbCategoria.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        cmbCategoria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbCategoriaActionPerformed(evt);
-            }
-        });
-        panelP.add(cmbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 170, 200, 30));
-
-        txtCantidad.setForeground(new java.awt.Color(0, 0, 0));
-        txtCantidad.setColorMaterial(new java.awt.Color(0, 0, 0));
-        txtCantidad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtCantidad.setPhColor(new java.awt.Color(0, 0, 0));
-        txtCantidad.setPlaceholder("Ingrese la cantidad...");
-        txtCantidad.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtCantidad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCantidadActionPerformed(evt);
-            }
-        });
-        panelP.add(txtCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 200, 30));
+        panelP.add(cmbMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 170, 200, 30));
 
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar.setText("Cancelar");
@@ -210,37 +166,64 @@ private materiales materialesPanel;
 
         lblImagen.setBackground(new java.awt.Color(153, 204, 255));
         lblImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        panelP.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 280, 190, 110));
+        panelP.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 250, 190, 140));
 
-        getContentPane().add(panelP, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 480));
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel5.setText("Tipo:");
+        panelP.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, 20));
+
+        cmbTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Categoría 1", "Categoría 2", "Categoría 3" }));
+        cmbTipo.setColorMaterial(new java.awt.Color(0, 0, 0));
+        cmbTipo.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        cmbTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTipoActionPerformed(evt);
+            }
+        });
+        panelP.add(cmbTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 200, 30));
+
+        txtDetalles.setForeground(new java.awt.Color(0, 0, 0));
+        txtDetalles.setBorderColor(new java.awt.Color(204, 204, 204));
+        txtDetalles.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txtDetalles.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtDetalles.setPhColor(new java.awt.Color(0, 0, 0));
+        txtDetalles.setPlaceholder("Ingrese el detalle...");
+        txtDetalles.setSelectionColor(new java.awt.Color(102, 102, 102));
+        txtDetalles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDetallesActionPerformed(evt);
+            }
+        });
+        panelP.add(txtDetalles, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 200, 50));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 490, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(panelP, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 481, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(panelP, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cmbUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbUnidadActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbUnidadActionPerformed
-
-    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreActionPerformed
-
-    private void txtDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcionActionPerformed
-
-    private void cmbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCategoriaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbCategoriaActionPerformed
-
-    private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCantidadActionPerformed
-
     private void btnSubirImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirImagenActionPerformed
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "png", "jpeg"));
-        
+
         int opcion = fileChooser.showOpenDialog(null);
         if (opcion == JFileChooser.APPROVE_OPTION) {
             File archivo = fileChooser.getSelectedFile();
@@ -250,54 +233,61 @@ private materiales materialesPanel;
         }
     }//GEN-LAST:event_btnSubirImagenActionPerformed
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-    String codigo = txtCodigo.getText();
-    String nombre = txtNombre.getText();
-    String descripcion = txtDescripcion.getText();
-    String unidadMedida = (String) cmbUnidad.getSelectedItem();
-    String categoria = (String) cmbCategoria.getSelectedItem();
-    
-
-    
-    // Validar que los campos obligatorios no estén vacíos
-    if (codigo.isEmpty() || nombre.isEmpty() || descripcion.isEmpty() || unidadMedida == null || categoria == null) {
-        JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    
-    // Manejo de cantidad
-    int cantidad;
-    try {
-        cantidad = Integer.parseInt(txtCantidad.getText().trim());
-        if (cantidad < 0) {
-            JOptionPane.showMessageDialog(this, "La cantidad no puede ser negativa.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Ingrese un número válido en la cantidad.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-        // Verificar si hay una imagen seleccionada
-    if (lblImagen.getIcon() == null) {
-        JOptionPane.showMessageDialog(this, "Por favor, suba una imagen antes de guardar.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    ImageIcon imagenSeleccionada = (ImageIcon) lblImagen.getIcon();
-
-
-    // Creación del objeto Material
-    material = new MaterialDatos(codigo, nombre, descripcion, unidadMedida, categoria, cantidad, imagenSeleccionada);
-    // Verificar si el panel principal está inicializado
-    materialGuardado = true;
-    dispose();
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        materialGuardado = false;
+        herramientaGuardado = false;
         dispose(); // Cierra la ventana emergente
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        String codigo = txtCodigo.getText();
+        String nombre = txtNombre.getText();
+        String tipo = (String) cmbTipo.getSelectedItem();
+        String marca = (String) cmbMarca.getSelectedItem();
+        String estado = (String) cmbEstado.getSelectedItem();
+        String detalles =txtDetalles.getText();
+
+        // Validar que los campos obligatorios no estén vacíos
+        if (codigo.isEmpty() || nombre.isEmpty() || tipo == null || marca == null || estado == null || detalles.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Manejo de cantidad
+
+
+        // Verificar si hay una imagen seleccionada
+        if (lblImagen.getIcon() == null) {
+            JOptionPane.showMessageDialog(this, "Por favor, suba una imagen antes de guardar.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        ImageIcon imagenSeleccionada = (ImageIcon) lblImagen.getIcon();
+
+        // Creación del objeto Material
+        herramienta = new HerramientaDatos(codigo, nombre, tipo, marca, estado, detalles, imagenSeleccionada);
+        // Verificar si el panel principal está inicializado
+        herramientaGuardado = true;
+        dispose();
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void cmbMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMarcaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbMarcaActionPerformed
+
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreActionPerformed
+
+    private void cmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbEstadoActionPerformed
+
+    private void cmbTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbTipoActionPerformed
+
+    private void txtDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDetallesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDetallesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -316,20 +306,20 @@ private materiales materialesPanel;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(nuevoMateriales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientasNuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(nuevoMateriales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientasNuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(nuevoMateriales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientasNuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(nuevoMateriales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientasNuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                nuevoMateriales dialog = new nuevoMateriales(new javax.swing.JFrame(), true);
+                herramientasNuevo dialog = new herramientasNuevo(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -345,8 +335,9 @@ private materiales materialesPanel;
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
     private rojeru_san.RSButton btnSubirImagen;
-    private RSMaterialComponent.RSComboBoxMaterial cmbCategoria;
-    private RSMaterialComponent.RSComboBoxMaterial cmbUnidad;
+    private RSMaterialComponent.RSComboBoxMaterial cmbEstado;
+    private RSMaterialComponent.RSComboBoxMaterial cmbMarca;
+    private RSMaterialComponent.RSComboBoxMaterial cmbTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -357,9 +348,8 @@ private materiales materialesPanel;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblImagen;
     private javax.swing.JPanel panelP;
-    private RSMaterialComponent.RSTextFieldMaterial txtCantidad;
     private RSMaterialComponent.RSTextFieldMaterial txtCodigo;
-    private RSMaterialComponent.RSTextFieldMaterial txtDescripcion;
+    private RSMaterialComponent.RSTextFieldOne txtDetalles;
     private RSMaterialComponent.RSTextFieldMaterial txtNombre;
     // End of variables declaration//GEN-END:variables
 }

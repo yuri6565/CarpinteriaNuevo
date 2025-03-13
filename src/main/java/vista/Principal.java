@@ -13,6 +13,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 
 import rojeru_san.RSButton;
 
@@ -25,6 +26,9 @@ public class Principal extends javax.swing.JFrame {
 
     public Principal() { 
         initComponents();
+
+      
+        this.uno.setSelected(true);
         
                 // Maximizar el JFrame para que ocupe toda la pantalla
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -399,7 +403,7 @@ proveedores pr = new proveedores();
                   
                           // Crear y mostrar el panel de inventario
         Inventario in = new Inventario();
-        in.setSize(1090,690 );
+        in.setSize(1290,730);
         in.setLocation(0,0);
         
         contenedor.removeAll();
@@ -456,6 +460,8 @@ proveedores pr = new proveedores();
         //</editor-fold>
         //</editor-fold>
 
+        
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
