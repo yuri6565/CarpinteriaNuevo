@@ -11,6 +11,7 @@ import java.io.File;
 import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
@@ -25,14 +26,48 @@ public class Principal extends javax.swing.JFrame {
 
     public Principal() { 
         initComponents();
- 
 
+      
         this.uno.setSelected(true);
         
+                // Maximizar el JFrame para que ocupe toda la pantalla
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        // Centrar el JFrame (opcional, ya que maximizarlo ocupa toda la pantalla)
+        setLocationRelativeTo(null);
+
+        // Ajustar el tamaño de los paneles al tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
+        // Ajustar el tamaño de jPanel1 (el panel principal) al tamaño de la pantalla
+        jPanel1.setPreferredSize(new Dimension(screenWidth, screenHeight));
+
+        // Ajustar el tamaño de jPanel2 (la barra superior) para que ocupe todo el ancho
+        jPanel2.setPreferredSize(new Dimension(screenWidth, 80));
+
+        // Ajustar el tamaño de jPanel3 (el menú lateral) para que tenga un ancho fijo y altura proporcional
+        jPanel3.setPreferredSize(new Dimension(260, screenHeight - 10));
+
+        // Ajustar el tamaño del contenedor para que ocupe el espacio restante
+        int contenedorWidth = screenWidth - 260; // Restar el ancho del menú lateral
+        int contenedorHeight = screenHeight - 80; // Restar la altura de la barra superior
+        contenedor.setPreferredSize(new Dimension(contenedorWidth, contenedorHeight));
+
+        // Ajustar las posiciones usando AbsoluteConstraints
+        jPanel1.removeAll(); // Limpiar el layout para reorganizar
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, screenWidth, 80));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 260, screenHeight - 10));
+        jPanel1.add(contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, contenedorWidth, contenedorHeight));
+
+        // Seleccionar el botón "uno" por defecto y cargar el panel Escritorio1
+        this.uno.setSelected(true);
         Escritorio1 es = new Escritorio1();
-        es.setSize(890,690 );
-        es.setLocation(0,0);
-        
+        es.setSize(contenedorWidth, contenedorHeight); // Ajustar tamaño dinámicamente
+        es.setLocation(0, 0);
+
         contenedor.removeAll();
         contenedor.add(es, BorderLayout.CENTER);
         contenedor.revalidate();
@@ -65,7 +100,8 @@ public class Principal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         seis = new rojeru_san.RSButton();
-        siete = new rojeru_san.RSButton();
+        ocho = new rojeru_san.RSButton();
+        siete1 = new rojeru_san.RSButton();
         contenedor = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -124,7 +160,7 @@ public class Principal extends javax.swing.JFrame {
 
         tres.setBackground(new java.awt.Color(29, 30, 51));
         tres.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        tres.setText("Gestion de proveedores");
+        tres.setText("Proveedores");
         tres.setColorHover(new java.awt.Color(128, 128, 128));
         tres.setColorTextHover(new java.awt.Color(0, 0, 0));
         tres.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -182,17 +218,29 @@ public class Principal extends javax.swing.JFrame {
         });
         jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 260, 60));
 
-        siete.setBackground(new java.awt.Color(29, 30, 51));
-        siete.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        siete.setText("Gestion de usuarios");
-        siete.setColorHover(new java.awt.Color(128, 128, 128));
-        siete.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        siete.addActionListener(new java.awt.event.ActionListener() {
+        ocho.setBackground(new java.awt.Color(29, 30, 51));
+        ocho.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        ocho.setText("Gestion de clientes");
+        ocho.setColorHover(new java.awt.Color(128, 128, 128));
+        ocho.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        ocho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sieteActionPerformed(evt);
+                ochoActionPerformed(evt);
             }
         });
-        jPanel3.add(siete, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 260, 60));
+        jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 260, 60));
+
+        siete1.setBackground(new java.awt.Color(29, 30, 51));
+        siete1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        siete1.setText("Gestion de usuarios");
+        siete1.setColorHover(new java.awt.Color(128, 128, 128));
+        siete1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        siete1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                siete1ActionPerformed(evt);
+            }
+        });
+        jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 260, 60));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 260, 800));
 
@@ -226,18 +274,33 @@ public class Principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void sieteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sieteActionPerformed
-                 if(!this.siete.isSelected()) {
-   this.uno.setSelected(false);
-      this.dos.setSelected(false);
-         this.tres.setSelected(false);
+    private void ochoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ochoActionPerformed
+        if (!this.ocho.isSelected()) {
+            this.uno.setSelected(false);
+            this.dos.setSelected(false);
+            this.tres.setSelected(false);
             this.cuatro.setSelected(false);
-               this.cinco.setSelected(false);
-                  this.seis.setSelected(false);
+            this.cinco.setSelected(false);
+            this.seis.setSelected(false);
+             this.ocho.setSelected(true);
+          
+             
+            Cliente cliente = new Cliente();
+            cliente.setSize(1290, 730);
+            cliente.setLocation(0, 0);
+
+            contenedor.removeAll();
+            contenedor.add(cliente);
+            contenedor.revalidate();
+            contenedor.repaint();
+
+            
+
                   
     
+                  
     } 
-    }//GEN-LAST:event_sieteActionPerformed
+    }//GEN-LAST:event_ochoActionPerformed
 
     private void seisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seisActionPerformed
          if(!this.seis.isSelected()) {
@@ -246,9 +309,16 @@ public class Principal extends javax.swing.JFrame {
          this.tres.setSelected(false);
             this.cuatro.setSelected(false);
                this.cinco.setSelected(false);
-                  this.siete.setSelected(false);
+                  this.ocho.setSelected(false);
                   
-    
+    caja box = new caja();
+        box.setSize(1290,730 );
+        box.setLocation(0,0);
+        
+        contenedor.removeAll();
+        contenedor.add(box);
+        contenedor.revalidate();
+        contenedor.repaint();
     } 
     }//GEN-LAST:event_seisActionPerformed
 
@@ -259,7 +329,7 @@ public class Principal extends javax.swing.JFrame {
          this.tres.setSelected(false);
             this.cuatro.setSelected(false);
                this.seis.setSelected(false);
-                  this.siete.setSelected(false);
+                  this.ocho.setSelected(false);
                   
     
     }    
@@ -272,7 +342,7 @@ public class Principal extends javax.swing.JFrame {
          this.tres.setSelected(false);
             this.cinco.setSelected(false);
                this.seis.setSelected(false);
-                  this.siete.setSelected(false);
+                  this.ocho.setSelected(false);
           }            
     
     }//GEN-LAST:event_cuatroActionPerformed
@@ -285,21 +355,29 @@ public class Principal extends javax.swing.JFrame {
          this.cuatro.setSelected(false);
             this.cinco.setSelected(false);
                this.seis.setSelected(false);
-                  this.siete.setSelected(false);
-
+                  this.ocho.setSelected(false);
+proveedores pr = new proveedores();
+        pr.setSize(1290,730 );
+        pr.setLocation(0,0);
+        
+        contenedor.removeAll();
+        contenedor.add(pr);
+        contenedor.revalidate();
+        contenedor.repaint();
+                  
           }            
            
     }//GEN-LAST:event_tresActionPerformed
 
     private void unoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unoActionPerformed
-  if(!this.uno.isSelected()) {
-    this.uno.setSelected(true);   
-   this.dos.setSelected(false);
-      this.tres.setSelected(false);
-         this.cuatro.setSelected(false);
+        if (!this.uno.isSelected()) {
+            this.uno.setSelected(true);
+            this.dos.setSelected(false);
+            this.tres.setSelected(false);
+            this.cuatro.setSelected(false);
             this.cinco.setSelected(false);
-               this.seis.setSelected(false);
-                  this.siete.setSelected(false);
+            this.seis.setSelected(false);
+            this.ocho.setSelected(false);
     Escritorio1 es = new Escritorio1();
         es.setSize(890,690 );
         es.setLocation(0,0);
@@ -320,7 +398,7 @@ public class Principal extends javax.swing.JFrame {
          this.cuatro.setSelected(false);
             this.cinco.setSelected(false);
                this.seis.setSelected(false);
-                  this.siete.setSelected(false);
+                  this.ocho.setSelected(false);
                   this.dos.setSelected(true);
                   
                           // Crear y mostrar el panel de inventario
@@ -349,6 +427,10 @@ public class Principal extends javax.swing.JFrame {
       
     }
     }//GEN-LAST:event_menuActionPerformed
+
+    private void siete1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siete1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_siete1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -401,8 +483,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private rojeru_san.RSButton menu;
+    private rojeru_san.RSButton ocho;
     private rojeru_san.RSButton seis;
-    private rojeru_san.RSButton siete;
+    private rojeru_san.RSButton siete1;
     private rojeru_san.RSButton tres;
     private rojeru_san.RSButton uno;
     // End of variables declaration//GEN-END:variables
