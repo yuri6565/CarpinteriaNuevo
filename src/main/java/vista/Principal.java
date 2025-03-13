@@ -25,20 +25,6 @@ public class Principal extends javax.swing.JFrame {
 
     public Principal() { 
         initComponents();
-        // Crear un JScrollPane y agregar el panel contenedor dentro de él
-JScrollPane scrollPane = new JScrollPane(contenedor);
-scrollPane.setBorder(null); // Quitar el borde del JScrollPane
-contenedor.setLayout(new java.awt.GridLayout(0, 2)); // Ajustar el layout si es necesario
-contenedor.setBorder(null); // Quitar el borde del JPanel
-
-
-scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-scrollPane.setViewportView(contenedor);
-
-// Agregar el JScrollPane al jPanel1 en lugar de agregar directamente el contenedor
-jPanel1.add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, 1290, 730));
  
 
         this.uno.setSelected(true);
