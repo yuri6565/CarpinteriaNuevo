@@ -4,18 +4,23 @@
  */
 package vista;
 
+import javax.swing.JOptionPane;
+import modelo.MovimientoDatos;
+
 /**
  *
  * @author ZenBook
  */
 public class nuevoMovimiento extends javax.swing.JDialog {
-
+    private MovimientoDatos movimiento; // Almacena el movimiento creado
+    public boolean movimientoGuardado = false;
     /**
      * Creates new form nuevoMovimiento
      */
     public nuevoMovimiento(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setTitle("Nuevo Movimiento");
     }
 
     /**
@@ -33,19 +38,19 @@ public class nuevoMovimiento extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        cmbCategoria = new RSMaterialComponent.RSComboBoxMaterial();
+        cmbTipo = new RSMaterialComponent.RSComboBoxMaterial();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        txtCantidad = new RSMaterialComponent.RSTextFieldMaterial();
+        txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel8 = new javax.swing.JLabel();
         btnCancelar = new rojeru_san.RSButtonRiple();
         btnGuardar = new rojeru_san.RSButtonRiple();
         jLabel9 = new javax.swing.JLabel();
-        txtNombre1 = new RSMaterialComponent.RSTextFieldMaterial();
-        cmbCategoria1 = new RSMaterialComponent.RSComboBoxMaterial();
-        txtCantidad1 = new RSMaterialComponent.RSTextFieldMaterial();
-        txtCantidad2 = new RSMaterialComponent.RSTextFieldMaterial();
-        rSTextFieldOne1 = new RSMaterialComponent.RSTextFieldOne();
+        txtFechaHora = new RSMaterialComponent.RSTextFieldMaterial();
+        cmbCategoria = new RSMaterialComponent.RSComboBoxMaterial();
+        txtCantidad = new RSMaterialComponent.RSTextFieldMaterial();
+        txtResponsable = new RSMaterialComponent.RSTextFieldMaterial();
+        txtMotivo = new RSMaterialComponent.RSTextFieldOne();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -58,7 +63,7 @@ public class nuevoMovimiento extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Century751 BT", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Agregar material");
+        jLabel1.setText("Agregar movimiento");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
@@ -75,15 +80,15 @@ public class nuevoMovimiento extends javax.swing.JDialog {
         jLabel4.setText("Nombre:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 140, -1, 20));
 
-        cmbCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Entrada", "Salida" }));
-        cmbCategoria.setColorMaterial(new java.awt.Color(0, 0, 0));
-        cmbCategoria.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        cmbCategoria.addActionListener(new java.awt.event.ActionListener() {
+        cmbTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Entrada", "Salida" }));
+        cmbTipo.setColorMaterial(new java.awt.Color(0, 0, 0));
+        cmbTipo.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        cmbTipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbCategoriaActionPerformed(evt);
+                cmbTipoActionPerformed(evt);
             }
         });
-        jPanel1.add(cmbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 200, 30));
+        jPanel1.add(cmbTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 200, 30));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel6.setText("Cantidad:");
@@ -93,18 +98,18 @@ public class nuevoMovimiento extends javax.swing.JDialog {
         jLabel7.setText("Responsable:");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, -1, -1));
 
-        txtCantidad.setForeground(new java.awt.Color(0, 0, 0));
-        txtCantidad.setColorMaterial(new java.awt.Color(0, 0, 0));
-        txtCantidad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtCantidad.setPhColor(new java.awt.Color(0, 0, 0));
-        txtCantidad.setPlaceholder("Ingrese el nombre...");
-        txtCantidad.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtCantidad.addActionListener(new java.awt.event.ActionListener() {
+        txtNombre.setForeground(new java.awt.Color(0, 0, 0));
+        txtNombre.setColorMaterial(new java.awt.Color(0, 0, 0));
+        txtNombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNombre.setPhColor(new java.awt.Color(0, 0, 0));
+        txtNombre.setPlaceholder("Ingrese el nombre...");
+        txtNombre.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCantidadActionPerformed(evt);
+                txtNombreActionPerformed(evt);
             }
         });
-        jPanel1.add(txtCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 170, 200, 30));
+        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 170, 200, 30));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel8.setText("Motivo:");
@@ -136,68 +141,118 @@ public class nuevoMovimiento extends javax.swing.JDialog {
         jLabel9.setText("Fecha y hora:");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
 
-        txtNombre1.setForeground(new java.awt.Color(0, 0, 0));
-        txtNombre1.setColorMaterial(new java.awt.Color(0, 0, 0));
-        txtNombre1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtNombre1.setPhColor(new java.awt.Color(0, 0, 0));
-        txtNombre1.setPlaceholder("Ingrese fecha y hora...");
-        txtNombre1.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtNombre1.addActionListener(new java.awt.event.ActionListener() {
+        txtFechaHora.setForeground(new java.awt.Color(0, 0, 0));
+        txtFechaHora.setColorMaterial(new java.awt.Color(0, 0, 0));
+        txtFechaHora.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtFechaHora.setPhColor(new java.awt.Color(0, 0, 0));
+        txtFechaHora.setPlaceholder("Ingrese fecha y hora...");
+        txtFechaHora.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtFechaHora.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombre1ActionPerformed(evt);
+                txtFechaHoraActionPerformed(evt);
             }
         });
-        jPanel1.add(txtNombre1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 200, 30));
+        jPanel1.add(txtFechaHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 200, 30));
 
-        cmbCategoria1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Materiales", "Herramientas" }));
-        cmbCategoria1.setColorMaterial(new java.awt.Color(0, 0, 0));
-        cmbCategoria1.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        cmbCategoria1.addActionListener(new java.awt.event.ActionListener() {
+        cmbCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Materiales", "Herramientas" }));
+        cmbCategoria.setColorMaterial(new java.awt.Color(0, 0, 0));
+        cmbCategoria.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        cmbCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbCategoria1ActionPerformed(evt);
+                cmbCategoriaActionPerformed(evt);
             }
         });
-        jPanel1.add(cmbCategoria1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 200, 30));
+        jPanel1.add(cmbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 200, 30));
 
-        txtCantidad1.setForeground(new java.awt.Color(0, 0, 0));
-        txtCantidad1.setColorMaterial(new java.awt.Color(0, 0, 0));
-        txtCantidad1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtCantidad1.setPhColor(new java.awt.Color(0, 0, 0));
-        txtCantidad1.setPlaceholder("Ingrese la cantidad...");
-        txtCantidad1.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtCantidad1.addActionListener(new java.awt.event.ActionListener() {
+        txtCantidad.setForeground(new java.awt.Color(0, 0, 0));
+        txtCantidad.setColorMaterial(new java.awt.Color(0, 0, 0));
+        txtCantidad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtCantidad.setPhColor(new java.awt.Color(0, 0, 0));
+        txtCantidad.setPlaceholder("Ingrese la cantidad...");
+        txtCantidad.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtCantidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCantidad1ActionPerformed(evt);
+                txtCantidadActionPerformed(evt);
             }
         });
-        jPanel1.add(txtCantidad1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 200, 30));
+        jPanel1.add(txtCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 200, 30));
 
-        txtCantidad2.setForeground(new java.awt.Color(0, 0, 0));
-        txtCantidad2.setColorMaterial(new java.awt.Color(0, 0, 0));
-        txtCantidad2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtCantidad2.setPhColor(new java.awt.Color(0, 0, 0));
-        txtCantidad2.setPlaceholder("Ingrese la cantidad...");
-        txtCantidad2.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtCantidad2.addActionListener(new java.awt.event.ActionListener() {
+        txtResponsable.setForeground(new java.awt.Color(0, 0, 0));
+        txtResponsable.setColorMaterial(new java.awt.Color(0, 0, 0));
+        txtResponsable.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtResponsable.setPhColor(new java.awt.Color(0, 0, 0));
+        txtResponsable.setPlaceholder("Ingrese la cantidad...");
+        txtResponsable.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtResponsable.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCantidad2ActionPerformed(evt);
+                txtResponsableActionPerformed(evt);
             }
         });
-        jPanel1.add(txtCantidad2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 260, 200, 30));
+        jPanel1.add(txtResponsable, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 260, 200, 30));
 
-        rSTextFieldOne1.setForeground(new java.awt.Color(0, 0, 0));
-        rSTextFieldOne1.setBorderColor(new java.awt.Color(204, 204, 204));
-        rSTextFieldOne1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        rSTextFieldOne1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        rSTextFieldOne1.setPhColor(new java.awt.Color(0, 0, 0));
-        rSTextFieldOne1.setPlaceholder("Ingrese el motivo...");
-        rSTextFieldOne1.setSelectionColor(new java.awt.Color(102, 102, 102));
-        jPanel1.add(rSTextFieldOne1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 200, 40));
+        txtMotivo.setForeground(new java.awt.Color(0, 0, 0));
+        txtMotivo.setBorderColor(new java.awt.Color(204, 204, 204));
+        txtMotivo.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txtMotivo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtMotivo.setPhColor(new java.awt.Color(0, 0, 0));
+        txtMotivo.setPlaceholder("Ingrese el motivo...");
+        txtMotivo.setSelectionColor(new java.awt.Color(102, 102, 102));
+        jPanel1.add(txtMotivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 200, 40));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 480));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cmbTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbTipoActionPerformed
+
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        movimientoGuardado = false;
+        dispose(); // Cierra la ventana emergente
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+                                          
+    String fechaHora = txtFechaHora.getText();
+    String tipo = (String) cmbTipo.getSelectedItem();
+    String categoria = (String) cmbCategoria.getSelectedItem();
+    String nombre = txtNombre.getText();
+    String responsable = txtResponsable.getText();
+    String motivo = txtMotivo.getText();
+
+    
+    // Validar que los campos obligatorios no estén vacíos
+    if (fechaHora.isEmpty() || tipo == null || categoria == null || nombre.isEmpty() || responsable.isEmpty() || motivo.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    
+    // Manejo de cantidad
+    int cantidad;
+    try {
+        cantidad = Integer.parseInt(txtCantidad.getText().trim());
+        if (cantidad < 0) {
+            JOptionPane.showMessageDialog(this, "La cantidad no puede ser negativa.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Ingrese un número válido en la cantidad.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+ 
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void txtFechaHoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaHoraActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFechaHoraActionPerformed
 
     private void cmbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCategoriaActionPerformed
         // TODO add your handling code here:
@@ -207,29 +262,9 @@ public class nuevoMovimiento extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCantidadActionPerformed
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        dispose(); // Cierra la ventana emergente
-    }//GEN-LAST:event_btnCancelarActionPerformed
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void txtNombre1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombre1ActionPerformed
+    private void txtResponsableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtResponsableActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombre1ActionPerformed
-
-    private void cmbCategoria1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCategoria1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbCategoria1ActionPerformed
-
-    private void txtCantidad1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidad1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCantidad1ActionPerformed
-
-    private void txtCantidad2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidad2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCantidad2ActionPerformed
+    }//GEN-LAST:event_txtResponsableActionPerformed
 
     /**
      * @param args the command line arguments
@@ -277,7 +312,7 @@ public class nuevoMovimiento extends javax.swing.JDialog {
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
     private RSMaterialComponent.RSComboBoxMaterial cmbCategoria;
-    private RSMaterialComponent.RSComboBoxMaterial cmbCategoria1;
+    private RSMaterialComponent.RSComboBoxMaterial cmbTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -288,10 +323,10 @@ public class nuevoMovimiento extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private RSMaterialComponent.RSTextFieldOne rSTextFieldOne1;
     private RSMaterialComponent.RSTextFieldMaterial txtCantidad;
-    private RSMaterialComponent.RSTextFieldMaterial txtCantidad1;
-    private RSMaterialComponent.RSTextFieldMaterial txtCantidad2;
-    private RSMaterialComponent.RSTextFieldMaterial txtNombre1;
+    private RSMaterialComponent.RSTextFieldMaterial txtFechaHora;
+    private RSMaterialComponent.RSTextFieldOne txtMotivo;
+    private RSMaterialComponent.RSTextFieldMaterial txtNombre;
+    private RSMaterialComponent.RSTextFieldMaterial txtResponsable;
     // End of variables declaration//GEN-END:variables
 }

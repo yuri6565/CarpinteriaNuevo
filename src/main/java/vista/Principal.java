@@ -12,6 +12,7 @@ import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 
 import rojeru_san.RSButton;
 
@@ -24,7 +25,22 @@ public class Principal extends javax.swing.JFrame {
 
     public Principal() { 
         initComponents();
+        // Crear un JScrollPane y agregar el panel contenedor dentro de él
+JScrollPane scrollPane = new JScrollPane(contenedor);
+scrollPane.setBorder(null); // Quitar el borde del JScrollPane
+contenedor.setLayout(new java.awt.GridLayout(0, 2)); // Ajustar el layout si es necesario
+contenedor.setBorder(null); // Quitar el borde del JPanel
+
+
+scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+scrollPane.setViewportView(contenedor);
+
+// Agregar el JScrollPane al jPanel1 en lugar de agregar directamente el contenedor
+jPanel1.add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, 1290, 730));
  
+
         this.uno.setSelected(true);
         
         Escritorio1 es = new Escritorio1();
@@ -323,7 +339,7 @@ public class Principal extends javax.swing.JFrame {
                   
                           // Crear y mostrar el panel de inventario
         Inventario in = new Inventario();
-        in.setSize(1090,690 );
+        in.setSize(1290,730);
         in.setLocation(0,0);
         
         contenedor.removeAll();
@@ -376,6 +392,8 @@ public class Principal extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
+        
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override

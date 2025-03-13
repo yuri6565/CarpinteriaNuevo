@@ -24,6 +24,8 @@ public class Inventario extends javax.swing.JPanel {
     public Inventario() {
 
         initComponents();
+        
+        
         this.btnMateriales.setSelected(true);
         
         materiales es = new materiales();
@@ -55,7 +57,7 @@ public class Inventario extends javax.swing.JPanel {
         setBackground(new java.awt.Color(237, 241, 255));
         setToolTipText("");
         setMaximumSize(new java.awt.Dimension(32767, 32));
-        setPreferredSize(new java.awt.Dimension(1015, 690));
+        setPreferredSize(new java.awt.Dimension(1290, 730));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnHerramientas.setBackground(new java.awt.Color(0, 0, 0));
@@ -82,7 +84,7 @@ public class Inventario extends javax.swing.JPanel {
 
         panelprincipal.setBackground(new java.awt.Color(237, 241, 255));
         panelprincipal.setPreferredSize(new java.awt.Dimension(960, 570));
-        add(panelprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 970, 580));
+        add(panelprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 1240, 580));
 
         btnMateriales.setBackground(new java.awt.Color(0, 0, 0));
         btnMateriales.setIcon(new javax.swing.ImageIcon(getClass().getResource("/box.png"))); // NOI18N
@@ -105,7 +107,7 @@ public class Inventario extends javax.swing.JPanel {
       this.btnMovimientos.setSelected(false);
         
         herramientas h = new herramientas();
-        h.setSize(1000, 490);
+        h.setSize(960, 570);
         h.setLocation(0,0);
         
         panelprincipal.removeAll();
@@ -123,7 +125,7 @@ public class Inventario extends javax.swing.JPanel {
       this.btnMovimientos.setSelected(true);
       
         movimientos es = new movimientos();
-        es.setSize(1000, 490);
+        es.setSize(960, 570);
         es.setLocation(0,0);
         
         panelprincipal.removeAll();
@@ -140,7 +142,7 @@ public class Inventario extends javax.swing.JPanel {
       this.btnMovimientos.setSelected(false);
         
         materiales es = new materiales();
-        es.setSize(1000, 490);
+        es.setSize(960, 570);
         es.setLocation(0,0);
         
         panelprincipal.removeAll();
