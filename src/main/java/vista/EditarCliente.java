@@ -5,8 +5,16 @@
 package vista;
 
 import controlador.Ctrl_Cliente;
+import java.awt.Frame;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import modelo.Cliente;
+import modelo.Conexion;
+
 
 
 
@@ -16,18 +24,21 @@ import modelo.Cliente;
  *
  * @author ZenBook
  */
-public class Crearcliente1 extends javax.swing.JDialog {
+public class EditarCliente extends javax.swing.JDialog {
 
+   private int idCliente;
 
-    /**
-     * Creates new form nuevoMateriales
-     */
-    public Crearcliente1(java.awt.Frame parent, boolean modal) {
+   public EditarCliente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setTitle("Nuevo Material");
+        
+   }
+ public EditarCliente(java.awt.Frame parent, boolean modal, int idCliente) {
+        super(parent, modal);
+        initComponents(); // No borrar, NetBeans necesita esto
+        this.idCliente = idCliente;
+        cargarDatosCliente(); // Llamar al método que llena los datos
     }
- 
    
 
     /**
@@ -125,10 +136,15 @@ public class Crearcliente1 extends javax.swing.JDialog {
         rSButton1.setBackground(new java.awt.Color(29, 30, 51));
         rSButton1.setText("Cancelar");
         rSButton1.setColorHover(new java.awt.Color(204, 0, 0));
+        rSButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(rSButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 420, 100, -1));
 
         guardar.setBackground(new java.awt.Color(29, 30, 51));
-        guardar.setText("Registrar");
+        guardar.setText("Guardar");
         guardar.setColorHover(new java.awt.Color(0, 153, 0));
         guardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,24 +165,32 @@ public class Crearcliente1 extends javax.swing.JDialog {
     }//GEN-LAST:event_direcciontxtActionPerformed
 
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
-      
-       Cliente cliente = new Cliente();
+ 
+       
+        Cliente cliente = new Cliente();
         cliente.setIdentificacion(identificaciontxt.getSelectedItem().toString());
         cliente.setNumero(Integer.parseInt(numerotxt.getText()));
         cliente.setNombre(nombretxt.getText());
         cliente.setApellido(apellidotxt.getText());
         cliente.setTelefono(telefonotxt.getText());
         cliente.setDireccion(direcciontxt.getText());
-
+     
         Ctrl_Cliente contro = new Ctrl_Cliente();
-        if (contro.guardar(cliente)) {
-            JOptionPane.showMessageDialog(null, "Se guardó correctamente en la base de datos");
+        if (contro.editar(cliente, idCliente)){
+            JOptionPane.showMessageDialog(null, "datos actualizados correctamente");
+             cargarDatosCliente(); 
         } else {
             JOptionPane.showMessageDialog(null, "Error al guardar");
         }
 
+        
+
   
     }//GEN-LAST:event_guardarActionPerformed
+
+    private void rSButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButton1ActionPerformed
+
+    }//GEN-LAST:event_rSButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -185,21 +209,27 @@ public class Crearcliente1 extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Crearcliente1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Crearcliente1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Crearcliente1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Crearcliente1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Crearcliente1 dialog = new Crearcliente1(new javax.swing.JFrame(), true);
+                EditarCliente dialog = new EditarCliente(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -226,4 +256,32 @@ public class Crearcliente1 extends javax.swing.JDialog {
     private rojeru_san.RSButton rSButton1;
     private RSMaterialComponent.RSTextFieldMaterial telefonotxt;
     // End of variables declaration//GEN-END:variables
+
+  
+
+
+
+    private void cargarDatosCliente() {
+        Ctrl_Cliente controlCliente = new Ctrl_Cliente();
+        Cliente cliente = controlCliente.obtenerClientePorid(idCliente);
+
+        if (cliente != null) {
+              identificaciontxt.setSelectedItem(cliente.getIdentificacion()); 
+              numerotxt.setText(String.valueOf(cliente.getNumero()));
+            nombretxt.setText(cliente.getNombre());
+            apellidotxt.setText(cliente.getApellido());
+            telefonotxt.setText(cliente.getTelefono());
+            direcciontxt.setText(cliente.getDireccion());
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo cargar la información del cliente.");
+            dispose();
+        }
+    }
+    
+     
+
+
+
+
+
 }

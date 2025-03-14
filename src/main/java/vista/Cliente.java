@@ -4,7 +4,16 @@
  */
 package vista;
 
+import controlador.Ctrl_Cliente;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelo.Conexion;
 
 /**
  *
@@ -12,12 +21,16 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Cliente extends javax.swing.JPanel {
 
+    private int id_cliente;
     /**
      * Creates new form movimientos
      */
     public Cliente() {
-        initComponents();
+       initComponents();  
+this.cargartablacliente();
+ 
     }
+
 
 
 
@@ -34,7 +47,7 @@ public class Cliente extends javax.swing.JPanel {
         txtBuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
         btnEliminar = new rojeru_san.RSButtonRiple();
         jScrollPane2 = new javax.swing.JScrollPane();
-        rSTableMetroCustom1 = new RSMaterialComponent.RSTableMetroCustom();
+        tablaclientes = new RSMaterialComponent.RSTableMetroCustom();
         btnNuevo = new rojeru_san.RSButtonRiple();
         btnEditar = new rojeru_san.RSButtonRiple();
 
@@ -68,7 +81,7 @@ public class Cliente extends javax.swing.JPanel {
         });
         jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 140, 110, 30));
 
-        rSTableMetroCustom1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaclientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null}
             },
@@ -91,24 +104,24 @@ public class Cliente extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        rSTableMetroCustom1.setBackgoundHead(new java.awt.Color(46, 49, 82));
-        rSTableMetroCustom1.setBackgoundHover(new java.awt.Color(67, 150, 209));
-        rSTableMetroCustom1.setBorderHead(null);
-        rSTableMetroCustom1.setBorderRows(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        rSTableMetroCustom1.setColorBorderHead(new java.awt.Color(46, 49, 82));
-        rSTableMetroCustom1.setColorBorderRows(new java.awt.Color(46, 49, 82));
-        rSTableMetroCustom1.setColorPrimaryText(new java.awt.Color(0, 0, 0));
-        rSTableMetroCustom1.setColorSecondary(new java.awt.Color(255, 255, 255));
-        rSTableMetroCustom1.setColorSecundaryText(new java.awt.Color(0, 0, 0));
-        rSTableMetroCustom1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        rSTableMetroCustom1.setFontHead(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        rSTableMetroCustom1.setFontRowHover(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        rSTableMetroCustom1.setFontRowSelect(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        rSTableMetroCustom1.setPreferredScrollableViewportSize(new java.awt.Dimension(1000, 1000));
-        rSTableMetroCustom1.setPreferredSize(new java.awt.Dimension(700, 50));
-        rSTableMetroCustom1.setSelectionBackground(new java.awt.Color(67, 150, 209));
-        jScrollPane2.setViewportView(rSTableMetroCustom1);
-        rSTableMetroCustom1.getColumnModel().getColumn(0).setPreferredWidth(10);
+        tablaclientes.setBackgoundHead(new java.awt.Color(46, 49, 82));
+        tablaclientes.setBackgoundHover(new java.awt.Color(67, 150, 209));
+        tablaclientes.setBorderHead(null);
+        tablaclientes.setBorderRows(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        tablaclientes.setColorBorderHead(new java.awt.Color(46, 49, 82));
+        tablaclientes.setColorBorderRows(new java.awt.Color(46, 49, 82));
+        tablaclientes.setColorPrimaryText(new java.awt.Color(0, 0, 0));
+        tablaclientes.setColorSecondary(new java.awt.Color(255, 255, 255));
+        tablaclientes.setColorSecundaryText(new java.awt.Color(0, 0, 0));
+        tablaclientes.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        tablaclientes.setFontHead(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        tablaclientes.setFontRowHover(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        tablaclientes.setFontRowSelect(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        tablaclientes.setPreferredScrollableViewportSize(new java.awt.Dimension(1000, 1000));
+        tablaclientes.setPreferredSize(new java.awt.Dimension(700, 50));
+        tablaclientes.setSelectionBackground(new java.awt.Color(67, 150, 209));
+        jScrollPane2.setViewportView(tablaclientes);
+        tablaclientes.getColumnModel().getColumn(0).setPreferredWidth(10);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, 1050, 380));
 
@@ -140,7 +153,22 @@ public class Cliente extends javax.swing.JPanel {
     }//GEN-LAST:event_txtBuscarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        
+  Ctrl_Cliente controlCliente = new Ctrl_Cliente();
+       if(id_cliente==0){
+        JOptionPane.showMessageDialog(this, "SELECCIONE UN CLIENTE");
+        } else {
+         if (controlCliente.eliminar(id_cliente)) {
+    JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente");
+    cargartablacliente(); 
+} else {
+    JOptionPane.showMessageDialog(this, "Error al eliminar cliente");
+
+}
+
+
+          
+          
+}           
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
@@ -157,7 +185,25 @@ public class Cliente extends javax.swing.JPanel {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
+        int filaSeleccionada = tablaclientes.getSelectedRow(); if (filaSeleccionada == -1) { JOptionPane.showMessageDialog(null, "Seleccione un cliente para editar"); } else { int id_cliente = (int) tablaclientes.getValueAt(filaSeleccionada, 0);
+
+if (filaSeleccionada == -1) {
+    JOptionPane.showMessageDialog(null, "Seleccione un cliente para editar.");
+} else {
+    int idCliente = Integer.parseInt(tablaclientes.getValueAt(filaSeleccionada, 0).toString()); 
+    EditarCliente editar = new EditarCliente(null, true, idCliente);
+    editar.setVisible(true);
+
+        
+       
+  
+}
+
+
+
+ }
+
+        
     }//GEN-LAST:event_btnEditarActionPerformed
 
 
@@ -167,7 +213,67 @@ public class Cliente extends javax.swing.JPanel {
     private rojeru_san.RSButtonRiple btnNuevo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private RSMaterialComponent.RSTableMetroCustom rSTableMetroCustom1;
+    private RSMaterialComponent.RSTableMetroCustom tablaclientes;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtBuscar;
     // End of variables declaration//GEN-END:variables
+public void cargartablacliente() {
+    Connection con = Conexion.getConnection();
+
+    
+    DefaultTableModel model = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; 
+        }
+    };
+
+    this.tablaclientes.setModel(model);
+    this.jScrollPane2.setViewportView(this.tablaclientes);
+    
+   
+    model.addColumn("Codigo");
+    model.addColumn("Tipo de documento");
+    model.addColumn("Numero");
+    model.addColumn("Nombre");
+    model.addColumn("Apellido");
+    model.addColumn("Telefono");
+    model.addColumn("Direccion");
+
+    String sql = "SELECT * FROM cliente";
+    Statement st;
+
+    try {
+        st = con.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+
+        while (rs.next()) {
+            Object fila[] = new Object[7];
+            for (int i = 0; i < 7; i++) {
+                fila[i] = rs.getObject(i + 1);
+            }
+            model.addRow(fila);
+        }
+        con.close();
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al cargar la tabla: " + e.getMessage());
+    }
+
+    
+    tablaclientes.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            int fila_point = tablaclientes.rowAtPoint(e.getPoint());
+            
+            if (fila_point > -1) {
+                id_cliente = (int) tablaclientes.getValueAt(fila_point, 0);
+               
+            }
+        }
+    });
+   }
+
+
+
+
 }
