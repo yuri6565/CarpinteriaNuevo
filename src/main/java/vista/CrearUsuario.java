@@ -36,6 +36,10 @@ public class CrearUsuario extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        rSMetroTextPlaceHolder1 = new rojerusan.RSMetroTextPlaceHolder();
+        rSMetroTextPlaceHolder2 = new rojerusan.RSMetroTextPlaceHolder();
+        rSButton3 = new rojeru_san.RSButton();
+        rSPasswordTwo1 = new RSMaterialComponent.RSPasswordTwo();
 
         jLabel2.setText("jLabel2");
 
@@ -90,12 +94,34 @@ public class CrearUsuario extends javax.swing.JPanel {
         jLabel9.setText("Contraseña");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 120, 30));
 
+        rSMetroTextPlaceHolder1.setToolTipText("");
+        rSMetroTextPlaceHolder1.setActionCommand("<Not Set>");
+        jPanel1.add(rSMetroTextPlaceHolder1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
+
+        rSMetroTextPlaceHolder2.setText("rSMetroTextPlaceHolder2");
+        jPanel1.add(rSMetroTextPlaceHolder2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, -1, -1));
+
+        rSButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/eye (1).png"))); // NOI18N
+        rSButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButton3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(rSButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 300, 50, 40));
+
+        rSPasswordTwo1.setText("rSPasswordTwo1");
+        jPanel1.add(rSPasswordTwo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, -1, -1));
+
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 880, 450));
     }// </editor-fold>//GEN-END:initComponents
 
     private void rSButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_rSButton2ActionPerformed
+
+    private void rSButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rSButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -109,5 +135,9 @@ public class CrearUsuario extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private rojeru_san.RSButton rSButton1;
     private rojeru_san.RSButton rSButton2;
+    private rojeru_san.RSButton rSButton3;
+    private rojerusan.RSMetroTextPlaceHolder rSMetroTextPlaceHolder1;
+    private rojerusan.RSMetroTextPlaceHolder rSMetroTextPlaceHolder2;
+    private RSMaterialComponent.RSPasswordTwo rSPasswordTwo1;
     // End of variables declaration//GEN-END:variables
 }
