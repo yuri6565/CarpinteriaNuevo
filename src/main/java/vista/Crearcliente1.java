@@ -42,8 +42,8 @@ public class Crearcliente1 extends javax.swing.JDialog {
         panelP = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         nombretxt = new RSMaterialComponent.RSTextFieldMaterial();
-        jLabel2 = new javax.swing.JLabel();
         apellidotxt = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel3 = new javax.swing.JLabel();
         numerotxt = new RSMaterialComponent.RSTextFieldMaterial();
@@ -52,6 +52,8 @@ public class Crearcliente1 extends javax.swing.JDialog {
         telefonotxt = new RSMaterialComponent.RSTextFieldMaterial();
         rSButton1 = new rojeru_san.RSButton();
         guardar = new rojeru_san.RSButton();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -68,6 +70,12 @@ public class Crearcliente1 extends javax.swing.JDialog {
         jPanel3.setToolTipText("");
         jPanel3.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Crear cliente");
+        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, -1, -1));
+
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 80));
 
         nombretxt.setForeground(new java.awt.Color(29, 30, 51));
@@ -77,10 +85,7 @@ public class Crearcliente1 extends javax.swing.JDialog {
         nombretxt.setPhColor(new java.awt.Color(29, 30, 51));
         nombretxt.setPlaceholder("Ingrese el nombre");
         nombretxt.setSelectionColor(new java.awt.Color(29, 30, 51));
-        jPanel1.add(nombretxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 280, 30));
-
-        jLabel2.setText("Nombre");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, -1));
+        jPanel1.add(nombretxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 280, 30));
 
         apellidotxt.setForeground(new java.awt.Color(29, 30, 31));
         apellidotxt.setColorMaterial(new java.awt.Color(29, 30, 31));
@@ -136,6 +141,14 @@ public class Crearcliente1 extends javax.swing.JDialog {
             }
         });
         jPanel1.add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 420, 90, -1));
+
+        jLabel7.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 18)); // NOI18N
+        jLabel7.setText("Telefono");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 70, 30));
+
+        jLabel8.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 18)); // NOI18N
+        jLabel8.setText("Nombre");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 70, 30));
 
         panelP.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 480));
 
@@ -216,8 +229,10 @@ public class Crearcliente1 extends javax.swing.JDialog {
     private RSMaterialComponent.RSTextFieldMaterial direcciontxt;
     private rojeru_san.RSButton guardar;
     private RSMaterialComponent.RSComboBoxMaterial identificaciontxt;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private RSMaterialComponent.RSTextFieldMaterial nombretxt;

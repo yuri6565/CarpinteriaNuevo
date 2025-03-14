@@ -16,7 +16,7 @@ import modelo.Usuario;
  * @author buitr
  */
 public class login extends javax.swing.JFrame {
-
+ private boolean isPasswordVisible = false;
     /**
      * Creates new form login
      */
@@ -47,6 +47,7 @@ public class login extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         rSMaterialButtonRectangle1 = new rojerusan.RSMaterialButtonRectangle();
         jLabel2 = new javax.swing.JLabel();
+        btnVer = new rojeru_san.RSButton();
         passtxt = new RSMaterialComponent.RSPasswordTwo();
         jPanel8 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -121,6 +122,15 @@ public class login extends javax.swing.JFrame {
         });
         jPanel6.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, 180, 20));
 
+        btnVer.setBackground(new java.awt.Color(255, 255, 255));
+        btnVer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ojo.png"))); // NOI18N
+        btnVer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerActionPerformed(evt);
+            }
+        });
+        jPanel6.add(btnVer, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 270, 30, 30));
+
         passtxt.setForeground(new java.awt.Color(204, 204, 204));
         passtxt.setText("********");
         passtxt.setToolTipText("");
@@ -191,6 +201,10 @@ public class login extends javax.swing.JFrame {
        passtxt.setText("");
     }//GEN-LAST:event_passtxtFocusGained
 
+    private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnVerActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -228,6 +242,7 @@ public class login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private rojeru_san.RSButton btnVer;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

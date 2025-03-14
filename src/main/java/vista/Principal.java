@@ -23,14 +23,12 @@ import rojeru_san.RSButton;
  */
 public class Principal extends javax.swing.JFrame {
 
-
-    public Principal() { 
+    public Principal() {
         initComponents();
 
-      
         this.uno.setSelected(true);
-        
-                // Maximizar el JFrame para que ocupe toda la pantalla
+
+        // Maximizar el JFrame para que ocupe toda la pantalla
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Centrar el JFrame (opcional, ya que maximizarlo ocupa toda la pantalla)
@@ -74,9 +72,6 @@ public class Principal extends javax.swing.JFrame {
         contenedor.repaint();
 
     }
-
-
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -282,9 +277,8 @@ public class Principal extends javax.swing.JFrame {
             this.cuatro.setSelected(false);
             this.cinco.setSelected(false);
             this.seis.setSelected(false);
-             this.ocho.setSelected(true);
-          
-             
+            this.ocho.setSelected(true);
+
             Cliente cliente = new Cliente();
             cliente.setSize(1290, 730);
             cliente.setLocation(0, 0);
@@ -294,79 +288,83 @@ public class Principal extends javax.swing.JFrame {
             contenedor.revalidate();
             contenedor.repaint();
 
-            
-
-                  
-    
-                  
-    } 
+        }
     }//GEN-LAST:event_ochoActionPerformed
 
     private void seisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seisActionPerformed
-         if(!this.seis.isSelected()) {
-   this.uno.setSelected(false);
-      this.dos.setSelected(false);
-         this.tres.setSelected(false);
+        if (!this.seis.isSelected()) {
+            this.uno.setSelected(false);
+            this.dos.setSelected(false);
+            this.tres.setSelected(false);
             this.cuatro.setSelected(false);
-               this.cinco.setSelected(false);
-                  this.ocho.setSelected(false);
-                  
-    caja box = new caja();
-        box.setSize(1290,730 );
-        box.setLocation(0,0);
-        
-        contenedor.removeAll();
-        contenedor.add(box);
-        contenedor.revalidate();
-        contenedor.repaint();
-    } 
+            this.cinco.setSelected(false);
+            this.ocho.setSelected(false);
+
+            caja box = new caja();
+            box.setSize(1290, 730);
+            box.setLocation(0, 0);
+
+            contenedor.removeAll();
+            contenedor.add(box);
+            contenedor.revalidate();
+            contenedor.repaint();
+        }
     }//GEN-LAST:event_seisActionPerformed
 
     private void cincoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cincoActionPerformed
-         if(!this.cinco.isSelected()) {
-   this.uno.setSelected(false);
-      this.dos.setSelected(false);
-         this.tres.setSelected(false);
+        if (!this.cinco.isSelected()) {
+            this.uno.setSelected(false);
+            this.dos.setSelected(false);
+            this.tres.setSelected(false);
             this.cuatro.setSelected(false);
-               this.seis.setSelected(false);
-                  this.ocho.setSelected(false);
-                  
-    
-    }    
+            this.seis.setSelected(false);
+            this.ocho.setSelected(false);
+
+        }
     }//GEN-LAST:event_cincoActionPerformed
 
     private void cuatroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuatroActionPerformed
-    if(!this.cuatro.isSelected()) {
-   this.uno.setSelected(false);
-      this.dos.setSelected(false);
-         this.tres.setSelected(false);
+        if (!this.cuatro.isSelected()) {
+            this.uno.setSelected(false);
+            this.dos.setSelected(false);
+            this.tres.setSelected(false);
             this.cinco.setSelected(false);
-               this.seis.setSelected(false);
-                  this.ocho.setSelected(false);
-          }            
-    
+            this.seis.setSelected(false);
+            this.ocho.setSelected(false);
+            this.cuatro.setSelected(true);
+            Produccion pr = new Produccion();
+            pr.setSize(1290, 730);
+            pr.setLocation(0, 0);
+
+            contenedor.removeAll();
+            contenedor.add(pr);
+            contenedor.revalidate();
+            contenedor.repaint();
+
+        }
+
     }//GEN-LAST:event_cuatroActionPerformed
 
     private void tresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tresActionPerformed
-       if(!this.tres.isSelected()) {
-   this.uno.setSelected(false);
-      this.dos.setSelected(false);
-       this.tres.setSelected(true);
-         this.cuatro.setSelected(false);
+        if (!this.tres.isSelected()) {
+            this.uno.setSelected(false);
+            this.dos.setSelected(false);
+            this.tres.setSelected(true);
+            this.cuatro.setSelected(false);
             this.cinco.setSelected(false);
-               this.seis.setSelected(false);
-                  this.ocho.setSelected(false);
-proveedores pr = new proveedores();
-        pr.setSize(1290,730 );
-        pr.setLocation(0,0);
-        
-        contenedor.removeAll();
-        contenedor.add(pr);
-        contenedor.revalidate();
-        contenedor.repaint();
-                  
-          }            
-           
+            this.seis.setSelected(false);
+            this.ocho.setSelected(false);
+            proveedores pr = new proveedores();
+            pr.setSize(1290, 730);
+            pr.setLocation(0, 0);
+
+            contenedor.removeAll();
+            contenedor.add(pr);
+            contenedor.revalidate();
+            contenedor.repaint();
+
+        }
+
     }//GEN-LAST:event_tresActionPerformed
 
     private void unoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unoActionPerformed
@@ -378,54 +376,52 @@ proveedores pr = new proveedores();
             this.cinco.setSelected(false);
             this.seis.setSelected(false);
             this.ocho.setSelected(false);
-    Escritorio1 es = new Escritorio1();
-        es.setSize(890,690 );
-        es.setLocation(0,0);
-        
-        contenedor.removeAll();
-        contenedor.add(es);
-        contenedor.revalidate();
-        contenedor.repaint();
-                  
-   
-  }   
+            Escritorio1 es = new Escritorio1();
+            es.setSize(890, 690);
+            es.setLocation(0, 0);
+
+            contenedor.removeAll();
+            contenedor.add(es);
+            contenedor.revalidate();
+            contenedor.repaint();
+
+        }
     }//GEN-LAST:event_unoActionPerformed
 
     private void dosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dosActionPerformed
-       if(!this.dos.isSelected()) {
-   this.uno.setSelected(false);
-      this.tres.setSelected(false);
-         this.cuatro.setSelected(false);
+        if (!this.dos.isSelected()) {
+            this.uno.setSelected(false);
+            this.tres.setSelected(false);
+            this.cuatro.setSelected(false);
             this.cinco.setSelected(false);
-               this.seis.setSelected(false);
-                  this.ocho.setSelected(false);
-                  this.dos.setSelected(true);
-                  
-                          // Crear y mostrar el panel de inventario
-        Inventario in = new Inventario();
-        in.setSize(1290,730);
-        in.setLocation(0,0);
-        
-        contenedor.removeAll();
-        contenedor.add(in);
-        contenedor.revalidate();
-        contenedor.repaint();
-        
+            this.seis.setSelected(false);
+            this.ocho.setSelected(false);
+            this.dos.setSelected(true);
 
-          }            
+            // Crear y mostrar el panel de inventario
+            Inventario in = new Inventario();
+            in.setSize(1290, 730);
+            in.setLocation(0, 0);
+
+            contenedor.removeAll();
+            contenedor.add(in);
+            contenedor.revalidate();
+            contenedor.repaint();
+
+        }
     }//GEN-LAST:event_dosActionPerformed
 
-    
+
     private void menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuActionPerformed
-    
-          int posicion = jPanel3.getX();
-    if (posicion > -1) {
-        Animacion.Animacion.mover_izquierda(0,-258, 2, 2, jPanel3);
-  
-    } else {
-        Animacion.Animacion.mover_derecha(-258,0, 2,2, jPanel3);
-      
-    }
+
+        int posicion = jPanel3.getX();
+        if (posicion > -1) {
+            Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
+
+        } else {
+            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
+
+        }
     }//GEN-LAST:event_menuActionPerformed
 
     private void siete1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siete1ActionPerformed
@@ -460,8 +456,6 @@ proveedores pr = new proveedores();
         //</editor-fold>
         //</editor-fold>
 
-        
-        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
