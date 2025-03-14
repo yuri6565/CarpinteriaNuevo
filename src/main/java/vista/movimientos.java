@@ -4,6 +4,9 @@
  */
 package vista;
 
+import java.awt.Color;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -11,13 +14,57 @@ import javax.swing.table.DefaultTableModel;
  * @author ZenBook
  */
 public class movimientos extends javax.swing.JPanel {
-
+private DefaultTableModel modeloTabla;
     /**
      * Creates new form movimientos
      */
     public movimientos() {
         initComponents();
+             tablaM.setBackground(new Color(245,246,250)); // Blanco grisáceo
+     tablaM.setOpaque(true);
+     tablaM.setFillsViewportHeight(true); // Ajusta el fondo en toda la tabla
+        
+     tablaM.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        
+     modeloTabla = new DefaultTableModel(){
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false; // Evita la edición en todas las celdas
     }
+};
+     modeloTabla.setColumnIdentifiers(new String[]{"Fecha y Hora", "Tipo", "Categoría", "Nombre", "Cantidad", "Responsable", "Motivo"});
+     tablaM.setModel(modeloTabla);
+    }
+    
+    
+        
+    private void agregarFilaATabla(String[] datos) {
+    modeloTabla.addRow(datos);
+}
+
+private void eliminarMovimientos() {
+    int[] filasSeleccionadas = tablaM.getSelectedRows();
+
+    if (filasSeleccionadas.length > 0) {
+        int confirmacion = JOptionPane.showConfirmDialog(
+            null,
+            "¿Está seguro de que desea eliminar los movimientos seleccionados?",
+            "Confirmar Eliminación",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            DefaultTableModel modelo = (DefaultTableModel) tablaM.getModel();
+
+            // Eliminar desde la última fila seleccionada para evitar problemas de índice
+            for (int i = filasSeleccionadas.length - 1; i >= 0; i--) {
+                modelo.removeRow(filasSeleccionadas[i]);
+            }
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Seleccione al menos una fila para eliminar.");
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,7 +80,7 @@ public class movimientos extends javax.swing.JPanel {
         rSComboMetro1 = new rojerusan.RSComboMetro();
         btnEliminar = new rojeru_san.RSButtonRiple();
         jScrollPane2 = new javax.swing.JScrollPane();
-        rSTableMetroCustom1 = new RSMaterialComponent.RSTableMetroCustom();
+        tablaM = new RSMaterialComponent.RSTableMetroCustom();
         btnNuevo = new rojeru_san.RSButtonRiple();
         btnEditar = new rojeru_san.RSButtonRiple();
 
@@ -72,7 +119,7 @@ public class movimientos extends javax.swing.JPanel {
         });
         jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 30, 110, 30));
 
-        rSTableMetroCustom1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaM.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 { new Integer(1), "2/03/25 4:06 pm", "Entrada", "Materiales", "Pegante",  new Integer(1), "Pegantes S.A.S", "compra"},
                 { new Integer(2), "2/03/25 4:11 pm", "Salida", "Materiales", "Madera mdf",  new Integer(3), "Juan Perez", "Uso en fabricacion"},
@@ -98,24 +145,24 @@ public class movimientos extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        rSTableMetroCustom1.setBackgoundHead(new java.awt.Color(46, 49, 82));
-        rSTableMetroCustom1.setBackgoundHover(new java.awt.Color(67, 150, 209));
-        rSTableMetroCustom1.setBorderHead(null);
-        rSTableMetroCustom1.setBorderRows(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        rSTableMetroCustom1.setColorBorderHead(new java.awt.Color(46, 49, 82));
-        rSTableMetroCustom1.setColorBorderRows(new java.awt.Color(46, 49, 82));
-        rSTableMetroCustom1.setColorPrimaryText(new java.awt.Color(0, 0, 0));
-        rSTableMetroCustom1.setColorSecondary(new java.awt.Color(255, 255, 255));
-        rSTableMetroCustom1.setColorSecundaryText(new java.awt.Color(0, 0, 0));
-        rSTableMetroCustom1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        rSTableMetroCustom1.setFontHead(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        rSTableMetroCustom1.setFontRowHover(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        rSTableMetroCustom1.setFontRowSelect(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        rSTableMetroCustom1.setSelectionBackground(new java.awt.Color(67, 150, 209));
-        jScrollPane2.setViewportView(rSTableMetroCustom1);
-        rSTableMetroCustom1.getColumnModel().getColumn(0).setPreferredWidth(10);
+        tablaM.setBackgoundHead(new java.awt.Color(46, 49, 82));
+        tablaM.setBackgoundHover(new java.awt.Color(67, 150, 209));
+        tablaM.setBorderHead(null);
+        tablaM.setBorderRows(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        tablaM.setColorBorderHead(new java.awt.Color(46, 49, 82));
+        tablaM.setColorBorderRows(new java.awt.Color(46, 49, 82));
+        tablaM.setColorPrimaryText(new java.awt.Color(0, 0, 0));
+        tablaM.setColorSecondary(new java.awt.Color(255, 255, 255));
+        tablaM.setColorSecundaryText(new java.awt.Color(0, 0, 0));
+        tablaM.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        tablaM.setFontHead(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        tablaM.setFontRowHover(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        tablaM.setFontRowSelect(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        tablaM.setSelectionBackground(new java.awt.Color(67, 150, 209));
+        jScrollPane2.setViewportView(tablaM);
+        tablaM.getColumnModel().getColumn(0).setPreferredWidth(10);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 1130, 330));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 1140, 420));
 
         btnNuevo.setBackground(new java.awt.Color(46, 49, 82));
         btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
@@ -149,13 +196,38 @@ public class movimientos extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-     nuevoMovimiento dialog = new nuevoMovimiento(new javax.swing.JFrame(), true);
-     dialog.setLocationRelativeTo(null); // Centra la ventana emergente
-     dialog.setVisible(true); // Muestra la ventana
+    nuevoMovimiento dialog = new nuevoMovimiento(new javax.swing.JFrame(), true);
+    dialog.setLocationRelativeTo(null);
+    dialog.setVisible(true);
+
+    if (dialog.isGuardado()) {
+        String[] datos = dialog.getDatos();
+        agregarFilaATabla(datos);
+    }
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-
+int filaSeleccionada = tablaM.getSelectedRow();
+if (filaSeleccionada >= 0) {
+    String[] datosFila = new String[7];
+    for (int i = 0; i < 7; i++) {
+        datosFila[i] = (String) tablaM.getValueAt(filaSeleccionada, i);
+    }
+    
+    movimientoEditar dialogoEditar = new movimientoEditar(null, true);
+    dialogoEditar.cargarDatos(datosFila);
+    dialogoEditar.setLocationRelativeTo(null);
+    dialogoEditar.setVisible(true);
+    
+    if (dialogoEditar.isGuardado()) {
+        String[] nuevosDatos = dialogoEditar.getDatos();
+        for (int i = 0; i < 7; i++) {
+            tablaM.setValueAt(nuevosDatos[i], filaSeleccionada, i);
+        }
+    }
+} else {
+    JOptionPane.showMessageDialog(null, "Seleccione una fila para editar.");
+}
     }//GEN-LAST:event_btnEditarActionPerformed
 
 
@@ -166,7 +238,7 @@ public class movimientos extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private rojerusan.RSComboMetro rSComboMetro1;
-    private RSMaterialComponent.RSTableMetroCustom rSTableMetroCustom1;
+    private RSMaterialComponent.RSTableMetroCustom tablaM;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

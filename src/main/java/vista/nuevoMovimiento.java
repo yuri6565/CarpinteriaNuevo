@@ -12,8 +12,8 @@ import modelo.MovimientoDatos;
  * @author ZenBook
  */
 public class nuevoMovimiento extends javax.swing.JDialog {
-    private MovimientoDatos movimiento; // Almacena el movimiento creado
-    public boolean movimientoGuardado = false;
+    private String[] datos; // Almacena los datos ingresados
+    private boolean guardado = false; // Indica si se presionó "Guardar"
     /**
      * Creates new form nuevoMovimiento
      */
@@ -21,6 +21,15 @@ public class nuevoMovimiento extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setTitle("Nuevo Movimiento");
+    }
+    
+        public String[] getDatos() {
+        return datos;
+    }
+
+    // Método para verificar si se presionó "Guardar"
+    public boolean isGuardado() {
+        return guardado;
     }
 
     /**
@@ -213,41 +222,31 @@ public class nuevoMovimiento extends javax.swing.JDialog {
     }//GEN-LAST:event_txtNombreActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        movimientoGuardado = false;
-        dispose(); // Cierra la ventana emergente
+      guardado = false;
+     setVisible(false); // Cerrar el diálogo
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-                                          
-    String fechaHora = txtFechaHora.getText();
-    String tipo = (String) cmbTipo.getSelectedItem();
-    String categoria = (String) cmbCategoria.getSelectedItem();
-    String nombre = txtNombre.getText();
-    String responsable = txtResponsable.getText();
-    String motivo = txtMotivo.getText();
+     datos = new String[]{
+        txtFechaHora.getText(),
+        (String) cmbTipo.getSelectedItem(),
+        (String) cmbCategoria.getSelectedItem(),
+        txtNombre.getText(),
+        txtCantidad.getText(),
+        txtResponsable.getText(),
+        txtMotivo.getText()
+    };
 
-    
-    // Validar que los campos obligatorios no estén vacíos
-    if (fechaHora.isEmpty() || tipo == null || categoria == null || nombre.isEmpty() || responsable.isEmpty() || motivo.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    
-    // Manejo de cantidad
-    int cantidad;
-    try {
-        cantidad = Integer.parseInt(txtCantidad.getText().trim());
-        if (cantidad < 0) {
-            JOptionPane.showMessageDialog(this, "La cantidad no puede ser negativa.", "Error", JOptionPane.ERROR_MESSAGE);
+    // Validar que los campos no estén vacíos
+    for (String dato : datos) {
+        if (dato.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos deben estar llenos", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Ingrese un número válido en la cantidad.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+     }
 
- 
+    guardado = true;
+    setVisible(false); // Cierra el diálogo
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void txtFechaHoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaHoraActionPerformed
