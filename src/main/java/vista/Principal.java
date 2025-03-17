@@ -52,49 +52,66 @@ public class Principal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         menu = new rojeru_san.RSButton();
-        jLabel2 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         dos = new rojeru_san.RSButton();
         uno = new rojeru_san.RSButton();
         tres = new rojeru_san.RSButton();
         cuatro = new rojeru_san.RSButton();
         cinco = new rojeru_san.RSButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         seis = new rojeru_san.RSButton();
         ocho = new rojeru_san.RSButton();
         siete1 = new rojeru_san.RSButton();
         contenedor = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(29, 30, 51));
+        jPanel2.setBackground(new java.awt.Color(29, 30, 81));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        menu.setBackground(new java.awt.Color(29, 30, 51));
+        menu.setBackground(new java.awt.Color(29, 30, 81));
+        menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gears-set.png"))); // NOI18N
         menu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuActionPerformed(evt);
             }
         });
-        jPanel2.add(menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(279, 15, 47, -1));
+        jPanel2.add(menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(276, 15, 50, 50));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("ESCRITORIO");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 20, -1, -1));
+        jButton2.setBackground(new java.awt.Color(29, 30, 81));
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1480, 20, -1, -1));
+
+        jButton3.setBackground(new java.awt.Color(29, 30, 81));
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/usuario (2).png"))); // NOI18N
+        jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1410, 20, -1, -1));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("CARPINTERIA");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 0, -1, -1));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("JOSE ABEL");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 40, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1550, 80));
 
-        jPanel3.setBackground(new java.awt.Color(29, 30, 51));
+        jPanel3.setBackground(new java.awt.Color(29, 30, 81));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        dos.setBackground(new java.awt.Color(29, 30, 51));
+        dos.setBackground(new java.awt.Color(29, 30, 81));
         dos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        dos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/box.png"))); // NOI18N
         dos.setText("   Inventario");
         dos.setColorHover(new java.awt.Color(169, 169, 169));
         dos.setColorTextHover(new java.awt.Color(0, 0, 0));
@@ -106,10 +123,10 @@ public class Principal extends javax.swing.JFrame {
         });
         jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 260, 60));
 
-        uno.setBackground(new java.awt.Color(29, 30, 51));
+        uno.setBackground(new java.awt.Color(29, 30, 81));
         uno.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         uno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/transfer.png"))); // NOI18N
-        uno.setText("Escritorio");
+        uno.setText("   Escritorio");
         uno.setColorHover(new java.awt.Color(200, 200, 200));
         uno.setColorTextHover(new java.awt.Color(0, 0, 0));
         uno.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -120,8 +137,9 @@ public class Principal extends javax.swing.JFrame {
         });
         jPanel3.add(uno, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 260, 60));
 
-        tres.setBackground(new java.awt.Color(29, 30, 51));
+        tres.setBackground(new java.awt.Color(29, 30, 81));
         tres.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        tres.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gestion-de-la-cadena-de-suministro (1).png"))); // NOI18N
         tres.setText("Proveedores");
         tres.setColorHover(new java.awt.Color(128, 128, 128));
         tres.setColorTextHover(new java.awt.Color(0, 0, 0));
@@ -133,8 +151,9 @@ public class Principal extends javax.swing.JFrame {
         });
         jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 260, 60));
 
-        cuatro.setBackground(new java.awt.Color(29, 30, 51));
+        cuatro.setBackground(new java.awt.Color(29, 30, 81));
         cuatro.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        cuatro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ajuste.png"))); // NOI18N
         cuatro.setText("Producción");
         cuatro.setColorHover(new java.awt.Color(200, 200, 200));
         cuatro.setColorTextHover(new java.awt.Color(0, 0, 0));
@@ -146,9 +165,10 @@ public class Principal extends javax.swing.JFrame {
         });
         jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 260, 60));
 
-        cinco.setBackground(new java.awt.Color(29, 30, 51));
+        cinco.setBackground(new java.awt.Color(29, 30, 81));
         cinco.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        cinco.setText("Ventas");
+        cinco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ventas.png"))); // NOI18N
+        cinco.setText("  Ventas");
         cinco.setColorHover(new java.awt.Color(128, 128, 128));
         cinco.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         cinco.addActionListener(new java.awt.event.ActionListener() {
@@ -158,17 +178,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jPanel3.add(cinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, 260, 60));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("JOSE ABEL");
-        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, -1, -1));
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("CARPINTERIA");
-        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, -1, -1));
-
-        seis.setBackground(new java.awt.Color(29, 30, 51));
+        seis.setBackground(new java.awt.Color(29, 30, 81));
         seis.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         seis.setText("Caja");
         seis.setColorHover(new java.awt.Color(128, 128, 128));
@@ -180,7 +190,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 260, 60));
 
-        ocho.setBackground(new java.awt.Color(29, 30, 51));
+        ocho.setBackground(new java.awt.Color(29, 30, 81));
         ocho.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         ocho.setText("Gestion de clientes");
         ocho.setColorHover(new java.awt.Color(128, 128, 128));
@@ -192,7 +202,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 260, 60));
 
-        siete1.setBackground(new java.awt.Color(29, 30, 51));
+        siete1.setBackground(new java.awt.Color(29, 30, 81));
         siete1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         siete1.setText("Gestion de usuarios");
         siete1.setColorHover(new java.awt.Color(128, 128, 128));
@@ -222,16 +232,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel1.add(contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, 1290, 730));
         contenedor.getAccessibleContext().setAccessibleName("");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1556, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 822, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1556, 822));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -437,8 +438,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel contenedor;
     private rojeru_san.RSButton cuatro;
     private rojeru_san.RSButton dos;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
