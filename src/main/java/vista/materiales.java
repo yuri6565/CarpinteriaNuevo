@@ -234,7 +234,7 @@ public class materiales extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(1240, 580));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panelprincipal.setBackground(new java.awt.Color(237, 241, 255));
+        panelprincipal.setBackground(new java.awt.Color(255, 255, 255));
         panelprincipal.setPreferredSize(new java.awt.Dimension(1240, 580));
         panelprincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -266,7 +266,6 @@ public class materiales extends javax.swing.JPanel {
         principalPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         panelprincipal.add(principalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 1180, 690));
 
-        rSComboMetro1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         rSComboMetro1.setColorArrow(new java.awt.Color(0, 0, 0));
         rSComboMetro1.setColorBorde(new java.awt.Color(255, 255, 255));
         rSComboMetro1.setColorFondo(new java.awt.Color(255, 255, 255));

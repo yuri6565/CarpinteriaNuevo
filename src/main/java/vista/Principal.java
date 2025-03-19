@@ -13,6 +13,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 import rojeru_san.RSButton;
@@ -25,8 +26,8 @@ public class Principal extends javax.swing.JFrame {
 
     public Principal() {
         initComponents();
-            jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
-            
+        jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
+
         // Seleccionar el botón "uno" por defecto y cargar el panel Escritorio1
         this.uno.setSelected(true);
         Escritorio1 es = new Escritorio1();
@@ -90,7 +91,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         menu.setBackground(new java.awt.Color(29, 30, 81));
-        menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gears-set.png"))); // NOI18N
+        menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/burger-bar.png"))); // NOI18N
         menu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuActionPerformed(evt);
@@ -100,6 +101,11 @@ public class Principal extends javax.swing.JFrame {
 
         jButton2.setBackground(new java.awt.Color(29, 30, 81));
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1480, 20, -1, -1));
 
         jButton3.setBackground(new java.awt.Color(29, 30, 81));
@@ -135,256 +141,318 @@ public class Principal extends javax.swing.JFrame {
         contenedor.getAccessibleContext().setAccessibleName("");
 
         jPanel3.setBackground(new java.awt.Color(29, 30, 81));
+        jPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel3MouseExited(evt);
+            }
+        });
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         dos.setBackground(new java.awt.Color(29, 30, 81));
-        dos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        dos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/box.png"))); // NOI18N
-        dos.setText("   Inventario");
+        dos.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
+        dos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/inventario-disponible.png"))); // NOI18N
+        dos.setText(" Inventario");
         dos.setColorHover(new java.awt.Color(169, 169, 169));
-        dos.setColorTextHover(new java.awt.Color(0, 0, 0));
-        dos.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        dos.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        dos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        dos.setMaximumSize(new java.awt.Dimension(127, 24));
+        dos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                dosMouseExited(evt);
+            }
+        });
         dos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dosActionPerformed(evt);
             }
         });
-        jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 260, 60));
+        jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 260, 50));
 
         uno.setBackground(new java.awt.Color(29, 30, 81));
-        uno.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        uno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/transfer.png"))); // NOI18N
-        uno.setText("   Escritorio");
+        uno.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
+        uno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/casa (1).png"))); // NOI18N
+        uno.setText("Escritorio");
+        uno.setToolTipText("");
         uno.setColorHover(new java.awt.Color(200, 200, 200));
-        uno.setColorTextHover(new java.awt.Color(0, 0, 0));
-        uno.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        uno.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        uno.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        uno.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        uno.setIconTextGap(10);
+        uno.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                unoMouseExited(evt);
+            }
+        });
         uno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 unoActionPerformed(evt);
             }
         });
-        jPanel3.add(uno, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 260, 60));
+        jPanel3.add(uno, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 260, 50));
 
         tres.setBackground(new java.awt.Color(29, 30, 81));
-        tres.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        tres.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gestion-de-la-cadena-de-suministro (1).png"))); // NOI18N
-        tres.setText("Proveedores");
+        tres.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
+        tres.setIcon(new javax.swing.ImageIcon(getClass().getResource("/servicio-de-administracion (1).png"))); // NOI18N
+        tres.setText(" Proveedores");
         tres.setColorHover(new java.awt.Color(128, 128, 128));
-        tres.setColorTextHover(new java.awt.Color(0, 0, 0));
-        tres.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        tres.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        tres.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        tres.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                tresMouseExited(evt);
+            }
+        });
         tres.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tresActionPerformed(evt);
             }
         });
-        jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 310, 260, 50));
+        jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 260, 50));
 
         cuatro.setBackground(new java.awt.Color(29, 30, 81));
-        cuatro.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        cuatro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ajuste.png"))); // NOI18N
-        cuatro.setText("Producción");
+        cuatro.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
+        cuatro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fabricar.png"))); // NOI18N
+        cuatro.setText(" Producción");
         cuatro.setColorHover(new java.awt.Color(200, 200, 200));
-        cuatro.setColorTextHover(new java.awt.Color(0, 0, 0));
-        cuatro.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        cuatro.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        cuatro.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        cuatro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                cuatroMouseExited(evt);
+            }
+        });
         cuatro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cuatroActionPerformed(evt);
             }
         });
-        jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 370, 260, 60));
+        jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 260, 50));
 
         cinco.setBackground(new java.awt.Color(29, 30, 81));
-        cinco.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        cinco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ventas.png"))); // NOI18N
-        cinco.setText("  Ventas");
+        cinco.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
+        cinco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mano.png"))); // NOI18N
+        cinco.setText("Ventas");
         cinco.setColorHover(new java.awt.Color(128, 128, 128));
-        cinco.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        cinco.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        cinco.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        cinco.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                cincoMouseExited(evt);
+            }
+        });
         cinco.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cincoActionPerformed(evt);
             }
         });
-        jPanel3.add(cinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, 260, 50));
+        jPanel3.add(cinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 380, 260, 50));
 
         seis.setBackground(new java.awt.Color(29, 30, 81));
-        seis.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        seis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/caja-registradora.png"))); // NOI18N
-        seis.setText("     Caja");
+        seis.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
+        seis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/caja-fuerte.png"))); // NOI18N
+        seis.setText(" Caja");
         seis.setColorHover(new java.awt.Color(128, 128, 128));
-        seis.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        seis.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        seis.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        seis.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                seisMouseExited(evt);
+            }
+        });
         seis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 seisActionPerformed(evt);
             }
         });
-        jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 260, 60));
+        jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 260, 50));
 
         ocho.setBackground(new java.awt.Color(29, 30, 81));
-        ocho.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        ocho.setIcon(new javax.swing.ImageIcon(getClass().getResource("/public-service.png"))); // NOI18N
+        ocho.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
+        ocho.setIcon(new javax.swing.ImageIcon(getClass().getResource("/responsabilidad.png"))); // NOI18N
         ocho.setText("Gestion de clientes");
         ocho.setColorHover(new java.awt.Color(128, 128, 128));
-        ocho.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        ocho.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        ocho.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ocho.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                ochoMouseExited(evt);
+            }
+        });
         ocho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ochoActionPerformed(evt);
             }
         });
-        jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 640, 260, 50));
+        jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 530, 260, 50));
 
         siete1.setBackground(new java.awt.Color(29, 30, 81));
-        siete1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        siete1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/personal.png"))); // NOI18N
-        siete1.setText("  Gestion de usuarios");
+        siete1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
+        siete1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/administracion.png"))); // NOI18N
+        siete1.setText("Gestion de usuarios");
         siete1.setColorHover(new java.awt.Color(128, 128, 128));
-        siete1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        siete1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        siete1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        siete1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                siete1MouseExited(evt);
+            }
+        });
         siete1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 siete1ActionPerformed(evt);
             }
         });
-        jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 260, 60));
+        jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 260, 50));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 800));
 
         jPanel4.setBackground(new java.awt.Color(29, 30, 81));
+        jPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel4MouseEntered(evt);
+            }
+        });
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         uno1.setBackground(new java.awt.Color(29, 30, 81));
-        uno1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        uno1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/transfer.png"))); // NOI18N
+        uno1.setBorder(null);
+        uno1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/casa (1).png"))); // NOI18N
         uno1.setColorHover(new java.awt.Color(200, 200, 200));
         uno1.setColorTextHover(new java.awt.Color(0, 0, 0));
         uno1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        uno1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                uno1MouseEntered(evt);
+            }
+        });
         uno1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 uno1ActionPerformed(evt);
             }
         });
+        jPanel4.add(uno1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 80, 50));
 
         dos1.setBackground(new java.awt.Color(29, 30, 81));
-        dos1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        dos1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/box.png"))); // NOI18N
+        dos1.setBorder(null);
+        dos1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/inventario-disponible.png"))); // NOI18N
         dos1.setColorHover(new java.awt.Color(169, 169, 169));
         dos1.setColorTextHover(new java.awt.Color(0, 0, 0));
         dos1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        dos1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                dos1MouseEntered(evt);
+            }
+        });
         dos1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dos1ActionPerformed(evt);
             }
         });
+        jPanel4.add(dos1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 80, 50));
 
         tres1.setBackground(new java.awt.Color(29, 30, 81));
-        tres1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        tres1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gestion-de-la-cadena-de-suministro (1).png"))); // NOI18N
+        tres1.setBorder(null);
+        tres1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/servicio-de-administracion (1).png"))); // NOI18N
         tres1.setColorHover(new java.awt.Color(128, 128, 128));
         tres1.setColorTextHover(new java.awt.Color(0, 0, 0));
         tres1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        tres1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                tres1MouseEntered(evt);
+            }
+        });
         tres1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tres1ActionPerformed(evt);
             }
         });
+        jPanel4.add(tres1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 80, 50));
 
         cuatro1.setBackground(new java.awt.Color(29, 30, 81));
-        cuatro1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        cuatro1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ajuste.png"))); // NOI18N
+        cuatro1.setBorder(null);
+        cuatro1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fabricar.png"))); // NOI18N
         cuatro1.setColorHover(new java.awt.Color(200, 200, 200));
         cuatro1.setColorTextHover(new java.awt.Color(0, 0, 0));
         cuatro1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        cuatro1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                cuatro1MouseEntered(evt);
+            }
+        });
         cuatro1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cuatro1ActionPerformed(evt);
             }
         });
+        jPanel4.add(cuatro1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 80, 50));
 
         cinco1.setBackground(new java.awt.Color(29, 30, 81));
-        cinco1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        cinco1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ventas.png"))); // NOI18N
+        cinco1.setBorder(null);
+        cinco1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mano.png"))); // NOI18N
         cinco1.setColorHover(new java.awt.Color(128, 128, 128));
         cinco1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        cinco1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                cinco1MouseEntered(evt);
+            }
+        });
         cinco1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cinco1ActionPerformed(evt);
             }
         });
+        jPanel4.add(cinco1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 380, 80, 50));
 
         seis1.setBackground(new java.awt.Color(29, 30, 81));
-        seis1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        seis1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/caja-registradora.png"))); // NOI18N
+        seis1.setBorder(null);
+        seis1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/caja-fuerte.png"))); // NOI18N
         seis1.setColorHover(new java.awt.Color(128, 128, 128));
         seis1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        seis1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                seis1MouseEntered(evt);
+            }
+        });
         seis1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 seis1ActionPerformed(evt);
             }
         });
+        jPanel4.add(seis1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 80, 50));
 
         siete2.setBackground(new java.awt.Color(29, 30, 81));
-        siete2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        siete2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/personal.png"))); // NOI18N
+        siete2.setBorder(null);
+        siete2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/administracion.png"))); // NOI18N
         siete2.setColorHover(new java.awt.Color(128, 128, 128));
         siete2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        siete2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                siete2MouseEntered(evt);
+            }
+        });
         siete2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 siete2ActionPerformed(evt);
             }
         });
+        jPanel4.add(siete2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 80, 50));
 
         ocho1.setBackground(new java.awt.Color(29, 30, 81));
-        ocho1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        ocho1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/public-service.png"))); // NOI18N
+        ocho1.setBorder(null);
+        ocho1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/responsabilidad.png"))); // NOI18N
         ocho1.setColorHover(new java.awt.Color(128, 128, 128));
         ocho1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        ocho1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                ocho1MouseEntered(evt);
+            }
+        });
         ocho1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ocho1ActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addComponent(uno1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(dos1, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-                            .addComponent(tres1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                    .addComponent(cuatro1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(cinco1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(seis1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(siete2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(ocho1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(172, 172, 172)
-                .addComponent(uno1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dos1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tres1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cuatro1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cinco1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(seis1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(siete2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ocho1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(106, Short.MAX_VALUE))
-        );
+        jPanel4.add(ocho1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 530, 80, 50));
 
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 80, 800));
 
@@ -423,6 +491,7 @@ public class Principal extends javax.swing.JFrame {
             jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
 
         }
+
     }//GEN-LAST:event_ochoActionPerformed
 
     private void seisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seisActionPerformed
@@ -453,6 +522,7 @@ public class Principal extends javax.swing.JFrame {
             jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
 
         }
+
     }//GEN-LAST:event_seisActionPerformed
 
     private void cincoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cincoActionPerformed
@@ -463,7 +533,9 @@ public class Principal extends javax.swing.JFrame {
             this.cuatro.setSelected(false);
             this.seis.setSelected(false);
             this.ocho.setSelected(false);
-int posicion = jPanel3.getX();
+
+        }
+        int posicion = jPanel3.getX();
         if (posicion > -1) {
             Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
             jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
@@ -472,7 +544,6 @@ int posicion = jPanel3.getX();
             Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
             jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
 
-        }
         }
     }//GEN-LAST:event_cincoActionPerformed
 
@@ -499,10 +570,13 @@ int posicion = jPanel3.getX();
         if (posicion > -1) {
             Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
             jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
+
         } else {
             Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
             jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
+
         }
+
 
     }//GEN-LAST:event_cuatroActionPerformed
 
@@ -523,7 +597,9 @@ int posicion = jPanel3.getX();
             contenedor.add(pr);
             contenedor.revalidate();
             contenedor.repaint();
-int posicion = jPanel3.getX();
+
+        }
+        int posicion = jPanel3.getX();
         if (posicion > -1) {
             Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
             jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
@@ -532,7 +608,6 @@ int posicion = jPanel3.getX();
             Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
             jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
 
-        }
         }
 
     }//GEN-LAST:event_tresActionPerformed
@@ -554,6 +629,8 @@ int posicion = jPanel3.getX();
             contenedor.add(es);
             contenedor.revalidate();
             contenedor.repaint();
+
+        }
         int posicion = jPanel3.getX();
         if (posicion > -1) {
             Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
@@ -563,7 +640,6 @@ int posicion = jPanel3.getX();
             Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
             jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
 
-        }
         }
     }//GEN-LAST:event_unoActionPerformed
 
@@ -586,7 +662,9 @@ int posicion = jPanel3.getX();
             contenedor.add(in);
             contenedor.revalidate();
             contenedor.repaint();
-int posicion = jPanel3.getX();
+
+        }
+        int posicion = jPanel3.getX();
         if (posicion > -1) {
             Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
             jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
@@ -595,7 +673,6 @@ int posicion = jPanel3.getX();
             Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
             jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
 
-        }
         }
     }//GEN-LAST:event_dosActionPerformed
 
@@ -615,20 +692,11 @@ int posicion = jPanel3.getX();
     }//GEN-LAST:event_menuActionPerformed
 
     private void siete1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siete1ActionPerformed
-     int posicion = jPanel3.getX();
-        if (posicion > -1) {
-            Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
-            jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
-
-        } else {
-            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
-            jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
-
-        }        // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_siete1ActionPerformed
 
     private void uno1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uno1ActionPerformed
-    if (!this.uno.isSelected()) {
+        if (!this.uno.isSelected()) {
             this.uno.setSelected(true);
             this.dos.setSelected(false);
             this.tres.setSelected(false);
@@ -644,8 +712,8 @@ int posicion = jPanel3.getX();
             contenedor.add(es);
             contenedor.revalidate();
             contenedor.repaint();
-}
-            int posicion = jPanel3.getX();
+        }
+        int posicion = jPanel3.getX();
         if (posicion > -1) {
             Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
             jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
@@ -655,11 +723,11 @@ int posicion = jPanel3.getX();
             jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
 
         }
-    
+
     }//GEN-LAST:event_uno1ActionPerformed
 
     private void dos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dos1ActionPerformed
-if (!this.dos.isSelected()) {
+        if (!this.dos.isSelected()) {
             this.uno.setSelected(false);
             this.tres.setSelected(false);
             this.cuatro.setSelected(false);
@@ -678,8 +746,8 @@ if (!this.dos.isSelected()) {
             contenedor.revalidate();
             contenedor.repaint();
 
-        } 
-int posicion = jPanel3.getX();
+        }
+        int posicion = jPanel3.getX();
         if (posicion > -1) {
             Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
             jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
@@ -692,7 +760,7 @@ int posicion = jPanel3.getX();
     }//GEN-LAST:event_dos1ActionPerformed
 
     private void tres1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tres1ActionPerformed
-if (!this.tres.isSelected()) {
+        if (!this.tres.isSelected()) {
             this.uno.setSelected(false);
             this.dos.setSelected(false);
             this.tres.setSelected(true);
@@ -710,7 +778,7 @@ if (!this.tres.isSelected()) {
             contenedor.repaint();
 
         }
-int posicion = jPanel3.getX();
+        int posicion = jPanel3.getX();
         if (posicion > -1) {
             Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
             jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
@@ -724,7 +792,7 @@ int posicion = jPanel3.getX();
     }//GEN-LAST:event_tres1ActionPerformed
 
     private void cuatro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuatro1ActionPerformed
-if (!this.cuatro.isSelected()) {
+        if (!this.cuatro.isSelected()) {
             this.uno.setSelected(false);
             this.dos.setSelected(false);
             this.tres.setSelected(false);
@@ -741,8 +809,8 @@ if (!this.cuatro.isSelected()) {
             contenedor.revalidate();
             contenedor.repaint();
 
-        }     
-int posicion = jPanel3.getX();
+        }
+        int posicion = jPanel3.getX();
         if (posicion > -1) {
             Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
             jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
@@ -807,7 +875,7 @@ int posicion = jPanel3.getX();
     }//GEN-LAST:event_seis1ActionPerformed
 
     private void siete2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siete2ActionPerformed
-int posicion = jPanel3.getX();
+        int posicion = jPanel3.getX();
         if (posicion > -1) {
             Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
             jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
@@ -849,6 +917,159 @@ int posicion = jPanel3.getX();
 
         }
     }//GEN-LAST:event_ocho1ActionPerformed
+
+    private void unoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_unoMouseExited
+
+    }//GEN-LAST:event_unoMouseExited
+
+    private void cuatroMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cuatroMouseExited
+
+
+    }//GEN-LAST:event_cuatroMouseExited
+
+    private void dosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dosMouseExited
+
+    }//GEN-LAST:event_dosMouseExited
+
+    private void tresMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tresMouseExited
+
+    }//GEN-LAST:event_tresMouseExited
+
+    private void cincoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cincoMouseExited
+
+    }//GEN-LAST:event_cincoMouseExited
+
+    private void seisMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seisMouseExited
+
+    }//GEN-LAST:event_seisMouseExited
+
+    private void siete1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_siete1MouseExited
+
+    }//GEN-LAST:event_siete1MouseExited
+
+    private void ochoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ochoMouseExited
+
+    }//GEN-LAST:event_ochoMouseExited
+
+    private void uno1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uno1MouseEntered
+        int posicion = jPanel3.getX();
+        if (posicion > -1) {
+            Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
+            jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
+
+        } else {
+            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
+            jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
+
+        }
+    }//GEN-LAST:event_uno1MouseEntered
+
+    private void jPanel3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseExited
+
+    }//GEN-LAST:event_jPanel3MouseExited
+
+    private void jPanel4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPanel4MouseEntered
+
+    private void cuatro1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cuatro1MouseEntered
+        int posicion = jPanel3.getX();
+        if (posicion > -1) {
+            Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
+            jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
+
+        } else {
+            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
+            jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
+
+        }
+    }//GEN-LAST:event_cuatro1MouseEntered
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+
+        JOptionPane.showMessageDialog(null, "Hasta luego");
+        login lo = new login();
+        lo.setVisible(true);
+        this.dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void dos1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dos1MouseEntered
+        int posicion = jPanel3.getX();
+        if (posicion > -1) {
+            Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
+            jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
+
+        } else {
+            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
+            jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
+
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_dos1MouseEntered
+
+    private void tres1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tres1MouseEntered
+        int posicion = jPanel3.getX();
+        if (posicion > -1) {
+            Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
+            jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
+
+        } else {
+            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
+            jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
+
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_tres1MouseEntered
+
+    private void cinco1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cinco1MouseEntered
+        int posicion = jPanel3.getX();
+        if (posicion > -1) {
+            Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
+            jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
+
+        } else {
+            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
+            jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
+
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_cinco1MouseEntered
+
+    private void seis1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seis1MouseEntered
+        int posicion = jPanel3.getX();
+        if (posicion > -1) {
+            Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
+            jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
+
+        } else {
+            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
+            jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
+
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_seis1MouseEntered
+
+    private void siete2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_siete2MouseEntered
+        int posicion = jPanel3.getX();
+        if (posicion > -1) {
+            Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
+            jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
+
+        } else {
+            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
+            jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
+
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_siete2MouseEntered
+
+    private void ocho1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ocho1MouseEntered
+        int posicion = jPanel3.getX();
+        if (posicion > -1) {
+            Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
+            jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
+
+        } else {
+            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
+            jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
+
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_ocho1MouseEntered
 
     /**
      * @param args the command line arguments
