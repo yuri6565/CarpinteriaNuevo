@@ -54,7 +54,7 @@ public class Inventario extends javax.swing.JPanel {
         panelprincipal = new javax.swing.JPanel();
         btnMateriales = new rojeru_san.RSButtonRiple();
 
-        setBackground(new java.awt.Color(237, 241, 255));
+        setBackground(new java.awt.Color(255, 255, 255));
         setToolTipText("");
         setMaximumSize(new java.awt.Dimension(32767, 32));
         setPreferredSize(new java.awt.Dimension(1290, 730));
@@ -82,7 +82,7 @@ public class Inventario extends javax.swing.JPanel {
         });
         add(btnMovimientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 20, 190, -1));
 
-        panelprincipal.setBackground(new java.awt.Color(237, 241, 255));
+        panelprincipal.setBackground(new java.awt.Color(255, 255, 255));
         panelprincipal.setPreferredSize(new java.awt.Dimension(960, 570));
         add(panelprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 1240, 580));
 

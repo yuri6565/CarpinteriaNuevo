@@ -227,7 +227,7 @@ public class herramientas extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(1240, 580));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panelprincipal.setBackground(new java.awt.Color(237, 241, 255));
+        panelprincipal.setBackground(new java.awt.Color(255, 255, 255));
         panelprincipal.setPreferredSize(new java.awt.Dimension(1240, 580));
         panelprincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
