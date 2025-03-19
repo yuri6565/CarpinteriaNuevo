@@ -49,6 +49,7 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         menu = new rojeru_san.RSButton();
@@ -56,6 +57,7 @@ public class Principal extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        contenedor = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         dos = new rojeru_san.RSButton();
         uno = new rojeru_san.RSButton();
@@ -65,7 +67,17 @@ public class Principal extends javax.swing.JFrame {
         seis = new rojeru_san.RSButton();
         ocho = new rojeru_san.RSButton();
         siete1 = new rojeru_san.RSButton();
-        contenedor = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        uno1 = new rojeru_san.RSButton();
+        dos1 = new rojeru_san.RSButton();
+        tres1 = new rojeru_san.RSButton();
+        cuatro1 = new rojeru_san.RSButton();
+        cinco1 = new rojeru_san.RSButton();
+        seis1 = new rojeru_san.RSButton();
+        siete2 = new rojeru_san.RSButton();
+        ocho1 = new rojeru_san.RSButton();
+
+        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -106,6 +118,22 @@ public class Principal extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1550, 80));
 
+        contenedor.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout contenedorLayout = new javax.swing.GroupLayout(contenedor);
+        contenedor.setLayout(contenedorLayout);
+        contenedorLayout.setHorizontalGroup(
+            contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1290, Short.MAX_VALUE)
+        );
+        contenedorLayout.setVerticalGroup(
+            contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 730, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, 1290, 730));
+        contenedor.getAccessibleContext().setAccessibleName("");
+
         jPanel3.setBackground(new java.awt.Color(29, 30, 81));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -135,7 +163,7 @@ public class Principal extends javax.swing.JFrame {
                 unoActionPerformed(evt);
             }
         });
-        jPanel3.add(uno, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 260, 60));
+        jPanel3.add(uno, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 260, 60));
 
         tres.setBackground(new java.awt.Color(29, 30, 81));
         tres.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -149,7 +177,7 @@ public class Principal extends javax.swing.JFrame {
                 tresActionPerformed(evt);
             }
         });
-        jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 260, 60));
+        jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 310, 260, 50));
 
         cuatro.setBackground(new java.awt.Color(29, 30, 81));
         cuatro.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -163,7 +191,7 @@ public class Principal extends javax.swing.JFrame {
                 cuatroActionPerformed(evt);
             }
         });
-        jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 260, 60));
+        jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 370, 260, 60));
 
         cinco.setBackground(new java.awt.Color(29, 30, 81));
         cinco.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -176,11 +204,12 @@ public class Principal extends javax.swing.JFrame {
                 cincoActionPerformed(evt);
             }
         });
-        jPanel3.add(cinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, 260, 60));
+        jPanel3.add(cinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, 260, 50));
 
         seis.setBackground(new java.awt.Color(29, 30, 81));
         seis.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        seis.setText("Caja");
+        seis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/caja-registradora.png"))); // NOI18N
+        seis.setText("     Caja");
         seis.setColorHover(new java.awt.Color(128, 128, 128));
         seis.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         seis.addActionListener(new java.awt.event.ActionListener() {
@@ -188,10 +217,11 @@ public class Principal extends javax.swing.JFrame {
                 seisActionPerformed(evt);
             }
         });
-        jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 260, 60));
+        jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 260, 60));
 
         ocho.setBackground(new java.awt.Color(29, 30, 81));
         ocho.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        ocho.setIcon(new javax.swing.ImageIcon(getClass().getResource("/public-service.png"))); // NOI18N
         ocho.setText("Gestion de clientes");
         ocho.setColorHover(new java.awt.Color(128, 128, 128));
         ocho.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -200,11 +230,12 @@ public class Principal extends javax.swing.JFrame {
                 ochoActionPerformed(evt);
             }
         });
-        jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 260, 60));
+        jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 640, 260, 50));
 
         siete1.setBackground(new java.awt.Color(29, 30, 81));
         siete1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        siete1.setText("Gestion de usuarios");
+        siete1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/personal.png"))); // NOI18N
+        siete1.setText("  Gestion de usuarios");
         siete1.setColorHover(new java.awt.Color(128, 128, 128));
         siete1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         siete1.addActionListener(new java.awt.event.ActionListener() {
@@ -212,25 +243,150 @@ public class Principal extends javax.swing.JFrame {
                 siete1ActionPerformed(evt);
             }
         });
-        jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 260, 60));
+        jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 260, 60));
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 260, 800));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 800));
 
-        contenedor.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4.setBackground(new java.awt.Color(29, 30, 81));
 
-        javax.swing.GroupLayout contenedorLayout = new javax.swing.GroupLayout(contenedor);
-        contenedor.setLayout(contenedorLayout);
-        contenedorLayout.setHorizontalGroup(
-            contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1290, Short.MAX_VALUE)
+        uno1.setBackground(new java.awt.Color(29, 30, 81));
+        uno1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        uno1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/transfer.png"))); // NOI18N
+        uno1.setColorHover(new java.awt.Color(200, 200, 200));
+        uno1.setColorTextHover(new java.awt.Color(0, 0, 0));
+        uno1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        uno1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uno1ActionPerformed(evt);
+            }
+        });
+
+        dos1.setBackground(new java.awt.Color(29, 30, 81));
+        dos1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        dos1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/box.png"))); // NOI18N
+        dos1.setColorHover(new java.awt.Color(169, 169, 169));
+        dos1.setColorTextHover(new java.awt.Color(0, 0, 0));
+        dos1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        dos1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dos1ActionPerformed(evt);
+            }
+        });
+
+        tres1.setBackground(new java.awt.Color(29, 30, 81));
+        tres1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        tres1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gestion-de-la-cadena-de-suministro (1).png"))); // NOI18N
+        tres1.setColorHover(new java.awt.Color(128, 128, 128));
+        tres1.setColorTextHover(new java.awt.Color(0, 0, 0));
+        tres1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        tres1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tres1ActionPerformed(evt);
+            }
+        });
+
+        cuatro1.setBackground(new java.awt.Color(29, 30, 81));
+        cuatro1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        cuatro1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ajuste.png"))); // NOI18N
+        cuatro1.setColorHover(new java.awt.Color(200, 200, 200));
+        cuatro1.setColorTextHover(new java.awt.Color(0, 0, 0));
+        cuatro1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        cuatro1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cuatro1ActionPerformed(evt);
+            }
+        });
+
+        cinco1.setBackground(new java.awt.Color(29, 30, 81));
+        cinco1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        cinco1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ventas.png"))); // NOI18N
+        cinco1.setColorHover(new java.awt.Color(128, 128, 128));
+        cinco1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        cinco1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cinco1ActionPerformed(evt);
+            }
+        });
+
+        seis1.setBackground(new java.awt.Color(29, 30, 81));
+        seis1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        seis1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/caja-registradora.png"))); // NOI18N
+        seis1.setColorHover(new java.awt.Color(128, 128, 128));
+        seis1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        seis1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seis1ActionPerformed(evt);
+            }
+        });
+
+        siete2.setBackground(new java.awt.Color(29, 30, 81));
+        siete2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        siete2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/personal.png"))); // NOI18N
+        siete2.setColorHover(new java.awt.Color(128, 128, 128));
+        siete2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        siete2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                siete2ActionPerformed(evt);
+            }
+        });
+
+        ocho1.setBackground(new java.awt.Color(29, 30, 81));
+        ocho1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        ocho1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/public-service.png"))); // NOI18N
+        ocho1.setColorHover(new java.awt.Color(128, 128, 128));
+        ocho1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        ocho1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ocho1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(uno1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(dos1, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+                            .addComponent(tres1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addComponent(cuatro1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(cinco1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(seis1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(siete2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(ocho1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
-        contenedorLayout.setVerticalGroup(
-            contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(172, 172, 172)
+                .addComponent(uno1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(dos1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tres1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cuatro1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cinco1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(seis1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(siete2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ocho1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(106, Short.MAX_VALUE))
         );
 
-        jPanel1.add(contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, 1290, 730));
-        contenedor.getAccessibleContext().setAccessibleName("");
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 80, 800));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1556, 822));
 
@@ -396,6 +552,38 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_siete1ActionPerformed
 
+    private void uno1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uno1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_uno1ActionPerformed
+
+    private void dos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dos1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dos1ActionPerformed
+
+    private void tres1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tres1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tres1ActionPerformed
+
+    private void cuatro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuatro1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cuatro1ActionPerformed
+
+    private void cinco1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cinco1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cinco1ActionPerformed
+
+    private void seis1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seis1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_seis1ActionPerformed
+
+    private void siete2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siete2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_siete2ActionPerformed
+
+    private void ocho1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ocho1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ocho1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -435,9 +623,13 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButton cinco;
+    private rojeru_san.RSButton cinco1;
     private javax.swing.JPanel contenedor;
     private rojeru_san.RSButton cuatro;
+    private rojeru_san.RSButton cuatro1;
     private rojeru_san.RSButton dos;
+    private rojeru_san.RSButton dos1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
@@ -445,12 +637,18 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private rojeru_san.RSButton menu;
     private rojeru_san.RSButton ocho;
+    private rojeru_san.RSButton ocho1;
     private rojeru_san.RSButton seis;
+    private rojeru_san.RSButton seis1;
     private rojeru_san.RSButton siete1;
+    private rojeru_san.RSButton siete2;
     private rojeru_san.RSButton tres;
+    private rojeru_san.RSButton tres1;
     private rojeru_san.RSButton uno;
+    private rojeru_san.RSButton uno1;
     // End of variables declaration//GEN-END:variables
 
 }
