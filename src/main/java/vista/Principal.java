@@ -40,6 +40,18 @@ public class Principal extends javax.swing.JFrame {
         contenedor.repaint();
 
     }
+    private void animacion (){
+    int posicion = jPanel3.getX();
+        if (posicion > -1) {
+            Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
+            jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
+
+        } else {
+            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
+            jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
+
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -101,6 +113,7 @@ public class Principal extends javax.swing.JFrame {
 
         jButton2.setBackground(new java.awt.Color(29, 30, 81));
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
+        jButton2.setBorder(null);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -110,6 +123,7 @@ public class Principal extends javax.swing.JFrame {
 
         jButton3.setBackground(new java.awt.Color(29, 30, 81));
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/usuario (2).png"))); // NOI18N
+        jButton3.setBorder(null);
         jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1410, 20, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
@@ -141,26 +155,15 @@ public class Principal extends javax.swing.JFrame {
         contenedor.getAccessibleContext().setAccessibleName("");
 
         jPanel3.setBackground(new java.awt.Color(29, 30, 81));
-        jPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jPanel3MouseExited(evt);
-            }
-        });
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         dos.setBackground(new java.awt.Color(29, 30, 81));
         dos.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        dos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/inventario-disponible.png"))); // NOI18N
         dos.setText(" Inventario");
         dos.setColorHover(new java.awt.Color(169, 169, 169));
         dos.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         dos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         dos.setMaximumSize(new java.awt.Dimension(127, 24));
-        dos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                dosMouseExited(evt);
-            }
-        });
         dos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dosActionPerformed(evt);
@@ -170,7 +173,6 @@ public class Principal extends javax.swing.JFrame {
 
         uno.setBackground(new java.awt.Color(29, 30, 81));
         uno.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        uno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/casa (1).png"))); // NOI18N
         uno.setText("Escritorio");
         uno.setToolTipText("");
         uno.setColorHover(new java.awt.Color(200, 200, 200));
@@ -178,11 +180,6 @@ public class Principal extends javax.swing.JFrame {
         uno.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         uno.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         uno.setIconTextGap(10);
-        uno.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                unoMouseExited(evt);
-            }
-        });
         uno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 unoActionPerformed(evt);
@@ -192,16 +189,10 @@ public class Principal extends javax.swing.JFrame {
 
         tres.setBackground(new java.awt.Color(29, 30, 81));
         tres.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        tres.setIcon(new javax.swing.ImageIcon(getClass().getResource("/servicio-de-administracion (1).png"))); // NOI18N
         tres.setText(" Proveedores");
         tres.setColorHover(new java.awt.Color(128, 128, 128));
         tres.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         tres.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        tres.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                tresMouseExited(evt);
-            }
-        });
         tres.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tresActionPerformed(evt);
@@ -211,16 +202,10 @@ public class Principal extends javax.swing.JFrame {
 
         cuatro.setBackground(new java.awt.Color(29, 30, 81));
         cuatro.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        cuatro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fabricar.png"))); // NOI18N
         cuatro.setText(" Producción");
         cuatro.setColorHover(new java.awt.Color(200, 200, 200));
         cuatro.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         cuatro.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        cuatro.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                cuatroMouseExited(evt);
-            }
-        });
         cuatro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cuatroActionPerformed(evt);
@@ -230,16 +215,10 @@ public class Principal extends javax.swing.JFrame {
 
         cinco.setBackground(new java.awt.Color(29, 30, 81));
         cinco.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        cinco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mano.png"))); // NOI18N
         cinco.setText("Ventas");
         cinco.setColorHover(new java.awt.Color(128, 128, 128));
         cinco.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         cinco.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        cinco.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                cincoMouseExited(evt);
-            }
-        });
         cinco.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cincoActionPerformed(evt);
@@ -249,16 +228,10 @@ public class Principal extends javax.swing.JFrame {
 
         seis.setBackground(new java.awt.Color(29, 30, 81));
         seis.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        seis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/caja-fuerte.png"))); // NOI18N
         seis.setText(" Caja");
         seis.setColorHover(new java.awt.Color(128, 128, 128));
         seis.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         seis.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        seis.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                seisMouseExited(evt);
-            }
-        });
         seis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 seisActionPerformed(evt);
@@ -268,16 +241,10 @@ public class Principal extends javax.swing.JFrame {
 
         ocho.setBackground(new java.awt.Color(29, 30, 81));
         ocho.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        ocho.setIcon(new javax.swing.ImageIcon(getClass().getResource("/responsabilidad.png"))); // NOI18N
         ocho.setText("Gestion de clientes");
         ocho.setColorHover(new java.awt.Color(128, 128, 128));
         ocho.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         ocho.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        ocho.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                ochoMouseExited(evt);
-            }
-        });
         ocho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ochoActionPerformed(evt);
@@ -287,16 +254,10 @@ public class Principal extends javax.swing.JFrame {
 
         siete1.setBackground(new java.awt.Color(29, 30, 81));
         siete1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        siete1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/administracion.png"))); // NOI18N
         siete1.setText("Gestion de usuarios");
         siete1.setColorHover(new java.awt.Color(128, 128, 128));
         siete1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         siete1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        siete1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                siete1MouseExited(evt);
-            }
-        });
         siete1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 siete1ActionPerformed(evt);
@@ -307,16 +268,10 @@ public class Principal extends javax.swing.JFrame {
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 800));
 
         jPanel4.setBackground(new java.awt.Color(29, 30, 81));
-        jPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jPanel4MouseEntered(evt);
-            }
-        });
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         uno1.setBackground(new java.awt.Color(29, 30, 81));
         uno1.setBorder(null);
-        uno1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/casa (1).png"))); // NOI18N
         uno1.setColorHover(new java.awt.Color(200, 200, 200));
         uno1.setColorTextHover(new java.awt.Color(0, 0, 0));
         uno1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -334,7 +289,6 @@ public class Principal extends javax.swing.JFrame {
 
         dos1.setBackground(new java.awt.Color(29, 30, 81));
         dos1.setBorder(null);
-        dos1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/inventario-disponible.png"))); // NOI18N
         dos1.setColorHover(new java.awt.Color(169, 169, 169));
         dos1.setColorTextHover(new java.awt.Color(0, 0, 0));
         dos1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -352,7 +306,6 @@ public class Principal extends javax.swing.JFrame {
 
         tres1.setBackground(new java.awt.Color(29, 30, 81));
         tres1.setBorder(null);
-        tres1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/servicio-de-administracion (1).png"))); // NOI18N
         tres1.setColorHover(new java.awt.Color(128, 128, 128));
         tres1.setColorTextHover(new java.awt.Color(0, 0, 0));
         tres1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -370,7 +323,6 @@ public class Principal extends javax.swing.JFrame {
 
         cuatro1.setBackground(new java.awt.Color(29, 30, 81));
         cuatro1.setBorder(null);
-        cuatro1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fabricar.png"))); // NOI18N
         cuatro1.setColorHover(new java.awt.Color(200, 200, 200));
         cuatro1.setColorTextHover(new java.awt.Color(0, 0, 0));
         cuatro1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -405,7 +357,6 @@ public class Principal extends javax.swing.JFrame {
 
         seis1.setBackground(new java.awt.Color(29, 30, 81));
         seis1.setBorder(null);
-        seis1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/caja-fuerte.png"))); // NOI18N
         seis1.setColorHover(new java.awt.Color(128, 128, 128));
         seis1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         seis1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -422,7 +373,6 @@ public class Principal extends javax.swing.JFrame {
 
         siete2.setBackground(new java.awt.Color(29, 30, 81));
         siete2.setBorder(null);
-        siete2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/administracion.png"))); // NOI18N
         siete2.setColorHover(new java.awt.Color(128, 128, 128));
         siete2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         siete2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -439,7 +389,6 @@ public class Principal extends javax.swing.JFrame {
 
         ocho1.setBackground(new java.awt.Color(29, 30, 81));
         ocho1.setBorder(null);
-        ocho1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/responsabilidad.png"))); // NOI18N
         ocho1.setColorHover(new java.awt.Color(128, 128, 128));
         ocho1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         ocho1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -679,16 +628,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuActionPerformed
 
-        int posicion = jPanel3.getX();
-        if (posicion > -1) {
-            Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
-            jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
-
-        } else {
-            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
-            jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
-
-        }
+        
     }//GEN-LAST:event_menuActionPerformed
 
     private void siete1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siete1ActionPerformed
@@ -918,39 +858,6 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ocho1ActionPerformed
 
-    private void unoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_unoMouseExited
-
-    }//GEN-LAST:event_unoMouseExited
-
-    private void cuatroMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cuatroMouseExited
-
-
-    }//GEN-LAST:event_cuatroMouseExited
-
-    private void dosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dosMouseExited
-
-    }//GEN-LAST:event_dosMouseExited
-
-    private void tresMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tresMouseExited
-
-    }//GEN-LAST:event_tresMouseExited
-
-    private void cincoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cincoMouseExited
-
-    }//GEN-LAST:event_cincoMouseExited
-
-    private void seisMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seisMouseExited
-
-    }//GEN-LAST:event_seisMouseExited
-
-    private void siete1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_siete1MouseExited
-
-    }//GEN-LAST:event_siete1MouseExited
-
-    private void ochoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ochoMouseExited
-
-    }//GEN-LAST:event_ochoMouseExited
-
     private void uno1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uno1MouseEntered
         int posicion = jPanel3.getX();
         if (posicion > -1) {
@@ -963,14 +870,6 @@ public class Principal extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_uno1MouseEntered
-
-    private void jPanel3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseExited
-
-    }//GEN-LAST:event_jPanel3MouseExited
-
-    private void jPanel4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPanel4MouseEntered
 
     private void cuatro1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cuatro1MouseEntered
         int posicion = jPanel3.getX();
