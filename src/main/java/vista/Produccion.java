@@ -1,7 +1,3 @@
-
-
-
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
@@ -31,35 +27,40 @@ import java.util.logging.Logger;
  */
 public class Produccion extends javax.swing.JPanel {
 
+    
+    
     /**
      * Creates new form Produccion
      */
     public Produccion() {
         initComponents();
-            jScrollPane2.setVisible(false); // Ocultar la tabla 1 inicialmente
-            jScrollPane3.setVisible(false); // Ocultar la tabla 1 inicialmente
-            jScrollPane4.setVisible(false); // Ocultar la tabla 1 inicialmente
+        jScrollPane2.setVisible(false); // Ocultar la tabla 1 inicialmente
+        jScrollPane3.setVisible(false); // Ocultar la tabla 1 inicialmente
+        jScrollPane4.setVisible(false); // Ocultar la tabla 1 inicialmente
 // Agregar DocumentListener a la barra de búsqueda
-    rSTextFieldMaterialIcon1.getDocument().addDocumentListener(new DocumentListener() {
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            filterTables();
-        }
+        rSTextFieldMaterialIcon1.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filterTables();
+            }
 
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            filterTables();
-        }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filterTables();
+            }
 
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            filterTables();
-        }
-    });
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filterTables();
+            }
+        });
     }
     
-    
-    
+    public void agregarFila(String id, String fechaInicio, String fechaFinal, String estado) {
+        DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+        model.addRow(new Object[]{id, generateRandomId(), fechaInicio, fechaFinal, estado});
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -77,7 +78,7 @@ public class Produccion extends javax.swing.JPanel {
         Tabla2 = new RSMaterialComponent.RSTableMetroCustom();
         jScrollPane4 = new javax.swing.JScrollPane();
         Tabla3 = new RSMaterialComponent.RSTableMetroCustom();
-        rSButtonMaterialTwo2 = new RSMaterialComponent.RSButtonMaterialTwo();
+        rSButtonMaterialTwo4 = new RSMaterialComponent.RSButtonMaterialTwo();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(1290, 730));
@@ -112,14 +113,16 @@ public class Produccion extends javax.swing.JPanel {
         jPanel1.add(rSButtonFlat_new3, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 42, 91, -1));
 
         rSButtonMaterialTwo3.setBackground(new java.awt.Color(29, 30, 51));
-        rSButtonMaterialTwo3.setText("Eliminar -");
+        rSButtonMaterialTwo3.setBorder(null);
+        rSButtonMaterialTwo3.setText("Nuevo+");
         rSButtonMaterialTwo3.setBackgroundHover(new java.awt.Color(29, 30, 31));
+        rSButtonMaterialTwo3.setBorderPainted(false);
         rSButtonMaterialTwo3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rSButtonMaterialTwo3ActionPerformed(evt);
             }
         });
-        jPanel1.add(rSButtonMaterialTwo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 86, 37));
+        jPanel1.add(rSButtonMaterialTwo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 120, 86, 37));
 
         rSTextFieldMaterialIcon1.setForeground(new java.awt.Color(29, 30, 91));
         rSTextFieldMaterialIcon1.setColorIcon(new java.awt.Color(29, 30, 111));
@@ -206,21 +209,23 @@ public class Produccion extends javax.swing.JPanel {
 
         jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 1220, 520));
 
-        rSButtonMaterialTwo2.setBackground(new java.awt.Color(29, 30, 51));
-        rSButtonMaterialTwo2.setText("Nuevo +");
-        rSButtonMaterialTwo2.setBackgroundHover(new java.awt.Color(29, 30, 31));
-        rSButtonMaterialTwo2.addActionListener(new java.awt.event.ActionListener() {
+        rSButtonMaterialTwo4.setBackground(new java.awt.Color(29, 30, 51));
+        rSButtonMaterialTwo4.setBorder(null);
+        rSButtonMaterialTwo4.setText("Eliminar -");
+        rSButtonMaterialTwo4.setBackgroundHover(new java.awt.Color(29, 30, 31));
+        rSButtonMaterialTwo4.setBorderPainted(false);
+        rSButtonMaterialTwo4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSButtonMaterialTwo2ActionPerformed(evt);
+                rSButtonMaterialTwo4ActionPerformed(evt);
             }
         });
-        jPanel1.add(rSButtonMaterialTwo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 110, 86, 37));
+        jPanel1.add(rSButtonMaterialTwo4, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 120, 86, 37));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1296, Short.MAX_VALUE)
+            .addGap(0, 1520, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, 0)
@@ -243,84 +248,52 @@ public class Produccion extends javax.swing.JPanel {
     }//GEN-LAST:event_rSTextFieldMaterialIcon1ActionPerformed
 
     private void rSButtonFlat_new3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonFlat_new3ActionPerformed
-    // Ocultar Tabla1 y Tabla3
-    jScrollPane3.setVisible(false); // Ocultar Tabla1
-    jScrollPane4.setVisible(false); // Ocultar Tabla3
+        // Ocultar Tabla2 y Tabla3
+        jScrollPane3.setVisible(false); // Ocultar Tabla1
+        jScrollPane4.setVisible(false); // Ocultar Tabla3
 
-    // Mostrar Tabla2
-    jScrollPane2.setVisible(true); // Mostrar Tabla2
-    // Revalidar y repaint para actualizar la interfaz
-    // Revalidar y repaint para actualizar la interfaz
-    jPanel1.revalidate();
-    jPanel1.repaint();
-                                                 
+        // Mostrar Tabla1
+        jScrollPane2.setVisible(true); // Mostrar Tabla2
+        // Revalidar y repaint para actualizar la interfaz
+        // Revalidar y repaint para actualizar la interfaz
+        
+
     }//GEN-LAST:event_rSButtonFlat_new3ActionPerformed
 
     private void rSButtonFlat_new1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonFlat_new1ActionPerformed
 // Ocultar Tabla1 y Tabla3
-    jScrollPane2.setVisible(false); // Ocultar Tabla1
-    jScrollPane4.setVisible(false); // Ocultar Tabla3
+        jScrollPane2.setVisible(false); // Ocultar Tabla1
+        jScrollPane4.setVisible(false); // Ocultar Tabla3
 
-    // Mostrar Tabla2
-    jScrollPane3.setVisible(true); // Mostrar Tabla2
-    // Revalidar y repaint para actualizar la interfaz
-    // Revalidar y repaint para actualizar la interfaz
-    jPanel1.revalidate();
-    jPanel1.repaint();
-                   // TODO add your handling code here:
+        // Mostrar Tabla2
+        jScrollPane3.setVisible(true); // Mostrar Tabla2
+        // Revalidar y repaint para actualizar la interfaz
+        // Revalidar y repaint para actualizar la interfaz
+        
+        // TODO add your handling code here:
     }//GEN-LAST:event_rSButtonFlat_new1ActionPerformed
 
     private void rSButtonFlat_new2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonFlat_new2ActionPerformed
-// Ocultar Tabla1 y Tabla3
-    jScrollPane2.setVisible(false); // Ocultar Tabla1
-    jScrollPane3.setVisible(false); // Ocultar Tabla3
+// Ocultar Tabla1 y Tabla2
+        jScrollPane2.setVisible(false); // Ocultar Tabla1
+        jScrollPane3.setVisible(false); // Ocultar Tabla3
 
-    // Mostrar Tabla2
-    jScrollPane4.setVisible(true); // Mostrar Tabla2
-    // Revalidar y repaint para actualizar la interfaz
-    // Revalidar y repaint para actualizar la interfaz
-    jPanel1.revalidate();
-    jPanel1.repaint();
-                   // TODO add your handling code here:
+        // Mostrar Tabla3
+        jScrollPane4.setVisible(true); // Mostrar Tabla2
+        // Revalidar y repaint para actualizar la interfaz
+        // Revalidar y repaint para actualizar la interfaz
+        
+        // TODO add your handling code here:
     }//GEN-LAST:event_rSButtonFlat_new2ActionPerformed
 
     private void rSButtonMaterialTwo3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMaterialTwo3ActionPerformed
-        // Determinar qué tabla está visible
-    DefaultTableModel model = null;
-    JTable currentTable = null;
-
-    if (jScrollPane2.isVisible()) {
-        model = (DefaultTableModel) Tabla1.getModel();
-        currentTable = Tabla1;
-    } else if (jScrollPane3.isVisible()) {
-        model = (DefaultTableModel) Tabla2.getModel();
-        currentTable = Tabla2;
-    } else if (jScrollPane4.isVisible()) {
-        model = (DefaultTableModel) Tabla3.getModel();
-        currentTable = Tabla3;
-    }
-
-    // Verificar si hay una fila seleccionada
-    int selectedRow = currentTable.getSelectedRow();
-    if (selectedRow != -1) { // Si hay una fila seleccionada
-        // Confirmar la eliminación
-        int confirm = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar esta fila?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-        if (confirm == JOptionPane.YES_OPTION) {
-            // Eliminar la fila seleccionada
-            model.removeRow(selectedRow);
-            // Actualizar la columna "#" para mantener la secuencia
-            for (int i = 0; i < model.getRowCount(); i++) {
-                model.setValueAt(i + 1, i, 0); // Actualiza la columna "#" con el nuevo índice
-            }
-        }
-    } else {
-        JOptionPane.showMessageDialog(this, "Por favor, selecciona una fila para eliminar.", "No se seleccionó ninguna fila", JOptionPane.WARNING_MESSAGE);
-    }
+    formuProduccion fo = new formuProduccion(this); // Pasar la instancia de Produccion
+    fo.setVisible(true);
     }//GEN-LAST:event_rSButtonMaterialTwo3ActionPerformed
 
-    private void rSButtonMaterialTwo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMaterialTwo2ActionPerformed
+    private void rSButtonMaterialTwo4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMaterialTwo4ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_rSButtonMaterialTwo2ActionPerformed
+    }//GEN-LAST:event_rSButtonMaterialTwo4ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -335,8 +308,8 @@ public class Produccion extends javax.swing.JPanel {
     private newscomponents.RSButtonFlat_new rSButtonFlat_new1;
     private newscomponents.RSButtonFlat_new rSButtonFlat_new2;
     private newscomponents.RSButtonFlat_new rSButtonFlat_new3;
-    private RSMaterialComponent.RSButtonMaterialTwo rSButtonMaterialTwo2;
     private RSMaterialComponent.RSButtonMaterialTwo rSButtonMaterialTwo3;
+    private RSMaterialComponent.RSButtonMaterialTwo rSButtonMaterialTwo4;
     private RSMaterialComponent.RSTextFieldMaterialIcon rSTextFieldMaterialIcon1;
     // End of variables declaration//GEN-END:variables
 
@@ -346,64 +319,63 @@ public class Produccion extends javax.swing.JPanel {
     }
 
     private void filterTables() {
-    String searchText = rSTextFieldMaterialIcon1.getText().toLowerCase(); // Obtener el texto de búsqueda
+        String searchText = rSTextFieldMaterialIcon1.getText().toLowerCase(); // Obtener el texto de búsqueda
 
-    // Filtrar cada tabla
-    if (searchText.length() == 1) {
-        // Filtrar por la columna "#" (índice 0)
-        filterTable(Tabla1, searchText, 0); // Cambia 0 por el índice de la columna "#" en Tabla1
-        filterTable(Tabla2, searchText, 0); // Cambia 0 por el índice de la columna "#" en Tabla2
-        filterTable(Tabla3, searchText, 0); // Cambia 0 por el índice de la columna "#" en Tabla3
-    } else if (searchText.length() >= 2) {
-        // Filtrar en todas las columnas
-        filterTable(Tabla1, searchText, -1); // Mostrar todas las filas en Tabla1
-        filterTable(Tabla2, searchText, -1); // Mostrar todas las filas en Tabla2
-        filterTable(Tabla3, searchText, -1); // Mostrar todas las filas en Tabla3
-    } else {
-        // Si no hay texto, mostrar todas las filas
-        filterTable(Tabla1, "", -1); // Mostrar todas las filas en Tabla1
-        filterTable(Tabla2, "", -1); // Mostrar todas las filas en Tabla2
-        filterTable(Tabla3, "", -1); // Mostrar todas las filas en Tabla3
-    }
-}
-
-private void filterTable(JTable table, String searchText, int columnIndex) {
-    DefaultTableModel model = (DefaultTableModel) table.getModel(); // Obtener el modelo de la tabla
-    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model); // Crear un sorter para la tabla
-    table.setRowSorter(sorter); // Establecer el sorter en la tabla
-
-    // Filtrar las filas
-    if (searchText.trim().isEmpty()) {
-        sorter.setRowFilter(null); // Si no hay texto, mostrar todas las filas
-    } else {
-        // Filtrar en la columna especificada o en todas las columnas si columnIndex es -1
-        if (columnIndex == -1) {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(searchText))); // Filtrar en todas las columnas
+        // Filtrar cada tabla
+        if (searchText.length() == 1) {
+            // Filtrar por la columna "#" (índice 0)
+            filterTable(Tabla1, searchText, 0); // Cambia 0 por el índice de la columna "#" en Tabla1
+            filterTable(Tabla2, searchText, 0); // Cambia 0 por el índice de la columna "#" en Tabla2
+            filterTable(Tabla3, searchText, 0); // Cambia 0 por el índice de la columna "#" en Tabla3
+        } else if (searchText.length() >= 2) {
+            // Filtrar en todas las columnas
+            filterTable(Tabla1, searchText, -1); // Mostrar todas las filas en Tabla1
+            filterTable(Tabla2, searchText, -1); // Mostrar todas las filas en Tabla2
+            filterTable(Tabla3, searchText, -1); // Mostrar todas las filas en Tabla3
         } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(searchText), columnIndex)); // Filtrar en la columna especificada
+            // Si no hay texto, mostrar todas las filas
+            filterTable(Tabla1, "", -1); // Mostrar todas las filas en Tabla1
+            filterTable(Tabla2, "", -1); // Mostrar todas las filas en Tabla2
+            filterTable(Tabla3, "", -1); // Mostrar todas las filas en Tabla3
         }
     }
-}
 
-public class Conexion {
+    private void filterTable(JTable table, String searchText, int columnIndex) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel(); // Obtener el modelo de la tabla
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model); // Crear un sorter para la tabla
+        table.setRowSorter(sorter); // Establecer el sorter en la tabla
 
-   public Connection getConnection() {
-    Connection con = null;
-    try {
-        String myBD = "jdbc:mysql://localhost:3306/carpinteriasistema?serverTimezone=UTC";
-        con = DriverManager.getConnection(myBD, "root", ""); 
-        System.out.println("Conexión exitosa.");
-    } catch (SQLException e) {
-        System.out.println("Error al conectar: " + e.getMessage());
+        // Filtrar las filas
+        if (searchText.trim().isEmpty()) {
+            sorter.setRowFilter(null); // Si no hay texto, mostrar todas las filas
+        } else {
+            // Filtrar en la columna especificada o en todas las columnas si columnIndex es -1
+            if (columnIndex == -1) {
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(searchText))); // Filtrar en todas las columnas
+            } else {
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(searchText), columnIndex)); // Filtrar en la columna especificada
+            }
+        }
     }
-    return con;
-   }
+
+    private void dispose() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public class Conexion {
+
+        public Connection getConnection() {
+            Connection con = null;
+            try {
+                String myBD = "jdbc:mysql://localhost:3306/carpinteriasistema?serverTimezone=UTC";
+                con = DriverManager.getConnection(myBD, "root", "");
+                System.out.println("Conexión exitosa.");
+            } catch (SQLException e) {
+                System.out.println("Error al conectar: " + e.getMessage());
+            }
+            return con;
+        }
+    }
+
 }
-}
-
-
-
-
-
-
 

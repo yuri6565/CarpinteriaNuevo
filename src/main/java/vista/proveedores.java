@@ -55,7 +55,7 @@ public class proveedores extends javax.swing.JPanel {
                 AñadirActionPerformed(evt);
             }
         });
-        jPanel4.add(Añadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 40, 86, 37));
+        jPanel4.add(Añadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 40, 86, 37));
 
         rSButtonMaterialTwo3.setBackground(new java.awt.Color(29, 30, 51));
         rSButtonMaterialTwo3.setText("Eliminar -");
@@ -65,7 +65,7 @@ public class proveedores extends javax.swing.JPanel {
                 rSButtonMaterialTwo3ActionPerformed(evt);
             }
         });
-        jPanel4.add(rSButtonMaterialTwo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 40, 86, 37));
+        jPanel4.add(rSButtonMaterialTwo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 40, 86, 37));
 
         Buscar.setBackground(new java.awt.Color(29, 30, 51));
         Buscar.setText("Buscar");
@@ -102,13 +102,13 @@ public class proveedores extends javax.swing.JPanel {
         Tabla1.setSelectionBackground(new java.awt.Color(29, 30, 91));
         jScrollPane2.setViewportView(Tabla1);
 
-        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 1040, 480));
+        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 1180, 480));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 1293, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 1293, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

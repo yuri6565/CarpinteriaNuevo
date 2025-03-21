@@ -108,6 +108,11 @@ public class herramientasNuevo extends javax.swing.JDialog {
         txtCodigo.setPhColor(new java.awt.Color(0, 0, 0));
         txtCodigo.setPlaceholder("Ingrese el codigo...");
         txtCodigo.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodigoActionPerformed(evt);
+            }
+        });
         panelP.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 200, 30));
 
         cmbEstado.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -288,6 +293,10 @@ public class herramientasNuevo extends javax.swing.JDialog {
     private void txtDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDetallesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDetallesActionPerformed
+
+    private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodigoActionPerformed
 
     /**
      * @param args the command line arguments
