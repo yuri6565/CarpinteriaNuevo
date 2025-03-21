@@ -846,16 +846,7 @@ public class Principal extends javax.swing.JFrame {
             contenedor.revalidate();
             contenedor.repaint();
         }
-        int posicion = jPanel3.getX();
-        if (posicion > -1) {
-            Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
-            jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
-
-        } else {
-            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
-            jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
-
-        }
+    animacion23();
     }//GEN-LAST:event_ocho1ActionPerformed
 
     private void uno1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uno1MouseEntered
@@ -1037,4 +1028,20 @@ public class Principal extends javax.swing.JFrame {
     private rojeru_san.RSButton uno1;
     // End of variables declaration//GEN-END:variables
 
+    
+ public void animacion23(){
+     int posicion = jPanel3.getX();
+        if (posicion > -1) {
+            Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
+            jPanel4.setVisible(true); // Ocultar la tabla 1 inicialmente
+
+        } else {
+            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
+            jPanel4.setVisible(false); // Ocultar la tabla 1 inicialmente
+
+        }      
+     
+ }   
+    
+    
 }
