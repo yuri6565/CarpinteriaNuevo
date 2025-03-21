@@ -59,15 +59,15 @@ public class Contrasena1 extends javax.swing.JDialog {
             .addGap(0, 90, Short.MAX_VALUE)
         );
 
-        jPanel6.add(rSPanelImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 10, 90, 90));
+        jPanel6.add(rSPanelImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 90, 90));
 
         jLabel11.setFont(new java.awt.Font("SansSerif", 1, 30)); // NOI18N
         jLabel11.setText("Restablece la contraseña");
-        jPanel6.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, -1, -1));
+        jPanel6.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
         jLabel7.setText("Email");
-        jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, -1, 20));
+        jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, 20));
 
         rSMaterialButtonRectangle2.setBackground(new java.awt.Color(29, 30, 51));
         rSMaterialButtonRectangle2.setText("Siguiente ->");
@@ -77,7 +77,7 @@ public class Contrasena1 extends javax.swing.JDialog {
                 rSMaterialButtonRectangle2ActionPerformed(evt);
             }
         });
-        jPanel6.add(rSMaterialButtonRectangle2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 410, 50));
+        jPanel6.add(rSMaterialButtonRectangle2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 410, 410, 50));
 
         txtcorreo.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         txtcorreo.addActionListener(new java.awt.event.ActionListener() {
@@ -85,7 +85,7 @@ public class Contrasena1 extends javax.swing.JDialog {
                 txtcorreoActionPerformed(evt);
             }
         });
-        jPanel6.add(txtcorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 410, 40));
+        jPanel6.add(txtcorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 410, 40));
 
         jLabel8.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
         jLabel8.setText("volver al inicio de sesion");
@@ -94,15 +94,15 @@ public class Contrasena1 extends javax.swing.JDialog {
                 jLabel8MousePressed(evt);
             }
         });
-        jPanel6.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 460, 170, 20));
+        jPanel6.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 490, 170, 20));
 
         jLabel9.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
         jLabel9.setText("Escribe el correo electronico de tu cuenta para que te ");
-        jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 410, 20));
+        jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 410, 20));
 
         jLabel10.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
         jLabel10.setText("enviamos un codigo de seguridad");
-        jPanel6.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 410, 20));
+        jPanel6.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 410, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
