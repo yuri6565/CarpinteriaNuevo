@@ -887,7 +887,7 @@ public class Principal extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
         JOptionPane.showMessageDialog(null, "Hasta luego");
-        login lo = new login();
+        Login1121 lo = new Login1121();
         lo.setVisible(true);
         this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
