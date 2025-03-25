@@ -64,8 +64,8 @@ setContentPane(fondo);
         jLabel6 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         rSMaterialButtonRectangle2 = new rojerusan.RSMaterialButtonRectangle();
-        passtxt = new RSMaterialComponent.RSTextFieldMaterialIcon();
-        txt_usuario = new RSMaterialComponent.RSTextFieldMaterialIcon();
+        txt_usuario = new RSMaterialComponent.RSTextFieldIconOne();
+        passtxt = new RSMaterialComponent.RSPasswordIconOne();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,18 +82,18 @@ setContentPane(fondo);
         rSPanelImage1.setLayout(rSPanelImage1Layout);
         rSPanelImage1Layout.setHorizontalGroup(
             rSPanelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 120, Short.MAX_VALUE)
+            .addGap(0, 180, Short.MAX_VALUE)
         );
         rSPanelImage1Layout.setVerticalGroup(
             rSPanelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 110, Short.MAX_VALUE)
+            .addGap(0, 160, Short.MAX_VALUE)
         );
 
-        jPanel6.add(rSPanelImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, -1, -1));
+        jPanel6.add(rSPanelImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 180, 160));
 
         jLabel11.setFont(new java.awt.Font("SansSerif", 1, 30)); // NOI18N
         jLabel11.setText("¡BIENVENIDO! ");
-        jPanel6.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 140, -1, -1));
+        jPanel6.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
         jLabel7.setText("Usuario");
@@ -101,7 +101,7 @@ setContentPane(fondo);
 
         jLabel6.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
         jLabel6.setText("Contraseña");
-        jPanel6.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, -1, -1));
+        jPanel6.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(29, 30, 51));
@@ -112,10 +112,10 @@ setContentPane(fondo);
                 jLabel2MousePressed(evt);
             }
         });
-        jPanel6.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 430, -1, 20));
+        jPanel6.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 400, -1, 20));
 
         rSMaterialButtonRectangle2.setBackground(new java.awt.Color(29, 30, 51));
-        rSMaterialButtonRectangle2.setText("INGRESAR ->");
+        rSMaterialButtonRectangle2.setText("INGRESAR ");
         rSMaterialButtonRectangle2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rSMaterialButtonRectangle2ActionPerformed(evt);
@@ -123,31 +123,30 @@ setContentPane(fondo);
         });
         jPanel6.add(rSMaterialButtonRectangle2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 480, 380, 50));
 
-        passtxt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        passtxt.setForeground(new java.awt.Color(0, 0, 0));
-        passtxt.setColorIcon(new java.awt.Color(204, 204, 204));
-        passtxt.setColorMaterial(new java.awt.Color(0, 0, 0));
-        passtxt.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        passtxt.setFont(new java.awt.Font("Candara", 3, 18)); // NOI18N
-        passtxt.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.AIRPORT_SHUTTLE);
-        passtxt.setInheritsPopupMenu(true);
-        passtxt.setPhColor(new java.awt.Color(0, 0, 0));
-        passtxt.setPlaceholder("  Ingresa tu usuario");
-        passtxt.setSelectionColor(new java.awt.Color(153, 153, 153));
-        jPanel6.add(passtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, 380, 40));
-
         txt_usuario.setForeground(new java.awt.Color(0, 0, 0));
+        txt_usuario.setBorderColor(new java.awt.Color(230, 230, 230));
         txt_usuario.setColorIcon(new java.awt.Color(204, 204, 204));
-        txt_usuario.setColorMaterial(new java.awt.Color(0, 0, 0));
-        txt_usuario.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txt_usuario.setFont(new java.awt.Font("Candara", 3, 18)); // NOI18N
+        txt_usuario.setColorTransparente(true);
+        txt_usuario.setDisabledTextColor(new java.awt.Color(102, 102, 102));
         txt_usuario.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.PEOPLE);
-        txt_usuario.setPhColor(new java.awt.Color(0, 0, 0));
-        txt_usuario.setPlaceholder("   Ingresa tu usuario");
-        txt_usuario.setSelectionColor(new java.awt.Color(153, 153, 153));
-        jPanel6.add(txt_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 380, 40));
+        txt_usuario.setPhColor(new java.awt.Color(51, 51, 51));
+        txt_usuario.setPlaceholder("ingrese su usuario");
+        txt_usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_usuarioActionPerformed(evt);
+            }
+        });
+        jPanel6.add(txt_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, 380, 30));
 
-        kGradientPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 120, 460, 590));
+        passtxt.setForeground(new java.awt.Color(0, 0, 0));
+        passtxt.setToolTipText("");
+        passtxt.setBorderColor(new java.awt.Color(230, 230, 230));
+        passtxt.setColorIcon(new java.awt.Color(204, 204, 204));
+        passtxt.setPhColor(new java.awt.Color(51, 51, 51));
+        passtxt.setPlaceholder("Ingrese su contraseña");
+        jPanel6.add(passtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 380, 30));
+
+        kGradientPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 190, 460, 590));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -173,6 +172,10 @@ setContentPane(fondo);
         dialog.setVisible(true);
         
     }//GEN-LAST:event_jLabel2MousePressed
+
+    private void txt_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_usuarioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -223,10 +226,10 @@ setContentPane(fondo);
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel6;
     private keeptoo.KGradientPanel kGradientPanel1;
-    private RSMaterialComponent.RSTextFieldMaterialIcon passtxt;
+    private RSMaterialComponent.RSPasswordIconOne passtxt;
     private rojerusan.RSMaterialButtonRectangle rSMaterialButtonRectangle2;
     private rojerusan.RSPanelImage rSPanelImage1;
-    private RSMaterialComponent.RSTextFieldMaterialIcon txt_usuario;
+    private RSMaterialComponent.RSTextFieldIconOne txt_usuario;
     // End of variables declaration//GEN-END:variables
 
 private void Login(){

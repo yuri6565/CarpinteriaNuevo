@@ -82,7 +82,7 @@ public class Codigo11 extends javax.swing.JDialog {
         jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, -1, 20));
 
         rSMaterialButtonRectangle2.setBackground(new java.awt.Color(29, 30, 51));
-        rSMaterialButtonRectangle2.setText("Siguiente ->");
+        rSMaterialButtonRectangle2.setText("Siguiente ");
         rSMaterialButtonRectangle2.setActionCommand("Siguiente->");
         rSMaterialButtonRectangle2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
