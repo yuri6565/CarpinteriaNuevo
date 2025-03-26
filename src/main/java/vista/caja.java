@@ -55,6 +55,7 @@ public class caja extends javax.swing.JPanel {
         txtOrderQuantity = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Lista de Clientes");
