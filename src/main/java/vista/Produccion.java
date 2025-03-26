@@ -6,11 +6,8 @@ package vista;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.regex.Pattern;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
@@ -18,8 +15,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -27,8 +22,6 @@ import java.util.logging.Logger;
  */
 public class Produccion extends javax.swing.JPanel {
 
-    
-    
     /**
      * Creates new form Produccion
      */
@@ -55,11 +48,50 @@ public class Produccion extends javax.swing.JPanel {
             }
         });
     }
+public void agregarFilaATabla2(String cantidad, String dimension, String material) {
+    DefaultTableModel model = (DefaultTableModel) Tabla2.getModel();
+    int newRowNum = model.getRowCount() + 1;  // Número secuencial
     
-    public void agregarFila(String id, String fechaInicio, String fechaFinal, String estado) {
-        DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-        model.addRow(new Object[]{id, generateRandomId(), fechaInicio, fechaFinal, estado});
-    }
+    model.addRow(new Object[]{
+        newRowNum,      // Columna #
+        generateRandomId(), // ID (si aplica)
+        cantidad,    // Fecha inicio
+        dimension,     // Fecha final
+        material          // Estado
+    });
+    Tabla2.revalidate();
+    Tabla2.repaint();
+    
+        System.out.println("Agregando fila a Tabla1. Filas antes: " + Tabla2.getRowCount());
+
+    
+    jScrollPane2.setVisible(false);
+    jScrollPane3.setVisible(true);
+    jScrollPane4.setVisible(false);
+}
+    public void agregarFilaATabla1(String fechaInicio, String fechaFinal, String estado) {
+    DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+    int newRowNum = model.getRowCount() + 1;  // Número secuencial
+    
+    model.addRow(new Object[]{
+        newRowNum,      // Columna #
+        generateRandomId(), // ID (si aplica)
+        fechaInicio,    // Fecha inicio
+        fechaFinal,     // Fecha final
+        estado          // Estado
+    });
+    Tabla1.revalidate();
+    Tabla1.repaint();
+    
+    System.out.println("Agregando fila a Tabla1. Filas antes: " + Tabla1.getRowCount());
+
+    // Opcional: Mostrar Tabla1 automáticamente
+    jScrollPane2.setVisible(true);
+    jScrollPane3.setVisible(false);
+    jScrollPane4.setVisible(false);
+    
+    
+}
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -92,7 +124,7 @@ public class Produccion extends javax.swing.JPanel {
                 rSButtonFlat_new1ActionPerformed(evt);
             }
         });
-        jPanel1.add(rSButtonFlat_new1, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 42, 130, -1));
+        jPanel1.add(rSButtonFlat_new1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 20, 130, -1));
 
         rSButtonFlat_new2.setBackground(new java.awt.Color(109, 160, 221));
         rSButtonFlat_new2.setText("Etapa produccion");
@@ -101,7 +133,7 @@ public class Produccion extends javax.swing.JPanel {
                 rSButtonFlat_new2ActionPerformed(evt);
             }
         });
-        jPanel1.add(rSButtonFlat_new2, new org.netbeans.lib.awtextra.AbsoluteConstraints(284, 42, 126, -1));
+        jPanel1.add(rSButtonFlat_new2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 126, -1));
 
         rSButtonFlat_new3.setBackground(new java.awt.Color(109, 160, 221));
         rSButtonFlat_new3.setText("Produccion");
@@ -110,19 +142,20 @@ public class Produccion extends javax.swing.JPanel {
                 rSButtonFlat_new3ActionPerformed(evt);
             }
         });
-        jPanel1.add(rSButtonFlat_new3, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 42, 91, -1));
+        jPanel1.add(rSButtonFlat_new3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 91, -1));
 
         rSButtonMaterialTwo3.setBackground(new java.awt.Color(29, 30, 51));
         rSButtonMaterialTwo3.setBorder(null);
         rSButtonMaterialTwo3.setText("Nuevo+");
         rSButtonMaterialTwo3.setBackgroundHover(new java.awt.Color(29, 30, 31));
         rSButtonMaterialTwo3.setBorderPainted(false);
+        rSButtonMaterialTwo3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rSButtonMaterialTwo3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rSButtonMaterialTwo3ActionPerformed(evt);
             }
         });
-        jPanel1.add(rSButtonMaterialTwo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 120, 86, 37));
+        jPanel1.add(rSButtonMaterialTwo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 70, 86, 37));
 
         rSTextFieldMaterialIcon1.setForeground(new java.awt.Color(29, 30, 91));
         rSTextFieldMaterialIcon1.setColorIcon(new java.awt.Color(29, 30, 111));
@@ -134,16 +167,16 @@ public class Produccion extends javax.swing.JPanel {
                 rSTextFieldMaterialIcon1ActionPerformed(evt);
             }
         });
-        jPanel1.add(rSTextFieldMaterialIcon1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, -1, 28));
+        jPanel1.add(rSTextFieldMaterialIcon1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, -1, 28));
 
         Tabla1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"1", "43", "34/54/3", "4", "final"},
-                {"2", "75", "78/45/23", "2", "proceso"},
-                {"3", "45", "54/7/34", "3", "xd"},
-                {"4", "73", "23/34/54", "1", "ya"},
-                {"5", "67", "45/6/45", "1", "ok"}
+                {"1", "43", "34/54/3", "45/85/6", "final"},
+                {"2", "75", "78/45/23", "21/32/5", "proceso"},
+                {"3", "45", "54/7/34", "36/98/7", "xd"},
+                {"4", "73", "23/34/54", "23/43/23", "ya"},
+                {"5", "67", "45/6/45", "34/58/3", "ok"}
             },
             new String [] {
                 "#", "ID", "Fecha_inicio", "Fecha_final", "estado"
@@ -155,15 +188,8 @@ public class Produccion extends javax.swing.JPanel {
         Tabla1.setColorSecundaryText(new java.awt.Color(0, 0, 0));
         Tabla1.setSelectionBackground(new java.awt.Color(29, 30, 91));
         jScrollPane2.setViewportView(Tabla1);
-        if (Tabla1.getColumnModel().getColumnCount() > 0) {
-            Tabla1.getColumnModel().getColumn(0).setHeaderValue("#");
-            Tabla1.getColumnModel().getColumn(1).setHeaderValue("ID");
-            Tabla1.getColumnModel().getColumn(2).setHeaderValue("Fecha_inicio");
-            Tabla1.getColumnModel().getColumn(3).setHeaderValue("Fecha_final");
-            Tabla1.getColumnModel().getColumn(4).setHeaderValue("estado");
-        }
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 1220, 520));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 1220, 520));
 
         Tabla2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla2.setModel(new javax.swing.table.DefaultTableModel(
@@ -185,7 +211,7 @@ public class Produccion extends javax.swing.JPanel {
         Tabla2.setSelectionBackground(new java.awt.Color(29, 30, 91));
         jScrollPane3.setViewportView(Tabla2);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 1220, 520));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 1220, 520));
 
         Tabla3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla3.setModel(new javax.swing.table.DefaultTableModel(
@@ -207,39 +233,34 @@ public class Produccion extends javax.swing.JPanel {
         Tabla3.setSelectionBackground(new java.awt.Color(29, 30, 91));
         jScrollPane4.setViewportView(Tabla3);
 
-        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 1220, 520));
+        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 1220, 520));
 
         rSButtonMaterialTwo4.setBackground(new java.awt.Color(29, 30, 51));
         rSButtonMaterialTwo4.setBorder(null);
         rSButtonMaterialTwo4.setText("Eliminar -");
         rSButtonMaterialTwo4.setBackgroundHover(new java.awt.Color(29, 30, 31));
         rSButtonMaterialTwo4.setBorderPainted(false);
+        rSButtonMaterialTwo4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rSButtonMaterialTwo4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rSButtonMaterialTwo4ActionPerformed(evt);
             }
         });
-        jPanel1.add(rSButtonMaterialTwo4, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 120, 86, 37));
+        jPanel1.add(rSButtonMaterialTwo4, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 86, 37));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1520, Short.MAX_VALUE)
+            .addGap(0, 1501, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, 0)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
+                .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1501, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
+            .addGap(0, 742, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 742, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -256,7 +277,7 @@ public class Produccion extends javax.swing.JPanel {
         jScrollPane2.setVisible(true); // Mostrar Tabla2
         // Revalidar y repaint para actualizar la interfaz
         // Revalidar y repaint para actualizar la interfaz
-        
+
 
     }//GEN-LAST:event_rSButtonFlat_new3ActionPerformed
 
@@ -269,7 +290,7 @@ public class Produccion extends javax.swing.JPanel {
         jScrollPane3.setVisible(true); // Mostrar Tabla2
         // Revalidar y repaint para actualizar la interfaz
         // Revalidar y repaint para actualizar la interfaz
-        
+
         // TODO add your handling code here:
     }//GEN-LAST:event_rSButtonFlat_new1ActionPerformed
 
@@ -282,13 +303,16 @@ public class Produccion extends javax.swing.JPanel {
         jScrollPane4.setVisible(true); // Mostrar Tabla2
         // Revalidar y repaint para actualizar la interfaz
         // Revalidar y repaint para actualizar la interfaz
-        
+
         // TODO add your handling code here:
     }//GEN-LAST:event_rSButtonFlat_new2ActionPerformed
 
     private void rSButtonMaterialTwo3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMaterialTwo3ActionPerformed
-    formuProduccion fo = new formuProduccion(this); // Pasar la instancia de Produccion
-    fo.setVisible(true);
+             
+    tresProduccion dialog = new tresProduccion(new javax.swing.JFrame(), true, this);
+    dialog.setLocationRelativeTo(null);
+    dialog.setVisible(true);
+
     }//GEN-LAST:event_rSButtonMaterialTwo3ActionPerformed
 
     private void rSButtonMaterialTwo4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMaterialTwo4ActionPerformed
@@ -362,6 +386,10 @@ public class Produccion extends javax.swing.JPanel {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    void agregarFilaATabla12(String fechaInicio, String fechaFinal, String estado) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public class Conexion {
 
         public Connection getConnection() {
@@ -376,6 +404,5 @@ public class Produccion extends javax.swing.JPanel {
             return con;
         }
     }
-
 }
 

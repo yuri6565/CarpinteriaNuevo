@@ -5,18 +5,7 @@
 package vista;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.io.File;
-import java.net.URL;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-
-import rojeru_san.RSButton;
 
 /**
  *
@@ -119,7 +108,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 80, 1270, 730));
+        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 1270, 810));
 
         jPanel3.setBackground(new java.awt.Color(29, 30, 81));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -432,14 +421,14 @@ public class Principal extends javax.swing.JFrame {
         contenedor.setLayout(contenedorLayout);
         contenedorLayout.setHorizontalGroup(
             contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1270, Short.MAX_VALUE)
+            .addGap(0, 1300, Short.MAX_VALUE)
         );
         contenedorLayout.setVerticalGroup(
             contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 730, Short.MAX_VALUE)
         );
 
-        jPanel1.add(contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 1270, 730));
+        jPanel1.add(contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 80, 1300, 730));
         contenedor.getAccessibleContext().setAccessibleName("");
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1556, 822));
