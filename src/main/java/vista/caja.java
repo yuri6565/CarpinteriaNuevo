@@ -195,7 +195,7 @@ public class caja extends javax.swing.JPanel {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
        
-        txtCustomerName.setEditable(false);
+       txtCustomerName.setEditable(false);
         txtCustomerMobileNumber.setEditable(false);
         txtCustomerEmail.setEditable(false);
         
@@ -204,7 +204,7 @@ public class caja extends javax.swing.JPanel {
         txtProductDescription.setEditable(false);
         
         DefaultTableModel model = (DefaultTableModel) tableCustomer.getModel();
-       
+       /*
         try{
         
             Connection con = ConnectionProvider.getCon();
@@ -217,7 +217,7 @@ public class caja extends javax.swing.JPanel {
         catch(Exception e){
         JOptionPane.showMessageDialog(null, e);
         }
-        
+        */
     }//GEN-LAST:event_formComponentShown
 
 
