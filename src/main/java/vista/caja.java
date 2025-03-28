@@ -217,9 +217,9 @@ public class caja extends javax.swing.JPanel {
         
         DefaultTableModel model = (DefaultTableModel) tableCustomer.getModel();
        
-        try{
+        /**try{
         
-            Connection con = ConnectionProvider.getCon();
+            Connection con = Conexion.getCon();
             Statement st =  con.createStatement();
             ResultSet rs = st.executeQuery("select *from clientes");
             while (rs.next()){
@@ -232,12 +232,9 @@ public class caja extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(null, e);
         }
         */
+
 }
-    
-    
-    
-    
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
