@@ -647,7 +647,7 @@ public class Principal extends javax.swing.JFrame {
             this.seis.setSelected(false);
             this.ocho.setSelected(false);
             Escritorio1 es = new Escritorio1();
-            es.setSize(890, 690);
+            es.setSize(1090, 690);
             es.setLocation(0, 0);
 
             contenedor.removeAll();
