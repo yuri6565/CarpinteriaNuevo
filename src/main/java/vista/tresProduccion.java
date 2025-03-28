@@ -24,9 +24,8 @@ public class tresProduccion extends javax.swing.JDialog {
     public tresProduccion(Frame parent, boolean modal, Produccion produccionPanel) {
     super(parent, modal);
     this.produccionPanel = produccionPanel;
-    this.produccionPanel2= produccionPanel2;
     initComponents();
-
+setLocationRelativeTo(parent);
     }
     tresProduccion(JFrame jFrame, boolean b) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
@@ -143,10 +142,15 @@ public class tresProduccion extends javax.swing.JDialog {
 
     private void detallecrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detallecrearActionPerformed
          this.dispose();
-         DetalleProduccion dialog = new DetalleProduccion(new javax.swing.JFrame(), true, this.produccionPanel2);
-        dialog.setLocationRelativeTo(null);
+        // Usa produccionPanel (no produccionPanel2)
+        DetalleProduccion dialog = new DetalleProduccion(
+            (javax.swing.JFrame) this.getParent(), 
+            true, 
+            this.produccionPanel
+        );
+        dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
-       
+      
     }//GEN-LAST:event_detallecrearActionPerformed
 
     private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed

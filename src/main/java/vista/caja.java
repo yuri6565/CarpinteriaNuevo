@@ -205,9 +205,9 @@ public class caja extends javax.swing.JPanel {
         
         DefaultTableModel model = (DefaultTableModel) tableCustomer.getModel();
        
-        try{
+        /**try{
         
-            Connection con = ConnectionProvider.getCon();
+            Connection con = Conexion.getCon();
             Statement st =  con.createStatement();
             ResultSet rs = st.executeQuery("select *from clientes");
             while (rs.next()){
@@ -217,7 +217,7 @@ public class caja extends javax.swing.JPanel {
         catch(Exception e){
         JOptionPane.showMessageDialog(null, e);
         }
-        
+        */
     }//GEN-LAST:event_formComponentShown
 
 

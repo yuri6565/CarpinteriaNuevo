@@ -14,11 +14,12 @@ public class DetalleProduccion extends javax.swing.JDialog {
 
     private Produccion produccionPanel2;
 
-    public DetalleProduccion(java.awt.Frame parent, boolean modal, Produccion produccionPanel2) {
-        super(parent, modal);
-        this.produccionPanel2 = produccionPanel2;  // Asigna la referencia
-        initComponents();
-    }
+    public DetalleProduccion(java.awt.Frame parent, boolean modal, Produccion produccionPanel) {
+    super(parent, modal);
+    this.produccionPanel2 = produccionPanel;
+    initComponents();
+    setLocationRelativeTo(parent); // Centrar el diálogo
+}
 
     public DetalleProduccion(java.awt.Frame parent, boolean modal) {
         this(parent, modal, null);  // Llama al nuevo constructor con null
@@ -150,20 +151,35 @@ public class DetalleProduccion extends javax.swing.JDialog {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
 
         if (produccionPanel2 == null) {
-            JOptionPane.showMessageDialog(this, "Error: No se recibió la referencia a Produccion", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        JOptionPane.showMessageDialog(this, 
+            "Error: No se pudo conectar con el panel de producción", 
+            "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        String cantidad = txtcantidad.getText();
-        String dimension = txtdimension.getText();
-        String material = txtmaterial.getText();
+    String cantidad = txtcantidad.getText().trim();
+    String dimension = txtdimension.getText().trim();
+    String material = txtmaterial.getText().trim();
 
-        if (cantidad.isEmpty() || dimension.isEmpty() || material.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    // Validación de campos vacíos
+    if (cantidad.isEmpty() || dimension.isEmpty() || material.isEmpty()) {
+        JOptionPane.showMessageDialog(this, 
+            "Todos los campos son obligatorios", 
+            "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        produccionPanel2.agregarFilaATabla12(cantidad, dimension, material);
+    // Validación de que cantidad sea numérica
+    try {
+        Integer.parseInt(cantidad);
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, 
+            "La cantidad debe ser un número válido", 
+            "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+        produccionPanel2.agregarFilaATabla2(cantidad, dimension, material);
         this.dispose();
 
         System.out.println("Datos a enviar: " + cantidad + ", " + dimension + ", " + material);

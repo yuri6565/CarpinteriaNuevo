@@ -59,10 +59,10 @@ public void agregarFilaATabla2(String cantidad, String dimension, String materia
         dimension,     // Fecha final
         material          // Estado
     });
+    /*
     Tabla2.revalidate();
     Tabla2.repaint();
-    
-        System.out.println("Agregando fila a Tabla1. Filas antes: " + Tabla2.getRowCount());
+    */
 
     
     jScrollPane2.setVisible(false);
@@ -83,7 +83,6 @@ public void agregarFilaATabla2(String cantidad, String dimension, String materia
     Tabla1.revalidate();
     Tabla1.repaint();
     
-    System.out.println("Agregando fila a Tabla1. Filas antes: " + Tabla1.getRowCount());
 
     // Opcional: Mostrar Tabla1 automáticamente
     jScrollPane2.setVisible(true);
@@ -269,42 +268,26 @@ public void agregarFilaATabla2(String cantidad, String dimension, String materia
     }//GEN-LAST:event_rSTextFieldMaterialIcon1ActionPerformed
 
     private void rSButtonFlat_new3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonFlat_new3ActionPerformed
-        // Ocultar Tabla2 y Tabla3
-        jScrollPane3.setVisible(false); // Ocultar Tabla1
-        jScrollPane4.setVisible(false); // Ocultar Tabla3
 
-        // Mostrar Tabla1
-        jScrollPane2.setVisible(true); // Mostrar Tabla2
-        // Revalidar y repaint para actualizar la interfaz
-        // Revalidar y repaint para actualizar la interfaz
+        jScrollPane3.setVisible(false); 
+        jScrollPane4.setVisible(false); 
+        jScrollPane2.setVisible(true); 
 
 
     }//GEN-LAST:event_rSButtonFlat_new3ActionPerformed
 
     private void rSButtonFlat_new1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonFlat_new1ActionPerformed
-// Ocultar Tabla1 y Tabla3
-        jScrollPane2.setVisible(false); // Ocultar Tabla1
-        jScrollPane4.setVisible(false); // Ocultar Tabla3
 
-        // Mostrar Tabla2
-        jScrollPane3.setVisible(true); // Mostrar Tabla2
-        // Revalidar y repaint para actualizar la interfaz
-        // Revalidar y repaint para actualizar la interfaz
-
-        // TODO add your handling code here:
+        jScrollPane2.setVisible(false); 
+        jScrollPane4.setVisible(false); 
+        jScrollPane3.setVisible(true); 
     }//GEN-LAST:event_rSButtonFlat_new1ActionPerformed
 
     private void rSButtonFlat_new2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonFlat_new2ActionPerformed
-// Ocultar Tabla1 y Tabla2
-        jScrollPane2.setVisible(false); // Ocultar Tabla1
-        jScrollPane3.setVisible(false); // Ocultar Tabla3
 
-        // Mostrar Tabla3
-        jScrollPane4.setVisible(true); // Mostrar Tabla2
-        // Revalidar y repaint para actualizar la interfaz
-        // Revalidar y repaint para actualizar la interfaz
-
-        // TODO add your handling code here:
+        jScrollPane2.setVisible(false); 
+        jScrollPane3.setVisible(false); 
+        jScrollPane4.setVisible(true);
     }//GEN-LAST:event_rSButtonFlat_new2ActionPerformed
 
     private void rSButtonMaterialTwo3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMaterialTwo3ActionPerformed
@@ -386,9 +369,9 @@ public void agregarFilaATabla2(String cantidad, String dimension, String materia
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    void agregarFilaATabla12(String fechaInicio, String fechaFinal, String estado) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
+
+    
 
     public class Conexion {
 
