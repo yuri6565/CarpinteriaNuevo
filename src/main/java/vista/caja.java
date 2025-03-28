@@ -1,36 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
+
 package vista;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Conexion;
 import java.sql.*;
+import controlador.Ctrl_Cliente;
 
-/**
- *
- * @author buitr
- */
 public class caja extends javax.swing.JPanel {
 
     private int cliente=0;
     private int finalTotalPrice = 0;
     private String orderId = "";
     
-    
-    
-    /*
     public caja() {
         initComponents();
     
-        
-    }*/
-
+      
+    }
     private void clearProductFields(){
-    
-        
+       
     txtProductName.setText("");
     txtProductPrice.setText("");
     txtProductName.setText("");
@@ -41,6 +30,8 @@ public class caja extends javax.swing.JPanel {
     public String getUniqueId(String prefix){
     return prefix + System.nanoTime();
     }
+    
+    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -74,6 +65,7 @@ public class caja extends javax.swing.JPanel {
         txtOrderQuantity = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(240, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -194,6 +186,26 @@ public class caja extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+      
+
+    
+    txtCustomerName.setEditable(false);
+    txtCustomerMobileNumber.setEditable(false);
+    txtCustomerEmail.setEditable(false);
+    
+    txtProductName.setEditable(false);
+    txtProductPrice.setEditable(false);
+    txtProductDescription.setEditable(false);
+    
+   DefaultTableModel model = (DefaultTableModel) tableCustomer.getModel();
+  
+        try {
+            Connection con = Conexion.getCon();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select *from cliente");
+            while (rs.next()) {
+                Object nextElement = rs.nextElement();
+                
        
        txtCustomerName.setEditable(false);
         txtCustomerMobileNumber.setEditable(false);
@@ -204,7 +216,7 @@ public class caja extends javax.swing.JPanel {
         txtProductDescription.setEditable(false);
         
         DefaultTableModel model = (DefaultTableModel) tableCustomer.getModel();
-       /*
+       
         try{
         
             Connection con = ConnectionProvider.getCon();
@@ -212,15 +224,20 @@ public class caja extends javax.swing.JPanel {
             ResultSet rs = st.executeQuery("select *from clientes");
             while (rs.next()){
                 model.addRow(new Object[]{rs.getString("cliente"),rs.getString("name"),rs.getString("mobileNumber"),rs.getString("email")});
+             
+/*
             }
-        }
-        catch(Exception e){
+
+        } catch (Exception e) {
         JOptionPane.showMessageDialog(null, e);
         }
         */
-    }//GEN-LAST:event_formComponentShown
-
-
+}
+    
+    
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
