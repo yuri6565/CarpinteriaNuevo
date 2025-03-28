@@ -186,6 +186,8 @@ public class caja extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+      
+
     
     txtCustomerName.setEditable(false);
     txtCustomerMobileNumber.setEditable(false);
@@ -196,7 +198,7 @@ public class caja extends javax.swing.JPanel {
     txtProductDescription.setEditable(false);
     
    DefaultTableModel model = (DefaultTableModel) tableCustomer.getModel();
-  /*
+  
         try {
             Connection con = Conexion.getCon();
             Statement st = con.createStatement();
@@ -204,13 +206,32 @@ public class caja extends javax.swing.JPanel {
             while (rs.next()) {
                 Object nextElement = rs.nextElement();
                 
+       
+       txtCustomerName.setEditable(false);
+        txtCustomerMobileNumber.setEditable(false);
+        txtCustomerEmail.setEditable(false);
+        
+        txtProductName.setEditable(false);
+        txtProductPrice.setEditable(false);
+        txtProductDescription.setEditable(false);
+        
+        DefaultTableModel model = (DefaultTableModel) tableCustomer.getModel();
+       
+        try{
+        
+            Connection con = ConnectionProvider.getCon();
+            Statement st =  con.createStatement();
+            ResultSet rs = st.executeQuery("select *from clientes");
+            while (rs.next()){
+                model.addRow(new Object[]{rs.getString("cliente"),rs.getString("name"),rs.getString("mobileNumber"),rs.getString("email")});
+             
+/*
             }
 
         } catch (Exception e) {
         JOptionPane.showMessageDialog(null, e);
         }
-    }//GEN-LAST:event_formComponentShown
-*/
+        */
 }
     
     
