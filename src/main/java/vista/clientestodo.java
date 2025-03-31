@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
+
 package vista;
 
 /**
@@ -60,4 +57,5 @@ public class clientestodo extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private keeptoo.KGradientPanel kGradientPanel1;
     // End of variables declaration//GEN-END:variables
+
 }

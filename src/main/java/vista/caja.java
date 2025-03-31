@@ -185,7 +185,7 @@ public class caja extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {                                    
       
 
     
@@ -198,7 +198,7 @@ public class caja extends javax.swing.JPanel {
     txtProductDescription.setEditable(false);
     
    DefaultTableModel model = (DefaultTableModel) tableCustomer.getModel();
-  
+  /*
         try {
             Connection con = Conexion.getCon();
             Statement st = con.createStatement();
