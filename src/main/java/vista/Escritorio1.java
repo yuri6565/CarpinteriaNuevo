@@ -30,113 +30,109 @@ public class Escritorio1 extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         rSButtonIconOne1 = new RSMaterialComponent.RSButtonIconOne();
         rSButton1 = new rojeru_san.RSButton();
         rSButton2 = new rojeru_san.RSButton();
-        rSCalendar1 = new newscomponents.RSCalendar();
+        rSButton3 = new rojeru_san.RSButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
+        setMinimumSize(new java.awt.Dimension(1290, 730));
         setPreferredSize(new java.awt.Dimension(890, 690));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/250x250.png"))); // NOI18N
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, -1, 280));
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 250, 280));
 
         jPanel2.setBackground(new java.awt.Color(55, 55, 94));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("egnvieornbioenbjietnbgineogbnot moietrmbpoentgwufbuwbfuwbf");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 140, 480, 30));
-
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Bienvenido a sga");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, -1, -1));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 0, 510, 120));
 
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("egnvieornbioenbjietnbgineogbnot moietrmbpoentgwufbuwbfuwbf");
-        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, 480, 30));
-
-        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel13.setText("egnvieornbioenbjietnbgineogbnot moietrmbpoentgwufbuwbfuwbf");
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 100, 480, 30));
-
-        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setText("egnvieornbioenbjietnbgineogbnot moietrmbpoentgwufbuwbfuwbf");
-        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, 480, 30));
-
-        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 860, 220));
+        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 950, 120));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanel1.setBackground(new java.awt.Color(55, 55, 94));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel3.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("NOTIFICACIONES");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        rSButtonIconOne1.setBackground(new java.awt.Color(240, 240, 240));
+        rSButtonIconOne1.setBackground(new java.awt.Color(55, 55, 94));
         rSButtonIconOne1.setBorder(null);
         rSButtonIconOne1.setBackgroundHover(new java.awt.Color(204, 204, 204));
         rSButtonIconOne1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rSButtonIconOne1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ADD_ALERT);
         rSButtonIconOne1.setPreferredSize(new java.awt.Dimension(37, 37));
-        jPanel1.add(rSButtonIconOne1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 0, -1, -1));
+        jPanel1.add(rSButtonIconOne1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 10, -1, -1));
 
-        jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 579, 40));
+        jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 579, 50));
 
         rSButton1.setBackground(new java.awt.Color(255, 255, 255));
         rSButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        rSButton1.setText("STOCK BAJO DE CLAVOS 3\"");
+        rSButton1.setText("STOCK BAJO DE MATERIAL");
         rSButton1.setColorText(new java.awt.Color(0, 0, 0));
-        jPanel3.add(rSButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 580, -1));
+        rSButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButton1ActionPerformed(evt);
+            }
+        });
+        jPanel3.add(rSButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 580, -1));
 
         rSButton2.setBackground(new java.awt.Color(255, 255, 255));
         rSButton2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         rSButton2.setForeground(new java.awt.Color(0, 0, 0));
         rSButton2.setText("FALTA DE STOCK DE MADERA DE ABEDUL ");
         rSButton2.setColorText(new java.awt.Color(0, 0, 0));
-        jPanel3.add(rSButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 580, -1));
+        jPanel3.add(rSButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 580, -1));
 
-        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 330, 580, 180));
+        rSButton3.setBackground(new java.awt.Color(255, 255, 255));
+        rSButton3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        rSButton3.setText("STOCK BAJO DE CLAVOS 3\"");
+        rSButton3.setColorText(new java.awt.Color(0, 0, 0));
+        rSButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButton3ActionPerformed(evt);
+            }
+        });
+        jPanel3.add(rSButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 580, -1));
 
-        rSCalendar1.setBackground(new java.awt.Color(55, 55, 94));
-        rSCalendar1.setBgColor(new java.awt.Color(55, 55, 94));
-        add(rSCalendar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 290, -1, -1));
+        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 200, 580, 290));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void rSButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rSButton1ActionPerformed
+
+    private void rSButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rSButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private rojeru_san.RSButton rSButton1;
     private rojeru_san.RSButton rSButton2;
+    private rojeru_san.RSButton rSButton3;
     private RSMaterialComponent.RSButtonIconOne rSButtonIconOne1;
-    private newscomponents.RSCalendar rSCalendar1;
     // End of variables declaration//GEN-END:variables
 }

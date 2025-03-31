@@ -198,8 +198,10 @@ public class caja extends javax.swing.JPanel {
     txtProductDescription.setEditable(false);
     
    DefaultTableModel model = (DefaultTableModel) tableCustomer.getModel();
-  
-     /*   try {
+
+  /*
+        try {
+
             Connection con = Conexion.getCon();
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select *from cliente");
