@@ -4,7 +4,11 @@
  */
 package vista;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import modelo.Conexion;
 
 /**
  *
@@ -149,40 +153,46 @@ public class DetalleProduccion extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-
-        if (produccionPanel2 == null) {
-        JOptionPane.showMessageDialog(this, 
-            "Error: No se pudo conectar con el panel de producción", 
-            "Error", JOptionPane.ERROR_MESSAGE);
+ // Validación de campos
+    if (txtcantidad.getText().isEmpty() || txtdimension.getText().isEmpty() || txtmaterial.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
-    String cantidad = txtcantidad.getText().trim();
-    String dimension = txtdimension.getText().trim();
-    String material = txtmaterial.getText().trim();
-
-    // Validación de campos vacíos
-    if (cantidad.isEmpty() || dimension.isEmpty() || material.isEmpty()) {
-        JOptionPane.showMessageDialog(this, 
-            "Todos los campos son obligatorios", 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    // Validación de que cantidad sea numérica
     try {
-        Integer.parseInt(cantidad);
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, 
-            "La cantidad debe ser un número válido", 
-            "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-        produccionPanel2.agregarFilaATabla2(cantidad, dimension, material);
+        // Obtener valores
+        int cantidad = Integer.parseInt(txtcantidad.getText());
+        String dimensiones = txtdimension.getText();
+        String materiales = txtmaterial.getText();
+        
+        // Insertar en BD
+        Connection con = new Conexion().getConnection();
+        String sql = "INSERT INTO detalle_produccion (cantidad, dimensiones, materiales) VALUES (?, ?, ?)";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, cantidad);
+        ps.setString(2, dimensiones);
+        ps.setString(3, materiales);
+        
+        
+        
+        ps.executeUpdate();
+        
+        // Cerrar recursos
+        ps.close();
+        con.close();
+        
+        // Cerrar diálogo
         this.dispose();
-
-        System.out.println("Datos a enviar: " + cantidad + ", " + dimension + ", " + material);
+        
+        // Actualizar tabla en Produccion
+        produccionPanel2.cargarTablaDetalle();
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "La cantidad debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -260,4 +270,6 @@ public class DetalleProduccion extends javax.swing.JDialog {
     private RSMaterialComponent.RSTextFieldTwo txtdimension;
     private RSMaterialComponent.RSTextFieldTwo txtmaterial;
     // End of variables declaration//GEN-END:variables
+
+    
 }
