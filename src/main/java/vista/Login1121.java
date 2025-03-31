@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -21,7 +22,13 @@ import javax.swing.JTextField;
  * @author Personal
  */
 public class Login1121 extends javax.swing.JFrame {
-
+ private boolean isPasswordVisible = false;
+      // Rutas de las imágenes
+    private final String eyeOpenPath = "/vista (1).png";   // Ojo abierto
+    private final String eyeClosedPath = "/ojo (2).png"; // Ojo cerrado
+    
+    private ImageIcon eyeOpenIcon;
+    private ImageIcon eyeClosedIcon;
     /**
      * Creates new form Login1
      */
@@ -44,7 +51,20 @@ fondo.add(kGradientPanel1, BorderLayout.CENTER);
 setContentPane(fondo);
 
 
+eyeOpenIcon = new ImageIcon(getClass().getResource(eyeOpenPath));
+eyeClosedIcon = new ImageIcon(getClass().getResource(eyeClosedPath));
+    }
+    
+    private void togglePasswordVisibility() {
+        if (isPasswordVisible) {
+            passtxt.setEchoChar('•'); // Ocultar contraseña
+            btnVer.setIcon(eyeClosedIcon); // Cambiar a imagen de ojo cerrado
 
+        } else {
+            passtxt.setEchoChar((char) 0); // Mostrar contraseña
+            btnVer.setIcon(eyeOpenIcon); // Cambiar a imagen de ojo abierto
+        }
+        isPasswordVisible = !isPasswordVisible;
     }
 
     /**
@@ -66,6 +86,7 @@ setContentPane(fondo);
         rSMaterialButtonRectangle2 = new rojerusan.RSMaterialButtonRectangle();
         txt_usuario = new RSMaterialComponent.RSTextFieldIconOne();
         passtxt = new RSMaterialComponent.RSPasswordIconOne();
+        btnVer = new rojeru_san.RSButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -136,7 +157,7 @@ setContentPane(fondo);
                 txt_usuarioActionPerformed(evt);
             }
         });
-        jPanel6.add(txt_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, 380, 30));
+        jPanel6.add(txt_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 360, 30));
 
         passtxt.setForeground(new java.awt.Color(0, 0, 0));
         passtxt.setToolTipText("");
@@ -144,7 +165,17 @@ setContentPane(fondo);
         passtxt.setColorIcon(new java.awt.Color(204, 204, 204));
         passtxt.setPhColor(new java.awt.Color(51, 51, 51));
         passtxt.setPlaceholder("Ingrese su contraseña");
-        jPanel6.add(passtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 380, 30));
+        jPanel6.add(passtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, 360, 30));
+
+        btnVer.setBackground(new java.awt.Color(236, 236, 236));
+        btnVer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ojo (2).png"))); // NOI18N
+        btnVer.setColorHover(new java.awt.Color(247, 247, 247));
+        btnVer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerActionPerformed(evt);
+            }
+        });
+        jPanel6.add(btnVer, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 370, 30, 30));
 
         kGradientPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 190, 460, 590));
 
@@ -176,6 +207,10 @@ setContentPane(fondo);
     private void txt_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_usuarioActionPerformed
+
+    private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
+        togglePasswordVisibility();
+    }//GEN-LAST:event_btnVerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -220,6 +255,7 @@ setContentPane(fondo);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private rojeru_san.RSButton btnVer;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
