@@ -5,7 +5,12 @@
 package vista;
 
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import modelo.Conexion;
 
 /**
  *
@@ -44,7 +49,7 @@ public class formuProduccion extends javax.swing.JDialog {
         btnCancelar = new rojeru_san.RSButtonRiple();
         txtinicio = new RSMaterialComponent.RSTextFieldTwo();
         txtfinal = new RSMaterialComponent.RSTextFieldTwo();
-        txtEstado = new RSMaterialComponent.RSTextFieldTwo();
+        Boxestado = new RSMaterialComponent.RSComboBoxMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(490, 340));
@@ -116,12 +121,10 @@ public class formuProduccion extends javax.swing.JDialog {
         txtfinal.setSelectionColor(new java.awt.Color(46, 49, 82));
         jPanel1.add(txtfinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 100, 200, 30));
 
-        txtEstado.setForeground(new java.awt.Color(46, 49, 82));
-        txtEstado.setBorderColor(new java.awt.Color(46, 49, 82));
-        txtEstado.setPhColor(new java.awt.Color(46, 49, 82));
-        txtEstado.setPlaceholder("");
-        txtEstado.setSelectionColor(new java.awt.Color(46, 49, 82));
-        jPanel1.add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 200, 30));
+        Boxestado.setForeground(new java.awt.Color(102, 102, 102));
+        Boxestado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", "pendiente", "proceso", "finalizado" }));
+        Boxestado.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        jPanel1.add(Boxestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -139,25 +142,63 @@ public class formuProduccion extends javax.swing.JDialog {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
 
-        if (produccionPanel == null) {
-            JOptionPane.showMessageDialog(this, "Error: No se recibió la referencia a Produccion", "Error", JOptionPane.ERROR_MESSAGE);
+        if (txtinicio.getText().isEmpty() || txtfinal.getText().isEmpty() || 
+        Boxestado.getSelectedItem() == null || Boxestado.getSelectedIndex() == 0) {
+        
+        JOptionPane.showMessageDialog(this, 
+            "Todos los campos son obligatorios", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    try {
+        // Obtener valores
+        Date fechaInicio = Date.valueOf(txtinicio.getText());
+        Date fechaFin = Date.valueOf(txtfinal.getText());
+        String estado = Boxestado.getSelectedItem().toString();
+
+        // Validar fechas
+        if (fechaFin.before(fechaInicio)) {
+            JOptionPane.showMessageDialog(this, 
+                "La fecha final no puede ser anterior a la fecha inicial", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        String fechaInicio = txtinicio.getText();
-        String fechaFinal = txtfinal.getText();
-        String estado = txtEstado.getText();
-
-        if (fechaInicio.isEmpty() || fechaFinal.isEmpty() || estado.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Agrega a Tabla1 (Producción)
-        produccionPanel.agregarFilaATabla1(fechaInicio, fechaFinal, estado);
+        // Insertar en BD (sin pedido_codigo)
+        Connection con = new Conexion().getConnection();
+        String sql = "INSERT INTO produccion (fecha_inicio, fecha_fin, estado) VALUES (?, ?, ?)";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setDate(1, fechaInicio);
+        ps.setDate(2, fechaFin);
+        ps.setString(3, estado);
+        
+        ps.executeUpdate();
+        
+        ps.close();
+        con.close();
+        
         this.dispose();
         
-        System.out.println("Datos a enviar: " + fechaInicio + ", " + fechaFinal + ", " + estado);
+        if (produccionPanel != null) {
+            produccionPanel.cargarTablaProduccion();
+        }
+        
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Formato de fecha incorrecto (usar YYYY-MM-DD)", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al guardar: " + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -215,6 +256,7 @@ public class formuProduccion extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private RSMaterialComponent.RSComboBoxMaterial Boxestado;
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
     private javax.swing.JLabel jLabel1;
@@ -223,7 +265,6 @@ public class formuProduccion extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private RSMaterialComponent.RSTextFieldTwo txtEstado;
     private RSMaterialComponent.RSTextFieldTwo txtfinal;
     private RSMaterialComponent.RSTextFieldTwo txtinicio;
     // End of variables declaration//GEN-END:variables

@@ -5,7 +5,6 @@
 package vista;
 
 import java.awt.Frame;
-import java.time.Clock;
 import javax.swing.JFrame;
 
 /**
@@ -14,24 +13,18 @@ import javax.swing.JFrame;
  */
 public class tresProduccion extends javax.swing.JDialog {
 
-    
     private Produccion produccionPanel;
-    private Produccion produccionPanel2;
 
-    /**
-     * Creates new form tresProduccion
-     */
-    public tresProduccion(Frame parent, boolean modal, Produccion produccionPanel) {
-    super(parent, modal);
-    this.produccionPanel = produccionPanel;
-    initComponents();
-setLocationRelativeTo(parent);
+    public tresProduccion(java.awt.Frame parent, boolean modal, Produccion produccionPanel) {
+        super(parent, modal);
+        this.produccionPanel = produccionPanel;
+        initComponents();
+        setLocationRelativeTo(parent);
     }
+
     tresProduccion(JFrame jFrame, boolean b) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -127,30 +120,34 @@ setLocationRelativeTo(parent);
     private void produccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produccionActionPerformed
         this.dispose();
         formuProduccion dialog = new formuProduccion(new javax.swing.JFrame(), true, this.produccionPanel);
-        dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-        
+        produccionPanel.cargarTablaProduccion(); // Actualizar tabla después de cerrar
+
     }//GEN-LAST:event_produccionActionPerformed
 
     private void etapacrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_etapacrearActionPerformed
         this.dispose();
-        EtapaProduccion dialog = new EtapaProduccion(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
+        // Usa produccionPanel (no produccionPanel2)
+        EtapaProduccion dialog = new EtapaProduccion(
+                (javax.swing.JFrame) this.getParent(),
+                true);
+        dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
-        
+
+
     }//GEN-LAST:event_etapacrearActionPerformed
 
     private void detallecrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detallecrearActionPerformed
-         this.dispose();
+        this.dispose();
         // Usa produccionPanel (no produccionPanel2)
         DetalleProduccion dialog = new DetalleProduccion(
-            (javax.swing.JFrame) this.getParent(), 
-            true, 
-            this.produccionPanel
+                (javax.swing.JFrame) this.getParent(),
+                true,
+                this.produccionPanel
         );
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
-      
+
     }//GEN-LAST:event_detallecrearActionPerformed
 
     private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
@@ -209,5 +206,4 @@ setLocationRelativeTo(parent);
     private rojeru_san.RSButtonRiple volver;
     // End of variables declaration//GEN-END:variables
 
-    
 }

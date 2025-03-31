@@ -6,6 +6,7 @@ package vista;
 
 import java.awt.Color;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,6 +25,7 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
+
 /**
  *
  * @author pc
@@ -38,7 +40,7 @@ public class Produccion extends javax.swing.JPanel {
 
         Tabla1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{}, // Sin datos iniciales
+                new Object[][]{},
                 new String[]{"#", "ID", "Fecha inicio", "Fecha fin", "Estado", "Código Pedido"}
         ));
 
@@ -48,8 +50,8 @@ public class Produccion extends javax.swing.JPanel {
 
         Tabla2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object[][]{},
-            new String[]{"#", "ID", "Cantidad", "Materiales", "Código Producción"}
+                new Object[][]{},
+                new String[]{"#", "ID", "Cantidad", "Dimensiones", "Materiales", "Código Producción"}
         ));
 
         Tabla2.setCellSelectionEnabled(false);
@@ -81,10 +83,6 @@ public class Produccion extends javax.swing.JPanel {
         jScrollPane2.setVisible(true);
         jScrollPane3.setVisible(false);
         jScrollPane4.setVisible(false);
-// Configurar selección de filas completas
-        Tabla1.setCellSelectionEnabled(false);
-        Tabla2.setCellSelectionEnabled(false);
-        Tabla3.setCellSelectionEnabled(false);
 
         // Cargar datos iniciales
         cargarDatosProduccion();
@@ -109,7 +107,6 @@ public class Produccion extends javax.swing.JPanel {
                 });
     }
 
-    
     public void agregarFilaATabla1(String fechaInicio, String fechaFinal, String estado) {
         actualizarTablaProduccion();
 
@@ -117,7 +114,15 @@ public class Produccion extends javax.swing.JPanel {
         jScrollPane3.setVisible(false);
         jScrollPane4.setVisible(false);
     }
-
+    
+public int obtenerProduccionSeleccionada() {
+        if(Tabla1.getSelectedRow() == -1) {
+            return -1;
+        }
+        int viewRow = Tabla1.getSelectedRow();
+        int modelRow = Tabla1.convertRowIndexToModel(viewRow);
+        return (int) Tabla1.getModel().getValueAt(modelRow, 1); // Columna del ID
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -220,18 +225,6 @@ public class Produccion extends javax.swing.JPanel {
         jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 1220, 520));
 
         Tabla3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Tabla3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"1", "43532", "silla", "Inicio", "43/65/24 ", "12/43/58"},
-                {"2", "67864", "mesa", "Proceso", "54/23/65", "74/34/23"},
-                {"3", "45683", "mueble ", "finalizando", "12/43/23", "96/23/28"},
-                {"4", "73867", "armario", "Proceso", "95/34/50", "34/54/84"},
-                {"5", "67594", "cama", "Terminado", "34/45/34", "84/34/39"}
-            },
-            new String [] {
-                "#", "ID", "Nombre_etapa", "Estado", "Fecha_inicio", "Fecha_final"
-            }
-        ));
         Tabla3.setBackgoundHead(new java.awt.Color(29, 30, 51));
         Tabla3.setBackgoundHover(new java.awt.Color(29, 30, 51));
         Tabla3.setColorPrimaryText(new java.awt.Color(0, 0, 0));
@@ -298,19 +291,10 @@ public class Produccion extends javax.swing.JPanel {
     }//GEN-LAST:event_etapaActionPerformed
 
     private void nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoActionPerformed
-                                    
-    JTable tablaActiva = determinarTablaActiva();
-    
-    if (tablaActiva == Tabla1) {
-        // Lógica para agregar nueva producción
-        // Puedes abrir un diálogo para ingresar los datos
-    } else if (tablaActiva == Tabla2) {
-        // Lógica para agregar nuevo detalle
-    } else if (tablaActiva == Tabla3) {
-        // Lógica para agregar nueva etapa
-    } else {
-        JOptionPane.showMessageDialog(this, "No hay tabla activa", "Advertencia", JOptionPane.WARNING_MESSAGE);
-    }
+    tresProduccion dialog = new tresProduccion(new javax.swing.JFrame(), true, this);
+    dialog.setVisible(true);
+
+        
     }//GEN-LAST:event_nuevoActionPerformed
 
     private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
@@ -441,6 +425,10 @@ public class Produccion extends javax.swing.JPanel {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    private void insertarDetalleEnBD(int cant, String dimension, String material, Integer produccionCodigo) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public class Conexion {
 
         public Connection getConnection() {
@@ -463,60 +451,60 @@ public class Produccion extends javax.swing.JPanel {
     }
 
     public void cargarTablaEtapa() {
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try {
-            con = new Conexion().getConnection();
-            String sql = "SELECT id_etapa, nombre_etapa, estado, fecha_inicio, fecha_fin FROM etapa_produccion";
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-
+        try (Connection con = new Conexion().getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                 "SELECT idetapa_produccion, nombre_etapa, estado, fecha_inicio, fecha_fin, produccion_codigo " +
+                 "FROM etapa_produccion");
+             ResultSet rs = ps.executeQuery()) {
+            
             DefaultTableModel model = (DefaultTableModel) Tabla3.getModel();
-            model.setRowCount(0); // Limpiar tabla
-
+            model.setRowCount(0);
+            
             int rowNum = 1;
             while (rs.next()) {
                 model.addRow(new Object[]{
                     rowNum++,
-                    rs.getInt("id_etapa"),
+                    rs.getInt("idetapa_produccion"),
                     rs.getString("nombre_etapa"),
                     rs.getString("estado"),
-                    rs.getString("fecha_inicio"),
-                    rs.getString("fecha_fin")
+                    rs.getDate("fecha_inicio"),
+                    rs.getDate("fecha_fin"),
+                    rs.getObject("produccion_codigo")
                 });
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar etapas: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            // Cerrar recursos (rs, ps, con)
+            JOptionPane.showMessageDialog(this, 
+                "Error al cargar etapas: " + e.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
         }
+    
     }
 
     public void cargarTablaDetalle() {
-    try (Connection con = new Conexion().getConnection();
-         PreparedStatement ps = con.prepareStatement("SELECT idetalle_produccion, cantidad, materiales, produccion_codigo FROM detalle_produccion");
-         ResultSet rs = ps.executeQuery()) {
-        
-        DefaultTableModel model = (DefaultTableModel) Tabla2.getModel();
-        model.setRowCount(0);
-        
-        int rowNum = 1;
-        while (rs.next()) {
-            model.addRow(new Object[]{
-                rowNum++,
-                rs.getInt("idetalle_produccion"),
-                rs.getInt("cantidad"),
-                rs.getString("materiales"),
-                rs.getObject("produccion_codigo") // Usar getObject para manejar NULL
-            });
+        try (Connection con = new Conexion().getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM detalle_produccion");
+             ResultSet rs = ps.executeQuery()) {
+            
+            DefaultTableModel model = (DefaultTableModel) Tabla2.getModel();
+            model.setRowCount(0);
+            
+            int rowNum = 1;
+            while(rs.next()) {
+                model.addRow(new Object[]{
+                    rowNum++,
+                    rs.getInt("idetalle_produccion"),
+                    rs.getInt("cantidad"),
+                    rs.getString("dimensiones"),
+                    rs.getString("materiales"),
+                    rs.getObject("produccion_codigo")
+                });
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar detalles: " + e.getMessage(), 
+                                        "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Error al cargar detalles: " + e.getMessage(), 
-                                    "Error", JOptionPane.ERROR_MESSAGE);
     }
-}
     public void actualizarTablaProduccion() {
         cargarDatosProduccion();
     }
@@ -527,7 +515,7 @@ public class Produccion extends javax.swing.JPanel {
         cargarTablaEtapa();
     }
 
-    private void insertarEnBD(String fechaInicio, String fechaFin, String estado, int codigoPedido) {
+    private void insertarEnBD(Date fechaInicio, Date fechaFin, String estado, int codigoPedido) {
         Connection con = null;
         PreparedStatement ps = null;
 
@@ -535,8 +523,8 @@ public class Produccion extends javax.swing.JPanel {
             con = new Conexion().getConnection();
             String sql = "INSERT INTO produccion (fecha_inicio, fecha_fin, estado, pedido_codigo) VALUES (?, ?, ?, ?)";
             ps = con.prepareStatement(sql);
-            ps.setString(1, fechaInicio);
-            ps.setString(2, fechaFin); // Corregido: era fecha_final
+            ps.setDate(1, fechaInicio);
+            ps.setDate(2, fechaFin); // Corregido: era fecha_final
             ps.setString(3, estado);
             ps.setInt(4, codigoPedido);
             ps.executeUpdate();
@@ -569,45 +557,66 @@ public class Produccion extends javax.swing.JPanel {
         return ids;
     }
 
+    private void insertarEtapaEnBD(String nombreEtapa, String estado, Date fechaInicio, Date fechaFin, int produccionCodigo) {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        try {
+            con = new Conexion().getConnection();
+            String sql = "INSERT INTO etapa_produccion (nombre_etapa, estado, fecha_inicio, fecha_fin, produccion_codigo) "
+                    + "VALUES (?, ?, ?, ?, ?)";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, nombreEtapa);
+            ps.setString(2, estado);
+            ps.setDate(3, fechaInicio);
+            ps.setDate(4, fechaFin);
+            ps.setInt(5, produccionCodigo);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al insertar etapa:");
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error al cerrar recursos:");
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void cargarTablaProduccion() {
-    Connection con = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
-
-    try {
-        con = new Conexion().getConnection();
-        String sql = "SELECT id_produccion, fecha_inicio, fecha_fin, estado, pedido_codigo FROM produccion";
-        ps = con.prepareStatement(sql);
-        rs = ps.executeQuery();
-
+    try (Connection con = new Conexion().getConnection();
+         PreparedStatement ps = con.prepareStatement("SELECT id_produccion, fecha_inicio, fecha_fin, estado FROM produccion");
+         ResultSet rs = ps.executeQuery()) {
+        
         DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-        model.setRowCount(0); // Limpiar tabla
-
+        model.setRowCount(0);
+        
         int rowNum = 1;
         while (rs.next()) {
             model.addRow(new Object[]{
                 rowNum++,
                 rs.getInt("id_produccion"),
-                rs.getString("fecha_inicio"),
-                rs.getString("fecha_fin"),
+                rs.getDate("fecha_inicio"),
+                rs.getDate("fecha_fin"),
                 rs.getString("estado"),
-                rs.getInt("pedido_codigo")
+                null 
             });
         }
     } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Error al cargar producción: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    } finally {
-        // Cerrar recursos
-        try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (con != null) con.close();
-        } catch (SQLException e) {
-            System.err.println("Error al cerrar recursos: " + e.getMessage());
-        }
+        JOptionPane.showMessageDialog(this, 
+            "Error al cargar datos: " + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
     }
+}
 
-    }
 
     private void eliminarProduccion(List<Object[]> datos) throws SQLException {
         List<Integer> ids = new ArrayList<>();
@@ -630,7 +639,7 @@ public class Produccion extends javax.swing.JPanel {
         try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("DELETE FROM detalle_produccion WHERE id_detalle = ?")) {
 
             for (Object[] fila : datos) {
-                ps.setInt(1, (Integer) fila[1]); // ID está en la columna 1
+                ps.setInt(1, (Integer) fila[1]); 
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -638,10 +647,10 @@ public class Produccion extends javax.swing.JPanel {
     }
 
     private void eliminarEtapaProduccion(List<Object[]> datos) throws SQLException {
-        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("DELETE FROM etapa_produccion WHERE id_etapa = ?")) {
+        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("DELETE FROM etapa_produccion WHERE idetapa_produccion = ?")) {
 
             for (Object[] fila : datos) {
-                ps.setInt(1, (Integer) fila[1]); // ID está en la columna 1
+                ps.setInt(1, (Integer) fila[1]); 
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -693,65 +702,67 @@ public class Produccion extends javax.swing.JPanel {
             eliminarEtapaProduccion(datos);
         }
     }
-private void insertarDetalleEnBD(int cantidad, String dimensiones, String materiales) {
-    Connection con = null;
-    PreparedStatement ps = null;
 
-    try {
-        con = new Conexion().getConnection();
-        String sql = "INSERT INTO detalle_produccion (cantidad, dimensiones, materiales) VALUES (?, ?, ?)";
-        ps = con.prepareStatement(sql);
-        ps.setInt(1, cantidad);
-        ps.setString(2, dimensiones);
-        ps.setString(3, materiales);
-        ps.executeUpdate();
-    } catch (SQLException e) {
-        System.err.println("Error al insertar detalle:");
-        e.printStackTrace();
-    } finally {
-        try {
-            if (ps != null) ps.close();
-            if (con != null) con.close();
-        } catch (SQLException e) {
-            System.err.println("Error al cerrar recursos:");
-            e.printStackTrace();
+    
+
+    private void eliminarFilasDeTabla(JTable tabla, int[] selectedRows) {
+        DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+        TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) tabla.getRowSorter();
+
+        // Eliminar en orden inverso
+        for (int i = selectedRows.length - 1; i >= 0; i--) {
+            int viewRow = selectedRows[i];
+            int modelRow = (sorter != null) ? sorter.convertRowIndexToModel(viewRow) : viewRow;
+            model.removeRow(modelRow);
         }
     }
-}
-    private void eliminarFilasDeTabla(JTable tabla, int[] selectedRows) {
-    DefaultTableModel model = (DefaultTableModel) tabla.getModel();
-    TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) tabla.getRowSorter();
 
-    // Eliminar en orden inverso
-    for (int i = selectedRows.length - 1; i >= 0; i--) {
-        int viewRow = selectedRows[i];
-        int modelRow = (sorter != null) ? sorter.convertRowIndexToModel(viewRow) : viewRow;
-        model.removeRow(modelRow);
-    }
-}
-    public void agregarFilaATabla2(String cantidad, String dimension, String material) {
-    // Insertar en la base de datos
-    try {
-        int cant = Integer.parseInt(cantidad);
-        insertarDetalleEnBD(cant, dimension, material);
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Cantidad debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    
-    // Actualizar la tabla
-    DefaultTableModel model = (DefaultTableModel) Tabla2.getModel();
-    int newRowNum = model.getRowCount() + 1;
-    model.addRow(new Object[]{
-        newRowNum,
-        generateRandomId(),
-        cantidad,
-        dimension,
-        material
-    });
+    public void agregarFilaATabla2(String cantidad, String dimension, String material, Integer produccionCodigo) {
+        // Insertar en la base de datos
+        try {
+            int cant = Integer.parseInt(cantidad);
+            insertarDetalleEnBD(cant, dimension, material, produccionCodigo);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Cantidad debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    jScrollPane2.setVisible(false);
-    jScrollPane3.setVisible(true);
-    jScrollPane4.setVisible(false);
-}
+        // Actualizar la tabla
+        DefaultTableModel model = (DefaultTableModel) Tabla2.getModel();
+        int newRowNum = model.getRowCount() + 1;
+        model.addRow(new Object[]{
+            newRowNum,
+            generateRandomId(),
+            cantidad,
+            dimension,
+            material,
+            produccionCodigo
+        });
+
+        jScrollPane2.setVisible(false);
+        jScrollPane3.setVisible(true);
+        jScrollPane4.setVisible(false);
+    }
+
+    public void agregarFilaATabla3(String nombreEtapa, String estado, Date fechaInicio, Date fechaFin, int produccionCodigo) {
+        // Insertar en la base de datos
+        insertarEtapaEnBD(nombreEtapa, estado, fechaInicio, fechaFin, produccionCodigo);
+
+        // Actualizar la tabla
+        DefaultTableModel model = (DefaultTableModel) Tabla3.getModel();
+        int newRowNum = model.getRowCount() + 1;
+        model.addRow(new Object[]{
+            newRowNum,
+            generateRandomId(),
+            nombreEtapa,
+            estado,
+            fechaInicio,
+            fechaFin,
+            produccionCodigo
+        });
+
+        jScrollPane2.setVisible(false);
+        jScrollPane3.setVisible(false);
+        jScrollPane4.setVisible(true);
+    }
 }

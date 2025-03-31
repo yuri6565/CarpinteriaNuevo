@@ -21,7 +21,6 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,3,91,0,0,6,23"/>
   </AuxValues>
 
   <Layout>
@@ -51,18 +50,14 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jPanel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                   <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
               </Group>
-
               <Group type="102" attributes="0">
-                  <EmptySpace min="260" pref="260" max="-2" attributes="0"/>
+                  <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="220" max="-2" attributes="0"/>
                   <Component id="contenedor" pref="1300" max="32767" attributes="0"/>
               </Group>
-
               <Component id="jPanel2" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
@@ -70,18 +65,16 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="jPanel3" max="32767" attributes="0"/>
               <Component id="jPanel4" max="32767" attributes="0"/>
-
-              <Component id="jPanel3" max="32767" attributes="0"/>
-
-              <Group type="102" attributes="0">
-                  <EmptySpace min="75" pref="75" max="-2" attributes="0"/>
-                  <Component id="jPanel5" min="-2" pref="780" max="-2" attributes="0"/>
-              </Group>
               <Group type="102" attributes="0">
                   <EmptySpace min="90" pref="90" max="-2" attributes="0"/>
-                  <Component id="contenedor" pref="770" max="32767" attributes="0"/>
+                  <Component id="contenedor" pref="777" max="32767" attributes="0"/>
               </Group>
-              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jPanel5" min="-2" pref="792" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="6" max="32767" attributes="0"/>
+              </Group>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -110,9 +103,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-
                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-
               </Group>
             </DimensionLayout>
           </Layout>
@@ -142,7 +133,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="780" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="792" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -168,9 +159,7 @@
                           </Group>
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       </Group>
-
-                      <EmptySpace pref="844" max="32767" attributes="0"/>
-
+                      <EmptySpace pref="865" max="32767" attributes="0"/>
                       <Component id="jButton3" min="-2" pref="108" max="-2" attributes="0"/>
                       <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
                       <Component id="jButton2" min="-2" pref="73" max="-2" attributes="0"/>
@@ -298,12 +287,18 @@
                   <Component id="seis" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="siete1" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="ocho" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+                      <Component id="rSPanelImage1" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="180" pref="180" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                      <Component id="rSPanelImage1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="uno" min="-2" pref="50" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="dos" min="-2" pref="50" max="-2" attributes="0"/>
@@ -539,6 +534,26 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="siete1ActionPerformed"/>
               </Events>
             </Component>
+            <Container class="rojerusan.RSPanelImage" name="rSPanelImage1">
+              <Properties>
+                <Property name="imagen" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/WhatsApp Image 2025-03-20 at 3.58.18 PM.png"/>
+                </Property>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="0" pref="154" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="0" pref="167" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+            </Container>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel4">
@@ -551,7 +566,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="uno1" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="uno1" alignment="1" min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="dos1" min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="tres1" min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="cuatro1" min="-2" pref="40" max="-2" attributes="0"/>
@@ -563,8 +578,8 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="180" pref="180" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="200" max="-2" attributes="0"/>
                       <Component id="uno1" min="-2" pref="50" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="dos1" min="-2" pref="50" max="-2" attributes="0"/>
@@ -580,6 +595,7 @@
                       <Component id="siete2" min="-2" pref="50" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="ocho1" min="-2" pref="50" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
