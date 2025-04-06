@@ -127,12 +127,9 @@ public class tresProduccion extends javax.swing.JDialog {
 
     private void etapacrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_etapacrearActionPerformed
         this.dispose();
-        // Usa produccionPanel (no produccionPanel2)
-        EtapaProduccion dialog = new EtapaProduccion(
-                (javax.swing.JFrame) this.getParent(),
-                true);
-        dialog.setLocationRelativeTo(this);
+        EtapaProduccion dialog = new EtapaProduccion(new javax.swing.JFrame(), true, this.produccionPanel);
         dialog.setVisible(true);
+        produccionPanel.cargarTablaEtapa();// Actualizar tabla después de cerrar
 
 
     }//GEN-LAST:event_etapacrearActionPerformed

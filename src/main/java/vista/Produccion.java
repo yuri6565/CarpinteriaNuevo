@@ -12,7 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.swing.JTable;
@@ -24,7 +23,6 @@ import javax.swing.table.TableRowSorter;
 import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
-
 
 /**
  *
@@ -41,7 +39,7 @@ public class Produccion extends javax.swing.JPanel {
         Tabla1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
-                new String[]{"#", "ID", "Fecha inicio", "Fecha fin", "Estado", "Código Pedido"}
+                new String[]{"#", "ID", "Fecha inicio", "Fecha fin", "Estado"}
         ));
 
         Tabla1.setCellSelectionEnabled(false);
@@ -51,7 +49,7 @@ public class Produccion extends javax.swing.JPanel {
         Tabla2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla2.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
-                new String[]{"#", "ID", "Cantidad", "Dimensiones", "Materiales", "Código Producción"}
+                new String[]{"#", "ID", "Cantidad", "Dimensiones", "Materiales"}
         ));
 
         Tabla2.setCellSelectionEnabled(false);
@@ -84,6 +82,8 @@ public class Produccion extends javax.swing.JPanel {
         jScrollPane3.setVisible(false);
         jScrollPane4.setVisible(false);
 
+        this.produccion.setSelected(true);
+
         // Cargar datos iniciales
         cargarDatosProduccion();
 
@@ -114,25 +114,22 @@ public class Produccion extends javax.swing.JPanel {
         jScrollPane3.setVisible(false);
         jScrollPane4.setVisible(false);
     }
-    
-public int obtenerProduccionSeleccionada() {
-        if(Tabla1.getSelectedRow() == -1) {
+
+    public int obtenerProduccionSeleccionada() {
+        if (Tabla1.getSelectedRow() == -1) {
             return -1;
         }
         int viewRow = Tabla1.getSelectedRow();
         int modelRow = Tabla1.convertRowIndexToModel(viewRow);
         return (int) Tabla1.getModel().getValueAt(modelRow, 1); // Columna del ID
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        nuevo = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        Detalle = new newscomponents.RSButtonFlat_new();
-        etapa = new newscomponents.RSButtonFlat_new();
-        produccion = new newscomponents.RSButtonFlat_new();
-        nuevo = new RSMaterialComponent.RSButtonMaterialTwo();
         rSTextFieldMaterialIcon1 = new RSMaterialComponent.RSTextFieldMaterialIcon();
         jScrollPane2 = new javax.swing.JScrollPane();
         Tabla1 = new RSMaterialComponent.RSTableMetroCustom();
@@ -140,53 +137,19 @@ public int obtenerProduccionSeleccionada() {
         Tabla2 = new RSMaterialComponent.RSTableMetroCustom();
         jScrollPane4 = new javax.swing.JScrollPane();
         Tabla3 = new RSMaterialComponent.RSTableMetroCustom();
-        eliminar = new RSMaterialComponent.RSButtonMaterialTwo();
+        btnNuevo = new rojeru_san.RSButtonRiple();
+        btnEditar = new rojeru_san.RSButtonRiple();
+        btnEliminar = new rojeru_san.RSButtonRiple();
+        produccion = new rojeru_san.RSButtonRiple();
+        etapaProduccion = new rojeru_san.RSButtonRiple();
+        detalleProduccion = new rojeru_san.RSButtonRiple();
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setPreferredSize(new java.awt.Dimension(1290, 730));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(368, 111, -1, -1));
+        nuevo.setBackground(new java.awt.Color(255, 255, 255));
+        nuevo.setPreferredSize(new java.awt.Dimension(1290, 730));
+        nuevo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        nuevo.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(368, 111, -1, -1));
 
-        Detalle.setBackground(new java.awt.Color(109, 160, 221));
-        Detalle.setText("Detalle produccion");
-        Detalle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DetalleActionPerformed(evt);
-            }
-        });
-        jPanel1.add(Detalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 20, 130, -1));
-
-        etapa.setBackground(new java.awt.Color(109, 160, 221));
-        etapa.setText("Etapa produccion");
-        etapa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                etapaActionPerformed(evt);
-            }
-        });
-        jPanel1.add(etapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 126, -1));
-
-        produccion.setBackground(new java.awt.Color(109, 160, 221));
-        produccion.setText("Produccion");
-        produccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                produccionActionPerformed(evt);
-            }
-        });
-        jPanel1.add(produccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 91, -1));
-
-        nuevo.setBackground(new java.awt.Color(29, 30, 51));
-        nuevo.setBorder(null);
-        nuevo.setText("Nuevo+");
-        nuevo.setBackgroundHover(new java.awt.Color(29, 30, 31));
-        nuevo.setBorderPainted(false);
-        nuevo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        nuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nuevoActionPerformed(evt);
-            }
-        });
-        jPanel1.add(nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 70, 86, 37));
-
+        rSTextFieldMaterialIcon1.setBackground(new java.awt.Color(245, 245, 245));
         rSTextFieldMaterialIcon1.setForeground(new java.awt.Color(29, 30, 91));
         rSTextFieldMaterialIcon1.setColorIcon(new java.awt.Color(29, 30, 111));
         rSTextFieldMaterialIcon1.setColorMaterial(new java.awt.Color(29, 30, 111));
@@ -197,7 +160,7 @@ public int obtenerProduccionSeleccionada() {
                 rSTextFieldMaterialIcon1ActionPerformed(evt);
             }
         });
-        jPanel1.add(rSTextFieldMaterialIcon1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, -1, 28));
+        nuevo.add(rSTextFieldMaterialIcon1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 430, 40));
 
         Tabla1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla1.setBackgoundHead(new java.awt.Color(29, 30, 51));
@@ -206,13 +169,13 @@ public int obtenerProduccionSeleccionada() {
         Tabla1.setColorSecundaryText(new java.awt.Color(0, 0, 0));
         Tabla1.setSelectionBackground(new java.awt.Color(29, 30, 91));
         Tabla1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane2.setViewportView(Tabla1);
         // Configurar Tabla1 para selección múltiple
         Tabla1.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         Tabla1.setRowSelectionAllowed(true);
         Tabla1.setColumnSelectionAllowed(true); // Solo selección por filas
+        jScrollPane2.setViewportView(Tabla1);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 1220, 520));
+        nuevo.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 1220, 520));
 
         Tabla2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla2.setBackgoundHead(new java.awt.Color(29, 30, 51));
@@ -220,9 +183,13 @@ public int obtenerProduccionSeleccionada() {
         Tabla2.setColorPrimaryText(new java.awt.Color(0, 0, 0));
         Tabla2.setColorSecundaryText(new java.awt.Color(0, 0, 0));
         Tabla2.setSelectionBackground(new java.awt.Color(29, 30, 91));
+        // Configurar Tabla1 para selección múltiple
+        Tabla2.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        Tabla2.setRowSelectionAllowed(true);
+        Tabla2.setColumnSelectionAllowed(true); // Solo selección por filas
         jScrollPane3.setViewportView(Tabla2);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 1220, 520));
+        nuevo.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 1220, 520));
 
         Tabla3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla3.setBackgoundHead(new java.awt.Color(29, 30, 51));
@@ -230,22 +197,78 @@ public int obtenerProduccionSeleccionada() {
         Tabla3.setColorPrimaryText(new java.awt.Color(0, 0, 0));
         Tabla3.setColorSecundaryText(new java.awt.Color(0, 0, 0));
         Tabla3.setSelectionBackground(new java.awt.Color(29, 30, 91));
+        // Configurar Tabla1 para selección múltiple
+        Tabla3.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        Tabla3.setRowSelectionAllowed(true);
+        Tabla3.setColumnSelectionAllowed(true); // Solo selección por filas
         jScrollPane4.setViewportView(Tabla3);
 
-        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 1220, 520));
+        nuevo.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 1220, 520));
 
-        eliminar.setBackground(new java.awt.Color(29, 30, 51));
-        eliminar.setBorder(null);
-        eliminar.setText("Eliminar -");
-        eliminar.setBackgroundHover(new java.awt.Color(29, 30, 31));
-        eliminar.setBorderPainted(false);
-        eliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        eliminar.addActionListener(new java.awt.event.ActionListener() {
+        btnNuevo.setBackground(new java.awt.Color(46, 49, 82));
+        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnNuevo.setText(" Nuevo");
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eliminarActionPerformed(evt);
+                btnNuevoActionPerformed(evt);
             }
         });
-        jPanel1.add(eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 86, 37));
+        nuevo.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 80, 120, 40));
+
+        btnEditar.setBackground(new java.awt.Color(46, 49, 82));
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil (1).png"))); // NOI18N
+        btnEditar.setText(" Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+        nuevo.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 80, 120, -1));
+
+        btnEliminar.setBackground(new java.awt.Color(46, 49, 82));
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (1).png"))); // NOI18N
+        btnEliminar.setText(" Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        nuevo.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 80, 120, 40));
+
+        produccion.setBackground(new java.awt.Color(46, 49, 82));
+        produccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gears-set.png"))); // NOI18N
+        produccion.setText("  Produccion");
+        produccion.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
+        produccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                produccionActionPerformed(evt);
+            }
+        });
+        nuevo.add(produccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 180, 40));
+
+        etapaProduccion.setBackground(new java.awt.Color(46, 49, 82));
+        etapaProduccion.setBorder(null);
+        etapaProduccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wrench.png"))); // NOI18N
+        etapaProduccion.setText(" Etapas produccion");
+        etapaProduccion.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
+        etapaProduccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                etapaProduccionActionPerformed(evt);
+            }
+        });
+        nuevo.add(etapaProduccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 20, 180, 40));
+
+        detalleProduccion.setBackground(new java.awt.Color(46, 49, 82));
+        detalleProduccion.setBorder(null);
+        detalleProduccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ajuste.png"))); // NOI18N
+        detalleProduccion.setText("Detalle produccion");
+        detalleProduccion.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
+        detalleProduccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                detalleProduccionActionPerformed(evt);
+            }
+        });
+        nuevo.add(detalleProduccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, 180, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -253,51 +276,33 @@ public int obtenerProduccionSeleccionada() {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 1501, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1501, Short.MAX_VALUE))
+                .addComponent(nuevo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1501, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 742, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 742, Short.MAX_VALUE))
+                .addComponent(nuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 742, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void rSTextFieldMaterialIcon1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSTextFieldMaterialIcon1ActionPerformed
-        filterTables();
+filterTables();        
     }//GEN-LAST:event_rSTextFieldMaterialIcon1ActionPerformed
 
-    private void produccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produccionActionPerformed
-
-        jScrollPane3.setVisible(false);
-        jScrollPane4.setVisible(false);
-        jScrollPane2.setVisible(true);
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        tresProduccion dialog = new tresProduccion(new javax.swing.JFrame(), true, this);
+        dialog.setVisible(true);
 
 
-    }//GEN-LAST:event_produccionActionPerformed
+    }//GEN-LAST:event_btnNuevoActionPerformed
 
-    private void DetalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DetalleActionPerformed
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
 
-        jScrollPane2.setVisible(false);
-        jScrollPane4.setVisible(false);
-        jScrollPane3.setVisible(true);
-    }//GEN-LAST:event_DetalleActionPerformed
 
-    private void etapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_etapaActionPerformed
+    }//GEN-LAST:event_btnEditarActionPerformed
 
-        jScrollPane2.setVisible(false);
-        jScrollPane3.setVisible(false);
-        jScrollPane4.setVisible(true);
-    }//GEN-LAST:event_etapaActionPerformed
-
-    private void nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoActionPerformed
-    tresProduccion dialog = new tresProduccion(new javax.swing.JFrame(), true, this);
-    dialog.setVisible(true);
-
-        
-    }//GEN-LAST:event_nuevoActionPerformed
-
-    private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // Determinar qué tabla está visible
         JTable tablaActiva = determinarTablaActiva();
 
@@ -357,24 +362,55 @@ public int obtenerProduccionSeleccionada() {
                     JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
-     }//GEN-LAST:event_eliminarActionPerformed
+    private void produccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produccionActionPerformed
+        jScrollPane3.setVisible(false);
+        jScrollPane4.setVisible(false);
+        jScrollPane2.setVisible(true);
+        this.produccion.setSelected(true);
+        this.etapaProduccion.setSelected(false);
+        this.detalleProduccion.setSelected(false);
+
+    }//GEN-LAST:event_produccionActionPerformed
+
+    private void etapaProduccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_etapaProduccionActionPerformed
+
+        jScrollPane2.setVisible(false);
+        jScrollPane3.setVisible(false);
+        jScrollPane4.setVisible(true);
+        this.produccion.setSelected(false);
+        this.etapaProduccion.setSelected(true);
+        this.detalleProduccion.setSelected(false);
+
+    }//GEN-LAST:event_etapaProduccionActionPerformed
+
+    private void detalleProduccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detalleProduccionActionPerformed
+
+        jScrollPane2.setVisible(false);
+        jScrollPane4.setVisible(false);
+        jScrollPane3.setVisible(true);
+        this.produccion.setSelected(false);
+        this.etapaProduccion.setSelected(false);
+        this.detalleProduccion.setSelected(true);
+    }//GEN-LAST:event_detalleProduccionActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private newscomponents.RSButtonFlat_new Detalle;
     private RSMaterialComponent.RSTableMetroCustom Tabla1;
     private RSMaterialComponent.RSTableMetroCustom Tabla2;
     private RSMaterialComponent.RSTableMetroCustom Tabla3;
-    private RSMaterialComponent.RSButtonMaterialTwo eliminar;
-    private newscomponents.RSButtonFlat_new etapa;
+    private rojeru_san.RSButtonRiple btnEditar;
+    private rojeru_san.RSButtonRiple btnEliminar;
+    private rojeru_san.RSButtonRiple btnNuevo;
+    private rojeru_san.RSButtonRiple detalleProduccion;
+    private rojeru_san.RSButtonRiple etapaProduccion;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private RSMaterialComponent.RSButtonMaterialTwo nuevo;
-    private newscomponents.RSButtonFlat_new produccion;
+    private javax.swing.JPanel nuevo;
+    private rojeru_san.RSButtonRiple produccion;
     private RSMaterialComponent.RSTextFieldMaterialIcon rSTextFieldMaterialIcon1;
     // End of variables declaration//GEN-END:variables
 
@@ -392,6 +428,7 @@ public int obtenerProduccionSeleccionada() {
             filterTable(Tabla1, searchText, 0); // Cambia 0 por el índice de la columna "#" en Tabla1
             filterTable(Tabla2, searchText, 0); // Cambia 0 por el índice de la columna "#" en Tabla2
             filterTable(Tabla3, searchText, 0); // Cambia 0 por el índice de la columna "#" en Tabla3
+
         } else if (searchText.length() >= 2) {
             // Filtrar en todas las columnas
             filterTable(Tabla1, searchText, -1); // Mostrar todas las filas en Tabla1
@@ -425,7 +462,7 @@ public int obtenerProduccionSeleccionada() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    private void insertarDetalleEnBD(int cant, String dimension, String material, Integer produccionCodigo) {
+    private void insertarDetalleEnBD(int cant, String dimension, String material) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -451,15 +488,13 @@ public int obtenerProduccionSeleccionada() {
     }
 
     public void cargarTablaEtapa() {
-        try (Connection con = new Conexion().getConnection();
-             PreparedStatement ps = con.prepareStatement(
-                 "SELECT idetapa_produccion, nombre_etapa, estado, fecha_inicio, fecha_fin, produccion_codigo " +
-                 "FROM etapa_produccion");
-             ResultSet rs = ps.executeQuery()) {
-            
+        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(
+                "SELECT idetapa_produccion, nombre_etapa, estado, fecha_inicio, fecha_fin "
+                + "FROM etapa_produccion"); ResultSet rs = ps.executeQuery()) {
+
             DefaultTableModel model = (DefaultTableModel) Tabla3.getModel();
             model.setRowCount(0);
-            
+
             int rowNum = 1;
             while (rs.next()) {
                 model.addRow(new Object[]{
@@ -468,43 +503,40 @@ public int obtenerProduccionSeleccionada() {
                     rs.getString("nombre_etapa"),
                     rs.getString("estado"),
                     rs.getDate("fecha_inicio"),
-                    rs.getDate("fecha_fin"),
-                    rs.getObject("produccion_codigo")
+                    rs.getDate("fecha_fin")
                 });
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al cargar etapas: " + e.getMessage(), 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar etapas: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
-    
+
     }
 
     public void cargarTablaDetalle() {
-        try (Connection con = new Conexion().getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM detalle_produccion");
-             ResultSet rs = ps.executeQuery()) {
-            
+        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("SELECT * FROM detalle_produccion"); ResultSet rs = ps.executeQuery()) {
+
             DefaultTableModel model = (DefaultTableModel) Tabla2.getModel();
             model.setRowCount(0);
-            
+
             int rowNum = 1;
-            while(rs.next()) {
+            while (rs.next()) {
                 model.addRow(new Object[]{
                     rowNum++,
                     rs.getInt("idetalle_produccion"),
                     rs.getInt("cantidad"),
                     rs.getString("dimensiones"),
-                    rs.getString("materiales"),
-                    rs.getObject("produccion_codigo")
+                    rs.getString("materiales")
                 });
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar detalles: " + e.getMessage(), 
-                                        "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al cargar detalles: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     public void actualizarTablaProduccion() {
         cargarDatosProduccion();
     }
@@ -515,18 +547,17 @@ public int obtenerProduccionSeleccionada() {
         cargarTablaEtapa();
     }
 
-    private void insertarEnBD(Date fechaInicio, Date fechaFin, String estado, int codigoPedido) {
+    private void insertarEnBD(Date fechaInicio, Date fechaFin, String estado) {
         Connection con = null;
         PreparedStatement ps = null;
 
         try {
             con = new Conexion().getConnection();
-            String sql = "INSERT INTO produccion (fecha_inicio, fecha_fin, estado, pedido_codigo) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO produccion (fecha_inicio, fecha_fin, estado) VALUES (?, ?, ?)";
             ps = con.prepareStatement(sql);
             ps.setDate(1, fechaInicio);
             ps.setDate(2, fechaFin); // Corregido: era fecha_final
             ps.setString(3, estado);
-            ps.setInt(4, codigoPedido);
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error al insertar:");
@@ -557,20 +588,19 @@ public int obtenerProduccionSeleccionada() {
         return ids;
     }
 
-    private void insertarEtapaEnBD(String nombreEtapa, String estado, Date fechaInicio, Date fechaFin, int produccionCodigo) {
+    private void insertarEtapaEnBD(String nombreEtapa, String estado, Date fechaInicio, Date fechaFin) {
         Connection con = null;
         PreparedStatement ps = null;
 
         try {
             con = new Conexion().getConnection();
-            String sql = "INSERT INTO etapa_produccion (nombre_etapa, estado, fecha_inicio, fecha_fin, produccion_codigo) "
-                    + "VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO etapa_produccion (nombre_etapa, estado, fecha_inicio, fecha_fin) "
+                    + "VALUES (?, ?, ?, ?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, nombreEtapa);
             ps.setString(2, estado);
             ps.setDate(3, fechaInicio);
             ps.setDate(4, fechaFin);
-            ps.setInt(5, produccionCodigo);
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error al insertar etapa:");
@@ -591,32 +621,29 @@ public int obtenerProduccionSeleccionada() {
     }
 
     public void cargarTablaProduccion() {
-    try (Connection con = new Conexion().getConnection();
-         PreparedStatement ps = con.prepareStatement("SELECT id_produccion, fecha_inicio, fecha_fin, estado FROM produccion");
-         ResultSet rs = ps.executeQuery()) {
-        
-        DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-        model.setRowCount(0);
-        
-        int rowNum = 1;
-        while (rs.next()) {
-            model.addRow(new Object[]{
-                rowNum++,
-                rs.getInt("id_produccion"),
-                rs.getDate("fecha_inicio"),
-                rs.getDate("fecha_fin"),
-                rs.getString("estado"),
-                null 
-            });
-        }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, 
-            "Error al cargar datos: " + e.getMessage(), 
-            "Error", 
-            JOptionPane.ERROR_MESSAGE);
-    }
-}
+        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("SELECT id_produccion, fecha_inicio, fecha_fin, estado FROM produccion"); ResultSet rs = ps.executeQuery()) {
 
+            DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+            model.setRowCount(0);
+
+            int rowNum = 1;
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rowNum++,
+                    rs.getInt("id_produccion"),
+                    rs.getDate("fecha_inicio"),
+                    rs.getDate("fecha_fin"),
+                    rs.getString("estado"),
+                    null
+                });
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar datos: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     private void eliminarProduccion(List<Object[]> datos) throws SQLException {
         List<Integer> ids = new ArrayList<>();
@@ -639,7 +666,7 @@ public int obtenerProduccionSeleccionada() {
         try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("DELETE FROM detalle_produccion WHERE id_detalle = ?")) {
 
             for (Object[] fila : datos) {
-                ps.setInt(1, (Integer) fila[1]); 
+                ps.setInt(1, (Integer) fila[1]);
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -650,7 +677,7 @@ public int obtenerProduccionSeleccionada() {
         try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("DELETE FROM etapa_produccion WHERE idetapa_produccion = ?")) {
 
             for (Object[] fila : datos) {
-                ps.setInt(1, (Integer) fila[1]); 
+                ps.setInt(1, (Integer) fila[1]);
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -703,8 +730,6 @@ public int obtenerProduccionSeleccionada() {
         }
     }
 
-    
-
     private void eliminarFilasDeTabla(JTable tabla, int[] selectedRows) {
         DefaultTableModel model = (DefaultTableModel) tabla.getModel();
         TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) tabla.getRowSorter();
@@ -717,11 +742,11 @@ public int obtenerProduccionSeleccionada() {
         }
     }
 
-    public void agregarFilaATabla2(String cantidad, String dimension, String material, Integer produccionCodigo) {
+    public void agregarFilaATabla2(String cantidad, String dimension, String material) {
         // Insertar en la base de datos
         try {
             int cant = Integer.parseInt(cantidad);
-            insertarDetalleEnBD(cant, dimension, material, produccionCodigo);
+            insertarDetalleEnBD(cant, dimension, material);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Cantidad debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -735,18 +760,14 @@ public int obtenerProduccionSeleccionada() {
             generateRandomId(),
             cantidad,
             dimension,
-            material,
-            produccionCodigo
+            material
         });
 
-        jScrollPane2.setVisible(false);
-        jScrollPane3.setVisible(true);
-        jScrollPane4.setVisible(false);
     }
 
-    public void agregarFilaATabla3(String nombreEtapa, String estado, Date fechaInicio, Date fechaFin, int produccionCodigo) {
+    public void agregarFilaATabla3(String nombreEtapa, String estado, Date fechaInicio, Date fechaFin) {
         // Insertar en la base de datos
-        insertarEtapaEnBD(nombreEtapa, estado, fechaInicio, fechaFin, produccionCodigo);
+        insertarEtapaEnBD(nombreEtapa, estado, fechaInicio, fechaFin);
 
         // Actualizar la tabla
         DefaultTableModel model = (DefaultTableModel) Tabla3.getModel();
@@ -757,12 +778,9 @@ public int obtenerProduccionSeleccionada() {
             nombreEtapa,
             estado,
             fechaInicio,
-            fechaFin,
-            produccionCodigo
+            fechaFin
+
         });
 
-        jScrollPane2.setVisible(false);
-        jScrollPane3.setVisible(false);
-        jScrollPane4.setVisible(true);
     }
 }
