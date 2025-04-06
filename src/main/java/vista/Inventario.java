@@ -110,10 +110,7 @@ public class Inventario extends javax.swing.JPanel {
         h.setSize(960, 570);
         h.setLocation(0,0);
         
-        panelprincipal.removeAll();
-        panelprincipal.add(h);
-        panelprincipal.revalidate();
-        panelprincipal.repaint();
+        
 
          }
     }//GEN-LAST:event_btnHerramientasActionPerformed
@@ -128,10 +125,7 @@ public class Inventario extends javax.swing.JPanel {
         es.setSize(960, 570);
         es.setLocation(0,0);
         
-        panelprincipal.removeAll();
-        panelprincipal.add(es);
-        panelprincipal.revalidate();
-        panelprincipal.repaint();
+        
             }
     }//GEN-LAST:event_btnMovimientosActionPerformed
 
@@ -145,10 +139,7 @@ public class Inventario extends javax.swing.JPanel {
         es.setSize(960, 570);
         es.setLocation(0,0);
         
-        panelprincipal.removeAll();
-        panelprincipal.add(es);
-        panelprincipal.revalidate();
-        panelprincipal.repaint();
+        
 
          }
     }//GEN-LAST:event_btnMaterialesActionPerformed

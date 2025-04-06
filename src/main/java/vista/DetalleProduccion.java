@@ -22,7 +22,7 @@ public class DetalleProduccion extends javax.swing.JDialog {
     super(parent, modal);
     this.produccionPanel2 = produccionPanel;
     initComponents();
-    setLocationRelativeTo(parent); // Centrar el diálogo
+    setLocationRelativeTo(parent); 
 }
 
     public DetalleProduccion(java.awt.Frame parent, boolean modal) {

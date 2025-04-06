@@ -19,15 +19,18 @@ import modelo.Conexion;
  * @author pc
  */
 public class EtapaProduccion extends javax.swing.JDialog {
-private Produccion produccionPanel;
+
+    private Produccion produccionPanel;
+
     /**
      * Creates new form EtapaProduccion
      */
-    public EtapaProduccion(Frame parent, boolean modal) {
+    public EtapaProduccion(Frame parent, boolean modal, Produccion produccionPanel) {
         super(parent, modal);
-        this.produccionPanel=produccionPanel;
+        this.produccionPanel = produccionPanel; // Esta asignación es correcta
         initComponents();
         setLocationRelativeTo(parent);
+        txtetapa.setEditable(true); // Habilitar edición del campo
     }
 
     /**
@@ -45,13 +48,13 @@ private Produccion produccionPanel;
         jLabel6 = new javax.swing.JLabel();
         btnGuardar = new rojeru_san.RSButtonRiple();
         jLabel9 = new javax.swing.JLabel();
-        txtfechafin = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel10 = new javax.swing.JLabel();
         txtetapa = new RSMaterialComponent.RSTextFieldMaterial();
         btnCancelar = new rojeru_san.RSButtonRiple();
         jLabel11 = new javax.swing.JLabel();
-        txtFechainicio = new RSMaterialComponent.RSTextFieldMaterial();
         Boxestado = new RSMaterialComponent.RSComboBoxMaterial();
+        txtFechainicio = new com.toedter.calendar.JDateChooser();
+        txtfechafin = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -88,21 +91,6 @@ private Produccion produccionPanel;
         jLabel9.setText("Fecha final:");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 160, -1, -1));
 
-        txtfechafin.setEditable(false);
-        txtfechafin.setBackground(new java.awt.Color(255, 255, 255));
-        txtfechafin.setForeground(new java.awt.Color(0, 0, 0));
-        txtfechafin.setColorMaterial(new java.awt.Color(0, 0, 0));
-        txtfechafin.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtfechafin.setPhColor(new java.awt.Color(0, 0, 0));
-        txtfechafin.setPlaceholder("");
-        txtfechafin.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtfechafin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtfechafinActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtfechafin, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 200, 200, 30));
-
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Nombre etapa:");
@@ -138,25 +126,26 @@ private Produccion produccionPanel;
         jLabel11.setText("Fecha inicio:");
         jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
 
-        txtFechainicio.setEditable(false);
-        txtFechainicio.setBackground(new java.awt.Color(255, 255, 255));
-        txtFechainicio.setForeground(new java.awt.Color(0, 0, 0));
-        txtFechainicio.setColorMaterial(new java.awt.Color(0, 0, 0));
-        txtFechainicio.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtFechainicio.setPhColor(new java.awt.Color(0, 0, 0));
-        txtFechainicio.setPlaceholder("");
-        txtFechainicio.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtFechainicio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFechainicioActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtFechainicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 200, 30));
-
         Boxestado.setForeground(new java.awt.Color(102, 102, 102));
         Boxestado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", "pendiente", "proceso", "completado" }));
         Boxestado.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        Boxestado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BoxestadoActionPerformed(evt);
+            }
+        });
         jPanel1.add(Boxestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 100, -1, -1));
+
+        txtFechainicio.setBackground(new java.awt.Color(255, 255, 255));
+        txtFechainicio.setForeground(new java.awt.Color(255, 255, 255));
+        txtFechainicio.setDateFormatString("y-MM-d");
+        txtFechainicio.setMaxSelectableDate(new java.util.Date(253370786472000L));
+        jPanel1.add(txtFechainicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 190, 30));
+
+        txtfechafin.setBackground(new java.awt.Color(255, 255, 255));
+        txtfechafin.setForeground(new java.awt.Color(255, 255, 255));
+        txtfechafin.setDateFormatString("y-MM-d");
+        jPanel1.add(txtfechafin, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 190, 190, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -175,97 +164,103 @@ private Produccion produccionPanel;
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-// Validación de campos
-        if (txtetapa.getText().isEmpty() || txtFechainicio.getText().isEmpty() || 
-            txtfechafin.getText().isEmpty() || Boxestado.getSelectedItem() == null) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+        // Validación mejorada
+        if (validarCampos() == false) {
             return;
         }
 
         try {
             // Obtener valores
-            String nombreEtapa = txtetapa.getText();
-            Date fechaInicio = Date.valueOf(txtFechainicio.getText());
-            Date fechaFin = Date.valueOf(txtfechafin.getText());
+            String nombreEtapa = txtetapa.getText().trim();
+            Date fechaInicio = new Date(txtFechainicio.getDate().getTime());
+            Date fechaFin = new Date(txtfechafin.getDate().getTime());
             String estado = Boxestado.getSelectedItem().toString();
-            
-            
 
             // Validar fechas
             if (fechaFin.before(fechaInicio)) {
-                JOptionPane.showMessageDialog(this, 
-                    "La fecha fin no puede ser anterior a la fecha inicio", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
+                mostrarError("La fecha fin no puede ser anterior a la fecha inicio");
                 return;
             }
 
             // Insertar en BD
-            Connection con = new Conexion().getConnection();
-            String sql = "INSERT INTO etapa_produccion (nombre_etapa, estado, fecha_inicio, fecha_fin) " +
-                         "VALUES (?, ?, ?, ?)";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, nombreEtapa);
-            ps.setString(2, estado);
-            ps.setDate(3, fechaInicio);
-            ps.setDate(4, fechaFin);
+            if (insertarEtapa(nombreEtapa, estado, fechaInicio, fechaFin)) {
+                this.dispose();
+                
+            }
             
-            
-            ps.executeUpdate();
-            
-            // Cerrar recursos
-            ps.close();
-            con.close();
-            
-            // Cerrar diálogo
-            this.dispose();
-            
-            // Actualizar tabla en Produccion
-           // produccionPanel.cargarTablaEtapas();
-            
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Formato de fecha incorrecto (usar YYYY-MM-DD)", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al guardar: " + e.getMessage(), 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
+            if (produccionPanel != null) {
+                    produccionPanel.cargarTablaEtapa();
+                }
+        } catch (Exception e) {
+            mostrarError("Error al guardar: " + e.getMessage());
             e.printStackTrace();
         }
-    }//GEN-LAST:event_btnGuardarActionPerformed
+        
+    }
 
-    private void txtfechafinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfechafinActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtfechafinActionPerformed
+// Métodos auxiliares
+    private boolean validarCampos() {
+        if (txtetapa.getText().trim().isEmpty()
+                || txtFechainicio.getDate() == null
+                || txtfechafin.getDate() == null
+                || Boxestado.getSelectedIndex() == 0) {
+
+            mostrarError("Todos los campos son obligatorios");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean insertarEtapa(String nombre, String estado, Date inicio, Date fin) throws SQLException {
+        String sql = "INSERT INTO etapa_produccion (nombre_etapa, estado, fecha_inicio, fecha_fin) VALUES (?, ?, ?, ?)";
+
+        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nombre);
+            ps.setString(2, estado);
+            ps.setDate(3, inicio);
+            ps.setDate(4, fin);
+
+            int resultado = ps.executeUpdate();
+            if (resultado > 0) {
+                mostrarMensaje("Etapa guardada correctamente");
+                return true;
+            }
+            
+        }
+        return false;
+    }
+
+    private void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void txtetapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtetapaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtetapaActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-this.dispose();
+        this.dispose();
         tresProduccion dialog = new tresProduccion(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-        
+
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void txtFechainicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechainicioActionPerformed
+    private void BoxestadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxestadoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFechainicioActionPerformed
+    }//GEN-LAST:event_BoxestadoActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -273,21 +268,15 @@ this.dispose();
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EtapaProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EtapaProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EtapaProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (Exception ex) {
             java.util.logging.Logger.getLogger(EtapaProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            private Produccion produccionPanel;
             public void run() {
-                EtapaProduccion dialog = new EtapaProduccion(new javax.swing.JFrame(), true);
+                EtapaProduccion dialog = new EtapaProduccion(new javax.swing.JFrame(), true, this.produccionPanel);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -310,8 +299,8 @@ this.dispose();
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private RSMaterialComponent.RSTextFieldMaterial txtFechainicio;
+    private com.toedter.calendar.JDateChooser txtFechainicio;
     private RSMaterialComponent.RSTextFieldMaterial txtetapa;
-    private RSMaterialComponent.RSTextFieldMaterial txtfechafin;
+    private com.toedter.calendar.JDateChooser txtfechafin;
     // End of variables declaration//GEN-END:variables
 }

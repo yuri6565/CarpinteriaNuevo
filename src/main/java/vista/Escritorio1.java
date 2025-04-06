@@ -38,6 +38,7 @@ public class Escritorio1 extends javax.swing.JPanel {
         rSButton1 = new rojeru_san.RSButton();
         rSButton2 = new rojeru_san.RSButton();
         rSButton3 = new rojeru_san.RSButton();
+        jCalendar1 = new com.toedter.calendar.JCalendar();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(1290, 730));
@@ -78,9 +79,9 @@ public class Escritorio1 extends javax.swing.JPanel {
         rSButtonIconOne1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rSButtonIconOne1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ADD_ALERT);
         rSButtonIconOne1.setPreferredSize(new java.awt.Dimension(37, 37));
-        jPanel1.add(rSButtonIconOne1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 10, -1, -1));
+        jPanel1.add(rSButtonIconOne1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 10, -1, -1));
 
-        jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 579, 50));
+        jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 510, 50));
 
         rSButton1.setBackground(new java.awt.Color(255, 255, 255));
         rSButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -91,14 +92,14 @@ public class Escritorio1 extends javax.swing.JPanel {
                 rSButton1ActionPerformed(evt);
             }
         });
-        jPanel3.add(rSButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 580, -1));
+        jPanel3.add(rSButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 510, -1));
 
         rSButton2.setBackground(new java.awt.Color(255, 255, 255));
         rSButton2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         rSButton2.setForeground(new java.awt.Color(0, 0, 0));
         rSButton2.setText("FALTA DE STOCK DE MADERA DE ABEDUL ");
         rSButton2.setColorText(new java.awt.Color(0, 0, 0));
-        jPanel3.add(rSButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 580, -1));
+        jPanel3.add(rSButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 510, -1));
 
         rSButton3.setBackground(new java.awt.Color(255, 255, 255));
         rSButton3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -109,9 +110,14 @@ public class Escritorio1 extends javax.swing.JPanel {
                 rSButton3ActionPerformed(evt);
             }
         });
-        jPanel3.add(rSButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 580, -1));
+        jPanel3.add(rSButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 510, -1));
 
-        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 200, 580, 290));
+        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 200, 510, 330));
+
+        jCalendar1.setBackground(new java.awt.Color(255, 255, 255));
+        jCalendar1.setForeground(new java.awt.Color(0, 0, 0));
+        jCalendar1.setDecorationBordersVisible(true);
+        add(jCalendar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 200, 260, 250));
     }// </editor-fold>//GEN-END:initComponents
 
     private void rSButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButton1ActionPerformed
@@ -124,6 +130,7 @@ public class Escritorio1 extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.toedter.calendar.JCalendar jCalendar1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -648,10 +648,11 @@ public class Principal extends javax.swing.JFrame {
             this.uno.setSelected(false);
             this.dos.setSelected(false);
             this.tres.setSelected(false);
+            this.cuatro.setSelected(true);
             this.cinco.setSelected(false);
             this.seis.setSelected(false);
             this.ocho.setSelected(false);
-            this.cuatro.setSelected(true);
+            
             Produccion pr = new Produccion();
             pr.setSize(1290, 730);
             pr.setLocation(0, 0);
@@ -742,155 +743,35 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_siete1ActionPerformed
 
     private void uno1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uno1ActionPerformed
-        if (!this.uno.isSelected()) {
-            this.uno.setSelected(true);
-            this.dos.setSelected(false);
-            this.tres.setSelected(false);
-            this.cuatro.setSelected(false);
-            this.cinco.setSelected(false);
-            this.seis.setSelected(false);
-            this.ocho.setSelected(false);
-            Escritorio1 es = new Escritorio1();
-            es.setSize(890, 690);
-            es.setLocation(0, 0);
-
-            contenedor.removeAll();
-            contenedor.add(es);
-            contenedor.revalidate();
-            contenedor.repaint();
-        }
-        animacion();
-
+        
     }//GEN-LAST:event_uno1ActionPerformed
 
     private void dos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dos1ActionPerformed
-        if (!this.dos.isSelected()) {
-            this.uno.setSelected(false);
-            this.tres.setSelected(false);
-            this.cuatro.setSelected(false);
-            this.cinco.setSelected(false);
-            this.seis.setSelected(false);
-            this.ocho.setSelected(false);
-            this.dos.setSelected(true);
-
-            // Crear y mostrar el panel de inventario
-            Inventario in = new Inventario();
-            in.setSize(1290, 730);
-            in.setLocation(0, 0);
-
-            contenedor.removeAll();
-            contenedor.add(in);
-            contenedor.revalidate();
-            contenedor.repaint();
-
-        }
-        animacion();
+        
     }//GEN-LAST:event_dos1ActionPerformed
 
     private void tres1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tres1ActionPerformed
-        if (!this.tres.isSelected()) {
-            this.uno.setSelected(false);
-            this.dos.setSelected(false);
-            this.tres.setSelected(true);
-            this.cuatro.setSelected(false);
-            this.cinco.setSelected(false);
-            this.seis.setSelected(false);
-            this.ocho.setSelected(false);
-            proveedores pr = new proveedores();
-            pr.setSize(1290, 730);
-            pr.setLocation(0, 0);
-
-            contenedor.removeAll();
-            contenedor.add(pr);
-            contenedor.revalidate();
-            contenedor.repaint();
-
-        }
-        animacion();
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_tres1ActionPerformed
 
     private void cuatro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuatro1ActionPerformed
-        if (!this.cuatro.isSelected()) {
-            this.uno.setSelected(false);
-            this.dos.setSelected(false);
-            this.tres.setSelected(false);
-            this.cinco.setSelected(false);
-            this.seis.setSelected(false);
-            this.ocho.setSelected(false);
-            this.cuatro.setSelected(true);
-            Produccion pr = new Produccion();
-            pr.setSize(1290, 730);
-            pr.setLocation(0, 0);
-
-            contenedor.removeAll();
-            contenedor.add(pr);
-            contenedor.revalidate();
-            contenedor.repaint();
-
-        }
-        animacion();// TODO add your handling code here:
+        
     }//GEN-LAST:event_cuatro1ActionPerformed
 
     private void cinco1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cinco1ActionPerformed
-        if (!this.cinco.isSelected()) {
-            this.uno.setSelected(false);
-            this.dos.setSelected(false);
-            this.tres.setSelected(false);
-            this.cuatro.setSelected(false);
-            this.seis.setSelected(false);
-            this.ocho.setSelected(false);
-
-        }
-        animacion();
+        
     }//GEN-LAST:event_cinco1ActionPerformed
 
     private void seis1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seis1ActionPerformed
-        if (!this.seis.isSelected()) {
-            this.uno.setSelected(false);
-            this.dos.setSelected(false);
-            this.tres.setSelected(false);
-            this.cuatro.setSelected(false);
-            this.cinco.setSelected(false);
-            this.ocho.setSelected(false);
-
-            caja box = new caja();
-            box.setSize(1290, 730);
-            box.setLocation(0, 0);
-
-            contenedor.removeAll();
-            contenedor.add(box);
-            contenedor.revalidate();
-            contenedor.repaint();
-        }
-        animacion();
+        
     }//GEN-LAST:event_seis1ActionPerformed
 
     private void siete2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siete2ActionPerformed
-        animacion();        // TODO add your handling code here:
+
     }//GEN-LAST:event_siete2ActionPerformed
 
     private void ocho1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ocho1ActionPerformed
-        if (!this.ocho.isSelected()) {
-            this.uno.setSelected(false);
-            this.dos.setSelected(false);
-            this.tres.setSelected(false);
-            this.cuatro.setSelected(false);
-            this.cinco.setSelected(false);
-            this.seis.setSelected(false);
-            this.ocho.setSelected(true);
-
-            Cliente cliente = new Cliente();
-            cliente.setSize(1290, 730);
-            cliente.setLocation(0, 0);
-
-            contenedor.removeAll();
-            contenedor.add(cliente);
-            contenedor.revalidate();
-            contenedor.repaint();
-        }
-        animacion();
-
+  
     }//GEN-LAST:event_ocho1ActionPerformed
 
     private void uno1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uno1MouseEntered
