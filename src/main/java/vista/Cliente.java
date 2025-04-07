@@ -51,7 +51,7 @@ this.cargartablacliente();
         btnNuevo = new rojeru_san.RSButtonRiple();
         btnEditar = new rojeru_san.RSButtonRiple();
 
-        setPreferredSize(new java.awt.Dimension(1290, 770));
+        setPreferredSize(new java.awt.Dimension(1290, 730));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(237, 241, 255));

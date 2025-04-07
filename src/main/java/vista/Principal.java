@@ -139,6 +139,7 @@ public class Principal extends javax.swing.JFrame {
         );
 
         jPanel2.setBackground(new java.awt.Color(29, 30, 81));
+        jPanel2.setForeground(new java.awt.Color(204, 204, 204));
 
         jButton2.setBackground(new java.awt.Color(29, 30, 81));
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N

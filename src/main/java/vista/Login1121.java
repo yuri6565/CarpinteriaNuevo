@@ -157,7 +157,7 @@ eyeClosedIcon = new ImageIcon(getClass().getResource(eyeClosedPath));
                 txt_usuarioActionPerformed(evt);
             }
         });
-        jPanel6.add(txt_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 360, 30));
+        jPanel6.add(txt_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 390, 30));
 
         passtxt.setForeground(new java.awt.Color(0, 0, 0));
         passtxt.setToolTipText("");
