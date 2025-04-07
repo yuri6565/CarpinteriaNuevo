@@ -112,12 +112,11 @@ public class Escritorio1 extends javax.swing.JPanel {
         });
         jPanel3.add(rSButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 510, -1));
 
-        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 200, 510, 330));
+        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 510, 330));
 
         jCalendar1.setBackground(new java.awt.Color(255, 255, 255));
-        jCalendar1.setForeground(new java.awt.Color(0, 0, 0));
         jCalendar1.setDecorationBordersVisible(true);
-        add(jCalendar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 200, 260, 250));
+        add(jCalendar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 200, 440, 360));
     }// </editor-fold>//GEN-END:initComponents
 
     private void rSButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButton1ActionPerformed

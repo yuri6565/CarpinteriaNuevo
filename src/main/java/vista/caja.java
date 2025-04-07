@@ -1,251 +1,255 @@
-
 package vista;
 
+import java.awt.BorderLayout;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import modelo.Conexion;
-import java.sql.*;
-import controlador.Ctrl_Cliente;
 
-public class caja extends javax.swing.JPanel {
+/**
+ *
+ * @author ADSO
+ */
+public final class caja extends javax.swing.JPanel {
 
-    private int cliente=0;
-    private int finalTotalPrice = 0;
-    private String orderId = "";
-    
     public caja() {
         initComponents();
-    
-      
+        tblCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        tblCliente.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Id", "Nombre", "Apellido", "Numero Tel", "Email"}
+        ));
+        cargarTablaClientes();
     }
-    private void clearProductFields(){
-       
-    txtProductName.setText("");
-    txtProductPrice.setText("");
-    txtProductName.setText("");
-    txtOrderQuantity.setText("");
-    
+
+    public class Conexion {
+
+        public Connection getConnection() {
+            Connection con = null;
+            try {
+                String myBD = "jdbc:mysql://localhost:3306/carpinteriasistema?serverTimezone=UTC";
+                con = DriverManager.getConnection(myBD, "root", "");
+                System.out.println("Conexión exitosa.");
+            } catch (SQLException e) {
+                System.out.println("Error al conectar: " + e.getMessage());
+            }
+            return con;
+        }
     }
-    
-    public String getUniqueId(String prefix){
-    return prefix + System.nanoTime();
+
+    public void cargarTablaClientes() {
+        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("SELECT codigo, nombre, apellido, telefono, email FROM cliente"); ResultSet rs = ps.executeQuery()) {
+
+            DefaultTableModel model = (DefaultTableModel) tblCliente.getModel();
+            model.setRowCount(0);
+
+            int rowNum = 1;
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rowNum++,
+                    rs.getString("nombre"),
+                    rs.getString("apellido"),
+                    rs.getString("telefono"),
+                    rs.getString("email"),
+                    null
+                });
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar datos: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+
+        }
     }
-    
-    
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tableCustomer = new javax.swing.JTable();
-        jLabel3 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tableCart = new javax.swing.JTable();
+        panelprincipal = new javax.swing.JPanel();
+        txtProductionPrice = new javax.swing.JTextField();
+        txtProductDescription = new javax.swing.JTextField();
+        txtQuantityOrder = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtCustomerName = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txtCustomerMobileNumber = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        txtCustomerEmail = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        lblFinalTotalPrice = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnAddCarrito = new javax.swing.JButton();
+        txtProductName = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblCliente = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
+        btnCrearCliente = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblCarrito = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        ComboIVA = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
-        txtProductName = new javax.swing.JTextField();
-        txtProductPrice = new javax.swing.JTextField();
-        txtProductDescription = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
-        txtOrderQuantity = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(240, 255, 255));
+        setBackground(new java.awt.Color(255, 255, 255));
+        setPreferredSize(new java.awt.Dimension(1290, 730));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("Lista de Clientes");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, -1, -1));
+        panelprincipal.setBackground(new java.awt.Color(255, 255, 255));
+        panelprincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tableCustomer.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null}
-            },
-            new String [] {
-                "ID", "Nombre", "Numero Tel", "Email"
-            }
-        ));
-        jScrollPane1.setViewportView(tableCustomer);
+        txtProductionPrice.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        panelprincipal.add(txtProductionPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 140, 280, -1));
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 82, 412, 222));
+        txtProductDescription.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        panelprincipal.add(txtProductDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 190, 280, -1));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel3.setText("Carrito");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 50, -1, -1));
+        txtQuantityOrder.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        panelprincipal.add(txtQuantityOrder, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 240, 280, -1));
 
-        tableCart.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "ID Producto", "Nombre", "Cantidad", "Precio", "Descripcion", "Sub Total"
-            }
-        ));
-        jScrollPane3.setViewportView(tableCart);
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel4.setText("Nombre Producto");
+        panelprincipal.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 70, -1, -1));
 
-        add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(858, 82, 400, 222));
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel5.setText("Precio Produccion");
+        panelprincipal.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 120, -1, -1));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel4.setText("Seleccionar Cliente:");
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 340, -1, -1));
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel6.setText("Descripcion");
+        panelprincipal.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 170, -1, -1));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel5.setText("Nombre");
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 370, -1, -1));
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel7.setText("Cantidad de la Orden");
+        panelprincipal.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 220, -1, -1));
 
-        txtCustomerName.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        add(txtCustomerName, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 393, 351, -1));
+        btnAddCarrito.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        btnAddCarrito.setText("Añadir al Carrito");
+        panelprincipal.add(btnAddCarrito, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 340, 290, 50));
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel6.setText("Numero Telefono");
-        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 432, -1, -1));
+        txtProductName.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        panelprincipal.add(txtProductName, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 90, 280, -1));
 
-        txtCustomerMobileNumber.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        add(txtCustomerMobileNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 455, 351, -1));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel2.setText("Datos Venta Producto");
+        panelprincipal.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, -1, -1));
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel7.setText("Correo");
-        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 490, -1, -1));
+        jScrollPane1.setViewportView(tblCliente);
 
-        txtCustomerEmail.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        add(txtCustomerEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 513, 351, -1));
+        panelprincipal.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 330, -1));
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel13.setText("Cantidad Total:");
-        add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 336, -1, -1));
+        jLabel8.setText("te llevara directamente a crear un cliente");
+        panelprincipal.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 550, -1, -1));
 
-        lblFinalTotalPrice.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        lblFinalTotalPrice.setText("00000");
-        add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(1109, 336, -1, -1));
-
-        jButton2.setText("Guardar Detalles de Pedido");
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnCrearCliente.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        btnCrearCliente.setText("Añadir cliente");
+        btnCrearCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnCrearClienteActionPerformed(evt);
             }
         });
-        add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(858, 394, 400, 40));
+        panelprincipal.add(btnCrearCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 487, 320, 50));
 
-        jButton3.setText("Reiniciar");
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 450, 400, 40));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel1.setText("Lista de Clientes");
+        panelprincipal.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, -1, -1));
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel8.setText("Datos Venta Producto");
-        add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 50, -1, -1));
+        tblCarrito.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel9.setText("Nombre del Producto");
-        add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 80, -1, -1));
-
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel10.setText("Precio del Producto");
-        add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 130, -1, -1));
-
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel11.setText("Descripcion  ");
-        add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 190, -1, -1));
-
-        txtProductName.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        add(txtProductName, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 100, 346, -1));
-
-        txtProductPrice.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        add(txtProductPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 150, 346, -1));
-
-        txtProductDescription.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        add(txtProductDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 210, 346, -1));
-
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel12.setText("Cantidad de la Orden");
-        add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 240, -1, -1));
-        add(txtOrderQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 270, 346, -1));
-
-        jButton1.setText("Añadir al Carrito");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 330, 346, 40));
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void formComponentShown(java.awt.event.ComponentEvent evt) {                                    
-      
-
-    
-    txtCustomerName.setEditable(false);
-    txtCustomerMobileNumber.setEditable(false);
-    txtCustomerEmail.setEditable(false);
-    
-    txtProductName.setEditable(false);
-    txtProductPrice.setEditable(false);
-    txtProductDescription.setEditable(false);
-    
-   DefaultTableModel model = (DefaultTableModel) tableCustomer.getModel();
-
-  /*
-        try {
-
-            Connection con = Conexion.getCon();
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select *from cliente");
-            while (rs.next()) {
-                Object nextElement = rs.nextElement();
-                
-       
-       txtCustomerName.setEditable(false);
-        txtCustomerMobileNumber.setEditable(false);
-        txtCustomerEmail.setEditable(false);
-        
-        txtProductName.setEditable(false);
-        txtProductPrice.setEditable(false);
-        txtProductDescription.setEditable(false);
-        
-        DefaultTableModel model = (DefaultTableModel) tableCustomer.getModel();
-       
-        /**try{
-        
-            Connection con = Conexion.getCon();
-            Statement st =  con.createStatement();
-            ResultSet rs = st.executeQuery("select *from clientes");
-            while (rs.next()){
-                model.addRow(new Object[]{rs.getString("cliente"),rs.getString("name"),rs.getString("mobileNumber"),rs.getString("email")});
-             
-/*
+            },
+            new String [] {
+                "Id Producto", "Nombre", "Cantidad", "Precio", "Descripcion", "Sub Total"
             }
+        ));
+        jScrollPane2.setViewportView(tblCarrito);
 
-        } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, e);
-        }
-        */
+        panelprincipal.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 60, 320, 247));
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel3.setText("Carrito");
+        panelprincipal.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 20, -1, -1));
+
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        jButton1.setText("Guardar detalles del pedido");
+        panelprincipal.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 370, 270, 50));
+
+        jButton2.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        jButton2.setText("Reiniciar");
+        panelprincipal.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 430, 270, 50));
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel9.setText("Cantidad Total:");
+        panelprincipal.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 340, -1, -1));
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel10.setText("00000");
+        panelprincipal.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 340, -1, -1));
+
+        ComboIVA.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        ComboIVA.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Porcentaje del IVA", "Ninguno", "21%", "10%", "4%" }));
+        panelprincipal.add(ComboIVA, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 290, 280, -1));
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel11.setText("IVA");
+        panelprincipal.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 270, -1, -1));
+
+        add(panelprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1120, 600));
+    }// </editor-fold>//GEN-END:initComponents
+/*
+    public void cambiarPanel(JPanel nuevoPanel) {
+    nuevoPanel.setSize(1290, 730);
+    nuevoPanel.setLocation(0, 0);
+    
+    contenedor.removeAll();
+    contenedor.add(nuevoPanel, BorderLayout.CENTER);
+    contenedor.revalidate();
+    contenedor.repaint();
 }
 
+caja in = new caja(this); // Pasar this (la instancia de Principal)
+in.setSize(1290, 730);
+in.setLocation(0, 0);
+
+contenedor.removeAll();
+contenedor.add(in);
+contenedor.revalidate();
+contenedor.repaint();
+     */
+    private void btnCrearClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearClienteActionPerformed
+        if(!this.btnCrearCliente.isSelected()){
+        this.btnCrearCliente.setSelected(true);
+        
+        Cliente cliente = new Cliente();
+        cliente.setSize(1290, 730);
+        cliente.setLocation(0, 0);
+        
+        panelprincipal.removeAll();
+        panelprincipal.add(cliente);
+        panelprincipal.revalidate();
+        panelprincipal.repaint();
+        
+        }
+       
+        
+    }//GEN-LAST:event_btnCrearClienteActionPerformed
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> ComboIVA;
+    private javax.swing.JButton btnAddCarrito;
+    private javax.swing.JButton btnCrearCliente;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -254,20 +258,13 @@ public class caja extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JLabel lblFinalTotalPrice;
-    private javax.swing.JTable tableCart;
-    private javax.swing.JTable tableCustomer;
-    private javax.swing.JTextField txtCustomerEmail;
-    private javax.swing.JTextField txtCustomerMobileNumber;
-    private javax.swing.JTextField txtCustomerName;
-    private javax.swing.JTextField txtOrderQuantity;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPanel panelprincipal;
+    private javax.swing.JTable tblCarrito;
+    private javax.swing.JTable tblCliente;
     private javax.swing.JTextField txtProductDescription;
     private javax.swing.JTextField txtProductName;
-    private javax.swing.JTextField txtProductPrice;
+    private javax.swing.JTextField txtProductionPrice;
+    private javax.swing.JTextField txtQuantityOrder;
     // End of variables declaration//GEN-END:variables
-
-    private void dispose() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }
