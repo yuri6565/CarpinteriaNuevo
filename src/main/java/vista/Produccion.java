@@ -5,6 +5,7 @@
 package vista;
 
 import java.awt.Color;
+import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -20,7 +21,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
@@ -28,7 +28,7 @@ import javax.swing.ListSelectionModel;
  *
  * @author pc
  */
-public class Produccion extends javax.swing.JPanel {
+public final class Produccion extends javax.swing.JPanel {
 
     /**
      * Creates new form Produccion
@@ -138,11 +138,11 @@ public class Produccion extends javax.swing.JPanel {
         jScrollPane4 = new javax.swing.JScrollPane();
         Tabla3 = new RSMaterialComponent.RSTableMetroCustom();
         btnNuevo = new rojeru_san.RSButtonRiple();
-        btnEditar = new rojeru_san.RSButtonRiple();
         btnEliminar = new rojeru_san.RSButtonRiple();
         produccion = new rojeru_san.RSButtonRiple();
         etapaProduccion = new rojeru_san.RSButtonRiple();
         detalleProduccion = new rojeru_san.RSButtonRiple();
+        btnGuardar = new rojeru_san.RSButtonRiple();
 
         nuevo.setBackground(new java.awt.Color(255, 255, 255));
         nuevo.setPreferredSize(new java.awt.Dimension(1290, 730));
@@ -163,6 +163,14 @@ public class Produccion extends javax.swing.JPanel {
         nuevo.add(rSTextFieldMaterialIcon1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 430, 40));
 
         Tabla1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Tabla1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
         Tabla1.setBackgoundHead(new java.awt.Color(29, 30, 51));
         Tabla1.setBackgoundHover(new java.awt.Color(29, 30, 51));
         Tabla1.setColorPrimaryText(new java.awt.Color(0, 0, 0));
@@ -215,16 +223,6 @@ public class Produccion extends javax.swing.JPanel {
         });
         nuevo.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 80, 120, 40));
 
-        btnEditar.setBackground(new java.awt.Color(46, 49, 82));
-        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil (1).png"))); // NOI18N
-        btnEditar.setText(" Editar");
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
-            }
-        });
-        nuevo.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 80, 120, -1));
-
         btnEliminar.setBackground(new java.awt.Color(46, 49, 82));
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (1).png"))); // NOI18N
         btnEliminar.setText(" Eliminar");
@@ -270,6 +268,16 @@ public class Produccion extends javax.swing.JPanel {
         });
         nuevo.add(detalleProduccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, 180, -1));
 
+        btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil (1).png"))); // NOI18N
+        btnGuardar.setText("Editar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        nuevo.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 80, 120, 40));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -287,20 +295,15 @@ public class Produccion extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void rSTextFieldMaterialIcon1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSTextFieldMaterialIcon1ActionPerformed
-filterTables();        
+        filterTables();
     }//GEN-LAST:event_rSTextFieldMaterialIcon1ActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         tresProduccion dialog = new tresProduccion(new javax.swing.JFrame(), true, this);
         dialog.setVisible(true);
-
+        
 
     }//GEN-LAST:event_btnNuevoActionPerformed
-
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-
-
-    }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // Determinar qué tabla está visible
@@ -355,12 +358,11 @@ filterTables();
                     "Operación Exitosa",
                     JOptionPane.INFORMATION_MESSAGE);
 
-        } catch (Exception e) {
+        } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(this,
                     "Error: " + e.getMessage(),
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -371,6 +373,7 @@ filterTables();
         this.produccion.setSelected(true);
         this.etapaProduccion.setSelected(false);
         this.detalleProduccion.setSelected(false);
+
 
     }//GEN-LAST:event_produccionActionPerformed
 
@@ -383,6 +386,7 @@ filterTables();
         this.etapaProduccion.setSelected(true);
         this.detalleProduccion.setSelected(false);
 
+
     }//GEN-LAST:event_etapaProduccionActionPerformed
 
     private void detalleProduccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detalleProduccionActionPerformed
@@ -393,15 +397,22 @@ filterTables();
         this.produccion.setSelected(false);
         this.etapaProduccion.setSelected(false);
         this.detalleProduccion.setSelected(true);
+
     }//GEN-LAST:event_detalleProduccionActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        EditTresProduccion dialog = new EditTresProduccion(new javax.swing.JFrame(), true, this);
+        dialog.setVisible(true);
+
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSTableMetroCustom Tabla1;
     private RSMaterialComponent.RSTableMetroCustom Tabla2;
     private RSMaterialComponent.RSTableMetroCustom Tabla3;
-    private rojeru_san.RSButtonRiple btnEditar;
     private rojeru_san.RSButtonRiple btnEliminar;
+    private rojeru_san.RSButtonRiple btnGuardar;
     private rojeru_san.RSButtonRiple btnNuevo;
     private rojeru_san.RSButtonRiple detalleProduccion;
     private rojeru_san.RSButtonRiple etapaProduccion;
@@ -413,11 +424,6 @@ filterTables();
     private rojeru_san.RSButtonRiple produccion;
     private RSMaterialComponent.RSTextFieldMaterialIcon rSTextFieldMaterialIcon1;
     // End of variables declaration//GEN-END:variables
-
-    private int generateRandomId() {
-        Random random = new Random();
-        return 10000 + random.nextInt(90000); // Genera un número entre 10000 y 99999
-    }
 
     private void filterTables() {
         String searchText = rSTextFieldMaterialIcon1.getText().toLowerCase(); // Obtener el texto de búsqueda
@@ -456,10 +462,6 @@ filterTables();
                 sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(searchText), columnIndex));
             }
         }
-    }
-
-    private void dispose() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     private void insertarDetalleEnBD(int cant, String dimension, String material) {
@@ -547,47 +549,6 @@ filterTables();
         cargarTablaEtapa();
     }
 
-    private void insertarEnBD(Date fechaInicio, Date fechaFin, String estado) {
-        Connection con = null;
-        PreparedStatement ps = null;
-
-        try {
-            con = new Conexion().getConnection();
-            String sql = "INSERT INTO produccion (fecha_inicio, fecha_fin, estado) VALUES (?, ?, ?)";
-            ps = con.prepareStatement(sql);
-            ps.setDate(1, fechaInicio);
-            ps.setDate(2, fechaFin); // Corregido: era fecha_final
-            ps.setString(3, estado);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Error al insertar:");
-            e.printStackTrace();
-        }
-    }
-
-    private List<Integer> obtenerIdsSeleccionados(int[] selectedRows) throws Exception {
-        DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-        TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) Tabla1.getRowSorter();
-        List<Integer> ids = new ArrayList<>();
-
-        for (int i = selectedRows.length - 1; i >= 0; i--) {
-            int viewRow = selectedRows[i];
-            int modelRow = (sorter != null) ? sorter.convertRowIndexToModel(viewRow) : viewRow;
-
-            try {
-                Object idObj = model.getValueAt(modelRow, 1); // Columna del ID
-                if (idObj == null) {
-                    throw new Exception("El ID en la fila " + (viewRow + 1) + " es nulo");
-                }
-                int id = Integer.parseInt(idObj.toString());
-                ids.add(id);
-            } catch (NumberFormatException e) {
-                throw new Exception("ID inválido en la fila " + (viewRow + 1));
-            }
-        }
-        return ids;
-    }
-
     private void insertarEtapaEnBD(String nombreEtapa, String estado, Date fechaInicio, Date fechaFin) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -604,7 +565,6 @@ filterTables();
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error al insertar etapa:");
-            e.printStackTrace();
         } finally {
             try {
                 if (ps != null) {
@@ -615,7 +575,6 @@ filterTables();
                 }
             } catch (SQLException e) {
                 System.err.println("Error al cerrar recursos:");
-                e.printStackTrace();
             }
         }
     }
@@ -757,7 +716,6 @@ filterTables();
         int newRowNum = model.getRowCount() + 1;
         model.addRow(new Object[]{
             newRowNum,
-            generateRandomId(),
             cantidad,
             dimension,
             material
@@ -774,7 +732,6 @@ filterTables();
         int newRowNum = model.getRowCount() + 1;
         model.addRow(new Object[]{
             newRowNum,
-            generateRandomId(),
             nombreEtapa,
             estado,
             fechaInicio,
@@ -783,4 +740,5 @@ filterTables();
         });
 
     }
+
 }
