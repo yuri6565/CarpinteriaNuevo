@@ -11,19 +11,20 @@ import javax.swing.JFrame;
  *
  * @author pc
  */
-public class tresProduccion extends javax.swing.JDialog {
+public class EditTresProduccion extends javax.swing.JDialog {
 
     private Produccion produccionPanel;
 
-    public tresProduccion(java.awt.Frame parent, boolean modal, Produccion produccionPanel) {
+    /**
+     * Creates new form EditTresProduccion
+     */
+    public EditTresProduccion(Frame parent, boolean modal, Produccion produccionPanel) {
         super(parent, modal);
-        this.produccionPanel = produccionPanel;
         initComponents();
-        setLocationRelativeTo(parent);
-    }
+        this.produccionPanel = produccionPanel;  // Asigna la referencia
 
-    tresProduccion(JFrame jFrame, boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        setLocationRelativeTo(parent);
+
     }
 
     /**
@@ -126,7 +127,7 @@ public class tresProduccion extends javax.swing.JDialog {
 
     private void produccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produccionActionPerformed
         this.dispose();
-        formuProduccion dialog = new formuProduccion(new javax.swing.JFrame(), true, this.produccionPanel);
+        EditProduccion dialog = new EditProduccion(new javax.swing.JFrame(), true, this.produccionPanel);
         dialog.setVisible(true);
         produccionPanel.cargarTablaProduccion(); // Actualizar tabla después de cerrar
 
@@ -134,7 +135,7 @@ public class tresProduccion extends javax.swing.JDialog {
 
     private void etapacrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_etapacrearActionPerformed
         this.dispose();
-        EtapaProduccion dialog = new EtapaProduccion(new javax.swing.JFrame(), true, this.produccionPanel);
+        EditEtapaProduccion dialog = new EditEtapaProduccion(new javax.swing.JFrame(), true, this.produccionPanel);
         dialog.setVisible(true);
         produccionPanel.cargarTablaEtapa();// Actualizar tabla después de cerrar
 
@@ -143,14 +144,9 @@ public class tresProduccion extends javax.swing.JDialog {
 
     private void detallecrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detallecrearActionPerformed
         this.dispose();
-        // Usa produccionPanel (no produccionPanel2)
-        DetalleProduccion dialog = new DetalleProduccion(
-                (javax.swing.JFrame) this.getParent(),
-                true,
-                this.produccionPanel
-        );
-        dialog.setLocationRelativeTo(this);
+        EditDetalleProduccion dialog = new EditDetalleProduccion(new javax.swing.JFrame(), true, this.produccionPanel);
         dialog.setVisible(true);
+        produccionPanel.cargarTablaDetalle(); // Actualizar tabla después de cerrar
 
     }//GEN-LAST:event_detallecrearActionPerformed
 
@@ -161,44 +157,6 @@ public class tresProduccion extends javax.swing.JDialog {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(tresProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(tresProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(tresProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(tresProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                tresProduccion dialog = new tresProduccion(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple detallecrear;
@@ -209,5 +167,4 @@ public class tresProduccion extends javax.swing.JDialog {
     private rojeru_san.RSButtonRiple produccion;
     private rojeru_san.RSButtonRiple volver;
     // End of variables declaration//GEN-END:variables
-
 }
