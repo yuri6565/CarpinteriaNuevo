@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,8 +21,24 @@ import modelo.Conexion;
  * @author ADSO
  */
 public final class caja extends javax.swing.JPanel {
-  
-public caja() {
+
+
+    private caja parentCaja;
+
+public void setCajaParent(caja parent) {
+    this.parentCaja = parent;
+}
+
+// Método para cerrar/volver (debe llamarse desde algún botón en Cliente)
+public void volverACaja() {
+    if (parentCaja != null) {
+        parentCaja.mostrarPanelPrincipal();
+    }
+    // O si está en un JDialog:
+    // this.dispose();
+}
+    public caja() {
+
         initComponents();
         btnNuevo.setVisible(false);
 }
@@ -76,20 +93,52 @@ public caja() {
         setPreferredSize(new java.awt.Dimension(1290, 730));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel12.setText("Cliente");
-        add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, -1, -1));
+        panelprincipal.setBackground(new java.awt.Color(255, 255, 255));
 
-        comboCliente.setColorMaterial(new java.awt.Color(29, 30, 51));
-        comboCliente.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        comboCliente.addActionListener(new java.awt.event.ActionListener() {
+        txtProductionPrice.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+
+        txtProductDescription.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+
+        txtQuantityOrder.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel4.setText("Nombre Producto");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel5.setText("Precio Produccion");
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel6.setText("Descripcion");
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel7.setText("Cantidad de la Orden");
+
+        btnAddCarrito.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        btnAddCarrito.setText("Añadir al Carrito");
+
+        txtProductName.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel2.setText("Datos Venta Producto");
+
+        jScrollPane1.setViewportView(tblCliente);
+
+        jLabel8.setText("te llevara directamente a crear un cliente");
+
+        btnCrearCliente.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        btnCrearCliente.setText("Añadir cliente");
+        btnCrearCliente.addActionListener(new java.awt.event.ActionListener() {
+
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboClienteActionPerformed(evt);
             }
         });
-        add(comboCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 280, 30));
 
-        tablaM.setModel(new javax.swing.table.DefaultTableModel(
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel1.setText("Lista de Clientes");
+
+        tblCarrito.setModel(new javax.swing.table.DefaultTableModel(
+
             new Object [][] {
                 {null, null, null, null}
             },
@@ -97,125 +146,178 @@ public caja() {
                 "Detalle", "Unidad", "Cantidad", "Valor Unitario"
             }
         ));
-        tablaM.setBackgoundHead(new java.awt.Color(46, 49, 82));
-        tablaM.setBackgoundHover(new java.awt.Color(67, 150, 209));
-        tablaM.setBorderHead(null);
-        tablaM.setBorderRows(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        tablaM.setColorBorderHead(new java.awt.Color(46, 49, 82));
-        tablaM.setColorBorderRows(new java.awt.Color(46, 49, 82));
-        tablaM.setColorPrimaryText(new java.awt.Color(0, 0, 0));
-        tablaM.setColorSecondary(new java.awt.Color(255, 255, 255));
-        tablaM.setColorSecundaryText(new java.awt.Color(0, 0, 0));
-        tablaM.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        tablaM.setFontHead(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        tablaM.setFontRowHover(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        tablaM.setFontRowSelect(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        tablaM.setSelectionBackground(new java.awt.Color(67, 150, 209));
-        jScrollPane2.setViewportView(tablaM);
-        tablaM.getColumnModel().getColumn(0).setPreferredWidth(10);
+        jScrollPane2.setViewportView(tblCarrito);
 
-        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 1140, 420));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel3.setText("Carrito");
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
-        jLabel1.setText("000000");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 560, 100, 30));
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        jButton1.setText("Guardar detalles del pedido");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 22)); // NOI18N
-        jLabel2.setText("Total:");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 560, 80, -1));
+        jButton2.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        jButton2.setText("Reiniciar");
 
-        btnNuevo1.setBackground(new java.awt.Color(46, 49, 82));
-        btnNuevo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
-        btnNuevo1.setText("Añadir");
-        btnNuevo1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevo1ActionPerformed(evt);
-            }
-        });
-        add(btnNuevo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 30, 100, 30));
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel9.setText("Cantidad Total:");
 
-        btnNuevo2.setBackground(new java.awt.Color(46, 49, 82));
-        btnNuevo2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/file-pdf-solid-60 (1).png"))); // NOI18N
-        btnNuevo2.setText("Crear PDF");
-        btnNuevo2.setColorHover(new java.awt.Color(46, 49, 82));
-        btnNuevo2.setRippleColor(new java.awt.Color(255, 153, 153));
-        btnNuevo2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnNuevo2MouseMoved(evt);
-            }
-        });
-        btnNuevo2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnNuevo2MouseExited(evt);
-            }
-        });
-        btnNuevo2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevo2ActionPerformed(evt);
-            }
-        });
-        add(btnNuevo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 550, 200, 140));
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel10.setText("00000");
 
-        btnNuevo.setBackground(new java.awt.Color(204, 204, 204));
-        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/file-pdf-solid-60 (2).png"))); // NOI18N
-        btnNuevo.setText("Crear PDF");
-        btnNuevo.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnNuevoMouseMoved(evt);
-            }
-        });
-        btnNuevo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnNuevoMouseEntered(evt);
-            }
-        });
-        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoActionPerformed(evt);
-            }
-        });
-        add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 550, 200, 140));
+        ComboIVA.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        ComboIVA.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Porcentaje del IVA", "Ninguno", "21%", "10%", "4%" }));
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel11.setText("IVA");
+
+        javax.swing.GroupLayout panelprincipalLayout = new javax.swing.GroupLayout(panelprincipal);
+        panelprincipal.setLayout(panelprincipalLayout);
+        panelprincipalLayout.setHorizontalGroup(
+            panelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelprincipalLayout.createSequentialGroup()
+                .addGap(120, 120, 120)
+                .addComponent(jLabel1)
+                .addGap(225, 225, 225)
+                .addComponent(jLabel2)
+                .addGap(282, 282, 282)
+                .addComponent(jLabel3))
+            .addGroup(panelprincipalLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(70, 70, 70)
+                .addGroup(panelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtProductionPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtProductDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtQuantityOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11)
+                    .addComponent(ComboIVA, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddCarrito, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(70, 70, 70)
+                .addGroup(panelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelprincipalLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel9)
+                        .addGap(13, 13, 13)
+                        .addComponent(jLabel10))
+                    .addGroup(panelprincipalLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelprincipalLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addGroup(panelprincipalLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(btnCrearCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(panelprincipalLayout.createSequentialGroup()
+                .addGap(70, 70, 70)
+                .addComponent(jLabel8))
+        );
+        panelprincipalLayout.setVerticalGroup(
+            panelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelprincipalLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(panelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addGap(20, 20, 20)
+                .addGroup(panelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelprincipalLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel4)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel5)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtProductionPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel6)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtProductDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel7)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtQuantityOrder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel11)
+                        .addGap(0, 0, 0)
+                        .addComponent(ComboIVA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)
+                        .addComponent(btnAddCarrito, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelprincipalLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addGroup(panelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel10))
+                        .addGap(10, 10, 10)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(7, 7, 7)
+                .addComponent(btnCrearCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
+                .addComponent(jLabel8))
+        );
+
+        add(panelprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, 730));
     }// </editor-fold>//GEN-END:initComponents
+/*
+    public void cambiarPanel(JPanel nuevoPanel) {
+    nuevoPanel.setSize(1290, 730);
+    nuevoPanel.setLocation(0, 0);
+    
+    contenedor.removeAll();
+    contenedor.add(nuevoPanel, BorderLayout.CENTER);
+    contenedor.revalidate();
+    contenedor.repaint();
+}
 
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-       
-       
-    }//GEN-LAST:event_btnNuevoActionPerformed
-
-    private void btnNuevoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoMouseEntered
-      
-    }//GEN-LAST:event_btnNuevoMouseEntered
-
-    private void btnNuevo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevo1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnNuevo1ActionPerformed
-
-    private void btnNuevoMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoMouseMoved
-        btnNuevo2.setVisible(true);
-btnNuevo.setVisible(false);
-    }//GEN-LAST:event_btnNuevoMouseMoved
-
-    private void btnNuevo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevo2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnNuevo2ActionPerformed
-
-    private void btnNuevo2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevo2MouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnNuevo2MouseExited
-
-    private void btnNuevo2MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevo2MouseMoved
-
-        btnNuevo2.setVisible(false);
-        btnNuevo.setVisible(true);
 
     }//GEN-LAST:event_btnNuevo2MouseMoved
 
-    private void comboClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboClienteActionPerformed
+contenedor.removeAll();
+contenedor.add(in);
+contenedor.revalidate();
+contenedor.repaint();
+     */
+    private void btnCrearClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearClienteActionPerformed
     
         
+    if (!panelClienteVisible) {
+        panelClienteVisible = true;
         
+        Cliente cliente = new Cliente();
+        cliente.setCajaParent(this); // Pasar referencia a este panel
+        cliente.setSize(panelprincipal.getSize());
+        cliente.setLocation(0, 0);
         
-    }//GEN-LAST:event_comboClienteActionPerformed
+        panelprincipal.removeAll();
+        panelprincipal.add(cliente, BorderLayout.CENTER); // Usar BorderLayout
+        panelprincipal.revalidate();
+        panelprincipal.repaint();
+    }
+}
+
+public void mostrarPanelPrincipal() {
+    panelClienteVisible = false;
+    panelprincipal.removeAll();
+    // Aquí debes reconstruir el panel principal original
+    initComponents(); // O reconstruir manualmente los componentes
+    cargarTablaClientes();
+    panelprincipal.revalidate();
+    panelprincipal.repaint();
+
+        
+    }//GEN-LAST:event_btnCrearClienteActionPerformed
+    private boolean panelClienteVisible = false;
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

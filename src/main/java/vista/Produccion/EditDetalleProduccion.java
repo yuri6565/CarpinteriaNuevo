@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista;
+package vista.Produccion;
 
 import java.awt.Frame;
 import java.sql.Connection;
@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.UnsupportedLookAndFeelException;
 import modelo.Conexion;
 
 /**
@@ -26,7 +27,7 @@ public class EditDetalleProduccion extends javax.swing.JDialog {
      * @param parent
      * @param modal
      */
-    public EditDetalleProduccion(Frame parent, boolean modal, Produccion produccionPanel) {
+    public EditDetalleProduccion(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(parent);
@@ -62,6 +63,7 @@ public class EditDetalleProduccion extends javax.swing.JDialog {
         btnBusca = new rojeru_san.RSButtonRiple();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -227,9 +229,7 @@ public class EditDetalleProduccion extends javax.swing.JDialog {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
-        tresProduccion dialog = new tresProduccion(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
+        
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtdimensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdimensionActionPerformed
@@ -289,10 +289,6 @@ public class EditDetalleProduccion extends javax.swing.JDialog {
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -300,23 +296,16 @@ public class EditDetalleProduccion extends javax.swing.JDialog {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditTresProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditTresProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditTresProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditTresProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(EtapaProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private Produccion produccionPanel;
-
+            @Override
             public void run() {
-                EditDetalleProduccion dialog = new EditDetalleProduccion(new javax.swing.JFrame(), true, this.produccionPanel);
+                EtapaProduccion dialog = new EtapaProduccion(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
