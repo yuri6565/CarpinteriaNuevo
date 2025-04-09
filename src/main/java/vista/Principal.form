@@ -630,6 +630,8 @@
               <Color blue="51" green="1e" red="1d" type="rgb"/>
             </Property>
           </Properties>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
           <SubComponents>
             <Component class="javax.swing.JButton" name="jButton4">
               <Properties>
