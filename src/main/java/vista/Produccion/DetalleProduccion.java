@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista;
+package vista.Produccion;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,7 +20,6 @@ public class DetalleProduccion extends javax.swing.JDialog {
 
     public DetalleProduccion(java.awt.Frame parent, boolean modal, Produccion produccionPanel) {
     super(parent, modal);
-    this.produccionPanel2 = produccionPanel;
     initComponents();
     setLocationRelativeTo(parent); 
 }
@@ -51,6 +50,7 @@ public class DetalleProduccion extends javax.swing.JDialog {
         txtcantidad = new RSMaterialComponent.RSTextFieldTwo();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -185,7 +185,7 @@ public class DetalleProduccion extends javax.swing.JDialog {
         this.dispose();
         
         // Actualizar tabla en Produccion
-        produccionPanel2.cargarTablaDetalle();
+       
         
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, "La cantidad debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
@@ -197,9 +197,7 @@ public class DetalleProduccion extends javax.swing.JDialog {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
-        tresProduccion dialog = new tresProduccion(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
+       
 
     }//GEN-LAST:event_btnCancelarActionPerformed
 

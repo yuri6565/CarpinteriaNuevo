@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,6 +16,20 @@ import javax.swing.table.DefaultTableModel;
  */
 public final class caja extends javax.swing.JPanel {
 
+    private caja parentCaja;
+
+public void setCajaParent(caja parent) {
+    this.parentCaja = parent;
+}
+
+// Método para cerrar/volver (debe llamarse desde algún botón en Cliente)
+public void volverACaja() {
+    if (parentCaja != null) {
+        parentCaja.mostrarPanelPrincipal();
+    }
+    // O si está en un JDialog:
+    // this.dispose();
+}
     public caja() {
         initComponents();
         tblCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -101,50 +116,36 @@ public final class caja extends javax.swing.JPanel {
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         panelprincipal.setBackground(new java.awt.Color(255, 255, 255));
-        panelprincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtProductionPrice.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        panelprincipal.add(txtProductionPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 140, 280, -1));
 
         txtProductDescription.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        panelprincipal.add(txtProductDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 190, 280, -1));
 
         txtQuantityOrder.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        panelprincipal.add(txtQuantityOrder, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 240, 280, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel4.setText("Nombre Producto");
-        panelprincipal.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 70, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel5.setText("Precio Produccion");
-        panelprincipal.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 120, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel6.setText("Descripcion");
-        panelprincipal.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 170, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel7.setText("Cantidad de la Orden");
-        panelprincipal.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 220, -1, -1));
 
         btnAddCarrito.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         btnAddCarrito.setText("Añadir al Carrito");
-        panelprincipal.add(btnAddCarrito, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 340, 290, 50));
 
         txtProductName.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        panelprincipal.add(txtProductName, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 90, 280, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel2.setText("Datos Venta Producto");
-        panelprincipal.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, -1, -1));
 
         jScrollPane1.setViewportView(tblCliente);
 
-        panelprincipal.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 330, -1));
-
         jLabel8.setText("te llevara directamente a crear un cliente");
-        panelprincipal.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 550, -1, -1));
 
         btnCrearCliente.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         btnCrearCliente.setText("Añadir cliente");
@@ -153,11 +154,9 @@ public final class caja extends javax.swing.JPanel {
                 btnCrearClienteActionPerformed(evt);
             }
         });
-        panelprincipal.add(btnCrearCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 487, 320, 50));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setText("Lista de Clientes");
-        panelprincipal.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, -1, -1));
 
         tblCarrito.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -169,37 +168,126 @@ public final class caja extends javax.swing.JPanel {
         ));
         jScrollPane2.setViewportView(tblCarrito);
 
-        panelprincipal.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 60, 320, 247));
-
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel3.setText("Carrito");
-        panelprincipal.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 20, -1, -1));
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         jButton1.setText("Guardar detalles del pedido");
-        panelprincipal.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 370, 270, 50));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         jButton2.setText("Reiniciar");
-        panelprincipal.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 430, 270, 50));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel9.setText("Cantidad Total:");
-        panelprincipal.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 340, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel10.setText("00000");
-        panelprincipal.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 340, -1, -1));
 
         ComboIVA.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         ComboIVA.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Porcentaje del IVA", "Ninguno", "21%", "10%", "4%" }));
-        panelprincipal.add(ComboIVA, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 290, 280, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel11.setText("IVA");
-        panelprincipal.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 270, -1, -1));
 
-        add(panelprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1120, 600));
+        javax.swing.GroupLayout panelprincipalLayout = new javax.swing.GroupLayout(panelprincipal);
+        panelprincipal.setLayout(panelprincipalLayout);
+        panelprincipalLayout.setHorizontalGroup(
+            panelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelprincipalLayout.createSequentialGroup()
+                .addGap(120, 120, 120)
+                .addComponent(jLabel1)
+                .addGap(225, 225, 225)
+                .addComponent(jLabel2)
+                .addGap(282, 282, 282)
+                .addComponent(jLabel3))
+            .addGroup(panelprincipalLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(70, 70, 70)
+                .addGroup(panelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtProductionPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtProductDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtQuantityOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11)
+                    .addComponent(ComboIVA, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddCarrito, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(70, 70, 70)
+                .addGroup(panelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelprincipalLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel9)
+                        .addGap(13, 13, 13)
+                        .addComponent(jLabel10))
+                    .addGroup(panelprincipalLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelprincipalLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addGroup(panelprincipalLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(btnCrearCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(panelprincipalLayout.createSequentialGroup()
+                .addGap(70, 70, 70)
+                .addComponent(jLabel8))
+        );
+        panelprincipalLayout.setVerticalGroup(
+            panelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelprincipalLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(panelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addGap(20, 20, 20)
+                .addGroup(panelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelprincipalLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel4)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel5)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtProductionPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel6)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtProductDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel7)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtQuantityOrder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel11)
+                        .addGap(0, 0, 0)
+                        .addComponent(ComboIVA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)
+                        .addComponent(btnAddCarrito, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelprincipalLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addGroup(panelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel10))
+                        .addGap(10, 10, 10)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(7, 7, 7)
+                .addComponent(btnCrearCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
+                .addComponent(jLabel8))
+        );
+
+        add(panelprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, 730));
     }// </editor-fold>//GEN-END:initComponents
 /*
     public void cambiarPanel(JPanel nuevoPanel) {
@@ -222,23 +310,35 @@ contenedor.revalidate();
 contenedor.repaint();
      */
     private void btnCrearClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearClienteActionPerformed
-        if(!this.btnCrearCliente.isSelected()){
-        this.btnCrearCliente.setSelected(true);
+    
+        
+    if (!panelClienteVisible) {
+        panelClienteVisible = true;
         
         Cliente cliente = new Cliente();
-        cliente.setSize(1290, 730);
+        cliente.setCajaParent(this); // Pasar referencia a este panel
+        cliente.setSize(panelprincipal.getSize());
         cliente.setLocation(0, 0);
         
         panelprincipal.removeAll();
-        panelprincipal.add(cliente);
+        panelprincipal.add(cliente, BorderLayout.CENTER); // Usar BorderLayout
         panelprincipal.revalidate();
         panelprincipal.repaint();
-        
-        }
-       
+    }
+}
+
+public void mostrarPanelPrincipal() {
+    panelClienteVisible = false;
+    panelprincipal.removeAll();
+    // Aquí debes reconstruir el panel principal original
+    initComponents(); // O reconstruir manualmente los componentes
+    cargarTablaClientes();
+    panelprincipal.revalidate();
+    panelprincipal.repaint();
+
         
     }//GEN-LAST:event_btnCrearClienteActionPerformed
-
+    private boolean panelClienteVisible = false;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> ComboIVA;

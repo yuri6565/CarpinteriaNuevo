@@ -22,17 +22,15 @@ import modelo.Conexion;
 public class Cliente extends javax.swing.JPanel {
 
     private int id_cliente;
+
     /**
      * Creates new form movimientos
      */
     public Cliente() {
-       initComponents();  
-this.cargartablacliente();
- 
+        initComponents();
+        this.cargartablacliente();
+
     }
-
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -83,27 +81,12 @@ this.cargartablacliente();
 
         tablaclientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "Codigo", "Tipo de documento", "Numero", "Nombre", "Apellido", "Telefono", "Direccion", "estado"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
             }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         tablaclientes.setBackgoundHead(new java.awt.Color(46, 49, 82));
         tablaclientes.setBackgoundHover(new java.awt.Color(67, 150, 209));
         tablaclientes.setBorderHead(null);
@@ -153,57 +136,48 @@ this.cargartablacliente();
     }//GEN-LAST:event_txtBuscarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-  Ctrl_Cliente controlCliente = new Ctrl_Cliente();
-       if(id_cliente==0){
-        JOptionPane.showMessageDialog(this, "SELECCIONE UN CLIENTE");
+        Ctrl_Cliente controlCliente = new Ctrl_Cliente();
+        if (id_cliente == 0) {
+            JOptionPane.showMessageDialog(this, "SELECCIONE UN CLIENTE");
         } else {
-         if (controlCliente.eliminar(id_cliente)) {
-    JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente");
-    cargartablacliente(); 
-} else {
-    JOptionPane.showMessageDialog(this, "Error al eliminar cliente");
+            if (controlCliente.eliminar(id_cliente)) {
+                JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente");
+                cargartablacliente();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al eliminar cliente");
 
-}
+            }
 
-
-          
-          
-}           
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
- Crearcliente1 dialog = new Crearcliente1(new javax.swing.JFrame(), true);
+        Crearcliente1 dialog = new Crearcliente1(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-        
-        
-   
-   
-        
-   
-       
+
+
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        int filaSeleccionada = tablaclientes.getSelectedRow(); if (filaSeleccionada == -1) { JOptionPane.showMessageDialog(null, "Seleccione un cliente para editar"); } else { int id_cliente = (int) tablaclientes.getValueAt(filaSeleccionada, 0);
+        int filaSeleccionada = tablaclientes.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un cliente para editar");
+        } else {
+            int id_cliente = (int) tablaclientes.getValueAt(filaSeleccionada, 0);
 
-if (filaSeleccionada == -1) {
-    JOptionPane.showMessageDialog(null, "Seleccione un cliente para editar.");
-} else {
-    int idCliente = Integer.parseInt(tablaclientes.getValueAt(filaSeleccionada, 0).toString()); 
-    EditarCliente editar = new EditarCliente(null, true, idCliente);
-    editar.setVisible(true);
+            if (filaSeleccionada == -1) {
+                JOptionPane.showMessageDialog(null, "Seleccione un cliente para editar.");
+            } else {
+                int idCliente = Integer.parseInt(tablaclientes.getValueAt(filaSeleccionada, 0).toString());
+                EditarCliente editar = new EditarCliente(null, true, idCliente);
+                editar.setVisible(true);
 
-        
-       
-  
-}
+            }
 
+        }
 
 
- }
-
-        
     }//GEN-LAST:event_btnEditarActionPerformed
 
 
@@ -217,63 +191,62 @@ if (filaSeleccionada == -1) {
     private RSMaterialComponent.RSTextFieldMaterialIcon txtBuscar;
     // End of variables declaration//GEN-END:variables
 public void cargartablacliente() {
-    Connection con = Conexion.getConnection();
+        Connection con = Conexion.getConnection();
 
-    
-    DefaultTableModel model = new DefaultTableModel() {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false; 
-        }
-    };
-
-    this.tablaclientes.setModel(model);
-    this.jScrollPane2.setViewportView(this.tablaclientes);
-    
-   
-    model.addColumn("Codigo");
-    model.addColumn("Tipo de documento");
-    model.addColumn("Numero");
-    model.addColumn("Nombre");
-    model.addColumn("Apellido");
-    model.addColumn("Telefono");
-    model.addColumn("Direccion");
-
-    String sql = "SELECT * FROM cliente";
-    Statement st;
-
-    try {
-        st = con.createStatement();
-        ResultSet rs = st.executeQuery(sql);
-
-        while (rs.next()) {
-            Object fila[] = new Object[7];
-            for (int i = 0; i < 7; i++) {
-                fila[i] = rs.getObject(i + 1);
+        DefaultTableModel model = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
-            model.addRow(fila);
-        }
-        con.close();
+        };
 
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Error al cargar la tabla: " + e.getMessage());
+        this.tablaclientes.setModel(model);
+        this.jScrollPane2.setViewportView(this.tablaclientes);
+
+        model.addColumn("codigo");
+        model.addColumn("identificacion");
+        model.addColumn("numero");
+        model.addColumn("nombre");
+        model.addColumn("apellido");
+        model.addColumn("telefono");
+        model.addColumn("direccion");
+        model.addColumn("email");
+
+        String sql = "SELECT * FROM cliente";
+        Statement st;
+
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            while (rs.next()) {
+                Object fila[] = new Object[7];
+                for (int i = 0; i < 7; i++) {
+                    fila[i] = rs.getObject(i + 1);
+                }
+                model.addRow(fila);
+            }
+            con.close();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar la tabla: " + e.getMessage());
+        }
+
+        tablaclientes.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int fila_point = tablaclientes.rowAtPoint(e.getPoint());
+
+                if (fila_point > -1) {
+                    id_cliente = (int) tablaclientes.getValueAt(fila_point, 0);
+
+                }
+            }
+        });
     }
 
-    
-    tablaclientes.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            int fila_point = tablaclientes.rowAtPoint(e.getPoint());
-            
-            if (fila_point > -1) {
-                id_cliente = (int) tablaclientes.getValueAt(fila_point, 0);
-               
-            }
-        }
-    });
-   }
-
-
-
+    void setCajaParent(caja aThis) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
 }
