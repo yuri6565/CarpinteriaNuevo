@@ -13,22 +13,25 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
  * @author pc
  */
-public class ProduccionContenido extends javax.swing.JPanel {
+public final class ProduccionContenido extends javax.swing.JPanel {
 
     /**
      * Creates new form produccionContenido
      */
     public ProduccionContenido() {
         initComponents();
-        
+
         Tabla1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
@@ -38,12 +41,29 @@ public class ProduccionContenido extends javax.swing.JPanel {
         Tabla1.setCellSelectionEnabled(false);
         Tabla1.setRowSelectionAllowed(true);
         Tabla1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        
+
         Color colorSeleccion = new Color(109, 160, 221);
         Color colorTexto = Color.white;
 
         Tabla1.setSelectionBackground(colorSeleccion);
         Tabla1.setSelectionForeground(colorTexto);
+
+        txtbuscar.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filtrarTabla();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filtrarTabla();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filtrarTabla();
+            }
+        });
         cargarTablaProduccion();    // Carga Tabla1
     }
 
@@ -56,7 +76,7 @@ public class ProduccionContenido extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        rSTextFieldMaterialIcon1 = new RSMaterialComponent.RSTextFieldMaterialIcon();
+        txtbuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
         btnNuevoProduc = new rojeru_san.RSButtonRiple();
         btnGuardar = new rojeru_san.RSButtonRiple();
         btnEliminar = new rojeru_san.RSButtonRiple();
@@ -67,21 +87,20 @@ public class ProduccionContenido extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(1250, 630));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        rSTextFieldMaterialIcon1.setBackground(new java.awt.Color(245, 245, 245));
-        rSTextFieldMaterialIcon1.setForeground(new java.awt.Color(29, 30, 91));
-        rSTextFieldMaterialIcon1.setColorIcon(new java.awt.Color(29, 30, 111));
-        rSTextFieldMaterialIcon1.setColorMaterial(new java.awt.Color(29, 30, 111));
-        rSTextFieldMaterialIcon1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
-        rSTextFieldMaterialIcon1.setPlaceholder("Buscar");
-        rSTextFieldMaterialIcon1.addActionListener(new java.awt.event.ActionListener() {
+        txtbuscar.setBackground(new java.awt.Color(245, 245, 245));
+        txtbuscar.setForeground(new java.awt.Color(29, 30, 91));
+        txtbuscar.setColorIcon(new java.awt.Color(29, 30, 111));
+        txtbuscar.setColorMaterial(new java.awt.Color(29, 30, 111));
+        txtbuscar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
+        txtbuscar.setPlaceholder("Buscar");
+        txtbuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSTextFieldMaterialIcon1ActionPerformed(evt);
+                txtbuscarActionPerformed(evt);
             }
         });
-        add(rSTextFieldMaterialIcon1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 430, 40));
+        add(txtbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 430, 40));
 
         btnNuevoProduc.setBackground(new java.awt.Color(46, 49, 82));
-        btnNuevoProduc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
         btnNuevoProduc.setText(" Nuevo");
         btnNuevoProduc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,7 +110,6 @@ public class ProduccionContenido extends javax.swing.JPanel {
         add(btnNuevoProduc, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 120, 40));
 
         btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil (1).png"))); // NOI18N
         btnGuardar.setText("Editar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -101,7 +119,6 @@ public class ProduccionContenido extends javax.swing.JPanel {
         add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 20, 120, 40));
 
         btnEliminar.setBackground(new java.awt.Color(46, 49, 82));
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (1).png"))); // NOI18N
         btnEliminar.setText(" Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,9 +142,9 @@ public class ProduccionContenido extends javax.swing.JPanel {
         add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1210, 490));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void rSTextFieldMaterialIcon1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSTextFieldMaterialIcon1ActionPerformed
+    private void txtbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarActionPerformed
 
-    }//GEN-LAST:event_rSTextFieldMaterialIcon1ActionPerformed
+    }//GEN-LAST:event_txtbuscarActionPerformed
 
     private void btnNuevoProducActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProducActionPerformed
         formuProduccion dialog = new formuProduccion(new javax.swing.JFrame(), true);
@@ -172,7 +189,7 @@ public class ProduccionContenido extends javax.swing.JPanel {
             // Desactivar auto-commit para manejar transacciones
             con.setAutoCommit(false);
 
-            String sql = "DELETE FROM produccion WHERE idproduccion = ?";
+            String sql = "DELETE FROM produccion WHERE id_produccion = ?";
             boolean error = false;
 
             // Eliminar en orden inverso para evitar problemas con los índices de la tabla
@@ -227,7 +244,7 @@ public class ProduccionContenido extends javax.swing.JPanel {
     private rojeru_san.RSButtonRiple btnGuardar;
     private rojeru_san.RSButtonRiple btnNuevoProduc;
     private javax.swing.JScrollPane jScrollPane2;
-    private RSMaterialComponent.RSTextFieldMaterialIcon rSTextFieldMaterialIcon1;
+    private RSMaterialComponent.RSTextFieldMaterialIcon txtbuscar;
     // End of variables declaration//GEN-END:variables
 public class Conexion {
 
@@ -243,21 +260,53 @@ public class Conexion {
             return con;
         }
     }
-public void cargarTablaProduccion() {
+
+    private void filtrarTabla() {
+        String textoBusqueda = txtbuscar.getText().trim();
+        DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(modelo);
+        Tabla1.setRowSorter(tr);
+
+        if (textoBusqueda.isEmpty()) {
+            tr.setRowFilter(null);
+            return;
+        }
+
+        // Expresión regular para detectar si son solo números (1-2 dígitos)
+        if (textoBusqueda.matches("\\d{1}")) {
+            // Buscar en ID (columna 0) y fechas (columnas 1 y 2)
+            List<RowFilter<Object, Object>> filters = new ArrayList<>();
+            filters.add(RowFilter.regexFilter("^" + textoBusqueda, 0));// ID (coincidencia exacta)
+            tr.setRowFilter(RowFilter.orFilter(filters));
+
+        } else if (textoBusqueda.matches("\\d{2}")) {
+            List<RowFilter<Object, Object>> filters = new ArrayList<>();
+            filters.add(RowFilter.regexFilter(textoBusqueda, 1)); // fecha_inicio
+            filters.add(RowFilter.regexFilter(textoBusqueda, 2)); // fecha_fin
+            tr.setRowFilter(RowFilter.orFilter(filters));
+        } // Si contiene letras (aunque sea parcial)
+        else if (textoBusqueda.matches(".*[a-zA-ZáéíóúÁÉÍÓÚ].*")) {
+            // Buscar solo en estado (columna 3)
+            tr.setRowFilter(RowFilter.regexFilter("(?i)" + textoBusqueda, 3));
+        } // Para otros casos (números más largos, combinaciones, etc.)
+        else {
+            // Buscar en todos los campos
+            tr.setRowFilter(RowFilter.regexFilter("(?i)" + textoBusqueda));
+        }
+    }
+
+    public void cargarTablaProduccion() {
         try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("SELECT id_produccion, fecha_inicio, fecha_fin, estado FROM produccion"); ResultSet rs = ps.executeQuery()) {
 
             DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
             model.setRowCount(0);
 
-            int rowNum = 1;
             while (rs.next()) {
                 model.addRow(new Object[]{
                     rs.getInt("id_produccion"),
                     rs.getDate("fecha_inicio"),
                     rs.getDate("fecha_fin"),
-                    rs.getString("estado"),
-                    null
-                });
+                    rs.getString("estado"),});
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
@@ -266,7 +315,5 @@ public void cargarTablaProduccion() {
                     JOptionPane.ERROR_MESSAGE);
         }
     }
-        
 
-    
 }

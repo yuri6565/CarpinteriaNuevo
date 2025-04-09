@@ -72,7 +72,6 @@ public final class Produccion extends javax.swing.JPanel {
         nuevo.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(368, 111, -1, -1));
 
         produccion.setBackground(new java.awt.Color(46, 49, 82));
-        produccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gears-set.png"))); // NOI18N
         produccion.setText("  Produccion");
         produccion.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
         produccion.addActionListener(new java.awt.event.ActionListener() {
@@ -84,7 +83,6 @@ public final class Produccion extends javax.swing.JPanel {
 
         etapaProduccion.setBackground(new java.awt.Color(46, 49, 82));
         etapaProduccion.setBorder(null);
-        etapaProduccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wrench.png"))); // NOI18N
         etapaProduccion.setText(" Etapas produccion");
         etapaProduccion.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
         etapaProduccion.addActionListener(new java.awt.event.ActionListener() {
@@ -96,7 +94,6 @@ public final class Produccion extends javax.swing.JPanel {
 
         detalleProduccion.setBackground(new java.awt.Color(46, 49, 82));
         detalleProduccion.setBorder(null);
-        detalleProduccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ajuste.png"))); // NOI18N
         detalleProduccion.setText("Detalle produccion");
         detalleProduccion.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
         detalleProduccion.addActionListener(new java.awt.event.ActionListener() {
