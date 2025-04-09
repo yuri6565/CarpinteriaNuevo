@@ -74,4 +74,5 @@
         <maven.compiler.release>23</maven.compiler.release>
         <exec.mainClass>com.mycompany.joseabelsistema.JoseabelSistema</exec.mainClass>
     </properties>
+    <name>joseabelSistemasga</name>
 </project>

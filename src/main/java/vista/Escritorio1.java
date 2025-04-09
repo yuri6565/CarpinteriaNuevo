@@ -123,6 +123,7 @@ public class Escritorio1 extends javax.swing.JPanel {
 
         add(jCalendar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 210, 350, 240));
 
+
     }// </editor-fold>//GEN-END:initComponents
 
     private void rSButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButton1ActionPerformed

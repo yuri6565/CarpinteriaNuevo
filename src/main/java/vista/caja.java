@@ -10,11 +10,18 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import modelo.Conexion;
+
+
 /**
  *
  * @author ADSO
  */
 public final class caja extends javax.swing.JPanel {
+
 
     private caja parentCaja;
 
@@ -31,85 +38,56 @@ public void volverACaja() {
     // this.dispose();
 }
     public caja() {
+
         initComponents();
-        tblCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        tblCliente.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{},
-                new String[]{"Id", "Nombre", "Apellido", "Numero Tel", "Email"}
-        ));
-        cargarTablaClientes();
-    }
+        btnNuevo.setVisible(false);
+}
+    
+/*
+    public void cargarComboClientes(Cliente cliente) {
+        String sql = "SELECT * FROM cliente                   ";
+       try (Connection con = new Conexion().getConnection();
+         PreparedStatement stmt = con.prepareStatement(TOOL_TIP_TEXT_KEY);
+         ResultSet rs = ps.executeQuery()) {
 
-    public class Conexion {
-
-        public Connection getConnection() {
-            Connection con = null;
-            try {
-                String myBD = "jdbc:mysql://localhost:3306/carpinteriasistema?serverTimezone=UTC";
-                con = DriverManager.getConnection(myBD, "root", "");
-                System.out.println("Conexión exitosa.");
-            } catch (SQLException e) {
-                System.out.println("Error al conectar: " + e.getMessage());
-            }
-            return con;
+        // Crear nuevo modelo para el combobox
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        
+        // Agregar primer elemento opcional (puedes eliminarlo si no lo necesitas)
+        model.addElement("-- Seleccione un cliente --");
+        
+        while (rs.next()) {
+            // Concatenar nombre y apellido para mostrar en el combobox
+            String cliente = rs.getString("nombre") + " " + rs.getString("apellido");
+            model.addElement(cliente);
         }
+        
+        // Aplicar el modelo al combobox
+        comboCliente.setModel(model);
+        
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this,
+                "Error al cargar clientes: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
     }
 
-    public void cargarTablaClientes() {
-        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("SELECT codigo, nombre, apellido, telefono, email FROM cliente"); ResultSet rs = ps.executeQuery()) {
-
-            DefaultTableModel model = (DefaultTableModel) tblCliente.getModel();
-            model.setRowCount(0);
-
-            int rowNum = 1;
-            while (rs.next()) {
-                model.addRow(new Object[]{
-                    rowNum++,
-                    rs.getString("nombre"),
-                    rs.getString("apellido"),
-                    rs.getString("telefono"),
-                    rs.getString("email"),
-                    null
-                });
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al cargar datos: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-
-        }
-    }
-
+*/
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelprincipal = new javax.swing.JPanel();
-        txtProductionPrice = new javax.swing.JTextField();
-        txtProductDescription = new javax.swing.JTextField();
-        txtQuantityOrder = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        btnAddCarrito = new javax.swing.JButton();
-        txtProductName = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblCliente = new javax.swing.JTable();
-        jLabel8 = new javax.swing.JLabel();
-        btnCrearCliente = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        comboCliente = new RSMaterialComponent.RSComboBoxMaterial();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblCarrito = new javax.swing.JTable();
-        jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        ComboIVA = new javax.swing.JComboBox<>();
-        jLabel11 = new javax.swing.JLabel();
+        tablaM = new RSMaterialComponent.RSTableMetroCustom();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        btnNuevo1 = new rojeru_san.RSButtonRiple();
+        btnNuevo2 = new rojeru_san.RSButtonRiple();
+        btnNuevo = new rojeru_san.RSButtonRiple();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(1290, 730));
@@ -150,8 +128,9 @@ public void volverACaja() {
         btnCrearCliente.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         btnCrearCliente.setText("Añadir cliente");
         btnCrearCliente.addActionListener(new java.awt.event.ActionListener() {
+
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCrearClienteActionPerformed(evt);
+                comboClienteActionPerformed(evt);
             }
         });
 
@@ -159,11 +138,12 @@ public void volverACaja() {
         jLabel1.setText("Lista de Clientes");
 
         tblCarrito.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
 
+            new Object [][] {
+                {null, null, null, null}
             },
             new String [] {
-                "Id Producto", "Nombre", "Cantidad", "Precio", "Descripcion", "Sub Total"
+                "Detalle", "Unidad", "Cantidad", "Valor Unitario"
             }
         ));
         jScrollPane2.setViewportView(tblCarrito);
@@ -300,9 +280,8 @@ public void volverACaja() {
     contenedor.repaint();
 }
 
-caja in = new caja(this); // Pasar this (la instancia de Principal)
-in.setSize(1290, 730);
-in.setLocation(0, 0);
+
+    }//GEN-LAST:event_btnNuevo2MouseMoved
 
 contenedor.removeAll();
 contenedor.add(in);
@@ -340,31 +319,16 @@ public void mostrarPanelPrincipal() {
     }//GEN-LAST:event_btnCrearClienteActionPerformed
     private boolean panelClienteVisible = false;
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> ComboIVA;
-    private javax.swing.JButton btnAddCarrito;
-    private javax.swing.JButton btnCrearCliente;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private rojeru_san.RSButtonRiple btnNuevo;
+    private rojeru_san.RSButtonRiple btnNuevo1;
+    private rojeru_san.RSButtonRiple btnNuevo2;
+    private RSMaterialComponent.RSComboBoxMaterial comboCliente;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JPanel panelprincipal;
-    private javax.swing.JTable tblCarrito;
-    private javax.swing.JTable tblCliente;
-    private javax.swing.JTextField txtProductDescription;
-    private javax.swing.JTextField txtProductName;
-    private javax.swing.JTextField txtProductionPrice;
-    private javax.swing.JTextField txtQuantityOrder;
+    private RSMaterialComponent.RSTableMetroCustom tablaM;
     // End of variables declaration//GEN-END:variables
 }
