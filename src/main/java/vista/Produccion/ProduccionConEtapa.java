@@ -6,6 +6,7 @@ package vista.Produccion;
 
 import java.awt.Color;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,8 +26,7 @@ public class ProduccionConEtapa extends javax.swing.JPanel {
      */
     public ProduccionConEtapa() {
         initComponents();
-        
-        
+
         Tabla1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
@@ -36,7 +36,7 @@ public class ProduccionConEtapa extends javax.swing.JPanel {
         Tabla1.setCellSelectionEnabled(false);
         Tabla1.setRowSelectionAllowed(true);
         Tabla1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        
+
         Color colorSeleccion = new Color(109, 160, 221);
         Color colorTexto = Color.white;
 
@@ -108,9 +108,14 @@ public class ProduccionConEtapa extends javax.swing.JPanel {
         add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 20, 120, 40));
 
         Tabla1.setBackground(new java.awt.Color(255, 255, 255));
+        Tabla1.setForeground(new java.awt.Color(255, 255, 255));
+        Tabla1.setAlignmentX(0.1F);
+        Tabla1.setAlignmentY(0.1F);
         Tabla1.setBackgoundHead(new java.awt.Color(46, 49, 82));
         Tabla1.setBackgoundHover(new java.awt.Color(46, 49, 82));
+        Tabla1.setColorBorderRows(new java.awt.Color(153, 153, 153));
         Tabla1.setColorPrimaryText(new java.awt.Color(46, 49, 82));
+        Tabla1.setColorSecondary(new java.awt.Color(255, 255, 255));
         Tabla1.setColorSecundaryText(new java.awt.Color(46, 49, 82));
         jScrollPane2.setViewportView(Tabla1);
 
@@ -118,7 +123,7 @@ public class ProduccionConEtapa extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void rSTextFieldMaterialIcon1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSTextFieldMaterialIcon1ActionPerformed
-       
+
     }//GEN-LAST:event_rSTextFieldMaterialIcon1ActionPerformed
 
     private void btnNuevoProducActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProducActionPerformed
@@ -136,9 +141,82 @@ public class ProduccionConEtapa extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-       
+        int[] selectedRows = Tabla1.getSelectedRows(); // Obtener todas las filas seleccionadas
+
+        if (selectedRows.length == 0) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Por favor seleccione al menos una fila para eliminar",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        // Confirmar eliminación
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return; // Si el usuario cancela, no hacer nada
+        }
+
+        try (Connection con = new Conexion().getConnection()) {
+            // Desactivar auto-commit para manejar transacciones
+            con.setAutoCommit(false);
+
+            String sql = "DELETE FROM etapa_produccion WHERE idetapa_produccion = ?";
+            boolean error = false;
+
+            // Eliminar en orden inverso para evitar problemas con los índices de la tabla
+            for (int i = selectedRows.length - 1; i >= 0; i--) {
+                int selectedRow = selectedRows[i];
+                int idProduccion = (int) Tabla1.getValueAt(selectedRow, 0);
+
+                try (PreparedStatement ps = con.prepareStatement(sql)) {
+                    ps.setInt(1, idProduccion);
+                    ps.executeUpdate();
+
+                    // Eliminar la fila de la tabla visual
+                    DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+                    model.removeRow(selectedRow);
+                } catch (SQLException e) {
+                    error = true;
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Error al eliminar el registro con ID " + idProduccion + ": " + e.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    break; // Detener si hay un error
+                }
+            }
+
+            if (error) {
+                con.rollback(); // Si hay error, deshacer cambios
+            } else {
+                con.commit(); // Si todo va bien, confirmar cambios
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Se eliminaron " + selectedRows.length + " registros correctamente",
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error en la conexión: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
-public void cargarTablaEtapa() {
+    public void cargarTablaEtapa() {
         try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(
                 "SELECT idetapa_produccion, nombre_etapa, estado, fecha_inicio, fecha_fin "
                 + "FROM etapa_produccion"); ResultSet rs = ps.executeQuery()) {
@@ -149,7 +227,6 @@ public void cargarTablaEtapa() {
             int rowNum = 1;
             while (rs.next()) {
                 model.addRow(new Object[]{
-                    rowNum++,
                     rs.getInt("idetapa_produccion"),
                     rs.getString("nombre_etapa"),
                     rs.getString("estado"),
@@ -166,6 +243,20 @@ public void cargarTablaEtapa() {
 
     }
 
+    public class Conexion {
+
+        public Connection getConnection() {
+            Connection con = null;
+            try {
+                String myBD = "jdbc:mysql://localhost:3306/carpinteriasistema?serverTimezone=UTC";
+                con = DriverManager.getConnection(myBD, "root", "");
+                System.out.println("Conexión exitosa.");
+            } catch (SQLException e) {
+                System.out.println("Error al conectar: " + e.getMessage());
+            }
+            return con;
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSTableMetro Tabla1;
     private rojeru_san.RSButtonRiple btnEditar;
