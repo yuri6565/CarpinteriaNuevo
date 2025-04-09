@@ -113,9 +113,14 @@ public class ProduccionContDetalle extends javax.swing.JPanel {
         add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 20, 120, 40));
 
         Tabla1.setBackground(new java.awt.Color(255, 255, 255));
+        Tabla1.setForeground(new java.awt.Color(255, 255, 255));
+        Tabla1.setAlignmentX(0.1F);
+        Tabla1.setAlignmentY(0.1F);
         Tabla1.setBackgoundHead(new java.awt.Color(46, 49, 82));
         Tabla1.setBackgoundHover(new java.awt.Color(46, 49, 82));
+        Tabla1.setColorBorderRows(new java.awt.Color(153, 153, 153));
         Tabla1.setColorPrimaryText(new java.awt.Color(46, 49, 82));
+        Tabla1.setColorSecondary(new java.awt.Color(255, 255, 255));
         Tabla1.setColorSecundaryText(new java.awt.Color(46, 49, 82));
         jScrollPane2.setViewportView(Tabla1);
 
@@ -139,7 +144,80 @@ public class ProduccionContDetalle extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        int[] selectedRows = Tabla1.getSelectedRows(); // Obtener todas las filas seleccionadas
 
+        if (selectedRows.length == 0) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Por favor seleccione al menos una fila para eliminar",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        // Confirmar eliminación
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return; // Si el usuario cancela, no hacer nada
+        }
+
+        try (Connection con = new ProduccionContDetalle.Conexion().getConnection()) {
+            // Desactivar auto-commit para manejar transacciones
+            con.setAutoCommit(false);
+
+            String sql = "DELETE FROM detalle_produccion WHERE idetalle_produccion = ?";
+            boolean error = false;
+
+            // Eliminar en orden inverso para evitar problemas con los índices de la tabla
+            for (int i = selectedRows.length - 1; i >= 0; i--) {
+                int selectedRow = selectedRows[i];
+                int idProduccion = (int) Tabla1.getValueAt(selectedRow, 0);
+
+                try (PreparedStatement ps = con.prepareStatement(sql)) {
+                    ps.setInt(1, idProduccion);
+                    ps.executeUpdate();
+
+                    // Eliminar la fila de la tabla visual
+                    DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+                    model.removeRow(selectedRow);
+                } catch (SQLException e) {
+                    error = true;
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Error al eliminar el registro con ID " + idProduccion + ": " + e.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    break; // Detener si hay un error
+                }
+            }
+
+            if (error) {
+                con.rollback(); // Si hay error, deshacer cambios
+            } else {
+                con.commit(); // Si todo va bien, confirmar cambios
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Se eliminaron " + selectedRows.length + " registros correctamente",
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error en la conexión: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
 
@@ -176,7 +254,6 @@ public class ProduccionContDetalle extends javax.swing.JPanel {
             int rowNum = 1;
             while (rs.next()) {
                 model.addRow(new Object[]{
-                    rowNum++,
                     rs.getInt("idetalle_produccion"),
                     rs.getInt("cantidad"),
                     rs.getString("dimensiones"),
