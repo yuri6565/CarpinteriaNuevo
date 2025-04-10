@@ -116,11 +116,11 @@
       <SubComponents>
         <Component class="RSMaterialComponent.RSTableMetro" name="Tabla1">
           <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="ff" red="ff" type="rgb"/>
-            </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+              <Table columnCount="0" rowCount="0"/>
             </Property>
             <Property name="alignmentX" type="float" value="0.1"/>
             <Property name="alignmentY" type="float" value="0.1"/>

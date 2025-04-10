@@ -127,8 +127,15 @@ public final class ProduccionContenido extends javax.swing.JPanel {
         });
         add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 20, 120, 40));
 
-        Tabla1.setBackground(new java.awt.Color(255, 255, 255));
         Tabla1.setForeground(new java.awt.Color(255, 255, 255));
+        Tabla1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
         Tabla1.setAlignmentX(0.1F);
         Tabla1.setAlignmentY(0.1F);
         Tabla1.setBackgoundHead(new java.awt.Color(46, 49, 82));
