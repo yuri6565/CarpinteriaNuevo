@@ -757,7 +757,6 @@ public class Principal extends javax.swing.JFrame {
             this.cuatro.setSelected(false);
             this.cinco.setSelected(false);
             this.ocho.setSelected(false);
-            this.nueve.setSelected(false);
 
         }
 
@@ -771,7 +770,7 @@ public class Principal extends javax.swing.JFrame {
             this.cuatro.setSelected(false);
             this.seis.setSelected(false);
             this.ocho.setSelected(false);
-            this.nueve.setSelected(false);
+
         }
 
     }//GEN-LAST:event_cincoActionPerformed
