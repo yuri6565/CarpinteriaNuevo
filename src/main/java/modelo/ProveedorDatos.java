@@ -9,15 +9,15 @@ package modelo;
  * @author buitr
  */
 public class ProveedorDatos {
-    private String codigo;
+    private String codigo_proveedor;
     private String nombre;
     private String telefono;
     private String direccion;
     private String producto;
     private String tipo;
 
-    public ProveedorDatos(String codigo, String nombre, String telefono, String direccion, String producto, String tipo) {
-        this.codigo = codigo;
+    public ProveedorDatos(String codigo_proveedor, String nombre, String telefono, String direccion, String producto, String tipo) {
+        this.codigo_proveedor = codigo_proveedor;
         this.nombre = nombre;
         this.telefono = telefono;
         this.direccion = direccion;
@@ -26,11 +26,11 @@ public class ProveedorDatos {
     }
 
     public String getCodigo() {
-        return codigo;
+        return codigo_proveedor;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setCodigo(String codigo_proveedor) {
+        this.codigo_proveedor = codigo_proveedor;
     }
 
     public String getNombre() {

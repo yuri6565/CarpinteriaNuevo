@@ -4,25 +4,22 @@
  */
 package vista;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import modelo.Conexion;
 
 
 public class proveedornuevo extends javax.swing.JDialog {
-private String[] datos; // Almacena los datos ingresados
-    private boolean guardado = false; 
+
+    
     public proveedornuevo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
          setTitle("Nuevo Proveedor");
     }
-      public String[] getDatos() {
-        return datos;
-    }
-
-    // Método para verificar si se presionó "Guardar"
-    public boolean isGuardado() {
-        return guardado;
-    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -39,11 +36,11 @@ private String[] datos; // Almacena los datos ingresados
         btnGuardar = new rojeru_san.RSButtonRiple();
         jLabel9 = new javax.swing.JLabel();
         txttelefono = new RSMaterialComponent.RSTextFieldMaterial();
-        cmbTipo = new RSMaterialComponent.RSComboBoxMaterial();
         txtproducto = new RSMaterialComponent.RSTextFieldMaterial();
-        txtdireccion = new RSMaterialComponent.RSTextFieldMaterial();
+        txttipo = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel8 = new javax.swing.JLabel();
         txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
+        txtdireccion1 = new RSMaterialComponent.RSTextFieldMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -113,7 +110,7 @@ private String[] datos; // Almacena los datos ingresados
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setText("Telefono:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 130, -1, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 150, -1, -1));
 
         txttelefono.setForeground(new java.awt.Color(0, 0, 0));
         txttelefono.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -128,16 +125,6 @@ private String[] datos; // Almacena los datos ingresados
         });
         jPanel1.add(txttelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, 200, 30));
 
-        cmbTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Materiales", "Herramientas" }));
-        cmbTipo.setColorMaterial(new java.awt.Color(0, 0, 0));
-        cmbTipo.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        cmbTipo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbTipoActionPerformed(evt);
-            }
-        });
-        jPanel1.add(cmbTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 200, 30));
-
         txtproducto.setForeground(new java.awt.Color(0, 0, 0));
         txtproducto.setColorMaterial(new java.awt.Color(0, 0, 0));
         txtproducto.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -151,18 +138,18 @@ private String[] datos; // Almacena los datos ingresados
         });
         jPanel1.add(txtproducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 200, 30));
 
-        txtdireccion.setForeground(new java.awt.Color(0, 0, 0));
-        txtdireccion.setColorMaterial(new java.awt.Color(0, 0, 0));
-        txtdireccion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtdireccion.setPhColor(new java.awt.Color(0, 0, 0));
-        txtdireccion.setPlaceholder("Ingrese la cantidad...");
-        txtdireccion.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtdireccion.addActionListener(new java.awt.event.ActionListener() {
+        txttipo.setForeground(new java.awt.Color(0, 0, 0));
+        txttipo.setColorMaterial(new java.awt.Color(0, 0, 0));
+        txttipo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txttipo.setPhColor(new java.awt.Color(0, 0, 0));
+        txttipo.setPlaceholder("Ingrese la cantidad...");
+        txttipo.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txttipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtdireccionActionPerformed(evt);
+                txttipoActionPerformed(evt);
             }
         });
-        jPanel1.add(txtdireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 240, 200, 30));
+        jPanel1.add(txttipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 200, 30));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel8.setText("Nombre:");
@@ -180,6 +167,19 @@ private String[] datos; // Almacena los datos ingresados
             }
         });
         jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 200, 30));
+
+        txtdireccion1.setForeground(new java.awt.Color(0, 0, 0));
+        txtdireccion1.setColorMaterial(new java.awt.Color(0, 0, 0));
+        txtdireccion1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtdireccion1.setPhColor(new java.awt.Color(0, 0, 0));
+        txtdireccion1.setPlaceholder("Ingrese la cantidad...");
+        txtdireccion1.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtdireccion1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtdireccion1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtdireccion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 240, 200, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -210,52 +210,74 @@ private String[] datos; // Almacena los datos ingresados
     }//GEN-LAST:event_txtCodigoActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        guardado = false;
-        setVisible(false); // Cerrar el diálogo
+   
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        datos = new String[]{
-            txtCodigo.getText(),
-            txtNombre.getText(),
-            txttelefono.getText(),
-            txtdireccion.getText(),
-            txtproducto.getText(),
-            (String) cmbTipo.getSelectedItem()
+     
 
-        };
-
-        // Validar que los campos no estén vacíos
-        for (String dato : datos) {
-            if (dato.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Todos los campos deben estar llenos", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
-
-        guardado = true;
-        setVisible(false); // Cierra el diálogo
+    try {
+        // Obtener valores
+        String codigo = (txtCodigo.getText());
+        String nombre = txtNombre.getText();
+        String telefono = txttelefono.getText();
+        String direccion = txttipo.getText();
+        String tipo = txttipo.getText();
+        String producto = txtproducto.getText();
+        
+        
+        // Insertar en BD
+        Connection con = new Conexion().getConnection();
+        String sql = "INSERT INTO proveedor (codigo_proveedor,nombre, telefono, direccion, tipo, producto) VALUES (?, ?, ?, ?, ?, ?)";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, codigo);
+        ps.setString(2, nombre);
+        ps.setString(3, telefono);
+        ps.setString(4, direccion);
+        ps.setString(5, tipo);
+        ps.setString(6, producto);
+        
+        
+        
+        ps.executeUpdate();
+        
+        // Cerrar recursos
+        ps.close();
+        con.close();
+        
+        // Cerrar diálogo
+        this.dispose();
+        
+        // Actualizar tabla en Produccion
+       
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "La cantidad debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void txttelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttelefonoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txttelefonoActionPerformed
 
-    private void cmbTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbTipoActionPerformed
-
     private void txtproductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtproductoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtproductoActionPerformed
 
-    private void txtdireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdireccionActionPerformed
+    private void txttipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttipoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtdireccionActionPerformed
+    }//GEN-LAST:event_txttipoActionPerformed
 
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
+
+    private void txtdireccion1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdireccion1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtdireccion1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -302,7 +324,6 @@ private String[] datos; // Almacena los datos ingresados
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
-    private RSMaterialComponent.RSComboBoxMaterial cmbTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -314,8 +335,9 @@ private String[] datos; // Almacena los datos ingresados
     private javax.swing.JPanel jPanel2;
     private RSMaterialComponent.RSTextFieldMaterial txtCodigo;
     private RSMaterialComponent.RSTextFieldMaterial txtNombre;
-    private RSMaterialComponent.RSTextFieldMaterial txtdireccion;
+    private RSMaterialComponent.RSTextFieldMaterial txtdireccion1;
     private RSMaterialComponent.RSTextFieldMaterial txtproducto;
     private RSMaterialComponent.RSTextFieldMaterial txttelefono;
+    private RSMaterialComponent.RSTextFieldMaterial txttipo;
     // End of variables declaration//GEN-END:variables
 }

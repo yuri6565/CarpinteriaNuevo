@@ -5,10 +5,15 @@
 package vista;
 
 import java.awt.Color;
-import java.util.Random;
-import java.util.regex.Pattern;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
@@ -27,40 +32,43 @@ private DefaultTableModel modeloTabla;
      */
     public proveedores() {
         initComponents();
-      rSTextFieldMaterialIcon1.getDocument().addDocumentListener(new DocumentListener() {
-         
+        
+      TablaP.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        TablaP.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Codigo", "Nombre", "Telefono", "Direccion", "Tipo", "Producto"}
+        ));
 
+        TablaP.setCellSelectionEnabled(false);
+        TablaP.setRowSelectionAllowed(true);
+        TablaP.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+        Color colorSeleccion = new Color(109, 160, 221);
+        Color colorTexto = Color.white;
+
+        TablaP.setSelectionBackground(colorSeleccion);
+        TablaP.setSelectionForeground(colorTexto);
+
+        txtbuscar.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                filtrarTabla();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                filtrarTabla();
             }
+
             @Override
             public void changedUpdate(DocumentEvent e) {
-                filterTables();
+                filtrarTabla();
             }
-      });
+        });
+        
+        cargarTablaProveedor();// Carga Tabla1
+    }
 
- initComponents();
-             TablaP.setBackground(new Color(245,246,250)); // Blanco grisáceo
-     TablaP.setOpaque(true);
-     TablaP.setFillsViewportHeight(true); // Ajusta el fondo en toda la tabla
-        
-     TablaP.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        
-     modeloTabla = new DefaultTableModel(){
-    @Override
-    public boolean isCellEditable(int row, int column) {
-        return false; // Evita la edición en todas las celdas
-    }
-};
-     modeloTabla.setColumnIdentifiers(new String[]{ "Codigo", "Nombre", "Telefono", "Direccion", "Producto", "Tipo"});
-     TablaP.setModel(modeloTabla);
-    }
    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -71,12 +79,11 @@ private DefaultTableModel modeloTabla;
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         editarBtn = new RSMaterialComponent.RSButtonMaterialTwo();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        TablaP = new RSMaterialComponent.RSTableMetroCustom();
         Añadir1 = new RSMaterialComponent.RSButtonMaterialTwo();
-        Buscar1 = new RSMaterialComponent.RSButtonMaterialTwo();
         eliminarBtn = new RSMaterialComponent.RSButtonMaterialTwo();
-        rSTextFieldMaterialIcon1 = new RSMaterialComponent.RSTextFieldMaterialIcon();
+        txtbuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TablaP = new RSMaterialComponent.RSTableMetro();
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setPreferredSize(new java.awt.Dimension(1290, 730));
@@ -97,24 +104,6 @@ private DefaultTableModel modeloTabla;
         });
         jPanel4.add(editarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 40, 86, 37));
 
-        TablaP.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        TablaP.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Codigo", "Nombre", "Telefono", "Direccion", "Producto", "Tipo"
-            }
-        ));
-        TablaP.setBackgoundHead(new java.awt.Color(29, 30, 51));
-        TablaP.setBackgoundHover(new java.awt.Color(29, 30, 51));
-        TablaP.setColorPrimaryText(new java.awt.Color(0, 0, 0));
-        TablaP.setColorSecundaryText(new java.awt.Color(0, 0, 0));
-        TablaP.setSelectionBackground(new java.awt.Color(29, 30, 91));
-        jScrollPane2.setViewportView(TablaP);
-
-        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 1040, 480));
-
         Añadir1.setBackground(new java.awt.Color(29, 30, 51));
         Añadir1.setText("Añadir+");
         Añadir1.setBackgroundHover(new java.awt.Color(29, 30, 31));
@@ -124,16 +113,6 @@ private DefaultTableModel modeloTabla;
             }
         });
         jPanel4.add(Añadir1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 40, 86, 37));
-
-        Buscar1.setBackground(new java.awt.Color(29, 30, 51));
-        Buscar1.setText("Buscar");
-        Buscar1.setBackgroundHover(new java.awt.Color(29, 30, 31));
-        Buscar1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Buscar1ActionPerformed(evt);
-            }
-        });
-        jPanel4.add(Buscar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 40, 86, 37));
 
         eliminarBtn.setBackground(new java.awt.Color(29, 30, 51));
         eliminarBtn.setText("Eliminar -");
@@ -145,17 +124,38 @@ private DefaultTableModel modeloTabla;
         });
         jPanel4.add(eliminarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 40, 86, 37));
 
-        rSTextFieldMaterialIcon1.setForeground(new java.awt.Color(29, 30, 91));
-        rSTextFieldMaterialIcon1.setColorIcon(new java.awt.Color(29, 30, 111));
-        rSTextFieldMaterialIcon1.setColorMaterial(new java.awt.Color(29, 30, 111));
-        rSTextFieldMaterialIcon1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
-        rSTextFieldMaterialIcon1.setPlaceholder("Buscar");
-        rSTextFieldMaterialIcon1.addActionListener(new java.awt.event.ActionListener() {
+        txtbuscar.setForeground(new java.awt.Color(29, 30, 91));
+        txtbuscar.setColorIcon(new java.awt.Color(29, 30, 111));
+        txtbuscar.setColorMaterial(new java.awt.Color(29, 30, 111));
+        txtbuscar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
+        txtbuscar.setPlaceholder("Buscar");
+        txtbuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSTextFieldMaterialIcon1ActionPerformed(evt);
+                txtbuscarActionPerformed(evt);
             }
         });
-        jPanel4.add(rSTextFieldMaterialIcon1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, -1, 28));
+        jPanel4.add(txtbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, -1, 28));
+
+        TablaP.setForeground(new java.awt.Color(255, 255, 255));
+        TablaP.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        TablaP.setAlignmentX(0.1F);
+        TablaP.setAlignmentY(0.1F);
+        TablaP.setBackgoundHead(new java.awt.Color(46, 49, 82));
+        TablaP.setBackgoundHover(new java.awt.Color(46, 49, 82));
+        TablaP.setColorBorderRows(new java.awt.Color(153, 153, 153));
+        TablaP.setColorPrimaryText(new java.awt.Color(46, 49, 82));
+        TablaP.setColorSecondary(new java.awt.Color(255, 255, 255));
+        TablaP.setColorSecundaryText(new java.awt.Color(46, 49, 82));
+        jScrollPane2.setViewportView(TablaP);
+
+        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 1190, 490));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -231,136 +231,118 @@ private DefaultTableModel modeloTabla;
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
- private void agregarFilaATabla(String[] datos) {
-    modeloTabla.addRow(datos);
-}
+ 
     private void editarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarBtnActionPerformed
 
- int filaSeleccionada = TablaP.getSelectedRow();
-        if (filaSeleccionada >= 0) {
-            String[] datosFila = new String[5];
-            for (int i = 0; i < 5; i++) {
-                datosFila[i] = (String) TablaP.getValueAt(filaSeleccionada, i);
-            }
-
-            proveedorEditar dialogoEditar = new proveedorEditar(null, true);
-            dialogoEditar.cargarDatos(datosFila);
-            dialogoEditar.setLocationRelativeTo(null);
-            dialogoEditar.setVisible(true);
-
-            if (dialogoEditar.isGuardado()) {
-                String[] nuevosDatos = dialogoEditar.getDatos();
-                for (int i = 0; i < 5; i++) {
-                    TablaP.setValueAt(nuevosDatos[i], filaSeleccionada, i);
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccione una fila para editar.");
-        }       
-
+ proveedorEditar dialog = new proveedorEditar(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+        cargarTablaProveedor();
          
     }//GEN-LAST:event_editarBtnActionPerformed
 
     private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
         // TODO add your handling code here:
         proveedornuevo dialog = new proveedornuevo(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
+       dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-
-        if (dialog.isGuardado()) {
-            String[] datos = dialog.getDatos();
-            agregarFilaATabla(datos);
-        }
+        cargarTablaProveedor();
 
     }//GEN-LAST:event_Añadir1ActionPerformed
 
-    private void Buscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Buscar1ActionPerformed
-filterTables();
-    }//GEN-LAST:event_Buscar1ActionPerformed
-
     private void eliminarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarBtnActionPerformed
-        // TODO add your handling code here:
-        int[] filasSeleccionadas = TablaP.getSelectedRows();
+         int[] selectedRows = TablaP.getSelectedRows(); // Obtener todas las filas seleccionadas
 
-    if (filasSeleccionadas.length > 0) {
-        int confirmacion = JOptionPane.showConfirmDialog(
-            null,
-            "¿Está seguro de que desea eliminar los movimientos seleccionados?",
-            "Confirmar Eliminación",
-            JOptionPane.YES_NO_OPTION
+        if (selectedRows.length == 0) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Por favor seleccione al menos una fila para eliminar",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        // Confirmar eliminación
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION
         );
 
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            DefaultTableModel modelo = (DefaultTableModel) TablaP.getModel();
-
-            // Eliminar desde la última fila seleccionada para evitar problemas de índice
-            for (int i = filasSeleccionadas.length - 1; i >= 0; i--) {
-                modelo.removeRow(filasSeleccionadas[i]);
-            }
+        if (confirm != JOptionPane.YES_OPTION) {
+            return; // Si el usuario cancela, no hacer nada
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Seleccione al menos una fila para eliminar.");
-    }
+
+        try (Connection con = new proveedores.Conexion().getConnection()) {
+            // Desactivar auto-commit para manejar transacciones
+            con.setAutoCommit(false);
+
+            String sql = "DELETE FROM proveedor WHERE codigo_proveedor = ?";
+            boolean error = false;
+
+            // Eliminar en orden inverso para evitar problemas con los índices de la tabla
+            for (int i = selectedRows.length - 1; i >= 0; i--) {
+                int selectedRow = selectedRows[i];
+                int codigo_proveedor = (int) TablaP.getValueAt(selectedRow, 0);
+
+                try (PreparedStatement ps = con.prepareStatement(sql)) {
+                    ps.setInt(1, codigo_proveedor);
+                    ps.executeUpdate();
+
+                    // Eliminar la fila de la tabla visual
+                    DefaultTableModel model = (DefaultTableModel) TablaP.getModel();
+                    model.removeRow(selectedRow);
+                } catch (SQLException e) {
+                    error = true;
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Error al eliminar el registro con ID " + codigo_proveedor + ": " + e.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    break; // Detener si hay un error
+                }
+            }
+
+            if (error) {
+                con.rollback(); // Si hay error, deshacer cambios
+            } else {
+                con.commit(); // Si todo va bien, confirmar cambios
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Se eliminaron " + selectedRows.length + " registros correctamente",
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error en la conexión: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }//GEN-LAST:event_eliminarBtnActionPerformed
 
-    private void rSTextFieldMaterialIcon1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSTextFieldMaterialIcon1ActionPerformed
-        filterTables();
-    }//GEN-LAST:event_rSTextFieldMaterialIcon1ActionPerformed
+    private void txtbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarActionPerformed
+        
+    }//GEN-LAST:event_txtbuscarActionPerformed
 
     private void editarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editarBtnMouseClicked
         // TODO add your handling code here:
-                                           
-    try {
-        int filaSeleccionada = TablaP.getSelectedRow();
-        if (filaSeleccionada >= 0) {
-            String[] datosFila = new String[6];
-            for (int i = 0; i < 6; i++) {
-                datosFila[i] = (String) TablaP.getValueAt(filaSeleccionada, i);
-            }
-
-            proveedorEditar dialogoEditar = new proveedorEditar(null, true);
-            dialogoEditar.cargarDatos(datosFila);
-            dialogoEditar.setLocationRelativeTo(null);
-            dialogoEditar.setVisible(true); // Corrige el nombre de la variable aquí
-
-            if (dialogoEditar.isGuardado()) {
-                String[] nuevosDatos = dialogoEditar.getDatos();
-                for (int i = 0; i < 6; i++) {
-                    TablaP.setValueAt(nuevosDatos[i], filaSeleccionada, i);
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccione una fila para editar.");
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al abrir el editor: " + e.getMessage());
-    }
+   
 
     }//GEN-LAST:event_editarBtnMouseClicked
 
     
-    private int generateRandomId(int digits) {
-    Random random = new Random();
-    int lowerBound = (int) Math.pow(10, digits - 1); // 10^(n-1)
-    int upperBound = (int) Math.pow(10, digits) - 1; // 10^n - 1
-    return random.nextInt(upperBound - lowerBound + 1) + lowerBound;
-}
-
-    private boolean idExists(int id) {
-    DefaultTableModel model = (DefaultTableModel) TablaP.getModel();
-    for (int i = 0; i < model.getRowCount(); i++) {
-        if ((Integer) model.getValueAt(i, 0) == id) { // Asegúrate de que estás verificando la columna correcta
-            return true; // El ID ya existe
-        }
-    }
-    return false; // El ID no existe
-}
+  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialTwo Añadir1;
-    private RSMaterialComponent.RSButtonMaterialTwo Buscar1;
-    private RSMaterialComponent.RSTableMetroCustom TablaP;
+    private RSMaterialComponent.RSTableMetro TablaP;
     private RSMaterialComponent.RSButtonMaterialTwo editarBtn;
     private RSMaterialComponent.RSButtonMaterialTwo eliminarBtn;
     private javax.swing.JPanel jPanel1;
@@ -368,43 +350,85 @@ filterTables();
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
-    private RSMaterialComponent.RSTextFieldMaterialIcon rSTextFieldMaterialIcon1;
+    private RSMaterialComponent.RSTextFieldMaterialIcon txtbuscar;
     // End of variables declaration//GEN-END:variables
-private void filterTables() {
-        String searchText = rSTextFieldMaterialIcon1.getText().toLowerCase(); // Obtener el texto de búsqueda
 
-        // Filtrar cada tabla
-        if (searchText.length() == 1) {
-            // Filtrar por la columna "#" (índice 0)
-            filterTable(TablaP, searchText, 0); // Cambia 0 por el índice de la columna "#" en Tabla1
-            
-        } else if (searchText.length() >= 2) {
-            // Filtrar en todas las columnas
-            filterTable(TablaP, searchText, -1); // Mostrar todas las filas en Tabla1
-           
-        } else {
-            // Si no hay texto, mostrar todas las filas
-            filterTable(TablaP, "", -1); // Mostrar todas las filas en Tabla1
-            
-        }
-    }
+public class Conexion {
 
-private void filterTable(JTable table, String searchText, int columnIndex) {
-        DefaultTableModel model = (DefaultTableModel) table.getModel(); // Obtener el modelo de la tabla
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model); // Crear un sorter para la tabla
-        table.setRowSorter(sorter); // Establecer el sorter en la tabla
-
-        // Filtrar las filas
-        if (searchText.trim().isEmpty()) {
-            sorter.setRowFilter(null); // Si no hay texto, mostrar todas las filas
-        } else {
-            // Filtrar en la columna especificada o en todas las columnas si columnIndex es -1
-            if (columnIndex == -1) {
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(searchText))); // Filtrar en todas las columnas
-            } else {
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(searchText), columnIndex)); // Filtrar en la columna especificada
+        public Connection getConnection() {
+            Connection con = null;
+            try {
+                String myBD = "jdbc:mysql://localhost:3306/carpinteriasistema?serverTimezone=UTC";
+                con = DriverManager.getConnection(myBD, "root", "");
+                System.out.println("Conexión exitosa.");
+            } catch (SQLException e) {
+                System.out.println("Error al conectar: " + e.getMessage());
             }
+            return con;
         }
     }
+
+public void cargarTablaProveedor() {
+        try (Connection con = new proveedores.Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("SELECT codigo_proveedor, nombre, telefono, direccion, tipo,producto  FROM proveedor"); ResultSet rs = ps.executeQuery()) {
+
+            DefaultTableModel model = (DefaultTableModel) TablaP.getModel();
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getInt("codigo_proveedor"),
+                    rs.getString("nombre"),
+                    rs.getString("telefono"),
+                    rs.getString("direccion"),
+                    rs.getString("tipo"),
+                    rs.getString("producto"),});
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar datos: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
+
+private void filtrarTabla(){
+    String textobusqueda = txtbuscar.getText().trim();
+    DefaultTableModel modelo = (DefaultTableModel)TablaP.getModel();
+    
+    TableRowSorter<DefaultTableModel>tr= new TableRowSorter<>(modelo);
+    TablaP.setRowSorter(tr);
+    
+    if (textobusqueda.isEmpty()){
+        tr.setRowFilter(null);
+        
+        return;
+        
+    }
+    
+    List<RowFilter<Object, Object>>filters = new ArrayList<>();
+    
+    if(textobusqueda.matches("\\d+")){
+        filters.add(RowFilter.regexFilter("^"+textobusqueda, 0));
+    }
+    
+    filters.add(RowFilter.regexFilter("(?i)"+ textobusqueda ,  1));
+    
+    filters.add(RowFilter.regexFilter("(?i)"+ textobusqueda ,  4));
+    
+    filters.add(RowFilter.regexFilter("(?i)"+ textobusqueda ,  5));
+    
+    tr.setRowFilter(RowFilter.orFilter(filters));
+    
 }
+
+
+
+
+
+
+
+}
+
 
