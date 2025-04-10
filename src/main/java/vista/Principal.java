@@ -719,8 +719,16 @@ public class Principal extends javax.swing.JFrame {
             this.cuatro.setSelected(false);
             this.cinco.setSelected(false);
             this.ocho.setSelected(false);
+            this.seis.setSelected(true);
 
-            
+            caja cliente = new caja();
+            cliente.setSize(1290, 730);
+            cliente.setLocation(0, 0);
+
+            contenedor.removeAll();
+            contenedor.add(cliente);
+            contenedor.revalidate();
+            contenedor.repaint();
         }
 
     }//GEN-LAST:event_seisActionPerformed
@@ -733,7 +741,7 @@ public class Principal extends javax.swing.JFrame {
             this.cuatro.setSelected(false);
             this.seis.setSelected(false);
             this.ocho.setSelected(false);
-
+ 
         }
         
     }//GEN-LAST:event_cincoActionPerformed
