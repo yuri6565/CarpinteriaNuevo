@@ -832,6 +832,27 @@ public class Principal extends javax.swing.JFrame {
 
     private void siete1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siete1ActionPerformed
         // TODO add your handling code here:
+          if (!this.siete1.isSelected()) {
+            this.uno.setSelected(false);
+            this.tres.setSelected(false);
+            this.cuatro.setSelected(false);
+            this.cinco.setSelected(false);
+            this.seis.setSelected(false);
+            this.ocho.setSelected(false);
+            this.dos.setSelected(false);
+            this.siete1.setSelected(true);
+            this.nueve.setSelected(false);
+            // Crear y mostrar el panel de inventario
+            Usuario  usu = new Usuario();
+            usu.setSize(1290, 730);
+            usu.setLocation(0, 0);
+
+            contenedor.removeAll();
+            contenedor.add(usu);
+            contenedor.revalidate();
+            contenedor.repaint();
+
+        }
     }//GEN-LAST:event_siete1ActionPerformed
 
     private void uno1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uno1ActionPerformed
