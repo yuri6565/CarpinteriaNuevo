@@ -4,27 +4,7 @@
  */
 package vista.Produccion;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.HeadlessException;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
 import javax.swing.JFrame;
-import javax.swing.JTable;
-import javax.swing.RowFilter;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
-import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -32,13 +12,11 @@ import javax.swing.ListSelectionModel;
  */
 public final class Produccion extends javax.swing.JPanel {
 
-    private Produccion produccionPanel;
 
     /**
      * Creates new form Produccion
      */
     public Produccion(JFrame jFrame, boolean par) {
-        initComponents();
         initComponents();
 
         this.produccion.setSelected(true);

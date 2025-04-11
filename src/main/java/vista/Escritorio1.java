@@ -35,8 +35,6 @@ public class Escritorio1 extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        rSLabelCircleImage1 = new rojerusan.RSLabelCircleImage();
-        rSLabelCircleImage2 = new rojerusan.RSLabelCircleImage();
         jPanel5 = new javax.swing.JPanel();
         rSLabelDropcap1 = new rojeru_san.rslabel.RSLabelDropcap();
         jLabel3 = new javax.swing.JLabel();
@@ -68,14 +66,6 @@ public class Escritorio1 extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("VISION");
         jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 150, -1, -1));
-
-        rSLabelCircleImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mision-cumplida.png"))); // NOI18N
-        rSLabelCircleImage1.setColorBorde(new java.awt.Color(41, 55, 102));
-        jPanel4.add(rSLabelCircleImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 290, -1, -1));
-
-        rSLabelCircleImage2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vision.png"))); // NOI18N
-        rSLabelCircleImage2.setColorBorde(new java.awt.Color(41, 55, 102));
-        jPanel4.add(rSLabelCircleImage2, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 300, -1, -1));
 
         jPanel5.setBackground(new java.awt.Color(41, 55, 102));
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -134,8 +124,6 @@ public class Escritorio1 extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private rojerusan.RSLabelCircleImage rSLabelCircleImage1;
-    private rojerusan.RSLabelCircleImage rSLabelCircleImage2;
     private rojeru_san.rslabel.RSLabelDropcap rSLabelDropcap1;
     private rojeru_san.rslabel.RSLabelDropcap rSLabelDropcap2;
     // End of variables declaration//GEN-END:variables
