@@ -31,15 +31,11 @@ public class catalogo extends javax.swing.JPanel {
         jPanel6 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        rSLabelImage2 = new rojerusan.RSLabelImage();
-        rSLabelImage3 = new rojerusan.RSLabelImage();
-        rSLabelImage4 = new rojerusan.RSLabelImage();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         rSLabelImage1 = new rojeru_san.rslabel.RSLabelImage();
         jLabel12 = new javax.swing.JLabel();
-        rSLabelImage6 = new rojerusan.RSLabelImage();
         rSLabelImage5 = new rojeru_san.rslabel.RSLabelImage();
         jLabel16 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
@@ -77,15 +73,6 @@ public class catalogo extends javax.swing.JPanel {
         });
         jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 360, -1, -1));
 
-        rSLabelImage2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/comedormad.jpg"))); // NOI18N
-        jPanel2.add(rSLabelImage2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, 190, -1));
-
-        rSLabelImage3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/escritorio.jpg"))); // NOI18N
-        jPanel2.add(rSLabelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 200, 190, -1));
-
-        rSLabelImage4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mesaredonda.jpg"))); // NOI18N
-        jPanel2.add(rSLabelImage4, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 200, 190, -1));
-
         jPanel3.setBackground(new java.awt.Color(41, 55, 102));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -115,9 +102,6 @@ public class catalogo extends javax.swing.JPanel {
             }
         });
         jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 190, -1, -1));
-
-        rSLabelImage6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/banco.jpg"))); // NOI18N
-        jPanel3.add(rSLabelImage6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, 190, -1));
 
         rSLabelImage5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bar.jpg"))); // NOI18N
         jPanel3.add(rSLabelImage5, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 20, 190, 154));
@@ -268,10 +252,6 @@ public class catalogo extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private rojeru_san.rslabel.RSLabelImage rSLabelImage1;
-    private rojerusan.RSLabelImage rSLabelImage2;
-    private rojerusan.RSLabelImage rSLabelImage3;
-    private rojerusan.RSLabelImage rSLabelImage4;
     private rojeru_san.rslabel.RSLabelImage rSLabelImage5;
-    private rojerusan.RSLabelImage rSLabelImage6;
     // End of variables declaration//GEN-END:variables
 }
