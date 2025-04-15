@@ -2,13 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista.Produccion;
+package vista.Produccionn;
 
 import java.awt.Frame;
+import java.awt.HeadlessException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import javax.swing.JFrame;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 import modelo.Conexion;
@@ -17,25 +19,23 @@ import modelo.Conexion;
  *
  * @author pc
  */
-public class EditDetalleProduccion extends javax.swing.JDialog {
+public class EditEtapaProduccion extends javax.swing.JDialog {
 
-    private int idProduccionActual = 0;
+    
+    private int idProduccionActual;
 
     /**
-     * Creates new form EditDetalleProduccion
-     *
+     * Creates new form EtapaProduccion
      * @param parent
      * @param modal
+     * @param produccionPanel
      */
-    public EditDetalleProduccion(Frame parent, boolean modal) {
+    public EditEtapaProduccion(Frame parent, boolean modal) {
         super(parent, modal);
+       
         initComponents();
         setLocationRelativeTo(parent);
-
-    }
-
-    private EditDetalleProduccion(JFrame jFrame, boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        txtetapa.setEditable(true); // Habilitar edición del campo
     }
 
     /**
@@ -54,12 +54,14 @@ public class EditDetalleProduccion extends javax.swing.JDialog {
         btnGuardar = new rojeru_san.RSButtonRiple();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        txtetapa = new RSMaterialComponent.RSTextFieldMaterial();
         btnCancelar = new rojeru_san.RSButtonRiple();
-        txtdimension = new RSMaterialComponent.RSTextFieldTwo();
-        txtmaterial = new RSMaterialComponent.RSTextFieldTwo();
-        txtcantidad = new RSMaterialComponent.RSTextFieldTwo();
         jLabel11 = new javax.swing.JLabel();
+        Boxestado = new RSMaterialComponent.RSComboBoxMaterial();
+        txtFechainicio = new com.toedter.calendar.JDateChooser();
+        txtfechafin = new com.toedter.calendar.JDateChooser();
         txtBusca = new RSMaterialComponent.RSTextFieldTwo();
+        jLabel12 = new javax.swing.JLabel();
         btnBusca = new rojeru_san.RSButtonRiple();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -73,15 +75,15 @@ public class EditDetalleProduccion extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Century751 BT", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Detalle Produccion");
+        jLabel1.setText("Etapa Produccion");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Dimensiones:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 160, -1, -1));
+        jLabel6.setText("Estado:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, -1, -1));
 
         btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar.setText("Guardar");
@@ -95,16 +97,31 @@ public class EditDetalleProduccion extends javax.swing.JDialog {
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel9.setText("Material usado:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
+        jLabel9.setText("Fecha final:");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 190, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel10.setText("Busca ID:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
+        jLabel10.setText("Nombre etapa:");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
+
+        txtetapa.setEditable(false);
+        txtetapa.setBackground(new java.awt.Color(255, 255, 255));
+        txtetapa.setForeground(new java.awt.Color(0, 0, 0));
+        txtetapa.setColorMaterial(new java.awt.Color(0, 0, 0));
+        txtetapa.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtetapa.setPhColor(new java.awt.Color(0, 0, 0));
+        txtetapa.setPlaceholder("");
+        txtetapa.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtetapa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtetapaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtetapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 200, 30));
 
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
-        btnCancelar.setText("Volver");
+        btnCancelar.setText("Cancelar");
         btnCancelar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,46 +130,31 @@ public class EditDetalleProduccion extends javax.swing.JDialog {
         });
         jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 270, 140, -1));
 
-        txtdimension.setForeground(new java.awt.Color(46, 49, 82));
-        txtdimension.setBorderColor(new java.awt.Color(46, 49, 82));
-        txtdimension.setPhColor(new java.awt.Color(46, 49, 82));
-        txtdimension.setPlaceholder("");
-        txtdimension.setSelectionColor(new java.awt.Color(46, 49, 82));
-        txtdimension.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtdimensionActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtdimension, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 190, 200, 30));
-
-        txtmaterial.setForeground(new java.awt.Color(46, 49, 82));
-        txtmaterial.setBorderColor(new java.awt.Color(46, 49, 82));
-        txtmaterial.setPhColor(new java.awt.Color(46, 49, 82));
-        txtmaterial.setPlaceholder("");
-        txtmaterial.setSelectionColor(new java.awt.Color(46, 49, 82));
-        txtmaterial.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtmaterialActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtmaterial, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 200, 30));
-
-        txtcantidad.setForeground(new java.awt.Color(46, 49, 82));
-        txtcantidad.setBorderColor(new java.awt.Color(46, 49, 82));
-        txtcantidad.setPhColor(new java.awt.Color(46, 49, 82));
-        txtcantidad.setPlaceholder("");
-        txtcantidad.setSelectionColor(new java.awt.Color(46, 49, 82));
-        txtcantidad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtcantidadActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtcantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 110, 200, 30));
-
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel11.setText("Cantidad:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 80, -1, -1));
+        jLabel11.setText("Fecha inicio:");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, -1, -1));
+
+        Boxestado.setForeground(new java.awt.Color(102, 102, 102));
+        Boxestado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", "pendiente", "proceso", "completado" }));
+        Boxestado.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        Boxestado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BoxestadoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Boxestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 160, -1, 30));
+
+        txtFechainicio.setBackground(new java.awt.Color(255, 255, 255));
+        txtFechainicio.setForeground(new java.awt.Color(255, 255, 255));
+        txtFechainicio.setDateFormatString("y-MM-d");
+        txtFechainicio.setMaxSelectableDate(new java.util.Date(253370786472000L));
+        jPanel1.add(txtFechainicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 190, 30));
+
+        txtfechafin.setBackground(new java.awt.Color(255, 255, 255));
+        txtfechafin.setForeground(new java.awt.Color(255, 255, 255));
+        txtfechafin.setDateFormatString("y-MM-d");
+        jPanel1.add(txtfechafin, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 220, 190, 30));
 
         txtBusca.setForeground(new java.awt.Color(46, 49, 82));
         txtBusca.setBorderColor(new java.awt.Color(46, 49, 82));
@@ -164,7 +166,12 @@ public class EditDetalleProduccion extends javax.swing.JDialog {
                 txtBuscaActionPerformed(evt);
             }
         });
-        jPanel1.add(txtBusca, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 100, 30));
+        jPanel1.add(txtBusca, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 100, 30));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setText("Busca ID:");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
 
         btnBusca.setBackground(new java.awt.Color(46, 49, 82));
         btnBusca.setText("Buscar");
@@ -174,7 +181,7 @@ public class EditDetalleProduccion extends javax.swing.JDialog {
                 btnBuscaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBusca, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 90, 30));
+        jPanel1.add(btnBusca, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, 90, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -193,56 +200,109 @@ public class EditDetalleProduccion extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (idProduccionActual == 0) {
-            JOptionPane.showMessageDialog(this, "Primero busque un registro para editar", "Error", JOptionPane.ERROR_MESSAGE);
+    int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de guardar los cambios?",
+                "Confirmar",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+// Validación de campos
+        if (txtFechainicio.getDate() == null || txtfechafin.getDate() == null
+                || Boxestado.getSelectedItem() == null || Boxestado.getSelectedIndex() == 0) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Todos los campos son obligatorios",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
+            // Obtener valores
+            Date fechaInicio = new Date(txtFechainicio.getDate().getTime());
+            Date fechaFin = new Date(txtfechafin.getDate().getTime());
+            String estado = Boxestado.getSelectedItem().toString();
+
+            // Validar fechas
+            if (fechaFin.before(fechaInicio)) {
+                JOptionPane.showMessageDialog(this,
+                        "La fecha final no puede ser anterior a la fecha inicial",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             Connection con = Conexion.getConnection();
-            String sql = "UPDATE detalle_produccion SET materiales = ?, dimensiones = ?, cantidad = ? WHERE idetalle_produccion = ?";
 
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, txtmaterial.getText());
-            ps.setString(2, txtdimension.getText());
-            ps.setInt(3, Integer.parseInt(txtcantidad.getText()));
-            ps.setInt(4, idProduccionActual);
+            if (idProduccionActual == 0) {
+                // Insertar nuevo registro
+                try (PreparedStatement ps = con.prepareStatement(
+                        "INSERT INTO etapa_produccion (fecha_inicio, fecha_fin, estado) VALUES (?, ?, ?)")) {
 
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(this, "Datos actualizados correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    ps.setDate(1, fechaInicio);
+                    ps.setDate(2, fechaFin);
+                    ps.setString(3, estado);
+
+                    ps.executeUpdate();
+
+                    JOptionPane.showMessageDialog(this,
+                            "Datos guardados correctamente",
+                            "Éxito",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
             } else {
-                JOptionPane.showMessageDialog(this, "No se pudo actualizar el registro", "Error", JOptionPane.ERROR_MESSAGE);
+                // Actualizar registro existente
+                try (PreparedStatement ps = con.prepareStatement(
+                        "UPDATE etapa_produccion SET fecha_inicio = ?, fecha_fin = ?, estado = ? WHERE idetapa_produccion = ?")) {
+
+                    ps.setDate(1, fechaInicio);
+                    ps.setDate(2, fechaFin);
+                    ps.setString(3, estado);
+                    ps.setInt(4, idProduccionActual);
+
+                    int affectedRows = ps.executeUpdate();
+                    if (affectedRows > 0) {
+                        JOptionPane.showMessageDialog(this,
+                                "Datos actualizados correctamente",
+                                "Éxito",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
             }
 
             con.close();
             this.dispose();
 
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "La cantidad debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
+         
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al guardar: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }       
+    }
+// Métodos auxiliares
+
+    private void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void txtetapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtetapaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtetapaActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
         
+
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void txtdimensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdimensionActionPerformed
+    private void BoxestadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxestadoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtdimensionActionPerformed
-
-    private void txtmaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtmaterialActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtmaterialActionPerformed
-
-    private void txtcantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcantidadActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtcantidadActionPerformed
+    }//GEN-LAST:event_BoxestadoActionPerformed
 
     private void txtBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscaActionPerformed
         // TODO add your handling code here:
@@ -257,30 +317,28 @@ public class EditDetalleProduccion extends javax.swing.JDialog {
             }
 
             int id = Integer.parseInt(idStr);
-            Connection con = Conexion.getConnection();
-            String sql = "SELECT * FROM detalle_produccion WHERE idetalle_produccion = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
-
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                idProduccionActual = id;
-                // Llenar los campos con los datos de la base de datos
-                txtmaterial.setText(rs.getString("materiales")); // Asegúrate que este campo exista en tu tabla
-                txtdimension.setText(rs.getString("dimensiones")); // Asegúrate que este campo exista en tu tabla
-                txtcantidad.setText(String.valueOf(rs.getInt("cantidad"))); // Asegúrate que este campo exista en tu tabla
-
-                // Puedes agregar más campos según necesites
-            } else {
-                JOptionPane.showMessageDialog(this, "No se encontró producción con ese ID", "Error", JOptionPane.ERROR_MESSAGE);
+            try (Connection con = Conexion.getConnection()) {
+                String sql = "SELECT * FROM etapa_produccion WHERE idetapa_produccion  = ?";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setInt(1, id);
+                
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    idProduccionActual = id;
+                    txtetapa.setText(rs.getString("nombre_etapa"));
+                    txtFechainicio.setDate(rs.getDate("fecha_inicio"));
+                    txtfechafin.setDate(rs.getDate("fecha_fin"));
+                    String estado = rs.getString("estado");
+                    Boxestado.setSelectedItem(estado);
+                    // Puedes agregar más campos según necesites
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se encontró producción con ese ID", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
-
-            con.close();
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "El ID debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
+        } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al buscar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
         }
     }//GEN-LAST:event_btnBuscaActionPerformed
 
@@ -318,19 +376,21 @@ public class EditDetalleProduccion extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private RSMaterialComponent.RSComboBoxMaterial Boxestado;
     private rojeru_san.RSButtonRiple btnBusca;
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private RSMaterialComponent.RSTextFieldTwo txtBusca;
-    private RSMaterialComponent.RSTextFieldTwo txtcantidad;
-    private RSMaterialComponent.RSTextFieldTwo txtdimension;
-    private RSMaterialComponent.RSTextFieldTwo txtmaterial;
+    private com.toedter.calendar.JDateChooser txtFechainicio;
+    private RSMaterialComponent.RSTextFieldMaterial txtetapa;
+    private com.toedter.calendar.JDateChooser txtfechafin;
     // End of variables declaration//GEN-END:variables
 }

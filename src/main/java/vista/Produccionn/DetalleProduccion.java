@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista.Produccion;
+package vista.Produccionn;
 
+import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -41,13 +42,13 @@ public class DetalleProduccion extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        btnGuardar = new rojeru_san.RSButtonRiple();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        btnCancelar = new rojeru_san.RSButtonRiple();
         txtdimension = new RSMaterialComponent.RSTextFieldTwo();
         txtmaterial = new RSMaterialComponent.RSTextFieldTwo();
         txtcantidad = new RSMaterialComponent.RSTextFieldTwo();
+        btnCancelar1 = new rojeru_san.RSButtonRiple();
+        btnGuardar1 = new rojeru_san.RSButtonRiple();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -70,16 +71,6 @@ public class DetalleProduccion extends javax.swing.JDialog {
         jLabel6.setText("Dimensiones:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, -1, -1));
 
-        btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
-        btnGuardar.setText("Guardar");
-        btnGuardar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 270, 140, -1));
-
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Material usado:");
@@ -89,16 +80,6 @@ public class DetalleProduccion extends javax.swing.JDialog {
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Cantidad:");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
-
-        btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
-        btnCancelar.setText("Volver");
-        btnCancelar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 270, 140, -1));
 
         txtdimension.setForeground(new java.awt.Color(46, 49, 82));
         txtdimension.setBorderColor(new java.awt.Color(46, 49, 82));
@@ -110,7 +91,7 @@ public class DetalleProduccion extends javax.swing.JDialog {
                 txtdimensionActionPerformed(evt);
             }
         });
-        jPanel1.add(txtdimension, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 100, 200, 30));
+        jPanel1.add(txtdimension, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 100, 200, 30));
 
         txtmaterial.setForeground(new java.awt.Color(46, 49, 82));
         txtmaterial.setBorderColor(new java.awt.Color(46, 49, 82));
@@ -136,6 +117,30 @@ public class DetalleProduccion extends javax.swing.JDialog {
         });
         jPanel1.add(txtcantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 200, 30));
 
+        btnCancelar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnCancelar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
+        btnCancelar1.setText("Volver");
+        btnCancelar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        btnCancelar1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelar1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, 140, -1));
+
+        btnGuardar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnGuardar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnGuardar1.setText("Guardar");
+        btnGuardar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        btnGuardar1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnGuardar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardar1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, 140, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -152,55 +157,6 @@ public class DetalleProduccion extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
- // Validación de campos
-    if (txtcantidad.getText().isEmpty() || txtdimension.getText().isEmpty() || txtmaterial.getText().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    try {
-        // Obtener valores
-        int cantidad = Integer.parseInt(txtcantidad.getText());
-        String dimensiones = txtdimension.getText();
-        String materiales = txtmaterial.getText();
-        
-        // Insertar en BD
-        Connection con = new Conexion().getConnection();
-        String sql = "INSERT INTO detalle_produccion (cantidad, dimensiones, materiales) VALUES (?, ?, ?)";
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setInt(1, cantidad);
-        ps.setString(2, dimensiones);
-        ps.setString(3, materiales);
-        
-        
-        
-        ps.executeUpdate();
-        
-        // Cerrar recursos
-        ps.close();
-        con.close();
-        
-        // Cerrar diálogo
-        this.dispose();
-        
-        // Actualizar tabla en Produccion
-       
-        
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "La cantidad debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        this.dispose();
-       
-
-    }//GEN-LAST:event_btnCancelarActionPerformed
-
     private void txtdimensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdimensionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtdimensionActionPerformed
@@ -212,6 +168,68 @@ public class DetalleProduccion extends javax.swing.JDialog {
     private void txtcantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcantidadActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtcantidadActionPerformed
+
+    private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
+        this.dispose();
+
+    }//GEN-LAST:event_btnCancelar1ActionPerformed
+
+    private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
+            // Validación de campos vacíos
+    if (txtcantidad.getText().isEmpty() || txtdimension.getText().isEmpty() || txtmaterial.getText().isEmpty()) {
+        new espacio_alerta((Frame) this.getParent(), true, "Error", "Todos los campos son obligatorios").setVisible(true);
+        return;
+    }
+
+    try {
+        // Validación de número
+        int cantidad = Integer.parseInt(txtcantidad.getText());
+        String dimensiones = txtdimension.getText();
+        String materiales = txtmaterial.getText();
+
+        // Mostrar diálogo de confirmación (alertaa)
+        alertaa confirmDialog = new alertaa(
+            (Frame) this.getParent(), 
+            true, 
+            "Confirmar", 
+            "¿Desea guardar los datos?"
+        );
+        confirmDialog.setLocationRelativeTo(null);
+        confirmDialog.setVisible(true);
+
+        if (confirmDialog.opcionConfirmada) { // Si el usuario confirma
+            // Insertar en BD
+            Connection con = new Conexion().getConnection();
+            String sql = "INSERT INTO detalle_produccion (cantidad, dimensiones, materiales) VALUES (?, ?, ?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, cantidad);
+            ps.setString(2, dimensiones);
+            ps.setString(3, materiales);
+            ps.executeUpdate();
+
+            // Mostrar diálogo de éxito
+            Datos_guardados exitoDialog = new Datos_guardados(
+                (Frame) this.getParent(),
+                true,
+                "Éxito",
+                "Datos guardados correctamente"
+            );
+            exitoDialog.setLocationRelativeTo(null);
+            exitoDialog.setVisible(true);
+
+            // Cerrar recursos y ventana
+            ps.close();
+            con.close();
+            this.dispose();
+        }
+
+    } catch (NumberFormatException e) {
+        new Error_fecha((Frame) this.getParent(), true, "Error", "La cantidad debe ser un número").setVisible(true);
+    } catch (SQLException e) {
+        new Error_guardar((Frame) this.getParent(), true, "Error", "Error al guardar: " + e.getMessage()).setVisible(true);
+        e.printStackTrace();
+    }
+    }//GEN-LAST:event_btnGuardar1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -256,8 +274,8 @@ public class DetalleProduccion extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private rojeru_san.RSButtonRiple btnCancelar;
-    private rojeru_san.RSButtonRiple btnGuardar;
+    private rojeru_san.RSButtonRiple btnCancelar1;
+    private rojeru_san.RSButtonRiple btnGuardar1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel6;

@@ -4,7 +4,7 @@
  */
 package vista;
 
-import vista.Produccion.Produccion;
+import vista.Produccionn.Produccion;
 import java.awt.BorderLayout;
 import javax.swing.JOptionPane;
 
@@ -75,7 +75,6 @@ public class Principal extends javax.swing.JFrame {
         menu = new rojeru_san.RSButton();
         jButton3 = new javax.swing.JButton();
         noti = new rojeru_san.RSButton();
-        rSPanelImage2 = new rojerusan.RSPanelImage();
         jPanel3 = new javax.swing.JPanel();
         dos = new rojeru_san.RSButton();
         tres = new rojeru_san.RSButton();
@@ -197,27 +196,12 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        rSPanelImage2.setImagen(new javax.swing.ImageIcon(getClass().getResource("/logo blanco.png"))); // NOI18N
-
-        javax.swing.GroupLayout rSPanelImage2Layout = new javax.swing.GroupLayout(rSPanelImage2);
-        rSPanelImage2.setLayout(rSPanelImage2Layout);
-        rSPanelImage2Layout.setHorizontalGroup(
-            rSPanelImage2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 64, Short.MAX_VALUE)
-        );
-        rSPanelImage2Layout.setVerticalGroup(
-            rSPanelImage2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(rSPanelImage2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(190, 190, 190)
+                .addGap(260, 260, 260)
                 .addComponent(menu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,9 +234,6 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(rSPanelImage2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(menu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -651,7 +632,7 @@ public class Principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 1310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1310, Short.MAX_VALUE)))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1312, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -695,6 +676,7 @@ public class Principal extends javax.swing.JFrame {
             this.seis.setSelected(false);
             this.ocho.setSelected(true);
             this.nueve.setSelected(false);
+            this.siete1.setSelected(false);
 
             Cliente cliente = new Cliente();
             cliente.setSize(1290, 730);
@@ -706,6 +688,7 @@ public class Principal extends javax.swing.JFrame {
             contenedor.repaint();
 
         }
+        animacion();
 
     }//GEN-LAST:event_ochoActionPerformed
 
@@ -717,8 +700,10 @@ public class Principal extends javax.swing.JFrame {
             this.cuatro.setSelected(false);
             this.cinco.setSelected(false);
             this.ocho.setSelected(false);
+            this.siete1.setSelected(false);
 
         }
+        animacion();
 
     }//GEN-LAST:event_seisActionPerformed
 
@@ -730,8 +715,10 @@ public class Principal extends javax.swing.JFrame {
             this.cuatro.setSelected(false);
             this.seis.setSelected(false);
             this.ocho.setSelected(false);
+            this.siete1.setSelected(false);
 
         }
+        animacion();
 
     }//GEN-LAST:event_cincoActionPerformed
 
@@ -745,6 +732,7 @@ public class Principal extends javax.swing.JFrame {
             this.seis.setSelected(false);
             this.ocho.setSelected(false);
             this.nueve.setSelected(false);
+            this.siete1.setSelected(false);
 
             Produccion pr = new Produccion(new javax.swing.JFrame(), true);
             pr.setSize(1290, 730);
@@ -757,6 +745,7 @@ public class Principal extends javax.swing.JFrame {
 
         }
 
+        animacion();
 
     }//GEN-LAST:event_cuatroActionPerformed
 
@@ -770,6 +759,8 @@ public class Principal extends javax.swing.JFrame {
             this.seis.setSelected(false);
             this.ocho.setSelected(false);
             this.nueve.setSelected(false);
+            this.siete1.setSelected(false);
+
             proveedores pr = new proveedores();
             pr.setSize(1290, 730);
             pr.setLocation(0, 0);
@@ -780,6 +771,7 @@ public class Principal extends javax.swing.JFrame {
             contenedor.repaint();
 
         }
+        animacion();
 
     }//GEN-LAST:event_tresActionPerformed
 
@@ -793,6 +785,7 @@ public class Principal extends javax.swing.JFrame {
             this.seis.setSelected(false);
             this.ocho.setSelected(false);
             this.nueve.setSelected(false);
+            this.siete1.setSelected(false);
 
             Escritorio1 es = new Escritorio1();
             es.setSize(1090, 690);
@@ -804,6 +797,7 @@ public class Principal extends javax.swing.JFrame {
             contenedor.repaint();
 
         }
+        animacion();
     }//GEN-LAST:event_unoActionPerformed
 
     private void dosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dosActionPerformed
@@ -816,6 +810,8 @@ public class Principal extends javax.swing.JFrame {
             this.ocho.setSelected(false);
             this.dos.setSelected(true);
             this.nueve.setSelected(false);
+            this.siete1.setSelected(false);
+
             // Crear y mostrar el panel de inventario
             Inventario in = new Inventario();
             in.setSize(1290, 730);
@@ -827,12 +823,14 @@ public class Principal extends javax.swing.JFrame {
             contenedor.repaint();
 
         }
+        animacion();
+
     }//GEN-LAST:event_dosActionPerformed
 
 
     private void siete1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siete1ActionPerformed
         // TODO add your handling code here:
-          if (!this.siete1.isSelected()) {
+        if (!this.siete1.isSelected()) {
             this.uno.setSelected(false);
             this.tres.setSelected(false);
             this.cuatro.setSelected(false);
@@ -843,7 +841,7 @@ public class Principal extends javax.swing.JFrame {
             this.siete1.setSelected(true);
             this.nueve.setSelected(false);
             // Crear y mostrar el panel de inventario
-            Usuario  usu = new Usuario();
+            Usuario usu = new Usuario();
             usu.setSize(1290, 730);
             usu.setLocation(0, 0);
 
@@ -853,6 +851,8 @@ public class Principal extends javax.swing.JFrame {
             contenedor.repaint();
 
         }
+        animacion();
+
     }//GEN-LAST:event_siete1ActionPerformed
 
     private void uno1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uno1ActionPerformed
@@ -954,6 +954,7 @@ public class Principal extends javax.swing.JFrame {
             this.ocho.setSelected(false);
             this.dos.setSelected(false);
             this.nueve.setSelected(true);
+            this.siete1.setSelected(false);
 
             // Crear y mostrar el panel de inventario
             catalogo cat = new catalogo();
@@ -966,7 +967,7 @@ public class Principal extends javax.swing.JFrame {
             contenedor.repaint();
 
         }
-
+animacion();
     }//GEN-LAST:event_nueveActionPerformed
 
     private void nueve1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nueve1MouseEntered
@@ -1041,7 +1042,6 @@ public class Principal extends javax.swing.JFrame {
     private rojeru_san.RSButton nueve1;
     private rojeru_san.RSButton ocho;
     private rojeru_san.RSButton ocho1;
-    private rojerusan.RSPanelImage rSPanelImage2;
     private rojerusan.RSPanelImage rSPanelImage3;
     private rojeru_san.RSButton seis;
     private rojeru_san.RSButton seis1;

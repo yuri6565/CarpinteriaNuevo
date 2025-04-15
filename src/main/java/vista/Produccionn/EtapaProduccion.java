@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista.Produccion;
+package vista.Produccionn;
 
 import java.awt.Frame;
 import java.sql.Connection;
@@ -19,8 +19,6 @@ import modelo.Conexion;
  * @author pc
  */
 public class EtapaProduccion extends javax.swing.JDialog {
-
-    private Produccion produccionPanel;
 
     /**
      * Creates new form EtapaProduccion
@@ -45,15 +43,15 @@ public class EtapaProduccion extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        btnGuardar = new rojeru_san.RSButtonRiple();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         txtetapa = new RSMaterialComponent.RSTextFieldMaterial();
-        btnCancelar = new rojeru_san.RSButtonRiple();
         jLabel11 = new javax.swing.JLabel();
         Boxestado = new RSMaterialComponent.RSComboBoxMaterial();
         txtFechainicio = new com.toedter.calendar.JDateChooser();
         txtfechafin = new com.toedter.calendar.JDateChooser();
+        btnGuardar1 = new rojeru_san.RSButtonRiple();
+        btnCancelar1 = new rojeru_san.RSButtonRiple();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -76,16 +74,6 @@ public class EtapaProduccion extends javax.swing.JDialog {
         jLabel6.setText("Estado:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, -1, -1));
 
-        btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
-        btnGuardar.setText("Guardar");
-        btnGuardar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 270, 140, -1));
-
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Fecha final:");
@@ -94,7 +82,7 @@ public class EtapaProduccion extends javax.swing.JDialog {
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Nombre etapa:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
 
         txtetapa.setEditable(false);
         txtetapa.setBackground(new java.awt.Color(255, 255, 255));
@@ -109,22 +97,12 @@ public class EtapaProduccion extends javax.swing.JDialog {
                 txtetapaActionPerformed(evt);
             }
         });
-        jPanel1.add(txtetapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 200, 30));
-
-        btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
-        btnCancelar.setText("Cancelar");
-        btnCancelar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 270, 140, -1));
+        jPanel1.add(txtetapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 190, 30));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Fecha inicio:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
 
         Boxestado.setForeground(new java.awt.Color(102, 102, 102));
         Boxestado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", "pendiente", "proceso", "completado" }));
@@ -134,18 +112,42 @@ public class EtapaProduccion extends javax.swing.JDialog {
                 BoxestadoActionPerformed(evt);
             }
         });
-        jPanel1.add(Boxestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 100, -1, -1));
+        jPanel1.add(Boxestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, -1, -1));
 
         txtFechainicio.setBackground(new java.awt.Color(255, 255, 255));
         txtFechainicio.setForeground(new java.awt.Color(255, 255, 255));
         txtFechainicio.setDateFormatString("y-MM-d");
         txtFechainicio.setMaxSelectableDate(new java.util.Date(253370786472000L));
-        jPanel1.add(txtFechainicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 190, 30));
+        jPanel1.add(txtFechainicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 190, 30));
 
         txtfechafin.setBackground(new java.awt.Color(255, 255, 255));
         txtfechafin.setForeground(new java.awt.Color(255, 255, 255));
         txtfechafin.setDateFormatString("y-MM-d");
         jPanel1.add(txtfechafin, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 190, 190, 30));
+
+        btnGuardar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnGuardar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnGuardar1.setText("Guardar");
+        btnGuardar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        btnGuardar1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnGuardar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardar1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 260, 140, -1));
+
+        btnCancelar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnCancelar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
+        btnCancelar1.setText("Volver");
+        btnCancelar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        btnCancelar1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelar1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 260, 140, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -163,51 +165,104 @@ public class EtapaProduccion extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // Validación mejorada
-        if (validarCampos() == false) {
-            return;
+    private void BoxestadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxestadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BoxestadoActionPerformed
+
+    private void txtetapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtetapaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtetapaActionPerformed
+
+    private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
+        // 1. Validar campos
+        if (!validarCampos()) {
+            return; // Detener si hay campos inválidos
         }
 
+        // 2. Obtener datos del formulario
+        String nombreEtapa = txtetapa.getText().trim();
+        String estado = Boxestado.getSelectedItem().toString();
+        Date fechaInicio = new Date(txtFechainicio.getDate().getTime());
+        Date fechaFin = new Date(txtfechafin.getDate().getTime());
+
+        // 3. Mostrar diálogo de confirmación
+        alertaa confirmDialog = new alertaa(
+                (Frame) this.getParent(),
+                true,
+                "Confirmar",
+                "¿Desea guardar la etapa de producción?"
+        );
+        confirmDialog.setLocationRelativeTo(null);
+        confirmDialog.setVisible(true);
+
+        if (!confirmDialog.opcionConfirmada) {
+            return; // Si el usuario cancela, no hacer nada
+        }
+
+        // 4. Intentar guardar en la base de datos
         try {
-            // Obtener valores
-            String nombreEtapa = txtetapa.getText().trim();
-            Date fechaInicio = new Date(txtFechainicio.getDate().getTime());
-            Date fechaFin = new Date(txtfechafin.getDate().getTime());
-            String estado = Boxestado.getSelectedItem().toString();
+            boolean exito = insertarEtapa(nombreEtapa, estado, fechaInicio, fechaFin);
+            if (exito) {
+                // Mostrar diálogo de éxito
+                Datos_guardados exitoDialog = new Datos_guardados(
+                        (Frame) this.getParent(),
+                        true,
+                        "Éxito",
+                        "Etapa guardada correctamente"
+                );
+                exitoDialog.setLocationRelativeTo(null);
+                exitoDialog.setVisible(true);
 
-            // Validar fechas
-            if (fechaFin.before(fechaInicio)) {
-                mostrarError("La fecha fin no puede ser anterior a la fecha inicio");
-                return;
+                this.dispose(); // Cerrar el diálogo si todo sale bien
             }
+        } catch (SQLException ex) {
+            // Mostrar diálogo de error
+            Error_guardar errorDialog = new Error_guardar(
+                    (Frame) this.getParent(),
+                    true,
+                    "Error",
+                    "Error al guardar: " + ex.getMessage()
+            );
+            errorDialog.setLocationRelativeTo(null);
+            errorDialog.setVisible(true);
 
-            // Insertar en BD
-            if (insertarEtapa(nombreEtapa, estado, fechaInicio, fechaFin)) {
-                this.dispose();
-                
-            }
-            
-            if (produccionPanel != null) {
-
-                }
-        } catch (Exception e) {
-            mostrarError("Error al guardar: " + e.getMessage());
-            e.printStackTrace();
+            Logger.getLogger(EtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
 
-// Métodos auxiliares
+// Métodos auxiliares (actualizados)
     private boolean validarCampos() {
         if (txtetapa.getText().trim().isEmpty()
                 || txtFechainicio.getDate() == null
                 || txtfechafin.getDate() == null
                 || Boxestado.getSelectedIndex() == 0) {
 
-            mostrarError("Todos los campos son obligatorios");
+            espacio_alerta errorDialog = new espacio_alerta(
+                    (Frame) this.getParent(),
+                    true,
+                    "Error",
+                    "Todos los campos son obligatorios"
+            );
+            errorDialog.setLocationRelativeTo(null);
+            errorDialog.setVisible(true);
+
             return false;
         }
+
+        // Validación adicional: fecha fin no puede ser anterior a fecha inicio
+        if (txtfechafin.getDate().before(txtFechainicio.getDate())) {
+            Error_fecha errorFecha = new Error_fecha(
+                    (Frame) this.getParent(),
+                    true,
+                    "Error",
+                    "La fecha final no puede ser anterior a la inicial"
+            );
+            errorFecha.setLocationRelativeTo(null);
+            errorFecha.setVisible(true);
+
+            return false;
+        }
+
         return true;
     }
 
@@ -221,37 +276,13 @@ public class EtapaProduccion extends javax.swing.JDialog {
             ps.setDate(3, inicio);
             ps.setDate(4, fin);
 
-            int resultado = ps.executeUpdate();
-            if (resultado > 0) {
-                mostrarMensaje("Etapa guardada correctamente");
-                return true;
-            }
-            
+            return ps.executeUpdate() > 0;
         }
-        return false;
-    }
+    }//GEN-LAST:event_btnGuardar1ActionPerformed
 
-    private void mostrarError(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    private void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void txtetapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtetapaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtetapaActionPerformed
-
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
         this.dispose();
-        
-    }//GEN-LAST:event_btnCancelarActionPerformed
-
-    private void BoxestadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxestadoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BoxestadoActionPerformed
+    }//GEN-LAST:event_btnCancelar1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -272,6 +303,7 @@ public class EtapaProduccion extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private Produccion produccionPanel;
+
             public void run() {
                 EtapaProduccion dialog = new EtapaProduccion(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -287,8 +319,8 @@ public class EtapaProduccion extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSComboBoxMaterial Boxestado;
-    private rojeru_san.RSButtonRiple btnCancelar;
-    private rojeru_san.RSButtonRiple btnGuardar;
+    private rojeru_san.RSButtonRiple btnCancelar1;
+    private rojeru_san.RSButtonRiple btnGuardar1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
