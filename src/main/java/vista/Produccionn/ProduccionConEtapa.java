@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package vista.Produccion;
+package vista.Produccionn;
 
 import java.awt.Color;
 import java.sql.Connection;
@@ -61,11 +61,11 @@ public class ProduccionConEtapa extends javax.swing.JPanel {
     private void initComponents() {
 
         txtbuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
-        btnNuevoProduc = new rojeru_san.RSButtonRiple();
-        btnEditar = new rojeru_san.RSButtonRiple();
-        btnEliminar = new rojeru_san.RSButtonRiple();
         jScrollPane2 = new javax.swing.JScrollPane();
         Tabla1 = new RSMaterialComponent.RSTableMetro();
+        btnNuevoProduc1 = new rojeru_san.RSButtonRiple();
+        btnGuardar = new rojeru_san.RSButtonRiple();
+        btnEliminar1 = new rojeru_san.RSButtonRiple();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -83,33 +83,6 @@ public class ProduccionConEtapa extends javax.swing.JPanel {
         });
         add(txtbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 430, 40));
 
-        btnNuevoProduc.setBackground(new java.awt.Color(46, 49, 82));
-        btnNuevoProduc.setText(" Nuevo");
-        btnNuevoProduc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoProducActionPerformed(evt);
-            }
-        });
-        add(btnNuevoProduc, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 120, 40));
-
-        btnEditar.setBackground(new java.awt.Color(46, 49, 82));
-        btnEditar.setText("Editar");
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
-            }
-        });
-        add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 20, 120, 40));
-
-        btnEliminar.setBackground(new java.awt.Color(46, 49, 82));
-        btnEliminar.setText(" Eliminar");
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
-            }
-        });
-        add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 20, 120, 40));
-
         Tabla1.setBackground(new java.awt.Color(255, 255, 255));
         Tabla1.setForeground(new java.awt.Color(255, 255, 255));
         Tabla1.setAlignmentX(0.1F);
@@ -123,27 +96,60 @@ public class ProduccionConEtapa extends javax.swing.JPanel {
         jScrollPane2.setViewportView(Tabla1);
 
         add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1210, 490));
+
+        btnNuevoProduc1.setBackground(new java.awt.Color(46, 49, 82));
+        btnNuevoProduc1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnNuevoProduc1.setText(" Nuevo");
+        btnNuevoProduc1.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
+        btnNuevoProduc1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoProduc1ActionPerformed(evt);
+            }
+        });
+        add(btnNuevoProduc1, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 20, 130, 40));
+
+        btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil (1).png"))); // NOI18N
+        btnGuardar.setText("Editar");
+        btnGuardar.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 20, 130, 40));
+
+        btnEliminar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnEliminar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (1).png"))); // NOI18N
+        btnEliminar1.setText(" Eliminar");
+        btnEliminar1.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
+        btnEliminar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminar1ActionPerformed(evt);
+            }
+        });
+        add(btnEliminar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 20, 130, 40));
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarActionPerformed
         filtrarTabla();
     }//GEN-LAST:event_txtbuscarActionPerformed
 
-    private void btnNuevoProducActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProducActionPerformed
+    private void btnNuevoProduc1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProduc1ActionPerformed
         EtapaProduccion dialog = new EtapaProduccion(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
         cargarTablaEtapa();
-    }//GEN-LAST:event_btnNuevoProducActionPerformed
+    }//GEN-LAST:event_btnNuevoProduc1ActionPerformed
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         EditEtapaProduccion dialog = new EditEtapaProduccion(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
         cargarTablaEtapa();
-    }//GEN-LAST:event_btnEditarActionPerformed
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+    private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed
         int[] selectedRows = Tabla1.getSelectedRows(); // Obtener todas las filas seleccionadas
 
         if (selectedRows.length == 0) {
@@ -218,7 +224,7 @@ public class ProduccionConEtapa extends javax.swing.JPanel {
                     JOptionPane.ERROR_MESSAGE
             );
         }
-    }//GEN-LAST:event_btnEliminarActionPerformed
+    }//GEN-LAST:event_btnEliminar1ActionPerformed
     public void cargarTablaEtapa() {
         try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(
                 "SELECT idetapa_produccion, nombre_etapa, estado, fecha_inicio, fecha_fin "
@@ -287,7 +293,7 @@ public class ProduccionConEtapa extends javax.swing.JPanel {
         } // Si contiene letras (aunque sea parcial)
         else if (textoBusqueda.matches(".*[a-zA-ZáéíóúÁÉÍÓÚ].*")) {
             // Buscar solo en estado (columna 3)
-            tr.setRowFilter(RowFilter.regexFilter("(?i)" + textoBusqueda, 1,2 ));
+            tr.setRowFilter(RowFilter.regexFilter("(?i)" + textoBusqueda, 1, 2));
         } // Para otros casos (números más largos, combinaciones, etc.)
         else {
             // Buscar en todos los campos
@@ -297,9 +303,9 @@ public class ProduccionConEtapa extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSTableMetro Tabla1;
-    private rojeru_san.RSButtonRiple btnEditar;
-    private rojeru_san.RSButtonRiple btnEliminar;
-    private rojeru_san.RSButtonRiple btnNuevoProduc;
+    private rojeru_san.RSButtonRiple btnEliminar1;
+    private rojeru_san.RSButtonRiple btnGuardar;
+    private rojeru_san.RSButtonRiple btnNuevoProduc1;
     private javax.swing.JScrollPane jScrollPane2;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtbuscar;
     // End of variables declaration//GEN-END:variables

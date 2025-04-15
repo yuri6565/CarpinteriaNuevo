@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista.Produccion;
+package vista.Produccionn;
 
+import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -17,14 +18,11 @@ import modelo.Conexion;
  */
 public class formuProduccion extends javax.swing.JDialog {
 
-    private final Produccion produccionPanel;
-
     /**
      * Creates new form formuProduccion
      */
     public formuProduccion(java.awt.Frame parent, boolean modal, Produccion produccionPanel) {
         super(parent, modal);
-        this.produccionPanel = produccionPanel;  // Asigna la referencia
         setLocationRelativeTo(parent);
         initComponents();
     }
@@ -71,14 +69,16 @@ public class formuProduccion extends javax.swing.JDialog {
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, -1, -1));
 
         btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
         btnGuardar.setText("Guardar");
-        btnGuardar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        btnGuardar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        btnGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 230, 140, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, 140, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
@@ -91,14 +91,16 @@ public class formuProduccion extends javax.swing.JDialog {
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
 
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
         btnCancelar.setText("Volver");
-        btnCancelar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        btnCancelar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        btnCancelar.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 230, 140, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, 140, -1));
 
         Boxestado.setForeground(new java.awt.Color(102, 102, 102));
         Boxestado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", "pendiente", "proceso", "finalizado" }));
@@ -114,7 +116,7 @@ public class formuProduccion extends javax.swing.JDialog {
         txtinicio.setForeground(new java.awt.Color(255, 255, 255));
         txtinicio.setDateFormatString("y-MM-d");
         txtinicio.setMaxSelectableDate(new java.util.Date(253370786472000L));
-        jPanel1.add(txtinicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 190, 30));
+        jPanel1.add(txtinicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 200, 30));
 
         txtfinal.setBackground(new java.awt.Color(255, 255, 255));
         txtfinal.setForeground(new java.awt.Color(255, 255, 255));
@@ -136,64 +138,67 @@ public class formuProduccion extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // Validación de campos
+        // 1. Validar campos
         if (txtinicio.getDate() == null || txtfinal.getDate() == null
                 || Boxestado.getSelectedItem() == null || Boxestado.getSelectedIndex() == 0) {
 
-            JOptionPane.showMessageDialog(this,
-                    "Todos los campos son obligatorios",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            new espacio_alerta((Frame) this.getParent(), true, "Error", "Todos los campos son obligatorios").setVisible(true);
             return;
         }
 
-        try {
-            // Obtener valores CORRECTAMENTE
-            Date fechaInicio = new Date(txtinicio.getDate().getTime());
-            Date fechaFin = new Date(txtfinal.getDate().getTime());
-            String estado = Boxestado.getSelectedItem().toString();
+        // 2. Validar fechas
+        Date fechaInicio = new Date(txtinicio.getDate().getTime());
+        Date fechaFin = new Date(txtfinal.getDate().getTime());
+        String estado = Boxestado.getSelectedItem().toString();
 
-            // Validar fechas
-            if (fechaFin.before(fechaInicio)) {
-                JOptionPane.showMessageDialog(this,
-                        "La fecha final no puede ser anterior a la fecha inicial",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+        if (fechaFin.before(fechaInicio)) {
+            new Error_fecha((Frame) this.getParent(), true, "Error", "La fecha final no puede ser anterior a la inicial").setVisible(true);
+            return;
+        }
 
-            // Conexión y inserción
+        // 3. Mostrar diálogo de confirmación (alertaa)
+        alertaa confirmDialog = new alertaa(
+                (Frame) this.getParent(),
+                true,
+                "Confirmar",
+                "¿Desea guardar los datos?"
+        );
+        confirmDialog.setVisible(true);
+
+        // 4. Procesar respuesta
+        if (confirmDialog.opcionConfirmada) { // Si eligió "Guardar"
             try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(
                     "INSERT INTO produccion (fecha_inicio, fecha_fin, estado) VALUES (?, ?, ?)")) {
 
                 ps.setDate(1, fechaInicio);
                 ps.setDate(2, fechaFin);
                 ps.setString(3, estado);
-
                 ps.executeUpdate();
 
-                JOptionPane.showMessageDialog(this,
-                        "Datos guardados correctamente",
+                // Mostrar diálogo de éxito (Datos_guardados)
+                Datos_guardados exitoDialog = new Datos_guardados(
+                        (Frame) this.getParent(),
+                        true,
                         "Éxito",
-                        JOptionPane.INFORMATION_MESSAGE);
+                        "Datos guardados correctamente"
+                );
+                exitoDialog.setLocationRelativeTo(null);
+                exitoDialog.setVisible(true);
 
+                // Cerrar el formulario de producción
                 this.dispose();
-
+            } catch (SQLException e) {
+                new Error_guardar((Frame) this.getParent(), true, "Error",
+                        "Error al guardar: " + e.getMessage()).setVisible(true);
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al guardar: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+        } else { // Si eligió "Cancelar"
+            this.dispose(); // Cierra el formulario de producción
         }
-
-
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
-        
 
     }//GEN-LAST:event_btnCancelarActionPerformed
 
