@@ -4,6 +4,7 @@
  */
 package vista;
 
+
 /**
  *
  * @author ADSO
@@ -89,10 +90,6 @@ public class caja extends javax.swing.JPanel {
             this.btnIngresos.setSelected(false);
             this.btnEgresos.setSelected(true);
 
-
-            herramientas h = new herramientas();
-            h.setSize(960, 570);
-            h.setLocation(0,0);
 
         }
     }//GEN-LAST:event_btnEgresosActionPerformed

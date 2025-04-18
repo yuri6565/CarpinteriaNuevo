@@ -11,31 +11,48 @@ import javax.swing.ImageIcon;
  * @author Personal
  */
 public class MaterialDatos {
-    private String codigo;
+    private int idInventario;
     private String nombre;
     private String descripcion;
-    private String unidadMedida;
-    private String categoria;
+    private String estado;
+    private String stock;
     private int cantidad;
-    private ImageIcon imagen;
+    private int idCategoria;
+    private int idMarca;
+    private int idUnidadMedida;
+    private byte[] imagen; // imagen en formato binario
 
-    public MaterialDatos(String codigo, String nombre, String descripcion, String unidadMedida,
-                    String categoria, int cantidad, ImageIcon imagen) {
-        this.codigo = codigo;
+    public MaterialDatos(String nombre, String descripcion, String estado, String stock, int cantidad, int idCategoria, int idMarca, int idUnidadMedida, byte[] imagen) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.unidadMedida = unidadMedida;
-        this.categoria = categoria;
+        this.estado = estado;
+        this.stock = stock;
         this.cantidad = cantidad;
+        this.idCategoria = idCategoria;
+        this.idMarca = idMarca;
+        this.idUnidadMedida = idUnidadMedida;
         this.imagen = imagen;
     }
 
-    public String getCodigo() {
-        return codigo;
+    public MaterialDatos(int idInventario, String nombre, String descripcion, String estado, String stock, int cantidad, int idCategoria, int idMarca, int idUnidadMedida, byte[] imagen) {
+        this.idInventario = idInventario;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.estado = estado;
+        this.stock = stock;
+        this.cantidad = cantidad;
+        this.idCategoria = idCategoria;
+        this.idMarca = idMarca;
+        this.idUnidadMedida = idUnidadMedida;
+        this.imagen = imagen;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public int getIdInventario() {
+        return idInventario;
+    }
+
+    public void setIdInventario(int idInventario) {
+        this.idInventario = idInventario;
     }
 
     public String getNombre() {
@@ -54,20 +71,20 @@ public class MaterialDatos {
         this.descripcion = descripcion;
     }
 
-    public String getUnidadMedida() {
-        return unidadMedida;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setUnidadMedida(String unidadMedida) {
-        this.unidadMedida = unidadMedida;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getStock() {
+        return stock;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setStock(String stock) {
+        this.stock = stock;
     }
 
     public int getCantidad() {
@@ -78,15 +95,37 @@ public class MaterialDatos {
         this.cantidad = cantidad;
     }
 
-    public ImageIcon getImagen() {
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
+    }
+
+    public int getIdMarca() {
+        return idMarca;
+    }
+
+    public void setIdMarca(int idMarca) {
+        this.idMarca = idMarca;
+    }
+
+    public int getIdUnidadMedida() {
+        return idUnidadMedida;
+    }
+
+    public void setIdUnidadMedida(int idUnidadMedida) {
+        this.idUnidadMedida = idUnidadMedida;
+    }
+
+    public byte[] getImagen() {
         return imagen;
     }
 
-    public void setImagen(ImageIcon imagen) {
+    public void setImagen(byte[] imagen) {
         this.imagen = imagen;
     }
-    
-   
     
     
 }
