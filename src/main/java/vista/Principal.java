@@ -4,9 +4,27 @@
  */
 package vista;
 
+
 import vista.Produccionn.Produccion;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+import vista.Inventario.herramientas;
+import vista.Inventario.materiales;
 
 import vista.catalogo.catalogo;
 
@@ -16,12 +34,132 @@ import vista.catalogo.catalogo;
  */
 public class Principal extends javax.swing.JFrame {
 
+    private JPanel submenuInventario;
+    private boolean submenuVisible = false; // Para controlar si el submenú está visible
+
     public Principal() {
 
         initComponents();
 
         jPanel4.setVisible(false);
         jPanel5.setVisible(false);
+
+//scrollpanel---------------------------
+        // Definir un JScrollPane y envolver el contenedor
+        JScrollPane scrollPane = new JScrollPane(contenedor);
+        scrollPane.setBounds(260, 80, 1020, 550); // Tamaño del área visible
+
+// Asegurar el desplazamiento horizontal y vertical
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); // Forzar barra horizontal
+
+        scrollPane.setBorder(null); // Quitar el borde del JScrollPane
+        contenedor.setBorder(null); // Quitar el borde del JPanel
+
+// Ajustar el tamaño preferido del contenedor para que sea más grande que el JScrollPane
+        contenedor.setPreferredSize(new Dimension(1290, 870)); // Asegura un tamaño mayor al viewport
+
+// Agregar el JScrollPane al panel principal
+        jPanel1.add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, 1020, 730));
+
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
+        scrollPane.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 8));
+
+        scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = new Color(153, 153, 153);
+            }
+
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                return new JButton() {
+                    @Override
+                    public Dimension getPreferredSize() {
+                        return new Dimension(0, 0);
+                    }
+                };
+            }
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                return new JButton() {
+                    @Override
+                    public Dimension getPreferredSize() {
+                        return new Dimension(0, 0);
+                    }
+                };
+            }
+
+            @Override
+            protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(thumbColor);
+                g2.fillRoundRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height, 10, 10);
+                g2.dispose();
+            }
+        });
+//scrollpanel ---------------------
+
+        // Inicializar el submenú
+        submenuInventario = new JPanel();
+        submenuInventario.setBackground(new Color(29, 30, 51)); // Mismo color que el menú
+        submenuInventario.setLayout(new GridLayout(2, 1, 0, 0)); // 3 filas, 1 columna, espacio entre ítems
+        submenuInventario.setPreferredSize(new Dimension(260, 80)); // Reducir altura total para reflejar menos espacio
+
+        // Añadir ítems al submenú (como botones)
+        JButton item1 = new JButton("Materiales");
+        item1.setBackground(new Color(9, 10, 19));
+        item1.setForeground(Color.WHITE);
+        item1.setFont(new Font("Tahoma", Font.BOLD, 14));
+        item1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 60, 0, 0)); // Margen izquierdo de 10 píxeles
+        item1.setFocusPainted(false); // Quitar el borde de enfoque
+        item1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        item1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT); // Texto a la derecha del ícono
+        item1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tratar-con-cuidado.png"))); // Ícono a la izquierda
+        item1.setIconTextGap(10); // Espacio entre ícono y texto
+        item1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                materiales m = new materiales(); // Cargar Inventario aquí si lo deseas
+                m.setSize(1290, 730);
+                m.setLocation(0, 0);
+                contenedor.removeAll();
+                contenedor.add(m);
+                contenedor.revalidate();
+                contenedor.repaint();
+            }
+        });
+
+        JButton item2 = new JButton("Herramientas");
+        item2.setBackground(new Color(9, 10, 19));
+        item2.setForeground(Color.WHITE);
+        item2.setFont(new Font("Tahoma", Font.BOLD, 14));
+        item2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 60, 0, 0)); // Margen izquierdo de 10 píxeles
+        item2.setFocusPainted(false); // Quitar el borde de enfoque
+        item2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        item2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT); // Texto a la derecha del ícono
+        item2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/llave-inglesa.png"))); // Ícono a la izquierda
+        item2.setIconTextGap(10); // Espacio entre ícono y texto
+        item2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+                herramientas h = new herramientas(); // Cargar Inventario aquí si lo deseas
+                h.setSize(1290, 730);
+                h.setLocation(0, 0);
+                contenedor.removeAll();
+                contenedor.add(h);
+                contenedor.revalidate();
+                contenedor.repaint();
+            }
+        });
+
+        submenuInventario.add(item1);
+        submenuInventario.add(item2);
 
         // Seleccionar el botón "uno" por defecto y cargar el panel Escritorio1
         this.uno.setSelected(true);
@@ -53,6 +191,30 @@ public class Principal extends javax.swing.JFrame {
             jPanel5.setVisible(true);
             jPanel5.setOpaque(false);
 
+        }
+    }
+
+    private void ocultarSubmenu() {
+        if (submenuVisible) {
+            jPanel3.removeAll();
+            jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+            // Restaurar posiciones originales de los botones
+            jPanel3.add(rSPanelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 41, 158, 153));
+            jPanel3.add(uno, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 260, 60));
+            jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 260, 60));
+            jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 260, 60));
+            jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 260, 60));
+            jPanel3.add(cinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, 260, 60));
+            jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 260, 60));
+            jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 260, 60));
+            jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 260, 60));
+            jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 660, 260, 60));
+
+            dos.setText(" Inventario           ▼"); // Indicar submenú cerrado
+            submenuVisible = false;
+            jPanel3.revalidate();
+            jPanel3.repaint();
         }
     }
 
@@ -245,7 +407,7 @@ public class Principal extends javax.swing.JFrame {
         dos.setBackground(new java.awt.Color(29, 30, 81));
         dos.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
         dos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/caja.png"))); // NOI18N
-        dos.setText(" Inventario");
+        dos.setText("Inventario           ▼");
         dos.setColorHover(new java.awt.Color(128, 128, 128));
         dos.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         dos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -632,7 +794,7 @@ public class Principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 1310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1312, Short.MAX_VALUE)))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1314, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -667,6 +829,7 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ochoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ochoActionPerformed
+        ocultarSubmenu(); // Ocultar submenú si ya está visible
         if (!this.ocho.isSelected()) {
             this.uno.setSelected(false);
             this.dos.setSelected(false);
@@ -693,6 +856,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_ochoActionPerformed
 
     private void seisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seisActionPerformed
+        ocultarSubmenu(); // Ocultar submenú si ya está visible
         if (!this.seis.isSelected()) {
             this.uno.setSelected(false);
             this.dos.setSelected(false);
@@ -708,6 +872,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_seisActionPerformed
 
     private void cincoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cincoActionPerformed
+        ocultarSubmenu();
         if (!this.cinco.isSelected()) {
             this.uno.setSelected(false);
             this.dos.setSelected(false);
@@ -723,6 +888,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_cincoActionPerformed
 
     private void cuatroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuatroActionPerformed
+        ocultarSubmenu();
         if (!this.cuatro.isSelected()) {
             this.uno.setSelected(false);
             this.dos.setSelected(false);
@@ -750,6 +916,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_cuatroActionPerformed
 
     private void tresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tresActionPerformed
+        ocultarSubmenu();
         if (!this.tres.isSelected()) {
             this.uno.setSelected(false);
             this.dos.setSelected(false);
@@ -776,6 +943,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_tresActionPerformed
 
     private void unoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unoActionPerformed
+        ocultarSubmenu();
         if (!this.uno.isSelected()) {
             this.uno.setSelected(true);
             this.dos.setSelected(false);
@@ -812,18 +980,35 @@ public class Principal extends javax.swing.JFrame {
             this.nueve.setSelected(false);
             this.siete1.setSelected(false);
 
-            // Crear y mostrar el panel de inventario
-            Inventario in = new Inventario();
-            in.setSize(1290, 730);
-            in.setLocation(0, 0);
+        }
+        // Alternar visibilidad del submenú
+        if (!submenuVisible) {
+            ocultarSubmenu(); // Asegurarse de que el estado anterior esté limpio
+            jPanel3.removeAll();
+            jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-            contenedor.removeAll();
-            contenedor.add(in);
-            contenedor.revalidate();
-            contenedor.repaint();
+            // Reubicar los botones con el submenú visible
+            jPanel3.add(rSPanelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 41, 158, 153));
+            jPanel3.add(uno, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 260, 60));
+            jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 260, 60));
+            jPanel3.add(submenuInventario, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 260, 80));
+            jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 380, 260, 60));
+            jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, 260, 60));
+            jPanel3.add(cinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 260, 60));
+            jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 560, 260, 60));
+            jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 620, 260, 60));
+            jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 680, 260, 60));
+            jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 740, 260, 60));
+
+            dos.setText(" Inventario           ▲"); // Submenú abierto
+
+            submenuVisible = true;
+            jPanel3.revalidate();
+            jPanel3.repaint();
+        } else {
+            ocultarSubmenu(); // Ocultar submenú si ya está visible
 
         }
-        animacion();
 
     }//GEN-LAST:event_dosActionPerformed
 
@@ -967,7 +1152,7 @@ public class Principal extends javax.swing.JFrame {
             contenedor.repaint();
 
         }
-animacion();
+        animacion();
     }//GEN-LAST:event_nueveActionPerformed
 
     private void nueve1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nueve1MouseEntered

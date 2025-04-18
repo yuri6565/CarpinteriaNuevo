@@ -2,9 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package vista;
+package vista.Inventario;
+
 
 import java.awt.BorderLayout;
+import vista.movimientos;
 
 /**
  *
@@ -20,16 +22,7 @@ public class Inventario extends javax.swing.JPanel {
         initComponents();
         
         
-        this.btnMateriales.setSelected(true);
         
-        materiales es = new materiales();
-        es.setSize(1000, 490);
-        es.setLocation(0,0);
-        
-        panelprincipal.removeAll();
-        panelprincipal.add(es, BorderLayout.CENTER);
-        panelprincipal.revalidate();
-        panelprincipal.repaint();
       
 }
 
@@ -99,12 +92,6 @@ public class Inventario extends javax.swing.JPanel {
     this.btnMateriales.setSelected(false);  
     this.btnHerramientas.setSelected(true);  
       this.btnMovimientos.setSelected(false);
-        
-        herramientas h = new herramientas();
-        h.setSize(960, 570);
-        h.setLocation(0,0);
-        
-        
 
          }
     }//GEN-LAST:event_btnHerramientasActionPerformed
@@ -129,12 +116,6 @@ public class Inventario extends javax.swing.JPanel {
     this.btnHerramientas.setSelected(false);  
       this.btnMovimientos.setSelected(false);
         
-        materiales es = new materiales();
-        es.setSize(960, 570);
-        es.setLocation(0,0);
-        
-        
-
          }
     }//GEN-LAST:event_btnMaterialesActionPerformed
 
