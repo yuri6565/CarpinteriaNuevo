@@ -4,6 +4,8 @@
  */
 package vista;
 
+
+import vista.Caja.Caja;
 import vista.Produccionn.Produccion;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -51,7 +53,9 @@ public class Principal extends javax.swing.JFrame {
         jPanel4.setVisible(false);
         jPanel5.setVisible(false);
 
+
 //submenu inventario------------------
+
         // Inicializar el submenú
         submenuInventario = new JPanel();
         submenuInventario.setBackground(new Color(29, 30, 81)); // Mismo color que el menú
@@ -964,6 +968,16 @@ public class Principal extends javax.swing.JFrame {
             this.nueve.setSelected(false);
             this.seis.setSelected(false);
 
+            
+            
+            Caja caja = new Caja();
+            caja.setSize(1290, 730);
+            caja.setLocation(0, 0);
+
+            contenedor.removeAll();
+            contenedor.add(caja);
+            contenedor.revalidate();
+            contenedor.repaint();
         }
         animacion();
 

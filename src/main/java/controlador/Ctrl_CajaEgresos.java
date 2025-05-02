@@ -18,16 +18,18 @@ import modelo.Conexion;
  * @author ADSO
  */
 public class Ctrl_CajaEgresos {
-    private final String tipo_movimiento = "egreso";
-    
-  public boolean insertar(Caja caja) {
-        String sql = "INSERT INTO caja (fecha, detalle, total, tipo_movimiento) VALUES (?,?,?,?)";
+        
+    private final String movimiento = "egreso";
+
+    public boolean insertar(Caja caja) {
+        String sql = "INSERT INTO caja (fecha, descripcion, monto, movimiento, categoria) VALUES (?,?,?,?,?)";
         try (Connection con = Conexion.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, caja.getFecha());
-            stmt.setString(2, caja.getDetalle());
-            stmt.setDouble(3, caja.getTotal());
-            stmt.setString(4, tipo_movimiento);  // 👈 Siempre 'material'
+            stmt.setString(2, caja.getDescripcion());
+            stmt.setDouble(3, caja.getMonto());
+            stmt.setString(4, movimiento);  // 👈 'egreso'
+            stmt.setString(5, caja.getCategoria());
             return stmt.executeUpdate() > 0;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error de conexión: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -35,45 +37,67 @@ public class Ctrl_CajaEgresos {
         }
     }
 
-    public List<Caja> obtenerCategorias() {
-        List<Caja> lista = new ArrayList<>();
-        String sql = "SELECT * FROM caja WHERE tipo_movimiento = ?";
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setString(1, tipo_movimiento);  // 👈 Solo 'material'
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    lista.add(new Caja(rs.getInt("codigo"), rs.getString("fecha"), rs.getString("detalle"), rs.getDouble("total")));
-                }
+   public List<Caja> obtenerEgresos() {
+    List<Caja> lista = new ArrayList<>();
+    String sql = "SELECT id_codigo, fecha, descripcion, monto, categoria  FROM caja WHERE movimiento = ? ";
+    
+    try (Connection con = Conexion.getConnection();
+         PreparedStatement stmt = con.prepareStatement(sql)) {
+        
+        stmt.setString(1, movimiento);
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                lista.add(new Caja(
+                    rs.getInt("id_codigo"),
+                    rs.getString("fecha"),
+                    rs.getString("descripcion"),
+                    rs.getDouble("monto"),
+                    rs.getString("categoria")
+                ));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return lista;
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al obtener egresos: " + e.getMessage(), 
+                                    "Error", JOptionPane.ERROR_MESSAGE);
     }
+    return lista;
+}
 
-    public boolean actualizar(Caja caja) {
-        String sql = "UPDATE caja SET fecha = ?, detalle = ?, total = ? WHERE codigo = ? AND tipo_movimiento = ?";
-        try (Connection conn = Conexion.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-                        stmt.setString(1, caja.getFecha());
-            stmt.setString(2, caja.getDetalle());
-            stmt.setDouble(3, caja.getTotal());
-            stmt.setInt(4, caja.getCodigo());
-            stmt.setString(5, tipo_movimiento);  // 👈 Asegura que solo actualice de tipo material
-            return stmt.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+// Mejora el método actualizar con mensajes más descriptivos
+public boolean actualizar(Caja caja) {
+    String sql = "UPDATE caja SET fecha = ?, descripcion = ?, monto = ?, categoria = ? WHERE id_codigo = ? AND movimiento = ?";
+    
+    try (Connection conn = Conexion.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setString(1, caja.getFecha());
+        stmt.setString(2, caja.getDescripcion());
+        stmt.setDouble(3, caja.getMonto());
+        stmt.setString(4,caja.getCategoria());
+        stmt.setInt(5, caja.getId_codigo());
+        stmt.setString(6, movimiento);
+        
+        
+        int result = stmt.executeUpdate();
+        if (result == 0) {
+            JOptionPane.showMessageDialog(null, "No se encontró el egreso o no es de tipo 'egreso'", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
+        return result > 0;
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al actualizar egreso: " + e.getMessage(), 
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
     }
+}
 
-    public boolean eliminar(int codigo) {
-        String sql = "DELETE FROM caja WHERE codigo = ? AND tipo_movimiento = ?";
+
+    public boolean eliminar(int id_codigo) {
+        String sql = "DELETE FROM caja WHERE id_codigo = ? AND movimiento = ?";
         try (Connection con = Conexion.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, codigo);
-            stmt.setString(2, tipo_movimiento);  // 👈 Asegura que solo borre si es material
+            stmt.setInt(1, id_codigo);
+            stmt.setString(2, movimiento);  // 👈 Solo si es 'egreso'
             return stmt.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();

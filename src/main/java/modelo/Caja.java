@@ -12,30 +12,33 @@ import java.util.Date;
  */
 public class Caja {
     
-    private int codigo;
+    private int id_codigo;
     private String fecha;
-    private String detalle;
-    private Double total;
+    private String descripcion;
+    private Double monto;
+    private String categoria;
 
-    public Caja(String fecha, String detalle, Double total) {
+    public Caja(String fecha, String descripcion, Double monto, String categoria) {
         this.fecha = fecha;
-        this.detalle = detalle;
-        this.total = total;
+        this.descripcion = descripcion;
+        this.monto = monto;
+        this.categoria = categoria;
     }
 
-    public Caja(int codigo, String fecha, String detalle, Double total) {
-        this.codigo = codigo;
+    public Caja(int id_codigo, String fecha, String descripcion, Double monto, String categoria) {
+        this.id_codigo = id_codigo;
         this.fecha = fecha;
-        this.detalle = detalle;
-        this.total = total;
+        this.descripcion = descripcion;
+        this.monto = monto;
+        this.categoria = categoria;
     }
 
-    public int getCodigo() {
-        return codigo;
+    public int getId_codigo() {
+        return id_codigo;
     }
 
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
+    public void setId_codigo(int id_codigo) {
+        this.id_codigo = id_codigo;
     }
 
     public String getFecha() {
@@ -46,20 +49,30 @@ public class Caja {
         this.fecha = fecha;
     }
 
-    public String getDetalle() {
-        return detalle;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDetalle(String detalle) {
-        this.detalle = detalle;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public Double getTotal() {
-        return total;
+    public Double getMonto() {
+        return monto;
     }
 
-    public void setTotal(Double total) {
-        this.total = total;
+    public void setMonto(Double monto) {
+        this.monto = monto;
     }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+    
+    
 
 }

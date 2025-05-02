@@ -2,22 +2,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista;
+package vista.Caja;
 
+import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
+import vista.Caja.Alertaa;
+import vista.Produccionn.Datos_guardados;
+import vista.Produccionn.espacio_alerta;
 
 /**
  *
  * @author ADSO
  */
 public class formuIngresos extends javax.swing.JDialog {
-int id_ingreso;
-private Ingresos ingresoPanel;
+
+    private Ingresos ingresoPanel;
+
     /**
      * Creates new form formuIngresos
      */
@@ -46,6 +53,8 @@ private Ingresos ingresoPanel;
         txtCantidadnuevo = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel2 = new javax.swing.JLabel();
         txtDetallenuevo = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel3 = new javax.swing.JLabel();
+        comboCategoria = new RSMaterialComponent.RSComboBoxMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -70,7 +79,7 @@ private Ingresos ingresoPanel;
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 300, 140, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 400, 140, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setText("Detalle de Ingreso:");
@@ -88,7 +97,7 @@ private Ingresos ingresoPanel;
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 140, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 140, -1));
 
         txtPago.setBackground(new java.awt.Color(255, 255, 255));
         txtPago.setForeground(new java.awt.Color(255, 255, 255));
@@ -99,7 +108,20 @@ private Ingresos ingresoPanel;
 
         jLabel2.setText("Cantidad a Ingresar:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
-        jPanel1.add(txtDetallenuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 420, -1));
+        jPanel1.add(txtDetallenuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 420, -1));
+
+        jLabel3.setText("Categoria");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, -1));
+
+        comboCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione categoria:", "Servicios Publicos", "Compra de Productos e Insumos", "Arriendo", "Nómina", "Gastos Administrativos", "Mercadeo y Publicidad", "Transporte", "Domicilios y Logistica", "mantenimineto y Reparaciones", "Muebles", "Equipos o Maquinaria", "Otros" }));
+        comboCategoria.setColorMaterial(new java.awt.Color(0, 0, 0));
+        comboCategoria.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        comboCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboCategoriaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(comboCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 420, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -109,44 +131,113 @@ private Ingresos ingresoPanel;
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-       
+                                     
+    // Validar campos obligatorios
+    if (!validarCampos()) {
+        return;
+    }
+
+    // Mostrar diálogo de confirmación
+    Alertaa confirmDialog = new Alertaa(
+            (Frame) this.getParent(),
+            true,
+            "Confirmar",
+            "¿Desea guardar los datos?"
+    );
+    confirmDialog.setVisible(true);
+
+    if (confirmDialog.opcionConfirmada()) {
         try {
             // Obtener valores
-           
             java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
-            String detalle = txtDetallenuevo.getText();
-            Double cantidad = Double.parseDouble(txtCantidadnuevo.getText().trim());
-            Double total = Double.parseDouble(txtCantidadnuevo.getText().trim());
+            String descripcion = txtDetallenuevo.getText();
+            double monto = Double.parseDouble(txtCantidadnuevo.getText().trim());
+            String categoria = comboCategoria.getSelectedItem().toString();
 
-
-            // Insertar en BD
-            if (insertarEtapa(fecha, detalle,cantidad,total)) {
-                this.dispose();
-                
+            // Validar categoría seleccionada
+            if (comboCategoria.getSelectedIndex() == 0) {
+                mostrarError("Debe seleccionar una categoría válida");
+                return;
             }
+
+            // Insertar en BD usando el método correcto
+            boolean exito = insertarIngreso(
+                new java.sql.Date(txtPago.getDate().getTime()).toString(),
+                monto,
+                "ingreso",
+                descripcion,
+                categoria
+            );
             
-            if (ingresoPanel != null) {
-
-                }
-        } catch (Exception e) {
-            mostrarError("Error al guardar: " + e.getMessage());
-            e.printStackTrace();
+            if (exito) {
+                Datos_guardados exitoDialog = new Datos_guardados(
+                    (Frame) this.getParent(),
+                    true,
+                    "Éxito",
+                    "Datos guardados correctamente"
+                );
+                exitoDialog.setLocationRelativeTo(null);
+                exitoDialog.setVisible(true);
+                this.dispose();
+            } else {
+                mostrarError("No se pudo guardar el registro");
+            }
+        } catch (NumberFormatException e) {
+            mostrarError("El monto debe ser un número válido");
+        } catch (SQLException ex) {
+            Logger.getLogger(formuIngresos.class.getName()).log(Level.SEVERE, null, ex);
+            mostrarError("Error al guardar en la base de datos");
         }
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
     
+}
+    }//GEN-LAST:event_btnGuardarActionPerformed
+   private boolean insertarIngreso(String fecha,Double monto,String movimiento, String descripcion, String categoria)throws SQLException{
+   String sql = "INSERT INTO caja (fecha, monto, descripcion, categoria, movimiento) VALUES (?, ?, ?, ?, ?)";
+   
+    try (Connection con = new Conexion().getConnection(); 
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setString(1, fecha);
+        ps.setDouble(2, monto);
+        ps.setString(3, descripcion);
+        ps.setString(4, categoria);
+        ps.setString(5, "ingreso"); // Usamos el valor fijo "ingreso" aquí
+        return ps.executeUpdate() > 0;
+    }
+   }
+
+   private boolean validarCampos() {
+    if (txtPago.getDate() == null || 
+        txtCantidadnuevo.getText().trim().isEmpty() || 
+        txtDetallenuevo.getText().trim().isEmpty() || 
+        comboCategoria.getSelectedIndex() == 0) {
+        
+        espacio_alerta errorDialog = new espacio_alerta(
+            (Frame) this.getParent(),
+            true,
+            "Error",
+            "Todos los campos son obligatorios"
+        );
+        errorDialog.setLocationRelativeTo(null);
+        errorDialog.setVisible(true);
+        return false;
+    }
+    return true;
+}
+
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void comboCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCategoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboCategoriaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -193,9 +284,11 @@ private Ingresos ingresoPanel;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
+    private RSMaterialComponent.RSComboBoxMaterial comboCategoria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -204,37 +297,36 @@ private Ingresos ingresoPanel;
     private com.toedter.calendar.JDateChooser txtPago;
     // End of variables declaration//GEN-END:variables
 
-    private boolean insertarEtapa(Date fecha, String detalle, Double cantidad, Double total) throws SQLException {
-        String sql = "INSERT INTO ingreso (fecha, detalle, ingreso, egreso, total) VALUES (?, ?, ?,0,?)";
+    private boolean insertarEtapa(Date fecha, double monto, String descripcion, String categoria) throws SQLException {
+        String sql = "INSERT INTO caja (fecha, descripcion, monto) VALUES (?, ?,?)";
 
-         try (Connection con = Conexion.getConnection();
-         PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-        // Convertir java.util.Date a java.sql.Date
-        ps.setDate(1, new java.sql.Date(fecha.getTime()));
-        ps.setString(2, detalle);
-        ps.setDouble(3, cantidad);  // Usar setDouble para valores numéricos
-        ps.setDouble(5, total);
-        
-        
-        int resultado = ps.executeUpdate();
-        if (resultado > 0) {
-            mostrarMensaje("Registro guardado correctamente");
-            return true;
+            // Convertir java.util.Date a java.sql.Date
+            ps.setDate(1, new java.sql.Date(fecha.getTime()));
+            ps.setString(2, descripcion);
+
+            // Usar setDouble para valores numéricos
+            ps.setDouble(3, monto);
+
+            int resultado = ps.executeUpdate();
+            if (resultado > 0) {
+                mostrarMensaje("Registro guardado correctamente");
+                return true;
+            }
+        } catch (SQLException e) {
+            mostrarError("Error de base de datos: " + e.getMessage());
+            throw e;  // Relanzar la excepción para manejo superior
         }
-    } catch (SQLException e) {
-        mostrarError("Error de base de datos: " + e.getMessage());
-        throw e;  // Relanzar la excepción para manejo superior
+        return false;
     }
-    return false;
-}
 
     private void mostrarError(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
-    
+
     private void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-    }     
+    }
 }
