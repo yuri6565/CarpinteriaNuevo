@@ -8,16 +8,14 @@ import java.awt.Frame;
 
 /**
  *
- * @author EQUIPO
+ * @author pc
  */
-public class alerta_elimi extends javax.swing.JDialog {
-
-    boolean opcionConfirmada = false;
+public class DatosActualizados extends javax.swing.JDialog {
 
     /**
-     * Creates new form alerta_elimi
+     * Creates new form DatosActualizados
      */
-    public alerta_elimi(Frame parent, boolean modal, String confirmar_eliminación, String está_seguro_que_desea_eliminar_los_regist) {
+    public DatosActualizados(Frame parent, boolean modal, String éxito, String datos_guardados_correctamente) {
         super(parent, modal);
         initComponents();
     }
@@ -34,9 +32,9 @@ public class alerta_elimi extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        btnGuardar = new rojeru_san.RSButtonRiple();
+        jLabel4 = new javax.swing.JLabel();
         btnCancelar = new rojeru_san.RSButtonRiple();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -48,33 +46,20 @@ public class alerta_elimi extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Century751 BT", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/crisis.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/felicidad.png"))); // NOI18N
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Century751 BT", 1, 36)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Alerta");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, -1, -1));
+        jLabel4.setFont(new java.awt.Font("Century751 BT", 1, 36)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Felicidades");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 90));
-
-        btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
-        btnGuardar.setText("Guardar");
-        btnGuardar.setColorHover(new java.awt.Color(0, 102, 0));
-        btnGuardar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
-        btnGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 130, 140, -1));
 
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
         btnCancelar.setText("Volver");
-        btnCancelar.setColorHover(new java.awt.Color(102, 0, 0));
+        btnCancelar.setColorHover(new java.awt.Color(0, 102, 0));
         btnCancelar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
         btnCancelar.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -82,7 +67,12 @@ public class alerta_elimi extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 130, 140, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 130, -1));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Datos actualizados con exito!!!");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 110, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -98,13 +88,7 @@ public class alerta_elimi extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        opcionConfirmada = true;
-        this.dispose();
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        opcionConfirmada = false;
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
@@ -125,20 +109,20 @@ public class alerta_elimi extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(alerta_elimi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DatosActualizados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(alerta_elimi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DatosActualizados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(alerta_elimi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DatosActualizados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(alerta_elimi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DatosActualizados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                alerta_elimi dialog = new alerta_elimi(new javax.swing.JFrame(), true, "Confirmar eliminaci\u00f3n", "\u00bfEst\u00e1 seguro que desea eliminar los registros seleccionados?");
+                DatosActualizados dialog = new DatosActualizados(new javax.swing.JFrame(), true, "\u00c9xito", "Datos guardados correctamente");
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -150,19 +134,11 @@ public class alerta_elimi extends javax.swing.JDialog {
         });
     }
 
-    public static boolean mostrarConfirmacion(Frame parent, String titulo, String mensaje) {
-        alerta_elimi dialog = new alerta_elimi(parent, true, titulo, mensaje);
-        dialog.setLocationRelativeTo(parent); // Centra el diálogo
-        dialog.setVisible(true); // Muestra el diálogo (modal)
-        return dialog.opcionConfirmada; // Retorna la opción seleccionada
-
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
-    private rojeru_san.RSButtonRiple btnGuardar;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables

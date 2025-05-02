@@ -2,27 +2,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista.Inventario;
+package vista.Inventario0;
 
-import RSMaterialComponent.RSComboBoxMaterial;
-import controlador.Ctrl_CategoriaMaterial;
-import controlador.Ctrl_MarcaMaterial;
-import controlador.Ctrl_UnidadMaterial;
-import java.awt.Dimension;
-import java.awt.GridLayout;
+import controlador.Ctrl_CategoriaHerramienta;
+import controlador.Ctrl_MarcaHerramienta;
+import controlador.Ctrl_UnidadHerramienta;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import modelo.Categoria;
+import modelo.HerramientaDatos;
 import modelo.Marca;
 import modelo.MaterialDatos;
 import modelo.Unidad;
@@ -31,7 +26,8 @@ import modelo.Unidad;
  *
  * @author ZenBook
  */
-public class nuevoMateriales extends javax.swing.JDialog {
+public class herramientasNuevo extends javax.swing.JDialog {
+
     private byte[] imagenBytes; // Para almacenar la imagen en bytes
     public boolean materialGuardado = false;
     public MaterialDatos material;
@@ -40,42 +36,42 @@ public class nuevoMateriales extends javax.swing.JDialog {
     private List<Unidad> unidades;
 
     /**
-     * Creates new form nuevoMateriales
+     * Creates new form herramientasNuevo
      */
-    public nuevoMateriales(java.awt.Frame parent, boolean modal) {
+    public herramientasNuevo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setTitle("Nuevo Material");
-        
+        setTitle("Nueva herramienta");
+
         // Cargar datos en los combo boxes
         cargarCategorias();
         cargarMarcas();
         cargarUnidades();
     }
-    
+
     private void cargarCategorias() {
-        Ctrl_CategoriaMaterial ctrl = new Ctrl_CategoriaMaterial();
-        categorias = ctrl.obtenerCategoriasMaterial();
+        Ctrl_CategoriaHerramienta ctrl = new Ctrl_CategoriaHerramienta();
+        categorias = ctrl.obtenerCategoriasHerramienta();
         cmbCategoria.removeAllItems();
         cmbCategoria.addItem("Seleccione categoría:");
         for (Categoria cat : categorias) {
             cmbCategoria.addItem(cat.getNombre());
         }
     }
-    
+
     private void cargarMarcas() {
-        Ctrl_MarcaMaterial ctrl = new Ctrl_MarcaMaterial();
-        marcas = ctrl.obtenerCategoriasMaterial();
+        Ctrl_MarcaHerramienta ctrl = new Ctrl_MarcaHerramienta();
+        marcas = ctrl.obtenerMarcasHerramienta();
         cmbMarca.removeAllItems();
         cmbMarca.addItem("Seleccione marca:");
         for (Marca m : marcas) {
             cmbMarca.addItem(m.getNombre());
         }
     }
-    
+
     private void cargarUnidades() {
-        Ctrl_UnidadMaterial ctrl = new Ctrl_UnidadMaterial();
-        unidades = ctrl.obtenerCategoriasMaterial();
+        Ctrl_UnidadHerramienta ctrl = new Ctrl_UnidadHerramienta();
+        unidades = ctrl.obtenerUnidadesHerramienta();
         cmbUnidad.removeAllItems();
         cmbUnidad.addItem("Seleccione unidad-medida:");
         for (Unidad um : unidades) {
@@ -117,7 +113,6 @@ public class nuevoMateriales extends javax.swing.JDialog {
         jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         panelP.setBackground(new java.awt.Color(255, 255, 255));
         panelP.setPreferredSize(new java.awt.Dimension(500, 500));
@@ -128,7 +123,7 @@ public class nuevoMateriales extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Century751 BT", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Agregar material");
+        jLabel1.setText("Agregar herramienta");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         panelP.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
@@ -289,7 +284,26 @@ public class nuevoMateriales extends javax.swing.JDialog {
         jLabel12.setText("Estado:");
         panelP.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, -1, -1));
 
-        getContentPane().add(panelP, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 550));
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 520, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(panelP, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 551, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(panelP, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -315,7 +329,7 @@ public class nuevoMateriales extends javax.swing.JDialog {
                 lblImagen.setIcon(new ImageIcon(img));
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error al leer la imagen: " + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnSubirImagenActionPerformed
@@ -453,15 +467,15 @@ public class nuevoMateriales extends javax.swing.JDialog {
 
         // Crear el objeto MaterialDatos
         material = new MaterialDatos(
-            nombre,
-            descripcion,
-            estado,
-            stock,
-            cantidad,
-            idCategoria,
-            idMarca,
-            idUnidadMedida,
-            imagenBytes
+                nombre,
+                descripcion,
+                estado,
+                stock,
+                cantidad,
+                idCategoria,
+                idMarca,
+                idUnidadMedida,
+                imagenBytes
         );
 
         materialGuardado = true;
@@ -497,20 +511,20 @@ public class nuevoMateriales extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(nuevoMateriales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientasNuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(nuevoMateriales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientasNuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(nuevoMateriales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientasNuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(nuevoMateriales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientasNuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                nuevoMateriales dialog = new nuevoMateriales(new javax.swing.JFrame(), true);
+                herramientasNuevo dialog = new herramientasNuevo(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

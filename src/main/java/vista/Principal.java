@@ -9,23 +9,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.plaf.basic.BasicScrollBarUI;
-import vista.Inventario.herramientas;
-import vista.Inventario.materiales;
-
 import vista.catalogo.catalogo;
+import vista.Inventario0.herramientas;
+import vista.Inventario0.materiales;
 
 /**
  *
@@ -89,16 +80,9 @@ public class Principal extends javax.swing.JFrame {
         item1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Deseleccionar otros botones del menú principal
-                uno.setSelected(false);
+                deseleccionar();
                 dos.setSelected(true); // Mantener "Inventario" resaltado
-                tres.setSelected(false);
-                cuatro.setSelected(false);
-                cinco.setSelected(false);
-                seis.setSelected(false);
-                siete1.setSelected(false);
-                ocho.setSelected(false);
-                nueve.setSelected(false);
+                
 
                 // Cargar la vista de Materiales
                 materiales m = new materiales();
@@ -117,16 +101,10 @@ public class Principal extends javax.swing.JFrame {
         item2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Deseleccionar otros botones del menú principal
-                uno.setSelected(false);
-                dos.setSelected(true); // Mantener "Inventario" resaltado
-                tres.setSelected(false);
-                cuatro.setSelected(false);
-                cinco.setSelected(false);
-                seis.setSelected(false);
-                siete1.setSelected(false);
-                ocho.setSelected(false);
-                nueve.setSelected(false);
+                
+                deseleccionar();
+                dos.setSelected(true); 
+              
 
                 // Cargar la vista de Herramientas
                 herramientas h = new herramientas();
@@ -184,17 +162,9 @@ public class Principal extends javax.swing.JFrame {
         item3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Deseleccionar otros botones del menú principal
-                uno.setSelected(false);
-                dos.setSelected(false);
-                tres.setSelected(false);
-                cuatro.setSelected(false);
+                deseleccionar();
                 cinco.setSelected(true); // Mantener "Ventas" resaltado
-                seis.setSelected(false);
-                siete1.setSelected(false);
-                ocho.setSelected(false);
-                nueve.setSelected(false);
-
+              
                 // Cargar la vista de Pedidos (temporalmente un mensaje)
                 JOptionPane.showMessageDialog(null, "Funcionalidad de Pedidos no implementada aún.");
                 contenedor.removeAll();
@@ -209,15 +179,9 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Deseleccionar otros botones del menú principal
-                uno.setSelected(false);
-                dos.setSelected(false);
-                tres.setSelected(false);
-                cuatro.setSelected(false);
+                deseleccionar();
                 cinco.setSelected(true); // Mantener "Ventas" resaltado
-                seis.setSelected(false);
-                siete1.setSelected(false);
-                ocho.setSelected(false);
-                nueve.setSelected(false);
+              
 
                 // Cargar la vista de Cotización (temporalmente un mensaje)
                 JOptionPane.showMessageDialog(null, "Funcionalidad de Cotización no implementada aún.");
@@ -327,12 +291,12 @@ public class Principal extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         contenedor = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         menu = new rojeru_san.RSButton();
-        jButton3 = new javax.swing.JButton();
         noti = new rojeru_san.RSButton();
+        btnUnidad = new RSMaterialComponent.RSButtonShape();
+        btnMarcas = new RSMaterialComponent.RSButtonShape();
         jPanel3 = new javax.swing.JPanel();
         dos = new rojeru_san.RSButton();
         tres = new rojeru_san.RSButton();
@@ -401,15 +365,6 @@ public class Principal extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(29, 30, 81));
 
-        jButton2.setBackground(new java.awt.Color(29, 30, 81));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
-        jButton2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("CARPINTERIA");
@@ -426,24 +381,13 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(29, 30, 81));
-        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/usuario (2).png"))); // NOI18N
-        jButton3.setText("Usuario");
-        jButton3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
         noti.setBackground(new java.awt.Color(29, 30, 81));
         noti.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
         noti.setIcon(new javax.swing.ImageIcon(getClass().getResource("/notificacion (1).png"))); // NOI18N
         noti.setText("Notificaiones");
         noti.setToolTipText("");
-        noti.setColorHover(new java.awt.Color(128, 128, 128));
+        noti.setColorHover(new java.awt.Color(29, 30, 81));
+        noti.setDoubleBuffered(true);
         noti.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         noti.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         noti.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -451,6 +395,32 @@ public class Principal extends javax.swing.JFrame {
         noti.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 notiActionPerformed(evt);
+            }
+        });
+
+        btnUnidad.setBackground(new java.awt.Color(29, 30, 81));
+        btnUnidad.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnUnidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/usuario (2).png"))); // NOI18N
+        btnUnidad.setText("Usuario");
+        btnUnidad.setToolTipText("");
+        btnUnidad.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnUnidad.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        btnUnidad.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnUnidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnidadActionPerformed(evt);
+            }
+        });
+
+        btnMarcas.setBackground(new java.awt.Color(29, 30, 81));
+        btnMarcas.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnMarcas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
+        btnMarcas.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnMarcas.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        btnMarcas.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnMarcas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMarcasActionPerformed(evt);
             }
         });
 
@@ -467,13 +437,13 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(jLabel1)))
-                .addGap(666, 666, 666)
+                .addGap(669, 669, 669)
                 .addComponent(noti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnMarcas, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -484,17 +454,15 @@ public class Principal extends javax.swing.JFrame {
                         .addGap(30, 30, 30)
                         .addComponent(jLabel1))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(noti, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(menu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(menu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnMarcas, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(noti, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -927,16 +895,10 @@ public class Principal extends javax.swing.JFrame {
     private void ochoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ochoActionPerformed
         ocultarSubmenus(); // Ocultar submenú si ya está visible
         if (!this.ocho.isSelected()) {
-            this.uno.setSelected(false);
-            this.dos.setSelected(false);
-            this.tres.setSelected(false);
-            this.cuatro.setSelected(false);
-            this.cinco.setSelected(false);
-            this.seis.setSelected(false);
+            deseleccionar();
             this.ocho.setSelected(true);
-            this.nueve.setSelected(false);
-            this.siete1.setSelected(false);
-
+            
+            
             Cliente cliente = new Cliente();
             cliente.setSize(1290, 730);
             cliente.setLocation(0, 0);
@@ -954,15 +916,8 @@ public class Principal extends javax.swing.JFrame {
     private void seisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seisActionPerformed
         ocultarSubmenus(); // Ocultar submenú si ya está visible
         if (!this.seis.isSelected()) {
-            this.uno.setSelected(false);
-            this.dos.setSelected(false);
-            this.tres.setSelected(false);
-            this.cuatro.setSelected(false);
-            this.cinco.setSelected(false);
-            this.ocho.setSelected(false);
-            this.siete1.setSelected(false);
-            this.nueve.setSelected(false);
-            this.seis.setSelected(false);
+            deseleccionar();
+            this.seis.setSelected(true);
 
         }
         animacion();
@@ -972,15 +927,9 @@ public class Principal extends javax.swing.JFrame {
     private void cincoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cincoActionPerformed
 
         if (!this.cinco.isSelected()) {
-            this.uno.setSelected(false);
-            this.dos.setSelected(false);
-            this.tres.setSelected(false);
-            this.cuatro.setSelected(false);
+            deseleccionar();
             this.cinco.setSelected(true);
-            this.seis.setSelected(false);
-            this.ocho.setSelected(false);
-            this.siete1.setSelected(false);
-            this.nueve.setSelected(false);
+            
 
             if (!submenuVentasVisible) {
                 ocultarSubmenus(); // Cerrar otros submenús
@@ -1015,15 +964,9 @@ public class Principal extends javax.swing.JFrame {
     private void cuatroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuatroActionPerformed
         ocultarSubmenus();
         if (!this.cuatro.isSelected()) {
-            this.uno.setSelected(false);
-            this.dos.setSelected(false);
-            this.tres.setSelected(false);
+            deseleccionar();
             this.cuatro.setSelected(true);
-            this.cinco.setSelected(false);
-            this.seis.setSelected(false);
-            this.ocho.setSelected(false);
-            this.nueve.setSelected(false);
-            this.siete1.setSelected(false);
+            
 
             Produccion pr = new Produccion(new javax.swing.JFrame(), true);
             pr.setSize(1290, 730);
@@ -1043,15 +986,9 @@ public class Principal extends javax.swing.JFrame {
     private void tresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tresActionPerformed
         ocultarSubmenus();
         if (!this.tres.isSelected()) {
-            this.uno.setSelected(false);
-            this.dos.setSelected(false);
+            deseleccionar();
             this.tres.setSelected(true);
-            this.cuatro.setSelected(false);
-            this.cinco.setSelected(false);
-            this.seis.setSelected(false);
-            this.ocho.setSelected(false);
-            this.nueve.setSelected(false);
-            this.siete1.setSelected(false);
+            
 
             proveedores pr = new proveedores();
             pr.setSize(1290, 730);
@@ -1070,15 +1007,9 @@ public class Principal extends javax.swing.JFrame {
     private void unoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unoActionPerformed
         ocultarSubmenus();
         if (!this.uno.isSelected()) {
+            deseleccionar();
             this.uno.setSelected(true);
-            this.dos.setSelected(false);
-            this.tres.setSelected(false);
-            this.cuatro.setSelected(false);
-            this.cinco.setSelected(false);
-            this.seis.setSelected(false);
-            this.ocho.setSelected(false);
-            this.nueve.setSelected(false);
-            this.siete1.setSelected(false);
+            
 
             Escritorio1 es = new Escritorio1();
             es.setSize(1090, 690);
@@ -1095,15 +1026,9 @@ public class Principal extends javax.swing.JFrame {
 
     private void dosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dosActionPerformed
         if (!this.dos.isSelected()) {
-            this.uno.setSelected(false);
-            this.tres.setSelected(false);
-            this.cuatro.setSelected(false);
-            this.cinco.setSelected(false);
-            this.seis.setSelected(false);
-            this.ocho.setSelected(false);
+            deseleccionar();
             this.dos.setSelected(true);
-            this.nueve.setSelected(false);
-            this.siete1.setSelected(false);
+            
 
         }
         // Alternar visibilidad del submenú
@@ -1141,15 +1066,8 @@ public class Principal extends javax.swing.JFrame {
     private void siete1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siete1ActionPerformed
         ocultarSubmenus();
         if (!this.siete1.isSelected()) {
-            this.uno.setSelected(false);
-            this.tres.setSelected(false);
-            this.cuatro.setSelected(false);
-            this.cinco.setSelected(false);
-            this.seis.setSelected(false);
-            this.ocho.setSelected(false);
-            this.dos.setSelected(false);
+            deseleccionar();
             this.siete1.setSelected(true);
-            this.nueve.setSelected(false);
             // Crear y mostrar el panel de inventario
             Usuario usu = new Usuario();
             usu.setSize(1290, 730);
@@ -1170,7 +1088,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_uno1ActionPerformed
 
     private void dos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dos1ActionPerformed
-   
+
     }//GEN-LAST:event_dos1ActionPerformed
 
     private void tres1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tres1ActionPerformed
@@ -1242,29 +1160,10 @@ public class Principal extends javax.swing.JFrame {
         animacion();
     }//GEN-LAST:event_jPanel5MouseEntered
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-
-        JOptionPane.showMessageDialog(null, "Hasta luego");
-        Login1121 lo = new Login1121();
-        lo.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void nueveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nueveActionPerformed
         if (!this.nueve.isSelected()) {
-            this.uno.setSelected(false);
-            this.tres.setSelected(false);
-            this.cuatro.setSelected(false);
-            this.cinco.setSelected(false);
-            this.seis.setSelected(false);
-            this.ocho.setSelected(false);
-            this.dos.setSelected(false);
+            deseleccionar();
             this.nueve.setSelected(true);
-            this.siete1.setSelected(false);
 
             // Crear y mostrar el panel de inventario
             catalogo cat = new catalogo();
@@ -1291,6 +1190,14 @@ public class Principal extends javax.swing.JFrame {
     private void notiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notiActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_notiActionPerformed
+
+    private void btnUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnidadActionPerformed
+
+    }//GEN-LAST:event_btnUnidadActionPerformed
+
+    private void btnMarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcasActionPerformed
+
+    }//GEN-LAST:event_btnMarcasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1330,6 +1237,8 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private RSMaterialComponent.RSButtonShape btnMarcas;
+    private RSMaterialComponent.RSButtonShape btnUnidad;
     private rojeru_san.RSButton cinco;
     private rojeru_san.RSButton cinco1;
     private javax.swing.JPanel contenedor;
@@ -1337,8 +1246,6 @@ public class Principal extends javax.swing.JFrame {
     private rojeru_san.RSButton cuatro1;
     private rojeru_san.RSButton dos;
     private rojeru_san.RSButton dos1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
@@ -1362,5 +1269,17 @@ public class Principal extends javax.swing.JFrame {
     private rojeru_san.RSButton uno;
     private rojeru_san.RSButton uno1;
     // End of variables declaration//GEN-END:variables
+
+    private void deseleccionar() {
+        this.uno.setSelected(false);
+        this.dos.setSelected(false);
+        this.tres.setSelected(false);
+        this.cuatro.setSelected(false);
+        this.cinco.setSelected(false);
+        this.seis.setSelected(false);
+        this.ocho.setSelected(false);
+        this.nueve.setSelected(false);
+        this.siete1.setSelected(false);
+    }
 
 }

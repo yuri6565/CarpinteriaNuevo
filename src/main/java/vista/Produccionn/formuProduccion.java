@@ -195,6 +195,7 @@ public class formuProduccion extends javax.swing.JDialog {
         } else { // Si eligió "Cancelar"
             this.dispose(); // Cierra el formulario de producción
         }
+        
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed

@@ -1,10 +1,9 @@
 
-
-
-
 package vista.Produccionn;
 
 import javax.swing.JFrame;
+import vista.Produccionn.ProduccionContenido;
+
 
 /**
  *
@@ -38,51 +37,16 @@ public final class Produccion extends javax.swing.JPanel {
 
         nuevo = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        produccion = new rojeru_san.RSButtonRiple();
-        etapaProduccion = new rojeru_san.RSButtonRiple();
-        detalleProduccion = new rojeru_san.RSButtonRiple();
         panelPrincipal = new javax.swing.JPanel();
+        produccion = new RSMaterialComponent.RSButtonShape();
+        Detalle_produccion = new RSMaterialComponent.RSButtonShape();
+        Etapas_produccion = new RSMaterialComponent.RSButtonShape();
 
         nuevo.setBackground(new java.awt.Color(255, 255, 255));
         nuevo.setMinimumSize(new java.awt.Dimension(1290, 730));
         nuevo.setPreferredSize(new java.awt.Dimension(1290, 730));
         nuevo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         nuevo.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(368, 111, -1, -1));
-
-        produccion.setBackground(new java.awt.Color(46, 49, 82));
-        produccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ajuste.png"))); // NOI18N
-        produccion.setText("  Produccion");
-        produccion.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
-        produccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                produccionActionPerformed(evt);
-            }
-        });
-        nuevo.add(produccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 180, 40));
-
-        etapaProduccion.setBackground(new java.awt.Color(46, 49, 82));
-        etapaProduccion.setBorder(null);
-        etapaProduccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gears-set.png"))); // NOI18N
-        etapaProduccion.setText(" Etapas produccion");
-        etapaProduccion.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
-        etapaProduccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                etapaProduccionActionPerformed(evt);
-            }
-        });
-        nuevo.add(etapaProduccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 20, 180, 40));
-
-        detalleProduccion.setBackground(new java.awt.Color(46, 49, 82));
-        detalleProduccion.setBorder(null);
-        detalleProduccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/eye (1).png"))); // NOI18N
-        detalleProduccion.setText("Detalle produccion");
-        detalleProduccion.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
-        detalleProduccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                detalleProduccionActionPerformed(evt);
-            }
-        });
-        nuevo.add(detalleProduccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, 180, -1));
 
         panelPrincipal.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -98,6 +62,49 @@ public final class Produccion extends javax.swing.JPanel {
         );
 
         nuevo.add(panelPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 1250, 630));
+
+        produccion.setBackground(new java.awt.Color(46, 49, 82));
+        produccion.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        produccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gears-set.png"))); // NOI18N
+        produccion.setText("Produccion");
+        produccion.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        produccion.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        produccion.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        produccion.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        produccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                produccionActionPerformed(evt);
+            }
+        });
+        nuevo.add(produccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 200, 40));
+
+        Detalle_produccion.setBackground(new java.awt.Color(46, 49, 82));
+        Detalle_produccion.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        Detalle_produccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/llave-inglesa.png"))); // NOI18N
+        Detalle_produccion.setText("Detalle produccion");
+        Detalle_produccion.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        Detalle_produccion.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        Detalle_produccion.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        Detalle_produccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Detalle_produccionActionPerformed(evt);
+            }
+        });
+        nuevo.add(Detalle_produccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 200, 40));
+
+        Etapas_produccion.setBackground(new java.awt.Color(46, 49, 82));
+        Etapas_produccion.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        Etapas_produccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ajuste.png"))); // NOI18N
+        Etapas_produccion.setText("Etapas produccion");
+        Etapas_produccion.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        Etapas_produccion.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        Etapas_produccion.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        Etapas_produccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Etapas_produccionActionPerformed(evt);
+            }
+        });
+        nuevo.add(Etapas_produccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 200, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -115,51 +122,12 @@ public final class Produccion extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void detalleProduccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detalleProduccionActionPerformed
-        // TODO add your handling code here:
-        if (!this.detalleProduccion.isSelected()) {
-            this.produccion.setSelected(false);
-            this.detalleProduccion.setSelected(true);
-            this.etapaProduccion.setSelected(false);
-
-            ProduccionContDetalle c = new ProduccionContDetalle();
-            c.setSize(1250, 630);
-            c.setLocation(0, 0);
-            panelPrincipal.removeAll();
-            panelPrincipal.add(c);
-            panelPrincipal.revalidate();
-            panelPrincipal.repaint();
-
-        }
-
-    }//GEN-LAST:event_detalleProduccionActionPerformed
-
-    private void etapaProduccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_etapaProduccionActionPerformed
-        // TODO add your handling code here:
-        if (!this.etapaProduccion.isSelected()) {
-            this.produccion.setSelected(false);
-            this.detalleProduccion.setSelected(false);
-            this.etapaProduccion.setSelected(true);
-
-            ProduccionConEtapa c = new ProduccionConEtapa();
-            c.setSize(1250, 630);
-            c.setLocation(0, 0);
-
-            panelPrincipal.removeAll();
-            panelPrincipal.add(c);
-            panelPrincipal.revalidate();
-            panelPrincipal.repaint();
-
-        }
-
-    }//GEN-LAST:event_etapaProduccionActionPerformed
-
     private void produccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produccionActionPerformed
         // TODO add your handling code here:
         if (!this.produccion.isSelected()) {
             this.produccion.setSelected(true);
-            this.detalleProduccion.setSelected(false);
-            this.etapaProduccion.setSelected(false);
+            this.Detalle_produccion.setSelected(false);
+            this.Etapas_produccion.setSelected(false);
 
             ProduccionContenido c = new ProduccionContenido();
             c.setSize(1250, 630);
@@ -172,14 +140,51 @@ public final class Produccion extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_produccionActionPerformed
 
+    private void Detalle_produccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Detalle_produccionActionPerformed
+        // TODO add your handling code here:
+        if (!this.Detalle_produccion.isSelected()) {
+            this.produccion.setSelected(false);
+            this.Detalle_produccion.setSelected(true);
+            this.Etapas_produccion.setSelected(false);
+
+            ProduccionContDetalle c = new ProduccionContDetalle();
+            c.setSize(1250, 630);
+            c.setLocation(0, 0);
+            panelPrincipal.removeAll();
+            panelPrincipal.add(c);
+            panelPrincipal.revalidate();
+            panelPrincipal.repaint();
+
+        }
+    }//GEN-LAST:event_Detalle_produccionActionPerformed
+
+    private void Etapas_produccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Etapas_produccionActionPerformed
+        // TODO add your handling code here:
+        if (!this.Etapas_produccion.isSelected()) {
+            this.produccion.setSelected(false);
+            this.Detalle_produccion.setSelected(false);
+            this.Etapas_produccion.setSelected(true);
+
+            ProduccionConEtapa c = new ProduccionConEtapa();
+            c.setSize(1250, 630);
+            c.setLocation(0, 0);
+
+            panelPrincipal.removeAll();
+            panelPrincipal.add(c);
+            panelPrincipal.revalidate();
+            panelPrincipal.repaint();
+
+        }
+    }//GEN-LAST:event_Etapas_produccionActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private rojeru_san.RSButtonRiple detalleProduccion;
-    private rojeru_san.RSButtonRiple etapaProduccion;
+    private RSMaterialComponent.RSButtonShape Detalle_produccion;
+    private RSMaterialComponent.RSButtonShape Etapas_produccion;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel nuevo;
     private javax.swing.JPanel panelPrincipal;
-    private rojeru_san.RSButtonRiple produccion;
+    private RSMaterialComponent.RSButtonShape produccion;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -2,24 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista.Inventario;
+package vista.Inventario0;
 
-import controlador.Ctrl_MarcaMaterial;
+import controlador.Ctrl_CategoriaMaterial;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import modelo.Marca;
+import modelo.Categoria;
 
 /**
  *
  * @author ZenBook
  */
-public class materialMarca extends javax.swing.JDialog {
+public class materialCategoria extends javax.swing.JDialog {
     private int ultimaFilaSeleccionada = -1;
     /**
-     * Creates new form materialMarca
+     * Creates new form categorias
      */
-    public materialMarca(java.awt.Frame parent, boolean modal) {
+    public materialCategoria(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         actualizarTabla();
@@ -31,16 +31,17 @@ public class materialMarca extends javax.swing.JDialog {
             cargarDatosSeleccionados();
         }
     });
+        
     }
-    
+
     private void actualizarTabla() {
     DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
     model.setRowCount(0); // Limpiar tabla
 
-    Ctrl_MarcaMaterial dao = new Ctrl_MarcaMaterial();
+    Ctrl_CategoriaMaterial dao = new Ctrl_CategoriaMaterial();
     
-    for (Marca marca : dao.obtenerCategoriasMaterial()) {
-        model.addRow(new Object[]{marca.getCodigo(), marca.getNombre()});
+    for (Categoria categoria : dao.obtenerCategoriasMaterial()) {
+        model.addRow(new Object[]{categoria.getCodigo(), categoria.getNombre()});
     } 
    }
     
@@ -94,11 +95,12 @@ public class materialMarca extends javax.swing.JDialog {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(46, 49, 82));
+        jPanel2.setPreferredSize(new java.awt.Dimension(95, 20));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Century751 BT", 1, 17)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Marcas");
+        jLabel2.setText("Categorías");
         jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 26));
@@ -231,7 +233,7 @@ public class materialMarca extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -270,7 +272,7 @@ public class materialMarca extends javax.swing.JDialog {
 
         if (confirmacion == JOptionPane.YES_OPTION) {
             DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
-            Ctrl_MarcaMaterial dao = new Ctrl_MarcaMaterial();
+            Ctrl_CategoriaMaterial dao = new Ctrl_CategoriaMaterial();
             boolean errorOcurrido = false;
             int eliminadosExitosos = 0;
 
@@ -319,8 +321,8 @@ public class materialMarca extends javax.swing.JDialog {
         String nombre = txtNombre.getText().trim(); // Obtener solo el nombre
 
         if (!nombre.isEmpty()) { // Verifica que el campo no esté vacío
-            Marca categoria = new Marca(nombre);
-            Ctrl_MarcaMaterial dao = new Ctrl_MarcaMaterial();
+            Categoria categoria = new Categoria(nombre);
+            Ctrl_CategoriaMaterial dao = new Ctrl_CategoriaMaterial();
 
             if (dao.insertar(categoria)) {
                 actualizarTabla(); // Refresca la tabla con los datos nuevos
@@ -340,8 +342,8 @@ public class materialMarca extends javax.swing.JDialog {
         String nuevoNombre = txtNombre.getText().trim();
 
         if (!nuevoNombre.isEmpty()) {
-            Marca categoria = new Marca(codigo, nuevoNombre);
-            Ctrl_MarcaMaterial dao = new Ctrl_MarcaMaterial();
+            Categoria categoria = new Categoria(codigo, nuevoNombre);
+            Ctrl_CategoriaMaterial dao = new Ctrl_CategoriaMaterial();
 
             if (dao.actualizar(categoria)) {  // Necesitarás implementar este método
                 actualizarTabla();
@@ -376,20 +378,20 @@ public class materialMarca extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(materialMarca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(materialCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(materialMarca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(materialCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(materialMarca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(materialCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(materialMarca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(materialCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                materialMarca dialog = new materialMarca(new javax.swing.JFrame(), true);
+                materialCategoria dialog = new materialCategoria(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
