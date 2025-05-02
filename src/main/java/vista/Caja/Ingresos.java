@@ -6,9 +6,13 @@ package vista.Caja;
 
 import controlador.Ctrl_CajaIngresos;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import modelo.Caja;
 
 
@@ -148,7 +152,7 @@ public final class Ingresos extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarActionPerformed
-
+    filtrarTabla();
     }//GEN-LAST:event_txtbuscarActionPerformed
 
     private void btnNuevoProducActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProducActionPerformed
@@ -209,6 +213,36 @@ public final class Ingresos extends javax.swing.JPanel {
     );
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    private void filtrarTabla() {
+        String textoBusqueda = txtbuscar.getText().trim();
+        DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(modelo);
+        Tabla1.setRowSorter(tr);
+            List<RowFilter<Object, Object>> filters = new ArrayList<>();
+
+        if (textoBusqueda.isEmpty()) {
+            tr.setRowFilter(null);
+            return;
+        }
+        // Expresión regular para detectar si son solo números (1-2 dígitos)
+        if (textoBusqueda.matches("\\d+")) {
+            // Buscar en ID (columna 0) y fechas (columnas 1 y 2)
+            filters.add(RowFilter.regexFilter(textoBusqueda, 0));// ID (coincidencia exacta)
+            filters.add(RowFilter.regexFilter(textoBusqueda, 1));
+            filters.add(RowFilter.regexFilter(textoBusqueda, 4));
+
+        }  // Si contiene letras (aunque sea parcial)
+        else {
+        // Buscar en Detalle (columna 2) y Categoría (columna 3)
+        String regex = "(?i)" + textoBusqueda; // (?i) = ignore case
+        filters.add(RowFilter.regexFilter(regex, 2)); // Detalle
+        filters.add(RowFilter.regexFilter(regex, 3)); // Categoría
+    }
+
+    // Aplicar todos los filtros combinados con OR
+    tr.setRowFilter(RowFilter.orFilter(filters));
+
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSTableMetro Tabla1;
     private rojeru_san.RSButtonRiple btnEliminar;
