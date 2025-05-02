@@ -2,24 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista.Inventario;
+package vista.Inventario0;
 
-import controlador.Ctrl_UnidadMaterial;
+import controlador.Ctrl_CategoriaHerramienta;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import modelo.Unidad;
+import modelo.Categoria;
 
 /**
  *
  * @author ZenBook
  */
-public class materialUnidad extends javax.swing.JDialog {
+public class herramientasCategoria extends javax.swing.JDialog {
     private int ultimaFilaSeleccionada = -1;
     /**
-     * Creates new form materialUnidad
+     * Creates new form herramientasCategoria
      */
-    public materialUnidad(java.awt.Frame parent, boolean modal) {
+    public herramientasCategoria(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         actualizarTabla();
@@ -37,10 +37,10 @@ public class materialUnidad extends javax.swing.JDialog {
     DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
     model.setRowCount(0); // Limpiar tabla
 
-        Ctrl_UnidadMaterial dao = new Ctrl_UnidadMaterial();
+    Ctrl_CategoriaHerramienta dao = new Ctrl_CategoriaHerramienta();
     
-    for (Unidad unidad : dao.obtenerCategoriasMaterial()) {
-        model.addRow(new Object[]{unidad.getCodigo(), unidad.getNombre()});
+    for (Categoria categoria : dao.obtenerCategoriasHerramienta()) {
+        model.addRow(new Object[]{categoria.getCodigo(), categoria.getNombre()});
     } 
    }
     
@@ -75,8 +75,6 @@ public class materialUnidad extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
@@ -87,28 +85,22 @@ public class materialUnidad extends javax.swing.JDialog {
         btnActualizar = new RSMaterialComponent.RSButtonShape();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabla1 = new RSMaterialComponent.RSTableMetroCustom();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        btnSalir = new rojeru_san.RSButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(740, 497));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel2.setBackground(new java.awt.Color(46, 49, 82));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel2.setFont(new java.awt.Font("Century751 BT", 1, 17)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Unidades de medida");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, -1));
-
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 26));
 
         jPanel3.setBackground(new java.awt.Color(245, 246, 250));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel3.setText("Codigo:");
-        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, -1, -1));
+        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, -1));
 
         txtNombre.setForeground(new java.awt.Color(0, 0, 0));
         txtNombre.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -121,11 +113,11 @@ public class materialUnidad extends javax.swing.JDialog {
                 txtNombreActionPerformed(evt);
             }
         });
-        jPanel3.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 50, 200, 30));
+        jPanel3.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 50, 200, 30));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel4.setText("Nombre:");
-        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, -1, -1));
+        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, -1, -1));
 
         txtCodigo.setEditable(false);
         txtCodigo.setBackground(new java.awt.Color(244, 244, 244));
@@ -133,7 +125,7 @@ public class materialUnidad extends javax.swing.JDialog {
         txtCodigo.setForeground(new java.awt.Color(0, 0, 0));
         txtCodigo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtCodigo.setPlaceholder("");
-        jPanel3.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 50, 100, 30));
+        jPanel3.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 100, 30));
 
         btnEliminar.setBackground(new java.awt.Color(46, 49, 82));
         btnEliminar.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -146,7 +138,7 @@ public class materialUnidad extends javax.swing.JDialog {
                 btnEliminarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 90, 110, 30));
+        jPanel3.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 90, 110, 30));
 
         btnAñadir.setBackground(new java.awt.Color(46, 49, 82));
         btnAñadir.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -159,7 +151,7 @@ public class materialUnidad extends javax.swing.JDialog {
                 btnAñadirActionPerformed(evt);
             }
         });
-        jPanel3.add(btnAñadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 10, 110, 30));
+        jPanel3.add(btnAñadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 10, 110, 30));
 
         btnActualizar.setBackground(new java.awt.Color(46, 49, 82));
         btnActualizar.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -172,7 +164,7 @@ public class materialUnidad extends javax.swing.JDialog {
                 btnActualizarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, 110, 30));
+        jPanel3.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 50, 110, 30));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 690, 130));
 
@@ -223,15 +215,36 @@ public class materialUnidad extends javax.swing.JDialog {
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, 560, 290));
 
+        jPanel2.setBackground(new java.awt.Color(46, 49, 82));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setFont(new java.awt.Font("Century751 BT", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Categorías");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, -1));
+
+        btnSalir.setBackground(new java.awt.Color(46, 49, 82));
+        btnSalir.setColorHover(new java.awt.Color(204, 0, 0));
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 0, 30, 30));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 30));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 710, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 1, Short.MAX_VALUE))
         );
 
         pack();
@@ -270,7 +283,7 @@ public class materialUnidad extends javax.swing.JDialog {
 
         if (confirmacion == JOptionPane.YES_OPTION) {
             DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
-            Ctrl_UnidadMaterial dao = new Ctrl_UnidadMaterial();
+            Ctrl_CategoriaHerramienta dao = new Ctrl_CategoriaHerramienta();
             boolean errorOcurrido = false;
             int eliminadosExitosos = 0;
 
@@ -319,8 +332,8 @@ public class materialUnidad extends javax.swing.JDialog {
         String nombre = txtNombre.getText().trim(); // Obtener solo el nombre
 
         if (!nombre.isEmpty()) { // Verifica que el campo no esté vacío
-            Unidad categoria = new Unidad(nombre);
-            Ctrl_UnidadMaterial dao = new Ctrl_UnidadMaterial();
+            Categoria categoria = new Categoria(nombre);
+            Ctrl_CategoriaHerramienta dao = new Ctrl_CategoriaHerramienta();
 
             if (dao.insertar(categoria)) {
                 actualizarTabla(); // Refresca la tabla con los datos nuevos
@@ -340,8 +353,8 @@ public class materialUnidad extends javax.swing.JDialog {
         String nuevoNombre = txtNombre.getText().trim();
 
         if (!nuevoNombre.isEmpty()) {
-            Unidad categoria = new Unidad(codigo, nuevoNombre);
-            Ctrl_UnidadMaterial dao = new Ctrl_UnidadMaterial();
+            Categoria categoria = new Categoria(codigo, nuevoNombre);
+            Ctrl_CategoriaHerramienta dao = new Ctrl_CategoriaHerramienta();
 
             if (dao.actualizar(categoria)) {  // Necesitarás implementar este método
                 actualizarTabla();
@@ -358,6 +371,10 @@ public class materialUnidad extends javax.swing.JDialog {
     private void tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla1MouseClicked
 
     }//GEN-LAST:event_tabla1MouseClicked
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -376,20 +393,20 @@ public class materialUnidad extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(materialUnidad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientasCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(materialUnidad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientasCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(materialUnidad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientasCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(materialUnidad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientasCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                materialUnidad dialog = new materialUnidad(new javax.swing.JFrame(), true);
+                herramientasCategoria dialog = new herramientasCategoria(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -405,6 +422,7 @@ public class materialUnidad extends javax.swing.JDialog {
     private RSMaterialComponent.RSButtonShape btnActualizar;
     private RSMaterialComponent.RSButtonShape btnAñadir;
     private RSMaterialComponent.RSButtonShape btnEliminar;
+    private rojeru_san.RSButton btnSalir;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

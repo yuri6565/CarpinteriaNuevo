@@ -21,18 +21,18 @@ import modelo.Conexion;
  */
 public class EditEtapaProduccion extends javax.swing.JDialog {
 
-    
     private int idProduccionActual;
 
     /**
      * Creates new form EtapaProduccion
+     *
      * @param parent
      * @param modal
      * @param produccionPanel
      */
     public EditEtapaProduccion(Frame parent, boolean modal) {
         super(parent, modal);
-       
+
         initComponents();
         setLocationRelativeTo(parent);
         txtetapa.setEditable(true); // Habilitar edición del campo
@@ -200,7 +200,7 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-    int confirm = JOptionPane.showConfirmDialog(this,
+        int confirm = JOptionPane.showConfirmDialog(this,
                 "¿Está seguro de guardar los cambios?",
                 "Confirmar",
                 JOptionPane.YES_NO_OPTION);
@@ -275,13 +275,12 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
             con.close();
             this.dispose();
 
-         
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
                     "Error al guardar: " + e.getMessage(),
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
-        }       
+        }
     }
 // Métodos auxiliares
 
@@ -296,7 +295,7 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
-        
+
 
     }//GEN-LAST:event_btnCancelarActionPerformed
 
@@ -321,7 +320,7 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
                 String sql = "SELECT * FROM etapa_produccion WHERE idetapa_produccion  = ?";
                 PreparedStatement ps = con.prepareStatement(sql);
                 ps.setInt(1, id);
-                
+
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     idProduccionActual = id;
@@ -361,6 +360,7 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private Produccion produccionPanel;
+
             @Override
             public void run() {
                 EtapaProduccion dialog = new EtapaProduccion(new javax.swing.JFrame(), true);

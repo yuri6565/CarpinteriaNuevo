@@ -157,7 +157,7 @@ public final class ProduccionContenido extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarActionPerformed
-
+filtrarTabla();
     }//GEN-LAST:event_txtbuscarActionPerformed
 
     private void btnNuevoProducActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProducActionPerformed
@@ -175,80 +175,59 @@ public final class ProduccionContenido extends javax.swing.JPanel {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // 1. Obtener filas seleccionadas
         int[] selectedRows = Tabla1.getSelectedRows();
 
-    // 1. Validar selección
-    if (selectedRows.length == 0) {
-        new espacio_alerta(
-            (Frame) this.getParent(),
-            true,
-            "Advertencia",
-            "Por favor seleccione al menos una fila para eliminar"
-        ).setVisible(true);
+        // 2. Validar si hay filas seleccionadas
+        if (selectedRows.length == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor seleccione al menos una fila para eliminar",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 3. Mostrar confirmación
+    int confirm = JOptionPane.showConfirmDialog(this,
+        "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
+        "Confirmar eliminación",
+        JOptionPane.YES_NO_OPTION);
+
+    // 4. Si el usuario no confirma, salir
+    if (confirm != JOptionPane.YES_OPTION) {
         return;
     }
 
-    // 2. Mostrar diálogo de confirmación personalizado
-    alerta_elimi confirmDialog = new alerta_elimi(
-        (Frame) this.getParent(),
-        true,
-        "Confirmar eliminación",
-        "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?"
-    );
-    confirmDialog.setLocationRelativeTo(null);
-    confirmDialog.setVisible(true);
+        // 5. Eliminar registros
+        try (Connection con = new Conexion().getConnection()) {
+            String sql = "DELETE FROM produccion WHERE id_produccion = ?";
+            DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
 
-    if (!confirmDialog.opcionConfirmada) {
-        return; // Si el usuario cancela, no hacer nada
-    }
+            // Eliminar en orden inverso para evitar problemas con los índices
+            for (int i = selectedRows.length - 1; i >= 0; i--) {
+                int row = selectedRows[i];
+                int id = (int) model.getValueAt(row, 0); // ID está en la columna 0
 
-    // 3. Proceso de eliminación
-    try (Connection con = new ProduccionContenido.Conexion().getConnection()) {
-        con.setAutoCommit(false);
-        String sql = "DELETE FROM produccion WHERE id_produccion = ?";
-        boolean error = false;
-
-        for (int i = selectedRows.length - 1; i >= 0; i--) {
-            int selectedRow = selectedRows[i];
-            int idProduccion = (int) Tabla1.getValueAt(selectedRow, 0);
-
-            try (PreparedStatement ps = con.prepareStatement(sql)) {
-                ps.setInt(1, idProduccion);
-                ps.executeUpdate();
-
-                DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-                model.removeRow(selectedRow);
-            } catch (SQLException e) {
-                error = true;
-                new Error_guardar(
-                    (Frame) this.getParent(),
-                    true,
-                    "Error",
-                    "Error al eliminar el registro con ID " + idProduccion + ": " + e.getMessage()
-                ).setVisible(true);
-                break;
+                try (PreparedStatement ps = con.prepareStatement(sql)) {
+                    ps.setInt(1, id);
+                    ps.executeUpdate();
+                    model.removeRow(row); // Eliminar de la tabla visual
+                }
             }
+
+            JOptionPane.showMessageDialog(this,
+                    "Registros eliminados correctamente",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al eliminar: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
 
-        if (error) {
-            con.rollback();
-        } else {
-            con.commit();
-            new Datos_guardados(
-                (Frame) this.getParent(),
-                true,
-                "Éxito",
-                "Se eliminaron " + selectedRows.length + " registros correctamente"
-            ).setVisible(true);
-        }
-    } catch (SQLException e) {
-        new Error_guardar(
-            (Frame) this.getParent(),
-            true,
-            "Error",
-            "Error en la conexión: " + e.getMessage()
-        ).setVisible(true);
-    }
+
     }//GEN-LAST:event_btnEliminarActionPerformed
 
 

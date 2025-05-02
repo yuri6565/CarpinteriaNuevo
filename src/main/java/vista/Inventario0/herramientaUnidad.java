@@ -2,70 +2,72 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista.Inventario;
+package vista.Inventario0;
 
-import controlador.Ctrl_CategoriaMaterial;
+import controlador.Ctrl_UnidadHerramienta;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import modelo.Categoria;
+import modelo.Unidad;
 
 /**
  *
  * @author ZenBook
  */
-public class materialCategoria extends javax.swing.JDialog {
+public class herramientaUnidad extends javax.swing.JDialog {
+
     private int ultimaFilaSeleccionada = -1;
+
     /**
-     * Creates new form categorias
+     * Creates new form herramientaUnidad
      */
-    public materialCategoria(java.awt.Frame parent, boolean modal) {
+    public herramientaUnidad(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         actualizarTabla();
+
         tabla1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        
-            // Listener para selección de filas
+
+        // Listener para selección de filas
         tabla1.getSelectionModel().addListSelectionListener(e -> {
-        if (!e.getValueIsAdjusting()) {
-            cargarDatosSeleccionados();
-        }
-    });
-        
+            if (!e.getValueIsAdjusting()) {
+                cargarDatosSeleccionados();
+            }
+        });
     }
 
     private void actualizarTabla() {
-    DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
-    model.setRowCount(0); // Limpiar tabla
-
-    Ctrl_CategoriaMaterial dao = new Ctrl_CategoriaMaterial();
-    
-    for (Categoria categoria : dao.obtenerCategoriasMaterial()) {
-        model.addRow(new Object[]{categoria.getCodigo(), categoria.getNombre()});
-    } 
-   }
-    
-    private void cargarDatosSeleccionados() {
-    int[] selectedRows = tabla1.getSelectedRows(); // Obtener todas las filas seleccionadas
-
-    if (selectedRows.length == 1) { // Solo cargar datos si hay exactamente una fila seleccionada
-        int filaSeleccionada = selectedRows[0];
         DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
-        txtCodigo.setText(model.getValueAt(filaSeleccionada, 0).toString()); // Código
-        txtNombre.setText(model.getValueAt(filaSeleccionada, 1).toString()); // Nombre
-        ultimaFilaSeleccionada = filaSeleccionada;
-    } else {
-        // Si hay más de una fila seleccionada o ninguna, limpiar los campos
-        limpiarCampos();
-        ultimaFilaSeleccionada = -1;
+        model.setRowCount(0); // Limpiar tabla
+
+        Ctrl_UnidadHerramienta dao = new Ctrl_UnidadHerramienta();
+
+        for (Unidad unidad : dao.obtenerUnidadesHerramienta()) {
+            model.addRow(new Object[]{unidad.getCodigo(), unidad.getNombre()});
+        }
     }
+
+    private void cargarDatosSeleccionados() {
+        int[] selectedRows = tabla1.getSelectedRows(); // Obtener todas las filas seleccionadas
+
+        if (selectedRows.length == 1) { // Solo cargar datos si hay exactamente una fila seleccionada
+            int filaSeleccionada = selectedRows[0];
+            DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
+            txtCodigo.setText(model.getValueAt(filaSeleccionada, 0).toString()); // Código
+            txtNombre.setText(model.getValueAt(filaSeleccionada, 1).toString()); // Nombre
+            ultimaFilaSeleccionada = filaSeleccionada;
+        } else {
+            // Si hay más de una fila seleccionada o ninguna, limpiar los campos
+            limpiarCampos();
+            ultimaFilaSeleccionada = -1;
+        }
     }
-    
-    
+
     private void limpiarCampos() {
-    txtCodigo.setText("");
-    txtNombre.setText("");
+        txtCodigo.setText("");
+        txtNombre.setText("");
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -78,6 +80,7 @@ public class materialCategoria extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        btnSalir = new rojeru_san.RSButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
@@ -95,15 +98,23 @@ public class materialCategoria extends javax.swing.JDialog {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(46, 49, 82));
-        jPanel2.setPreferredSize(new java.awt.Dimension(95, 20));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setFont(new java.awt.Font("Century751 BT", 1, 17)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Century751 BT", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Categorías");
+        jLabel2.setText("Unidades de medida");
         jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, -1));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 26));
+        btnSalir.setBackground(new java.awt.Color(46, 49, 82));
+        btnSalir.setColorHover(new java.awt.Color(204, 0, 0));
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 0, 30, 30));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 30));
 
         jPanel3.setBackground(new java.awt.Color(245, 246, 250));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -233,11 +244,15 @@ public class materialCategoria extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
@@ -248,9 +263,9 @@ public class materialCategoria extends javax.swing.JDialog {
 
         if (filasSeleccionadas.length == 0) {
             JOptionPane.showMessageDialog(this,
-                "Selecciona al menos una categoría primero",
-                "Advertencia",
-                JOptionPane.WARNING_MESSAGE);
+                    "Selecciona al menos una categoría primero",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -263,16 +278,16 @@ public class materialCategoria extends javax.swing.JDialog {
         }
 
         int confirmacion = JOptionPane.showConfirmDialog(
-            this,
-            mensajeConfirmacion,
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE
+                this,
+                mensajeConfirmacion,
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
         );
 
         if (confirmacion == JOptionPane.YES_OPTION) {
             DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
-            Ctrl_CategoriaMaterial dao = new Ctrl_CategoriaMaterial();
+            Ctrl_UnidadHerramienta dao = new Ctrl_UnidadHerramienta();
             boolean errorOcurrido = false;
             int eliminadosExitosos = 0;
 
@@ -293,24 +308,24 @@ public class materialCategoria extends javax.swing.JDialog {
             if (errorOcurrido) {
                 if (eliminadosExitosos > 0) {
                     JOptionPane.showMessageDialog(this,
-                        "Se eliminaron " + eliminadosExitosos + " categorías, pero hubo errores con algunas.",
-                        "Resultado parcial",
-                        JOptionPane.WARNING_MESSAGE);
+                            "Se eliminaron " + eliminadosExitosos + " categorías, pero hubo errores con algunas.",
+                            "Resultado parcial",
+                            JOptionPane.WARNING_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(this,
-                        "Error al eliminar todas las categorías seleccionadas",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                            "Error al eliminar todas las categorías seleccionadas",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 String mensajeExito = (filasSeleccionadas.length == 1)
-                ? "¡Categoría eliminada correctamente!"
-                : "¡Se eliminaron " + filasSeleccionadas.length + " categorías correctamente!";
+                        ? "¡Categoría eliminada correctamente!"
+                        : "¡Se eliminaron " + filasSeleccionadas.length + " categorías correctamente!";
 
                 JOptionPane.showMessageDialog(this,
-                    mensajeExito,
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
+                        mensajeExito,
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
 
             limpiarCampos();
@@ -321,8 +336,8 @@ public class materialCategoria extends javax.swing.JDialog {
         String nombre = txtNombre.getText().trim(); // Obtener solo el nombre
 
         if (!nombre.isEmpty()) { // Verifica que el campo no esté vacío
-            Categoria categoria = new Categoria(nombre);
-            Ctrl_CategoriaMaterial dao = new Ctrl_CategoriaMaterial();
+            Unidad categoria = new Unidad(nombre);
+            Ctrl_UnidadHerramienta dao = new Ctrl_UnidadHerramienta();
 
             if (dao.insertar(categoria)) {
                 actualizarTabla(); // Refresca la tabla con los datos nuevos
@@ -342,8 +357,8 @@ public class materialCategoria extends javax.swing.JDialog {
         String nuevoNombre = txtNombre.getText().trim();
 
         if (!nuevoNombre.isEmpty()) {
-            Categoria categoria = new Categoria(codigo, nuevoNombre);
-            Ctrl_CategoriaMaterial dao = new Ctrl_CategoriaMaterial();
+            Unidad categoria = new Unidad(codigo, nuevoNombre);
+            Ctrl_UnidadHerramienta dao = new Ctrl_UnidadHerramienta();
 
             if (dao.actualizar(categoria)) {  // Necesitarás implementar este método
                 actualizarTabla();
@@ -378,20 +393,20 @@ public class materialCategoria extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(materialCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientaUnidad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(materialCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientaUnidad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(materialCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientaUnidad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(materialCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientaUnidad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                materialCategoria dialog = new materialCategoria(new javax.swing.JFrame(), true);
+                herramientaUnidad dialog = new herramientaUnidad(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -407,6 +422,7 @@ public class materialCategoria extends javax.swing.JDialog {
     private RSMaterialComponent.RSButtonShape btnActualizar;
     private RSMaterialComponent.RSButtonShape btnAñadir;
     private RSMaterialComponent.RSButtonShape btnEliminar;
+    private rojeru_san.RSButton btnSalir;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

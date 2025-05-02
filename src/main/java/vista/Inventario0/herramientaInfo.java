@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista.Inventario;
+package vista.Inventario0;
 
-import controlador.Ctrl_CategoriaMaterial;
-import controlador.Ctrl_MarcaMaterial;
-import controlador.Ctrl_UnidadMaterial;
+import controlador.Ctrl_CategoriaHerramienta;
+import controlador.Ctrl_MarcaHerramienta;
+import controlador.Ctrl_UnidadHerramienta;
 import java.awt.Image;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -17,21 +17,19 @@ import modelo.Unidad;
 
 /**
  *
- * @ author ZenBook
+ * @author ZenBook
  */
-public class materialInfo extends javax.swing.JDialog {
+public class herramientaInfo extends javax.swing.JDialog {
 
     /**
-     * Creates new form materialInfo
+     * Creates new form herramientaInfo
      */
-    public materialInfo(java.awt.Frame parent, boolean modal) {
+    public herramientaInfo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
     }
-    
-        // Método para establecer los datos
-    public void mostrarMaterial(MaterialDatos material) {
+
+        public void mostrarMaterial(MaterialDatos material) {
         lblCodigo.setText(String.valueOf(material.getIdInventario())); // Usar idInventario como código
         lblNombre.setText(material.getNombre());
         lblDescripcion.setText(material.getDescripcion());
@@ -39,8 +37,8 @@ public class materialInfo extends javax.swing.JDialog {
         lblEstado.setText(material.getEstado());
         lblStock.setText(material.getStock());
 
-        Ctrl_CategoriaMaterial ctrlCategoria = new Ctrl_CategoriaMaterial();
-        List<Categoria> categorias = ctrlCategoria.obtenerCategoriasMaterial();
+            Ctrl_CategoriaHerramienta ctrlCategoria = new Ctrl_CategoriaHerramienta();
+        List<Categoria> categorias = ctrlCategoria.obtenerCategoriasHerramienta();
         String nombreCategoria = "Sin categoría";
         for (Categoria cat : categorias) {
             if (cat.getCodigo() == material.getIdCategoria()) {
@@ -50,8 +48,8 @@ public class materialInfo extends javax.swing.JDialog {
         }
         lblCategoria.setText(nombreCategoria);
 
-        Ctrl_MarcaMaterial ctrlMarca = new Ctrl_MarcaMaterial();
-        List<Marca> marcas = ctrlMarca.obtenerCategoriasMaterial();
+            Ctrl_MarcaHerramienta ctrlMarca = new Ctrl_MarcaHerramienta();
+        List<Marca> marcas = ctrlMarca.obtenerMarcasHerramienta();
         String nombreMarca = "Sin marca";
         for (Marca m : marcas) {
             if (m.getCodigo() == material.getIdMarca()) {
@@ -62,8 +60,8 @@ public class materialInfo extends javax.swing.JDialog {
         // Asumimos que txtUnidadMedida debería mostrar la marca, ya que no hay un campo directo para unidad en la interfaz
         lblMarca.setText(nombreMarca); // Corregir esto si debe mostrar la unidad de medida
 
-        Ctrl_UnidadMaterial ctrlUnidad = new Ctrl_UnidadMaterial();
-        List<Unidad> unidades = ctrlUnidad.obtenerCategoriasMaterial();
+            Ctrl_UnidadHerramienta ctrlUnidad = new Ctrl_UnidadHerramienta();
+        List<Unidad> unidades = ctrlUnidad.obtenerUnidadesHerramienta();
         String nombreUnidad = "Sin unidad de medida";
         for (Unidad um : unidades) {
             if (um.getCodigo() == material.getIdUnidadMedida()) {
@@ -89,7 +87,7 @@ public class materialInfo extends javax.swing.JDialog {
             lblImagen.setIcon(null);
         }
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -135,7 +133,7 @@ public class materialInfo extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Century751 BT", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Información del material");
+        jLabel1.setText("Información de la herramienta");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 510, 50));
@@ -284,20 +282,20 @@ public class materialInfo extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(materialInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientaInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(materialInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientaInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(materialInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientaInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(materialInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientaInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                materialInfo dialog = new materialInfo(new javax.swing.JFrame(), true);
+                herramientaInfo dialog = new herramientaInfo(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
