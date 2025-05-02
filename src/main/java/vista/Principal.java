@@ -5,6 +5,7 @@
 package vista;
 
 
+import vista.Caja.Caja;
 import vista.Produccionn.Produccion;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -44,63 +45,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel4.setVisible(false);
         jPanel5.setVisible(false);
 
-//scrollpanel---------------------------
-        // Definir un JScrollPane y envolver el contenedor
-        JScrollPane scrollPane = new JScrollPane(contenedor);
-        scrollPane.setBounds(260, 80, 1020, 550); // Tamaño del área visible
 
-// Asegurar el desplazamiento horizontal y vertical
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); // Forzar barra horizontal
-
-        scrollPane.setBorder(null); // Quitar el borde del JScrollPane
-        contenedor.setBorder(null); // Quitar el borde del JPanel
-
-// Ajustar el tamaño preferido del contenedor para que sea más grande que el JScrollPane
-        contenedor.setPreferredSize(new Dimension(1290, 870)); // Asegura un tamaño mayor al viewport
-
-// Agregar el JScrollPane al panel principal
-        jPanel1.add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, 1020, 730));
-
-        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
-        scrollPane.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 8));
-
-        scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-            @Override
-            protected void configureScrollBarColors() {
-                this.thumbColor = new Color(153, 153, 153);
-            }
-
-            @Override
-            protected JButton createDecreaseButton(int orientation) {
-                return new JButton() {
-                    @Override
-                    public Dimension getPreferredSize() {
-                        return new Dimension(0, 0);
-                    }
-                };
-            }
-
-            @Override
-            protected JButton createIncreaseButton(int orientation) {
-                return new JButton() {
-                    @Override
-                    public Dimension getPreferredSize() {
-                        return new Dimension(0, 0);
-                    }
-                };
-            }
-
-            @Override
-            protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(thumbColor);
-                g2.fillRoundRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height, 10, 10);
-                g2.dispose();
-            }
-        });
-//scrollpanel ---------------------
 
         // Inicializar el submenú
         submenuInventario = new JPanel();
@@ -866,6 +811,16 @@ public class Principal extends javax.swing.JFrame {
             this.ocho.setSelected(false);
             this.siete1.setSelected(false);
 
+            
+            
+            Caja caja = new Caja();
+            caja.setSize(1290, 730);
+            caja.setLocation(0, 0);
+
+            contenedor.removeAll();
+            contenedor.add(caja);
+            contenedor.revalidate();
+            contenedor.repaint();
         }
         animacion();
 

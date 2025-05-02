@@ -2,36 +2,31 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package vista;
+package vista.Caja;
 
+import controlador.Ctrl_CajaEgresos;
 import java.awt.Color;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-
 
 /**
  *
  * @author ADSO
  */
-public class Ingresos extends javax.swing.JPanel {
+public final class Egresos extends javax.swing.JPanel {
 
     /**
-     * Creates new form Ingresos
+     * Creates new form CajaContenido
      */
-    public Ingresos() {
+    public Egresos() {
         initComponents();
+        
         
         Tabla1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
-                new String[]{"Id Registro", "Fecha Pago", "Detalle", "Cantidad ingresada"}
+                new String[]{"Id Registro", "Fecha Pago", "Detalle", "Categoria",  "Cantidad ingresada"}
         ));
 
         Tabla1.setCellSelectionEnabled(false);
@@ -44,8 +39,23 @@ public class Ingresos extends javax.swing.JPanel {
         Tabla1.setSelectionBackground(colorSeleccion);
         Tabla1.setSelectionForeground(colorTexto);
 
-        cargarTablaIngresos();
+        cargarTablaEgresos();
     }
+    public void cargarTablaEgresos() {
+    DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+    model.setRowCount(0);
+
+    Ctrl_CajaEgresos ctrl = new Ctrl_CajaEgresos();
+    for (modelo.Caja caja : ctrl.obtenerEgresos()) {
+        model.addRow(new Object[]{
+            caja.getId_codigo(),
+            caja.getFecha(),
+            caja.getDescripcion(),
+            caja.getCategoria(),
+            caja.getMonto()
+        });
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -56,7 +66,8 @@ public class Ingresos extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
         txtbuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
         btnNuevoProduc = new rojeru_san.RSButtonRiple();
         btnGuardar = new rojeru_san.RSButtonRiple();
@@ -64,9 +75,9 @@ public class Ingresos extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         Tabla1 = new RSMaterialComponent.RSTableMetro();
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setPreferredSize(new java.awt.Dimension(1250, 630));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setPreferredSize(new java.awt.Dimension(1250, 630));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtbuscar.setBackground(new java.awt.Color(245, 245, 245));
         txtbuscar.setForeground(new java.awt.Color(29, 30, 91));
@@ -79,7 +90,7 @@ public class Ingresos extends javax.swing.JPanel {
                 txtbuscarActionPerformed(evt);
             }
         });
-        jPanel1.add(txtbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 430, 40));
+        jPanel3.add(txtbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 430, 40));
 
         btnNuevoProduc.setBackground(new java.awt.Color(46, 49, 82));
         btnNuevoProduc.setText(" Nuevo");
@@ -88,7 +99,7 @@ public class Ingresos extends javax.swing.JPanel {
                 btnNuevoProducActionPerformed(evt);
             }
         });
-        jPanel1.add(btnNuevoProduc, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 120, 40));
+        jPanel3.add(btnNuevoProduc, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 120, 40));
 
         btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar.setText("Editar");
@@ -97,7 +108,7 @@ public class Ingresos extends javax.swing.JPanel {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 20, 120, 40));
+        jPanel3.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 20, 120, 40));
 
         btnEliminar.setBackground(new java.awt.Color(46, 49, 82));
         btnEliminar.setText(" Eliminar");
@@ -106,7 +117,7 @@ public class Ingresos extends javax.swing.JPanel {
                 btnEliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 20, 120, 40));
+        jPanel3.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 20, 120, 40));
 
         Tabla1.setForeground(new java.awt.Color(255, 255, 255));
         Tabla1.setAlignmentX(0.1F);
@@ -119,21 +130,38 @@ public class Ingresos extends javax.swing.JPanel {
         Tabla1.setColorSecundaryText(new java.awt.Color(46, 49, 82));
         jScrollPane2.setViewportView(Tabla1);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 1210, 490));
+        jPanel3.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 1160, 490));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1301, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1301, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 673, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1301, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1301, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 673, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -142,21 +170,21 @@ public class Ingresos extends javax.swing.JPanel {
     }//GEN-LAST:event_txtbuscarActionPerformed
 
     private void btnNuevoProducActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProducActionPerformed
-        formuIngresos dialog = new formuIngresos(new javax.swing.JFrame(), true);
+        formuEgresos dialog = new formuEgresos(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-        cargarTablaIngresos();
+        cargarTablaEgresos();
     }//GEN-LAST:event_btnNuevoProducActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        EditIngresos dialog = new EditIngresos(new javax.swing.JFrame(), true);
+        EditEgresos dialog = new EditEgresos(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-        cargarTablaIngresos();
+        cargarTablaEgresos();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        int[] selectedRows = Tabla1.getSelectedRows(); // Obtener todas las filas seleccionadas
+        int[] selectedRows = Tabla1.getSelectedRows();
 
         if (selectedRows.length == 0) {
             JOptionPane.showMessageDialog(
@@ -168,7 +196,6 @@ public class Ingresos extends javax.swing.JPanel {
             return;
         }
 
-        // Confirmar eliminación
         int confirm = JOptionPane.showConfirmDialog(
             this,
             "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
@@ -177,102 +204,40 @@ public class Ingresos extends javax.swing.JPanel {
         );
 
         if (confirm != JOptionPane.YES_OPTION) {
-            return; // Si el usuario cancela, no hacer nada
+            return;
         }
 
-        try (Connection con = new Ingresos.Conexion().getConnection()) {
-            // Desactivar auto-commit para manejar transacciones
-            con.setAutoCommit(false);
+        Ctrl_CajaEgresos ctrl = new Ctrl_CajaEgresos();
+        DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+        int eliminados = 0;
 
-            String sql = "DELETE FROM produccion WHERE id_produccion = ?";
-            boolean error = false;
-
-            // Eliminar en orden inverso para evitar problemas con los índices de la tabla
-            for (int i = selectedRows.length - 1; i >= 0; i--) {
-                int selectedRow = selectedRows[i];
-                int idProduccion = (int) Tabla1.getValueAt(selectedRow, 0);
-
-                try (PreparedStatement ps = con.prepareStatement(sql)) {
-                    ps.setInt(1, idProduccion);
-                    ps.executeUpdate();
-
-                    // Eliminar la fila de la tabla visual
-                    DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-                    model.removeRow(selectedRow);
-                } catch (SQLException e) {
-                    error = true;
-                    JOptionPane.showMessageDialog(
-                        this,
-                        "Error al eliminar el registro con ID " + idProduccion + ": " + e.getMessage(),
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE
-                    );
-                    break; // Detener si hay un error
-                }
+        for (int i = selectedRows.length - 1; i >= 0; i--) {
+            int codigo = (int) Tabla1.getValueAt(selectedRows[i], 0);
+            if (ctrl.eliminar(codigo)) {
+                model.removeRow(selectedRows[i]);
+                eliminados++;
             }
-
-            if (error) {
-                con.rollback(); // Si hay error, deshacer cambios
-            } else {
-                con.commit(); // Si todo va bien, confirmar cambios
-                JOptionPane.showMessageDialog(
-                    this,
-                    "Se eliminaron " + selectedRows.length + " registros correctamente",
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE
-                );
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(
-                this,
-                "Error en la conexión: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE
-            );
         }
+
+        JOptionPane.showMessageDialog(
+            this,
+            "Se eliminaron " + eliminados + " registros correctamente.",
+            "Éxito",
+            JOptionPane.INFORMATION_MESSAGE
+        );
     }//GEN-LAST:event_btnEliminarActionPerformed
-public class Conexion {
 
-        public Connection getConnection() {
-            Connection con = null;
-            try {
-                String myBD = "jdbc:mysql://localhost:3306/carpinteriasistema?serverTimezone=UTC";
-                con = DriverManager.getConnection(myBD, "root", "");
-                System.out.println("Conexión exitosa.");
-            } catch (SQLException e) {
-                System.out.println("Error al conectar: " + e.getMessage());
-            }
-            return con;
-        }
-    }
-public void cargarTablaIngresos() {
-        try (Connection con = new Ingresos.Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("SELECT id_ingreso, fecha, detalle, ingreso FROM Ingreso"); ResultSet rs = ps.executeQuery()) {
-
-            DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-            model.setRowCount(0);
-
-            while (rs.next()) {
-                model.addRow(new Object[]{
-                    rs.getInt("id_ingreso"),
-                    rs.getDate("fecha"),
-                    rs.getString("detalle"),
-                    rs.getDouble("ingreso"),});
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al cargar datos: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSTableMetro Tabla1;
     private rojeru_san.RSButtonRiple btnEliminar;
     private rojeru_san.RSButtonRiple btnGuardar;
     private rojeru_san.RSButtonRiple btnNuevoProduc;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtbuscar;
     // End of variables declaration//GEN-END:variables
+
+    
 }

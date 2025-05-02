@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista;
+package vista.Caja;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,8 +17,8 @@ import modelo.Conexion;
  * @author ADSO
  */
 public class EditIngresos extends javax.swing.JDialog {
-
-    private int id_ingreso;
+    private int idIngresoActual;
+    private int id_codigo;
 
     public EditIngresos(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -48,6 +48,8 @@ public class EditIngresos extends javax.swing.JDialog {
         txtCantidadEdit = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel2 = new javax.swing.JLabel();
         txtDetalleEdit = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel3 = new javax.swing.JLabel();
+        comboCategoria = new RSMaterialComponent.RSComboBoxMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -72,11 +74,11 @@ public class EditIngresos extends javax.swing.JDialog {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 350, 140, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 410, 140, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setText("Detalle:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 90, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 90, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel10.setText("Fecha Pago:");
@@ -90,11 +92,11 @@ public class EditIngresos extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 140, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 140, -1));
 
         txtPago.setBackground(new java.awt.Color(255, 255, 255));
         txtPago.setForeground(new java.awt.Color(255, 255, 255));
-        txtPago.setDateFormatString("y-MM-d");
+        txtPago.setDateFormatString("yyyy-MM-dd");
         txtPago.setMaxSelectableDate(new java.util.Date(253370786472000L));
         jPanel1.add(txtPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 110, 190, 30));
 
@@ -123,63 +125,127 @@ public class EditIngresos extends javax.swing.JDialog {
             }
         });
         jPanel1.add(txtBusca, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 100, 30));
+
+        txtCantidadEdit.setForeground(new java.awt.Color(0, 0, 0));
+        txtCantidadEdit.setPlaceholder("Ingrese Valor a Ingresar");
         jPanel1.add(txtCantidadEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 420, -1));
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel2.setText("Cantidad Ingresada:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, -1, -1));
-        jPanel1.add(txtDetalleEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 420, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
+
+        txtDetalleEdit.setForeground(new java.awt.Color(0, 0, 0));
+        txtDetalleEdit.setPlaceholder("Detalles de Ingreso");
+        jPanel1.add(txtDetalleEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 420, -1));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel3.setText("Categoria:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, -1, -1));
+
+        comboCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione categoria:", "Servicios Publicos", "Compra de Productos e Insumos", "Arriendo", "Nómina", "Gastos Administrativos", "Mercadeo y Publicidad", "Transporte", "Domicilios y Logistica", "mantenimineto y Reparaciones", "Muebles", "Equipos o Maquinaria", "Otros" }));
+        comboCategoria.setColorMaterial(new java.awt.Color(0, 0, 0));
+        comboCategoria.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        comboCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboCategoriaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(comboCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 420, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (id_ingreso == 0) {
-            JOptionPane.showMessageDialog(this, "Primero busque un registro para editar", "Error", JOptionPane.ERROR_MESSAGE);
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de guardar los cambios?",
+                "Confirmar",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+// Validación de campos
+        if (txtPago.getDateFormatString()== null || txtDetalleEdit.getText()== null
+                || txtCantidadEdit.getText()== null|| comboCategoria.getSelectedItem()== null || comboCategoria.getSelectedIndex() == 0) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Todos los campos son obligatorios",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            Connection con = Conexion.getConnection();
-            String sql = "UPDATE ingreso SET fecha = ?, detalle = ?, ingreso = ? WHERE id_ingreso = ?";
-
-            PreparedStatement ps = con.prepareStatement(sql);
-
+            // Obtener valores
             java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
-            ps.setDate(1, fecha);
-            
-            
-            ps.setString(2, txtDetalleEdit.getText());
+            String detalle = txtDetalleEdit.getText();
             double cantidad = Double.parseDouble(txtCantidadEdit.getText());
-            ps.setDouble(3, cantidad);
-            
-            ps.setInt(4, id_ingreso);
+            String categoria = comboCategoria.getSelectedItem().toString();
 
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(this, "Datos actualizados correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            
+
+            Connection con = Conexion.getConnection();
+            
+
+            if (idIngresoActual == 0) {
+                // Insertar nuevo registro
+                try (PreparedStatement ps = con.prepareStatement(
+                        "INSERT INTO caja (fecha, monto, descripcion,categoria) VALUES (?,?, ?,?)")) {
+
+                    ps.setDate(1, fecha);
+                    ps.setDouble(2, cantidad);
+                    ps.setString(3, detalle);
+                    ps.setString(4, categoria);
+
+                    ps.executeUpdate();
+
+                    JOptionPane.showMessageDialog(this,
+                            "Datos guardados correctamente",
+                            "Éxito",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
             } else {
-                JOptionPane.showMessageDialog(this, "No se pudo actualizar el registro", "Error", JOptionPane.ERROR_MESSAGE);
+                // Actualizar registro existente
+                try (PreparedStatement ps = con.prepareStatement(
+                        "UPDATE caja SET fecha = ?, monto = ?, descripcion = ?, categoria = ? WHERE id_codigo = ?")) {
+
+                    ps.setDate(1, fecha);
+                    ps.setDouble(2, cantidad);
+                    ps.setString(3, detalle);
+                    ps.setString(4, categoria);
+                    ps.setInt(5, id_codigo);
+
+                    int affectedRows = ps.executeUpdate();
+                    if (affectedRows > 0) {
+                        JOptionPane.showMessageDialog(this,
+                                "Datos actualizados correctamente",
+                                "Éxito",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
             }
 
             con.close();
             this.dispose();
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-
+         
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al guardar: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }       
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -189,43 +255,60 @@ public class EditIngresos extends javax.swing.JDialog {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         try {
-            String idStr = txtBusca.getText();
-            if (idStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Ingrese un ID válido", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            int id = Integer.parseInt(idStr);
-            Connection con = Conexion.getConnection();
-            String sql = "SELECT * FROM ingreso WHERE id_ingreso = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
-
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                id_ingreso = id;
-                // Llenar los campos con los datos de la base de datos
-                txtPago.setDate(rs.getDate("fecha"));
-                txtCantidadEdit.setText(rs.getString("ingreso"));
-                txtDetalleEdit.setText(rs.getString("detalle"));
-
-                // Puedes agregar más campos según necesites
-            } else {
-                JOptionPane.showMessageDialog(this, "No se encontró producción con ese ID", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-
-            con.close();
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El ID debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al buscar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+        String idStr = txtBusca.getText().trim();
+        if (idStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un ID válido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+
+        int id = Integer.parseInt(idStr);
+        
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM caja WHERE id_codigo = ?")) {
+            
+            ps.setInt(1, id);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    id_codigo = id;
+                    idIngresoActual = id;
+                    
+                    // Llenar los campos con los datos
+                    txtPago.setDate(rs.getDate("fecha"));
+                    txtCantidadEdit.setText(String.valueOf(rs.getDouble("monto")));
+                    txtDetalleEdit.setText(rs.getString("descripcion"));
+                    
+                    // Establecer la categoría seleccionada
+                    String categoria = rs.getString("categoria");
+                    for (int i = 0; i < comboCategoria.getItemCount(); i++) {
+                        if (comboCategoria.getItemAt(i).equals(categoria)) {
+                            comboCategoria.setSelectedIndex(i);
+                            break;
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, 
+                        "No se encontró un ingreso con ese ID", 
+                        "Error", 
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "El ID debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al buscar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void txtBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBuscaActionPerformed
+
+    private void comboCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCategoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboCategoriaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -273,10 +356,12 @@ public class EditIngresos extends javax.swing.JDialog {
     private rojeru_san.RSButtonRiple btnBuscar;
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
+    private RSMaterialComponent.RSComboBoxMaterial comboCategoria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
