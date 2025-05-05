@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package vista;
+package vista.proveedor;
 
 import java.awt.Color;
 import java.sql.Connection;
@@ -84,6 +84,7 @@ private DefaultTableModel modeloTabla;
         txtbuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
         jScrollPane2 = new javax.swing.JScrollPane();
         TablaP = new RSMaterialComponent.RSTableMetro();
+        producto = new RSMaterialComponent.RSButtonMaterialTwo();
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setPreferredSize(new java.awt.Dimension(1290, 730));
@@ -122,7 +123,7 @@ private DefaultTableModel modeloTabla;
                 eliminarBtnActionPerformed(evt);
             }
         });
-        jPanel4.add(eliminarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 40, 86, 37));
+        jPanel4.add(eliminarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 40, 86, 37));
 
         txtbuscar.setForeground(new java.awt.Color(29, 30, 91));
         txtbuscar.setColorIcon(new java.awt.Color(29, 30, 111));
@@ -156,6 +157,16 @@ private DefaultTableModel modeloTabla;
         jScrollPane2.setViewportView(TablaP);
 
         jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 1190, 490));
+
+        producto.setBackground(new java.awt.Color(29, 30, 51));
+        producto.setText("Producto");
+        producto.setBackgroundHover(new java.awt.Color(29, 30, 31));
+        producto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                productoActionPerformed(evt);
+            }
+        });
+        jPanel4.add(producto, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 40, 86, 37));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -337,6 +348,14 @@ private DefaultTableModel modeloTabla;
 
     }//GEN-LAST:event_editarBtnMouseClicked
 
+    private void productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productoActionPerformed
+        // TODO add your handling code here:
+        proveedorProducto dialog = new proveedorProducto(new javax.swing.JFrame(), true);
+       dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+        cargarTablaProveedor();
+    }//GEN-LAST:event_productoActionPerformed
+
     
   
 
@@ -350,6 +369,7 @@ private DefaultTableModel modeloTabla;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
+    private RSMaterialComponent.RSButtonMaterialTwo producto;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtbuscar;
     // End of variables declaration//GEN-END:variables
 
