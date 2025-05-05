@@ -5,6 +5,7 @@
 package vista;
 
 
+import vista.proveedor.proveedores;
 import vista.Caja.Caja;
 import vista.Produccionn.Produccion;
 import java.awt.BorderLayout;
