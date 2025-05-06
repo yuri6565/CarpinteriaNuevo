@@ -56,7 +56,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="contenedor" min="-2" pref="1310" max="-2" attributes="0"/>
-                      <Component id="jPanel5" pref="1314" max="32767" attributes="0"/>
+                      <Component id="jPanel5" pref="1316" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -343,12 +343,16 @@
                   <Component id="uno" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="dos" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="siete1" min="-2" pref="250" max="-2" attributes="0"/>
-                  <Component id="nueve" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="tres" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="seis" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="cuatro" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="cinco" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="ocho" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="Diez" alignment="0" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="nueve" min="-2" pref="250" max="-2" attributes="0"/>
+                  </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -365,10 +369,6 @@
                           <Group type="102" attributes="0">
                               <EmptySpace min="197" pref="197" max="-2" attributes="0"/>
                               <Component id="siete1" min="-2" pref="52" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="298" pref="298" max="-2" attributes="0"/>
-                              <Component id="nueve" min="-2" pref="53" max="-2" attributes="0"/>
                           </Group>
                           <Component id="tres" min="-2" pref="52" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
@@ -388,6 +388,11 @@
                               <Component id="ocho" min="-2" pref="53" max="-2" attributes="0"/>
                           </Group>
                       </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="nueve" min="-2" pref="53" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="Diez" min="-2" pref="53" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="208" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -655,6 +660,33 @@
                 </DimensionLayout>
               </Layout>
             </Container>
+            <Component class="rojeru_san.RSButton" name="Diez">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="51" green="1e" red="1d" type="rgb"/>
+                </Property>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
+                    <EmptyBorder bottom="1" left="30" right="1" top="1"/>
+                  </Border>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/ajustes (1).png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Configuracion"/>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
+                <Property name="colorHover" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="80" green="80" red="80" type="rgb"/>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="SansSerif" size="18" style="1"/>
+                </Property>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DiezActionPerformed"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel4">

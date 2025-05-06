@@ -313,6 +313,7 @@ public class Principal extends javax.swing.JFrame {
         nueve = new rojeru_san.RSButton();
         uno = new rojeru_san.RSButton();
         rSPanelImage3 = new rojerusan.RSPanelImage();
+        Diez = new rojeru_san.RSButton();
         jPanel4 = new javax.swing.JPanel();
         uno1 = new rojeru_san.RSButton();
         dos1 = new rojeru_san.RSButton();
@@ -609,6 +610,20 @@ public class Principal extends javax.swing.JFrame {
             .addGap(0, 153, Short.MAX_VALUE)
         );
 
+        Diez.setBackground(new java.awt.Color(29, 30, 81));
+        Diez.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
+        Diez.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ajustes (1).png"))); // NOI18N
+        Diez.setText("Configuracion");
+        Diez.setToolTipText("");
+        Diez.setColorHover(new java.awt.Color(128, 128, 128));
+        Diez.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        Diez.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        Diez.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DiezActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -619,12 +634,15 @@ public class Principal extends javax.swing.JFrame {
             .addComponent(uno, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(dos, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(siete1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(nueve, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(tres, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(seis, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(cuatro, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(cinco, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(ocho, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(Diez, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(nueve, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -640,9 +658,6 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(197, 197, 197)
                         .addComponent(siete1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(298, 298, 298)
-                        .addComponent(nueve, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(tres, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(147, 147, 147)
@@ -655,7 +670,12 @@ public class Principal extends javax.swing.JFrame {
                         .addComponent(cinco, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(247, 247, 247)
-                        .addComponent(ocho, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(ocho, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(nueve, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Diez, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(208, 208, 208))
         );
 
         jPanel4.setBackground(new java.awt.Color(29, 30, 81));
@@ -863,7 +883,7 @@ public class Principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 1310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1314, Short.MAX_VALUE)))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1316, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1182,7 +1202,7 @@ public class Principal extends javax.swing.JFrame {
             this.nueve.setSelected(true);
 
             // Crear y mostrar el panel de inventario
-            catalogo cat = new catalogo();
+            catalogo cat = new catalogo(this, submenuVisible);
             cat.setSize(1290, 730);
             cat.setLocation(0, 0);
 
@@ -1214,6 +1234,27 @@ public class Principal extends javax.swing.JFrame {
     private void btnMarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcasActionPerformed
 
     }//GEN-LAST:event_btnMarcasActionPerformed
+
+    private void DiezActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DiezActionPerformed
+        // TODO add your handling code here:
+        
+           if (!this.Diez.isSelected()) {
+            deseleccionar();
+            this.Diez.setSelected(true);
+
+            // Crear y mostrar el panel de inventario
+            config cong = new config();
+            cong.setSize(1290, 730);
+            cong.setLocation(0, 0);
+
+            contenedor.removeAll();
+            contenedor.add(cong);
+            contenedor.revalidate();
+            contenedor.repaint();
+
+        }
+        animacion();
+    }//GEN-LAST:event_DiezActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1253,6 +1294,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private rojeru_san.RSButton Diez;
     private RSMaterialComponent.RSButtonShape btnMarcas;
     private RSMaterialComponent.RSButtonShape btnUnidad;
     private rojeru_san.RSButton cinco;
