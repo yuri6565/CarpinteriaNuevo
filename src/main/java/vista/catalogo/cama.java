@@ -30,7 +30,6 @@ public class cama extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         rSLabelImage1 = new rojerusan.RSLabelImage();
-        rSLabelImage2 = new rojerusan.RSLabelImage();
         rSLabelImage3 = new rojerusan.RSLabelImage();
         rSLabelImage4 = new rojerusan.RSLabelImage();
         rSLabelImage5 = new rojerusan.RSLabelImage();
@@ -56,10 +55,6 @@ public class cama extends javax.swing.JPanel {
         rSLabelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/catalogo/cama6.jpg"))); // NOI18N
         jPanel3.add(rSLabelImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 260, -1, -1));
 
-        rSLabelImage2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        rSLabelImage2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/catalogo/cama1.png"))); // NOI18N
-        jPanel3.add(rSLabelImage2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, -1, -1));
-
         rSLabelImage3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel3.add(rSLabelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 260, -1, -1));
 
@@ -75,20 +70,19 @@ public class cama extends javax.swing.JPanel {
         rSLabelImage6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/catalogo/cama4.jpg"))); // NOI18N
         jPanel3.add(rSLabelImage6, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 40, 150, -1));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 430));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 920, 600));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 440));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 590));
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
+    javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private rojerusan.RSLabelImage rSLabelImage1;
-    private rojerusan.RSLabelImage rSLabelImage2;
     private rojerusan.RSLabelImage rSLabelImage3;
     private rojerusan.RSLabelImage rSLabelImage4;
     private rojerusan.RSLabelImage rSLabelImage5;

@@ -9,28 +9,26 @@ package modelo;
  * @author buitr
  */
 public class ProveedorDatos {
-    private String codigo_proveedor;
+    private String id_proveedor;
     private String nombre;
+    private String correo_electronico;
     private String telefono;
     private String direccion;
-    private String producto;
-    private String tipo;
 
-    public ProveedorDatos(String codigo_proveedor, String nombre, String telefono, String direccion, String producto, String tipo) {
-        this.codigo_proveedor = codigo_proveedor;
+    public ProveedorDatos(String id_proveedor, String nombre, String correo_electronico, String telefono, String direccion) {
+        this.id_proveedor = id_proveedor;
         this.nombre = nombre;
+        this.correo_electronico = correo_electronico;
         this.telefono = telefono;
         this.direccion = direccion;
-        this.producto = producto;
-        this.tipo = tipo;
     }
 
-    public String getCodigo() {
-        return codigo_proveedor;
+    public String getId_proveedor() {
+        return id_proveedor;
     }
 
-    public void setCodigo(String codigo_proveedor) {
-        this.codigo_proveedor = codigo_proveedor;
+    public void setId_proveedor(String id_proveedor) {
+        this.id_proveedor = id_proveedor;
     }
 
     public String getNombre() {
@@ -39,6 +37,14 @@ public class ProveedorDatos {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getCorreo_electronico() {
+        return correo_electronico;
+    }
+
+    public void setCorreo_electronico(String correo_electronico) {
+        this.correo_electronico = correo_electronico;
     }
 
     public String getTelefono() {
@@ -56,22 +62,6 @@ public class ProveedorDatos {
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
+  
 
-    public String getProducto() {
-        return producto;
-    }
-
-    public void setProducto(String producto) {
-        this.producto = producto;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-    
-    
 }

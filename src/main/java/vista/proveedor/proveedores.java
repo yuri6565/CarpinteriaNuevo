@@ -21,10 +21,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-/**
- *
- * @author buitr
- */
+
+
 public class proveedores extends javax.swing.JPanel {
 private DefaultTableModel modeloTabla;
     /**
@@ -36,7 +34,7 @@ private DefaultTableModel modeloTabla;
       TablaP.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         TablaP.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
-                new String[]{"Codigo", "Nombre", "Telefono", "Direccion", "Tipo", "Producto"}
+                new String[]{"ID", "Nombre","correo", "Telefono", "Direccion"}
         ));
 
         TablaP.setCellSelectionEnabled(false);
@@ -290,16 +288,16 @@ private DefaultTableModel modeloTabla;
             // Desactivar auto-commit para manejar transacciones
             con.setAutoCommit(false);
 
-            String sql = "DELETE FROM proveedor WHERE codigo_proveedor = ?";
+            String sql = "DELETE FROM proveedor WHERE id_proveedor = ?";
             boolean error = false;
 
             // Eliminar en orden inverso para evitar problemas con los índices de la tabla
             for (int i = selectedRows.length - 1; i >= 0; i--) {
                 int selectedRow = selectedRows[i];
-                int codigo_proveedor = (int) TablaP.getValueAt(selectedRow, 0);
+                int id_proveedor = (int) TablaP.getValueAt(selectedRow, 0);
 
                 try (PreparedStatement ps = con.prepareStatement(sql)) {
-                    ps.setInt(1, codigo_proveedor);
+                    ps.setInt(1, id_proveedor);
                     ps.executeUpdate();
 
                     // Eliminar la fila de la tabla visual
@@ -309,7 +307,7 @@ private DefaultTableModel modeloTabla;
                     error = true;
                     JOptionPane.showMessageDialog(
                             this,
-                            "Error al eliminar el registro con ID " + codigo_proveedor + ": " + e.getMessage(),
+                            "Error al eliminar el registro con ID " + id_proveedor + ": " + e.getMessage(),
                             "Error",
                             JOptionPane.ERROR_MESSAGE
                     );
@@ -389,19 +387,18 @@ public class Conexion {
     }
 
 public void cargarTablaProveedor() {
-        try (Connection con = new proveedores.Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("SELECT codigo_proveedor, nombre, telefono, direccion, tipo,producto  FROM proveedor"); ResultSet rs = ps.executeQuery()) {
+        try (Connection con = new proveedores.Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("SELECT id_proveedor, nombre,correo_electronico, telefono, direccion  FROM proveedor"); ResultSet rs = ps.executeQuery()) {
 
             DefaultTableModel model = (DefaultTableModel) TablaP.getModel();
             model.setRowCount(0);
 
             while (rs.next()) {
                 model.addRow(new Object[]{
-                    rs.getInt("codigo_proveedor"),
+                    rs.getInt("id_proveedor"),
                     rs.getString("nombre"),
+                    rs.getString("correo_electronico"),
                     rs.getString("telefono"),
-                    rs.getString("direccion"),
-                    rs.getString("tipo"),
-                    rs.getString("producto"),});
+                    rs.getString("direccion")});
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
@@ -435,9 +432,10 @@ private void filtrarTabla(){
     
     filters.add(RowFilter.regexFilter("(?i)"+ textobusqueda ,  1));
     
-    filters.add(RowFilter.regexFilter("(?i)"+ textobusqueda ,  4));
+    filters.add(RowFilter.regexFilter("(?i)"+ textobusqueda ,  2));
+    filters.add(RowFilter.regexFilter("(?i)"+ textobusqueda ,  3));
     
-    filters.add(RowFilter.regexFilter("(?i)"+ textobusqueda ,  5));
+    filters.add(RowFilter.regexFilter("(?i)"+ textobusqueda ,  4));
     
     tr.setRowFilter(RowFilter.orFilter(filters));
     

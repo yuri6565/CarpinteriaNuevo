@@ -2,6 +2,7 @@ package vista.catalogo;
 
 import javax.swing.JFrame;
 
+
 /**
  *
  * @author buitr
@@ -13,32 +14,34 @@ public class catalogo extends javax.swing.JPanel {
 
       
 
-        comedor c = new comedor();
-        c.setSize(1250, 630);
-        c.setLocation(0, 0);
+        silla s = new silla();
+            s.setSize(1250, 630);
+            s.setLocation(0, 0);
 
         panelPrincipal.removeAll();
-        panelPrincipal.add(c);
+        panelPrincipal.add(s);
         panelPrincipal.revalidate();
         panelPrincipal.repaint();
 
     }
 
-   
+  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        panelPrincipal = new javax.swing.JPanel();
         comedor = new rojerusan.RSLabelImage();
         silla = new rojerusan.RSLabelImage();
         armario = new rojerusan.RSLabelImage();
         rSLabelImage2 = new rojerusan.RSLabelImage();
         jPanel3 = new javax.swing.JPanel();
         rSLabelImage1 = new rojerusan.RSLabelImage();
+        panelPrincipal = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        Añadir = new rojeru_san.RSButtonRiple();
+        Añadir1 = new rojeru_san.RSButtonRiple();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -46,19 +49,6 @@ public class catalogo extends javax.swing.JPanel {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        javax.swing.GroupLayout panelPrincipalLayout = new javax.swing.GroupLayout(panelPrincipal);
-        panelPrincipal.setLayout(panelPrincipalLayout);
-        panelPrincipalLayout.setHorizontalGroup(
-            panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 980, Short.MAX_VALUE)
-        );
-        panelPrincipalLayout.setVerticalGroup(
-            panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
-        );
-
-        jPanel2.add(panelPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 980, 450));
 
         comedor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         comedor.setText("Comedor y Bar");
@@ -138,11 +128,46 @@ public class catalogo extends javax.swing.JPanel {
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 910, 120));
 
+        javax.swing.GroupLayout panelPrincipalLayout = new javax.swing.GroupLayout(panelPrincipal);
+        panelPrincipal.setLayout(panelPrincipalLayout);
+        panelPrincipalLayout.setHorizontalGroup(
+            panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 980, Short.MAX_VALUE)
+        );
+        panelPrincipalLayout.setVerticalGroup(
+            panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 450, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(panelPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, 980, 450));
+
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/catalogo/catalogo.png"))); // NOI18N
         jLabel1.setText("Catalogo");
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, -1, -1));
+
+        Añadir.setBackground(new java.awt.Color(46, 49, 82));
+        Añadir.setText("Producto");
+        Añadir.setColorHover(new java.awt.Color(0, 153, 51));
+        Añadir.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        Añadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AñadirActionPerformed(evt);
+            }
+        });
+        jPanel2.add(Añadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 200, 140, -1));
+
+        Añadir1.setBackground(new java.awt.Color(46, 49, 82));
+        Añadir1.setText("categoria");
+        Añadir1.setColorHover(new java.awt.Color(0, 153, 51));
+        Añadir1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        Añadir1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Añadir1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(Añadir1, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 20, 140, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1110, 710));
 
@@ -231,8 +256,24 @@ public class catalogo extends javax.swing.JPanel {
         
     }//GEN-LAST:event_rSLabelImage1MouseClicked
 
+    private void AñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AñadirActionPerformed
+        // TODO add your handling code here:
+        catalogoNuevo dialog = new catalogoNuevo(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_AñadirActionPerformed
+
+    private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
+        // TODO add your handling code here:
+        catalogocategoria dialog = new catalogocategoria(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_Añadir1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private rojeru_san.RSButtonRiple Añadir;
+    private rojeru_san.RSButtonRiple Añadir1;
     private rojerusan.RSLabelImage armario;
     private rojerusan.RSLabelImage comedor;
     private javax.swing.JLabel jLabel1;
