@@ -55,10 +55,11 @@ public class Principal extends javax.swing.JFrame {
         submenuInventario.setPreferredSize(new Dimension(250, 80)); // Reducir altura total para reflejar menos espacio
 
         // Añadir ítems al submenú (como botones RSButton)
+        //boton para materiales
         rojeru_san.RSButton item1 = new rojeru_san.RSButton();
         item1.setBackground(new Color(29, 30, 81)); // Fondo igual que el menú
         item1.setForeground(Color.WHITE);
-        item1.setFont(new Font("Tahoma", Font.BOLD, 14));
+        item1.setFont(new Font("Tahoma", Font.BOLD, 15));
         item1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 60, 1, 1)); // Margen izquierdo para alinear con el texto del menú
         item1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         item1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -68,10 +69,11 @@ public class Principal extends javax.swing.JFrame {
         item1.setColorHover(new Color(150, 150, 150)); // Mismo color de hover que los botones del menú
         item1.setColorTextHover(Color.WHITE);
 
+        //boton para herramientas
         rojeru_san.RSButton item2 = new rojeru_san.RSButton();
         item2.setBackground(new Color(29, 30, 81)); // Fondo igual que el menú
         item2.setForeground(Color.WHITE);
-        item2.setFont(new Font("Tahoma", Font.BOLD, 14));
+        item2.setFont(new Font("Tahoma", Font.BOLD, 15));
         item2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 60, 1, 1)); // Margen izquierdo para alinear con el texto del menú
         item2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         item2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -139,7 +141,7 @@ public class Principal extends javax.swing.JFrame {
         item3 = new rojeru_san.RSButton();
         item3.setBackground(new Color(29, 30, 81));
         item3.setForeground(Color.WHITE);
-        item3.setFont(new Font("Tahoma", Font.BOLD, 14));
+        item3.setFont(new Font("Tahoma", Font.BOLD, 15));
         item3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 60, 1, 1));
         item3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         item3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -153,7 +155,7 @@ public class Principal extends javax.swing.JFrame {
         item4 = new rojeru_san.RSButton();
         item4.setBackground(new Color(29, 30, 81));
         item4.setForeground(Color.WHITE);
-        item4.setFont(new Font("Tahoma", Font.BOLD, 14));
+        item4.setFont(new Font("Tahoma", Font.BOLD, 15));
         item4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 60, 1, 1));
         item4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         item4.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -167,12 +169,23 @@ public class Principal extends javax.swing.JFrame {
         item3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deseleccionar();
+                // Deseleccionar otros botones del menú principal
+                uno.setSelected(false);
+                dos.setSelected(false);
+                tres.setSelected(false);
+                cuatro.setSelected(false);
                 cinco.setSelected(true); // Mantener "Ventas" resaltado
-              
-                // Cargar la vista de Pedidos (temporalmente un mensaje)
-                JOptionPane.showMessageDialog(null, "Funcionalidad de Pedidos no implementada aún.");
+                seis.setSelected(false);
+                siete1.setSelected(false);
+                ocho.setSelected(false);
+                nueve.setSelected(false);
+
+                // Cargar la vista de Pedidos
+                vista.Ventas.pedido pedidos = new vista.Ventas.pedido(contenedor);
+                pedidos.setSize(1290, 730);
+                pedidos.setLocation(0, 0);
                 contenedor.removeAll();
+                contenedor.add(pedidos);
                 contenedor.revalidate();
                 contenedor.repaint();
                 animacion();
