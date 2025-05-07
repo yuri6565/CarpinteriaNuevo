@@ -17,7 +17,7 @@ public class alerta_elimi extends javax.swing.JDialog {
     /**
      * Creates new form alerta_elimi
      */
-    public alerta_elimi(Frame parent, boolean modal, String confirmar_eliminación, String par2) {
+    public alerta_elimi(Frame parent, boolean modal, String confirmar_eliminación, String está_seguro_que_desea_eliminar_los_regist) {
         super(parent, modal);
         initComponents();
     }
@@ -151,9 +151,11 @@ public class alerta_elimi extends javax.swing.JDialog {
     }
 
     public static boolean mostrarConfirmacion(Frame parent, String titulo, String mensaje) {
-        Datos_elimi dialog = new Datos_elimi(parent, true, "\u00c9xito", "Datos guardados correctamente");
-        dialog.setVisible(true);
-        return dialog.opcionConfirmada;
+        alerta_elimi dialog = new alerta_elimi(parent, true, titulo, mensaje);
+        dialog.setLocationRelativeTo(parent); // Centra el diálogo
+        dialog.setVisible(true); // Muestra el diálogo (modal)
+        return dialog.opcionConfirmada; // Retorna la opción seleccionada
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

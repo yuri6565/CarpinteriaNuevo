@@ -84,7 +84,7 @@
         <maven.compiler.release>23</maven.compiler.release>
         <exec.mainClass>com.mycompany.joseabelsistema.JoseabelSistema</exec.mainClass>
     </properties>
-    <name>joseabelSistemasga</name>
+    <name>joseabelsistema</name>
     <repositories>
         <repository>
             <id>unknown-jars-temp-repo</id>

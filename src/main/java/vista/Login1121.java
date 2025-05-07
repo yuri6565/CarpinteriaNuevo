@@ -22,39 +22,38 @@ import javax.swing.JTextField;
  * @author Personal
  */
 public class Login1121 extends javax.swing.JFrame {
- private boolean isPasswordVisible = false;
-      // Rutas de las imágenes
+
+    private boolean isPasswordVisible = false;
+    // Rutas de las imágenes
     private final String eyeOpenPath = "/vista (1).png";   // Ojo abierto
     private final String eyeClosedPath = "/ojo (2).png"; // Ojo cerrado
-    
+
     private ImageIcon eyeOpenIcon;
     private ImageIcon eyeClosedIcon;
+
     /**
      * Creates new form Login1
      */
     public Login1121() {
         initComponents();
-   setExtendedState(JFrame.MAXIMIZED_BOTH); 
-setLocationRelativeTo(null); 
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setLocationRelativeTo(null);
 
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(kGradientPanel1, gbc);
 
-setLayout(new GridBagLayout());
-GridBagConstraints gbc = new GridBagConstraints();
-gbc.gridx = 0;
-gbc.gridy = 0;
-gbc.anchor = GridBagConstraints.CENTER; 
-add(kGradientPanel1, gbc);
+        JPanel fondo = new JPanel(new BorderLayout());
+        fondo.add(kGradientPanel1, BorderLayout.CENTER);
+        setContentPane(fondo);
 
-
-JPanel fondo = new JPanel(new BorderLayout());
-fondo.add(kGradientPanel1, BorderLayout.CENTER);
-setContentPane(fondo);
-
-
-eyeOpenIcon = new ImageIcon(getClass().getResource(eyeOpenPath));
-eyeClosedIcon = new ImageIcon(getClass().getResource(eyeClosedPath));
+        eyeOpenIcon = new ImageIcon(getClass().getResource(eyeOpenPath));
+        eyeClosedIcon = new ImageIcon(getClass().getResource(eyeClosedPath));
     }
-    
+
     private void togglePasswordVisibility() {
         if (isPasswordVisible) {
             passtxt.setEchoChar('•'); // Ocultar contraseña
@@ -194,14 +193,14 @@ eyeClosedIcon = new ImageIcon(getClass().getResource(eyeClosedPath));
     }// </editor-fold>//GEN-END:initComponents
 
     private void rSMaterialButtonRectangle2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonRectangle2ActionPerformed
-    Login();
+        Login();
     }//GEN-LAST:event_rSMaterialButtonRectangle2ActionPerformed
 
     private void jLabel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MousePressed
-     Contrasena1 dialog = new Contrasena1(new javax.swing.JFrame(), true);
+        Contrasena1 dialog = new Contrasena1(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-        
+
     }//GEN-LAST:event_jLabel2MousePressed
 
     private void txt_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usuarioActionPerformed
@@ -268,27 +267,25 @@ eyeClosedIcon = new ImageIcon(getClass().getResource(eyeClosedPath));
     private RSMaterialComponent.RSTextFieldIconOne txt_usuario;
     // End of variables declaration//GEN-END:variables
 
-private void Login(){
- if(!txt_usuario.getText().isEmpty()&& !passtxt.getText().isEmpty()){
-    Contrl_login controlUsuario= new Contrl_login();
-     modelo.Usuario usuario = new modelo.Usuario();
-    usuario.setUsuario(txt_usuario.getText().trim());
-     usuario.setContrasena(passtxt.getText().trim());
-     
-     if(controlUsuario.loginUser(usuario)){
-         JOptionPane.showMessageDialog(null, "Bienvenido");
-         Principal pc = new Principal();
-         pc.setVisible(true);
-        this.dispose();
-    }else{
-         JOptionPane.showMessageDialog(null, "el usuario o las credenciales estan incorrectas, intente de nuevo");
-     }
-     
- }else{
-      JOptionPane.showMessageDialog(null, "porfavor rellene todos los campos");
-}
-}
+    private void Login() {
+        if (!txt_usuario.getText().isEmpty() && !passtxt.getText().isEmpty()) {
+            Contrl_login controlUsuario = new Contrl_login();
+            modelo.Usuario usuario = new modelo.Usuario();
+            usuario.setUsuario(txt_usuario.getText().trim());
+            usuario.setContrasena(passtxt.getText().trim());
+
+            if (controlUsuario.loginUser(usuario)) {
+                JOptionPane.showMessageDialog(null, "Bienvenido");
+                Principal pc = new Principal();
+                pc.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "el usuario o las credenciales estan incorrectas, intente de nuevo");
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "porfavor rellene todos los campos");
+        }
+    }
 
 }
-
-

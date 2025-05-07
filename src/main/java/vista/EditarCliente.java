@@ -11,14 +11,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import modelo.Cliente;
 import modelo.Conexion;
-
-
-
-
-
 
 /**
  *
@@ -26,20 +23,19 @@ import modelo.Conexion;
  */
 public class EditarCliente extends javax.swing.JDialog {
 
-   private int idCliente;
+    private int idCliente;
+    private JPanel parentPanel; // Referencia al panel principal (Cliente)
+    private DefaultTableModel tableModel; // Referencia al modelo de la tabla
+    private int selectedRow; // Fila seleccionada
 
-   public EditarCliente(java.awt.Frame parent, boolean modal) {
+    public EditarCliente(java.awt.Frame parent, boolean modal, int idCliente, DefaultTableModel tableModel, int selectedRow) {
         super(parent, modal);
         initComponents();
-        
-   }
- public EditarCliente(java.awt.Frame parent, boolean modal, int idCliente) {
-        super(parent, modal);
-        initComponents(); // No borrar, NetBeans necesita esto
         this.idCliente = idCliente;
-        cargarDatosCliente(); // Llamar al método que llena los datos
+        this.tableModel = tableModel;
+        this.selectedRow = selectedRow;
+        cargarDatosCliente();
     }
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,16 +49,21 @@ public class EditarCliente extends javax.swing.JDialog {
         panelP = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        nombretxt = new RSMaterialComponent.RSTextFieldMaterial();
-        jLabel2 = new javax.swing.JLabel();
-        apellidotxt = new RSMaterialComponent.RSTextFieldMaterial();
-        jLabel3 = new javax.swing.JLabel();
-        numerotxt = new RSMaterialComponent.RSTextFieldMaterial();
-        direcciontxt = new RSMaterialComponent.RSTextFieldMaterial();
-        identificaciontxt = new RSMaterialComponent.RSComboBoxMaterial();
-        telefonotxt = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel1 = new javax.swing.JLabel();
         rSButton1 = new rojeru_san.RSButton();
         guardar = new rojeru_san.RSButton();
+        jLabel6 = new javax.swing.JLabel();
+        identificaciontxt = new RSMaterialComponent.RSComboBoxMaterial();
+        jLabel9 = new javax.swing.JLabel();
+        nombretxt = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel10 = new javax.swing.JLabel();
+        apellidotxt = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel4 = new javax.swing.JLabel();
+        numerotxt = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel5 = new javax.swing.JLabel();
+        telefonotxt = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel11 = new javax.swing.JLabel();
+        direcciontxt = new RSMaterialComponent.RSTextFieldMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -79,59 +80,13 @@ public class EditarCliente extends javax.swing.JDialog {
         jPanel3.setToolTipText("");
         jPanel3.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Editar cliente");
+        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 170, 40));
+
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 80));
-
-        nombretxt.setForeground(new java.awt.Color(29, 30, 51));
-        nombretxt.setCaretColor(new java.awt.Color(29, 30, 51));
-        nombretxt.setColorMaterial(new java.awt.Color(29, 30, 51));
-        nombretxt.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        nombretxt.setPhColor(new java.awt.Color(29, 30, 51));
-        nombretxt.setPlaceholder("Ingrese el nombre");
-        nombretxt.setSelectionColor(new java.awt.Color(29, 30, 51));
-        jPanel1.add(nombretxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 280, 30));
-
-        jLabel2.setText("Nombre");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, -1));
-
-        apellidotxt.setForeground(new java.awt.Color(29, 30, 31));
-        apellidotxt.setColorMaterial(new java.awt.Color(29, 30, 31));
-        apellidotxt.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        apellidotxt.setPhColor(new java.awt.Color(29, 30, 51));
-        apellidotxt.setPlaceholder("Ingrese el apellido");
-        jPanel1.add(apellidotxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 240, 270, 30));
-
-        jLabel3.setText("Numero de identificacion");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 130, -1, -1));
-
-        numerotxt.setForeground(new java.awt.Color(0, 0, 0));
-        numerotxt.setColorMaterial(new java.awt.Color(0, 0, 0));
-        numerotxt.setDisabledTextColor(new java.awt.Color(51, 51, 51));
-        numerotxt.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        numerotxt.setPhColor(new java.awt.Color(29, 30, 51));
-        numerotxt.setPlaceholder("Numero de identificacion");
-        jPanel1.add(numerotxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 160, 280, 30));
-
-        direcciontxt.setForeground(new java.awt.Color(29, 30, 31));
-        direcciontxt.setColorMaterial(new java.awt.Color(29, 30, 31));
-        direcciontxt.setPhColor(new java.awt.Color(29, 30, 51));
-        direcciontxt.setPlaceholder("Direccion");
-        direcciontxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                direcciontxtActionPerformed(evt);
-            }
-        });
-        jPanel1.add(direcciontxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 310, 260, 30));
-
-        identificaciontxt.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Tipo de identificacion:", "CC", "TI", "CE" }));
-        identificaciontxt.setColorMaterial(new java.awt.Color(29, 30, 51));
-        identificaciontxt.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jPanel1.add(identificaciontxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 280, 30));
-
-        telefonotxt.setForeground(new java.awt.Color(29, 30, 31));
-        telefonotxt.setColorMaterial(new java.awt.Color(29, 30, 31));
-        telefonotxt.setPhColor(new java.awt.Color(29, 30, 51));
-        telefonotxt.setPlaceholder("telefono");
-        jPanel1.add(telefonotxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 280, -1));
 
         rSButton1.setBackground(new java.awt.Color(29, 30, 51));
         rSButton1.setText("Cancelar");
@@ -153,6 +108,78 @@ public class EditarCliente extends javax.swing.JDialog {
         });
         jPanel1.add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 420, 90, -1));
 
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel6.setText("Tipo de identificación:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
+
+        identificaciontxt.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Tipo de identificacion:", "CC", "CE", "TI", "RC", "NIT", "PA", "PEP", "PPT", "DNI" }));
+        identificaciontxt.setColorMaterial(new java.awt.Color(29, 30, 51));
+        identificaciontxt.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jPanel1.add(identificaciontxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 280, 30));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel9.setText("Nombre:");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, -1, -1));
+
+        nombretxt.setForeground(new java.awt.Color(29, 30, 51));
+        nombretxt.setCaretColor(new java.awt.Color(29, 30, 51));
+        nombretxt.setColorMaterial(new java.awt.Color(29, 30, 51));
+        nombretxt.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        nombretxt.setPhColor(new java.awt.Color(29, 30, 51));
+        nombretxt.setPlaceholder("Ingrese el nombre");
+        nombretxt.setSelectionColor(new java.awt.Color(29, 30, 51));
+        jPanel1.add(nombretxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 280, 30));
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel10.setText("Apellido:");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, -1, -1));
+
+        apellidotxt.setForeground(new java.awt.Color(29, 30, 31));
+        apellidotxt.setColorMaterial(new java.awt.Color(29, 30, 31));
+        apellidotxt.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        apellidotxt.setPhColor(new java.awt.Color(29, 30, 51));
+        apellidotxt.setPlaceholder("Ingrese el apellido");
+        jPanel1.add(apellidotxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 270, 30));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel4.setText("Numero de identificación:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 110, -1, -1));
+
+        numerotxt.setForeground(new java.awt.Color(0, 0, 0));
+        numerotxt.setColorMaterial(new java.awt.Color(0, 0, 0));
+        numerotxt.setDisabledTextColor(new java.awt.Color(51, 51, 51));
+        numerotxt.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        numerotxt.setPhColor(new java.awt.Color(29, 30, 51));
+        numerotxt.setPlaceholder("Ingrese n° identificacion");
+        jPanel1.add(numerotxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 150, 270, 30));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel5.setText("Telefono:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 210, -1, -1));
+
+        telefonotxt.setForeground(new java.awt.Color(29, 30, 31));
+        telefonotxt.setColorMaterial(new java.awt.Color(29, 30, 31));
+        telefonotxt.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        telefonotxt.setPhColor(new java.awt.Color(29, 30, 51));
+        telefonotxt.setPlaceholder("Ingrese telefono");
+        jPanel1.add(telefonotxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 240, 270, 30));
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel11.setText("Dirección:");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 300, -1, -1));
+
+        direcciontxt.setForeground(new java.awt.Color(29, 30, 31));
+        direcciontxt.setColorMaterial(new java.awt.Color(29, 30, 31));
+        direcciontxt.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        direcciontxt.setPhColor(new java.awt.Color(29, 30, 51));
+        direcciontxt.setPlaceholder("Ingrese direccion");
+        direcciontxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                direcciontxtActionPerformed(evt);
+            }
+        });
+        jPanel1.add(direcciontxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 330, 270, 30));
+
         panelP.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 480));
 
         getContentPane().add(panelP, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 480));
@@ -160,13 +187,35 @@ public class EditarCliente extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void direcciontxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_direcciontxtActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_direcciontxtActionPerformed
-
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
- 
-       
+
+// Validación de campos
+        if (identificaciontxt.getSelectedItem() == null || identificaciontxt.getSelectedItem().toString().equals("Tipo de identificacion:")) {
+            JOptionPane.showMessageDialog(this, "Seleccione un tipo de identificación válido.");
+            return;
+        }
+        if (numerotxt.getText().isEmpty() || !numerotxt.getText().matches("\\d+")) {
+            JOptionPane.showMessageDialog(this, "Ingrese un número de identificación válido.");
+            return;
+        }
+        if (nombretxt.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un nombre válido.");
+            return;
+        }
+        if (apellidotxt.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un apellido válido.");
+            return;
+        }
+        if (telefonotxt.getText().isEmpty() || !telefonotxt.getText().matches("\\d+")) {
+            JOptionPane.showMessageDialog(this, "Ingrese un teléfono válido.");
+            return;
+        }
+        if (direcciontxt.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese una dirección válida.");
+            return;
+        }
+
+// Validación de campos (sin cambios)...
         Cliente cliente = new Cliente();
         cliente.setIdentificacion(identificaciontxt.getSelectedItem().toString());
         cliente.setNumero(Integer.parseInt(numerotxt.getText()));
@@ -174,23 +223,34 @@ public class EditarCliente extends javax.swing.JDialog {
         cliente.setApellido(apellidotxt.getText());
         cliente.setTelefono(telefonotxt.getText());
         cliente.setDireccion(direcciontxt.getText());
-     
+
         Ctrl_Cliente contro = new Ctrl_Cliente();
-        if (contro.editar(cliente, idCliente)){
-            JOptionPane.showMessageDialog(null, "datos actualizados correctamente");
-             cargarDatosCliente(); 
+        if (contro.editar(cliente, idCliente)) {
+            JOptionPane.showMessageDialog(null, "Datos actualizados correctamente");
+            // Actualizar directamente la fila en el modelo
+            if (tableModel != null && selectedRow != -1) {
+                tableModel.setValueAt(idCliente, selectedRow, 0); // Código
+                tableModel.setValueAt(cliente.getIdentificacion(), selectedRow, 1); // Identificación
+                tableModel.setValueAt(cliente.getNumero(), selectedRow, 2); // Número
+                tableModel.setValueAt(cliente.getNombre(), selectedRow, 3); // Nombre
+                tableModel.setValueAt(cliente.getApellido(), selectedRow, 4); // Apellido
+                tableModel.setValueAt(cliente.getTelefono(), selectedRow, 5); // Teléfono
+                tableModel.setValueAt(cliente.getDireccion(), selectedRow, 6); // Dirección
+            }
+            dispose();
         } else {
             JOptionPane.showMessageDialog(null, "Error al guardar");
         }
 
-        
-
-  
     }//GEN-LAST:event_guardarActionPerformed
 
     private void rSButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButton1ActionPerformed
-
+        dispose(); // Cerrar el diálogo al cancelar
     }//GEN-LAST:event_rSButton1ActionPerformed
+
+    private void direcciontxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_direcciontxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_direcciontxtActionPerformed
 
     /**
      * @param args the command line arguments
@@ -229,7 +289,17 @@ public class EditarCliente extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                EditarCliente dialog = new EditarCliente(new javax.swing.JFrame(), true);
+// Crear un JFrame como ventana padre
+                javax.swing.JFrame frame = new javax.swing.JFrame();
+                // Crear un modelo de tabla de prueba con las mismas columnas que tablaclientes
+                DefaultTableModel tableModel = new DefaultTableModel(
+                );
+                // Usar una fila de prueba (índice 0)
+                int selectedRow = 0;
+                // Usar un idCliente de prueba (por ejemplo, 1)
+                int idCliente = 1;
+
+                EditarCliente dialog = new EditarCliente(frame, true, idCliente, tableModel, selectedRow);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -246,8 +316,13 @@ public class EditarCliente extends javax.swing.JDialog {
     private RSMaterialComponent.RSTextFieldMaterial direcciontxt;
     private rojeru_san.RSButton guardar;
     private RSMaterialComponent.RSComboBoxMaterial identificaciontxt;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private RSMaterialComponent.RSTextFieldMaterial nombretxt;
@@ -257,17 +332,13 @@ public class EditarCliente extends javax.swing.JDialog {
     private RSMaterialComponent.RSTextFieldMaterial telefonotxt;
     // End of variables declaration//GEN-END:variables
 
-  
-
-
-
     private void cargarDatosCliente() {
         Ctrl_Cliente controlCliente = new Ctrl_Cliente();
         Cliente cliente = controlCliente.obtenerClientePorid(idCliente);
 
         if (cliente != null) {
-              identificaciontxt.setSelectedItem(cliente.getIdentificacion()); 
-              numerotxt.setText(String.valueOf(cliente.getNumero()));
+            identificaciontxt.setSelectedItem(cliente.getIdentificacion());
+            numerotxt.setText(String.valueOf(cliente.getNumero()));
             nombretxt.setText(cliente.getNombre());
             apellidotxt.setText(cliente.getApellido());
             telefonotxt.setText(cliente.getTelefono());
@@ -277,11 +348,5 @@ public class EditarCliente extends javax.swing.JDialog {
             dispose();
         }
     }
-    
-     
-
-
-
-
 
 }
