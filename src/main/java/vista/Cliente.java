@@ -11,7 +11,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import modelo.Conexion;
 
@@ -22,14 +24,15 @@ import modelo.Conexion;
 public class Cliente extends javax.swing.JPanel {
 
     private int id_cliente;
+    private Ctrl_Cliente controlador;
 
     /**
      * Creates new form movimientos
      */
     public Cliente() {
+        controlador = new Ctrl_Cliente();
         initComponents();
-        this.cargartablacliente();
-
+        cargartablacliente();
     }
 
     /**
@@ -43,16 +46,16 @@ public class Cliente extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         txtBuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
-        btnEliminar = new rojeru_san.RSButtonRiple();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        btnNuevo1 = new RSMaterialComponent.RSButtonShape();
+        btnEditar1 = new RSMaterialComponent.RSButtonShape();
+        btnEliminar1 = new RSMaterialComponent.RSButtonShape();
+        jScrollPane3 = new javax.swing.JScrollPane();
         tablaclientes = new RSMaterialComponent.RSTableMetroCustom();
-        btnNuevo = new rojeru_san.RSButtonRiple();
-        btnEditar = new rojeru_san.RSButtonRiple();
 
         setPreferredSize(new java.awt.Dimension(1290, 730));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(237, 241, 255));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(960, 570));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -69,24 +72,77 @@ public class Cliente extends javax.swing.JPanel {
         });
         jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 430, 40));
 
-        btnEliminar.setBackground(new java.awt.Color(46, 49, 82));
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (1).png"))); // NOI18N
-        btnEliminar.setText(" Eliminar");
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+        btnNuevo1.setBackground(new java.awt.Color(46, 49, 82));
+        btnNuevo1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnNuevo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnNuevo1.setText(" Nuevo");
+        btnNuevo1.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnNuevo1.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        btnNuevo1.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnNuevo1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnNuevo1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
+                btnNuevo1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 140, 110, 30));
+        jPanel1.add(btnNuevo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 90, 110, 30));
+
+        btnEditar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnEditar1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnEditar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil (1)_1.png"))); // NOI18N
+        btnEditar1.setText(" Editar");
+        btnEditar1.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnEditar1.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        btnEditar1.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnEditar1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnEditar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditar1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEditar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 90, 110, 30));
+
+        btnEliminar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnEliminar1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnEliminar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (1).png"))); // NOI18N
+        btnEliminar1.setText(" Eliminar");
+        btnEliminar1.setToolTipText("");
+        btnEliminar1.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnEliminar1.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        btnEliminar1.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnEliminar1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnEliminar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminar1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEliminar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 90, 110, 30));
 
         tablaclientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-
+                "Codigo", "Identificacion", "Numero", "Nombre", "Apellido", "Telefono", "Direccion"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tablaclientes.setBackgoundHead(new java.awt.Color(46, 49, 82));
         tablaclientes.setBackgoundHover(new java.awt.Color(67, 150, 209));
         tablaclientes.setBorderHead(null);
@@ -99,34 +155,17 @@ public class Cliente extends javax.swing.JPanel {
         tablaclientes.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         tablaclientes.setFontHead(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         tablaclientes.setFontRowHover(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        tablaclientes.setFontRowSelect(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        tablaclientes.setPreferredScrollableViewportSize(new java.awt.Dimension(1000, 1000));
-        tablaclientes.setPreferredSize(new java.awt.Dimension(700, 50));
+        tablaclientes.setFontRowSelect(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         tablaclientes.setSelectionBackground(new java.awt.Color(67, 150, 209));
-        jScrollPane2.setViewportView(tablaclientes);
+        tablaclientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaclientesMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tablaclientes);
         tablaclientes.getColumnModel().getColumn(0).setPreferredWidth(10);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, 1050, 380));
-
-        btnNuevo.setBackground(new java.awt.Color(46, 49, 82));
-        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
-        btnNuevo.setText(" Nuevo");
-        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 140, 100, 30));
-
-        btnEditar.setBackground(new java.awt.Color(46, 49, 82));
-        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil (1).png"))); // NOI18N
-        btnEditar.setText(" Editar");
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 140, 100, 30));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 1040, 500));
 
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, 730));
     }// </editor-fold>//GEN-END:initComponents
@@ -135,116 +174,112 @@ public class Cliente extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBuscarActionPerformed
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        Ctrl_Cliente controlCliente = new Ctrl_Cliente();
-        if (id_cliente == 0) {
-            JOptionPane.showMessageDialog(this, "SELECCIONE UN CLIENTE");
-        } else {
-            if (controlCliente.eliminar(id_cliente)) {
-                JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente");
-                cargartablacliente();
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al eliminar cliente");
-
-            }
-
-        }
-    }//GEN-LAST:event_btnEliminarActionPerformed
-
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+    private void btnNuevo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevo1ActionPerformed
         Crearcliente1 dialog = new Crearcliente1(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
 
+        if (dialog.isGuardado()) {
+            cargartablacliente(); // Recargar la tabla solo si se guardó correctamente
+        }
+    }//GEN-LAST:event_btnNuevo1ActionPerformed
 
-    }//GEN-LAST:event_btnNuevoActionPerformed
-
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+    private void btnEditar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditar1ActionPerformed
         int filaSeleccionada = tablaclientes.getSelectedRow();
         if (filaSeleccionada == -1) {
             JOptionPane.showMessageDialog(null, "Seleccione un cliente para editar");
-        } else {
-            int id_cliente = (int) tablaclientes.getValueAt(filaSeleccionada, 0);
-
-            if (filaSeleccionada == -1) {
-                JOptionPane.showMessageDialog(null, "Seleccione un cliente para editar.");
-            } else {
-                int idCliente = Integer.parseInt(tablaclientes.getValueAt(filaSeleccionada, 0).toString());
-                EditarCliente editar = new EditarCliente(null, true, idCliente);
-                editar.setVisible(true);
-
-            }
-
+            return;
         }
 
+        int idCliente = Integer.parseInt(tablaclientes.getValueAt(filaSeleccionada, 0).toString());
+        DefaultTableModel model = (DefaultTableModel) tablaclientes.getModel();
+        EditarCliente editar = new EditarCliente(new javax.swing.JFrame(), true, idCliente, model, filaSeleccionada);
+        editar.setLocationRelativeTo(null);
+        editar.setVisible(true);
+    }//GEN-LAST:event_btnEditar1ActionPerformed
 
-    }//GEN-LAST:event_btnEditarActionPerformed
+    private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed
+        int filaSeleccionada = tablaclientes.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un cliente para eliminar");
+            return;
+        }
+
+        int idCliente = (int) tablaclientes.getValueAt(filaSeleccionada, 0);
+        Ctrl_Cliente controlCliente = new Ctrl_Cliente();
+
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+            "¿Está seguro de que desea eliminar el cliente con código " + idCliente + "?",
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            if (controlCliente.eliminar(idCliente)) {
+                JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente");
+                cargartablacliente(); // Recargar la tabla
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al eliminar cliente");
+            }
+        }
+    }//GEN-LAST:event_btnEliminar1ActionPerformed
+
+    private void tablaclientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaclientesMouseClicked
+        int fila_point = tablaclientes.rowAtPoint(evt.getPoint());
+        if (fila_point > -1) {
+            id_cliente = (int) tablaclientes.getValueAt(fila_point, 0);
+        }
+    }//GEN-LAST:event_tablaclientesMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private rojeru_san.RSButtonRiple btnEditar;
-    private rojeru_san.RSButtonRiple btnEliminar;
-    private rojeru_san.RSButtonRiple btnNuevo;
+    private RSMaterialComponent.RSButtonShape btnEditar1;
+    private RSMaterialComponent.RSButtonShape btnEliminar1;
+    private RSMaterialComponent.RSButtonShape btnNuevo1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private RSMaterialComponent.RSTableMetroCustom tablaclientes;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtBuscar;
     // End of variables declaration//GEN-END:variables
-public void cargartablacliente() {
-        Connection con = Conexion.getConnection();
+    public void cargartablacliente() {
+        tablaclientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        DefaultTableModel model = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Código");
+        model.addColumn("Identificación");
+        model.addColumn("Número");
+        model.addColumn("Nombre");
+        model.addColumn("Apellido");
+        model.addColumn("Teléfono");
+        model.addColumn("Dirección");
 
-        this.tablaclientes.setModel(model);
-        this.jScrollPane2.setViewportView(this.tablaclientes);
-
-        model.addColumn("codigo");
-        model.addColumn("identificacion");
-        model.addColumn("numero");
-        model.addColumn("nombre");
-        model.addColumn("apellido");
-        model.addColumn("telefono");
-        model.addColumn("direccion");
-        model.addColumn("email");
-
-        String sql = "SELECT * FROM cliente";
-        Statement st;
-
-        try {
-            st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-
-            while (rs.next()) {
-                Object fila[] = new Object[7];
-                for (int i = 0; i < 7; i++) {
-                    fila[i] = rs.getObject(i + 1);
-                }
-                model.addRow(fila);
-            }
-            con.close();
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al cargar la tabla: " + e.getMessage());
+        List<modelo.Cliente> clientes = controlador.obtenerClientes();
+        for (modelo.Cliente cliente : clientes) {
+            Object[] fila = new Object[7];
+            fila[0] = cliente.getid_cliente();
+            fila[1] = cliente.getIdentificacion() != null ? cliente.getIdentificacion() : "Sin identificación";
+            fila[2] = cliente.getNumero();
+            fila[3] = cliente.getNombre() != null ? cliente.getNombre() : "Sin nombre";
+            fila[4] = cliente.getApellido() != null ? cliente.getApellido() : "Sin apellido";
+            fila[5] = cliente.getTelefono() != null ? cliente.getTelefono() : "Sin teléfono";
+            fila[6] = cliente.getDireccion() != null ? cliente.getDireccion() : "Sin dirección";
+            model.addRow(fila);
         }
 
+        tablaclientes.setModel(model);
+        System.out.println("Número de filas en el modelo después de cargar: " + model.getRowCount());
+
+        // Listener para capturar la selección de una fila
         tablaclientes.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int fila_point = tablaclientes.rowAtPoint(e.getPoint());
-
                 if (fila_point > -1) {
                     id_cliente = (int) tablaclientes.getValueAt(fila_point, 0);
-
                 }
             }
         });
     }
-
     
 
 }

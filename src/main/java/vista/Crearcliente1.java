@@ -17,7 +17,8 @@ import modelo.Cliente;
  * @author ZenBook
  */
 public class Crearcliente1 extends javax.swing.JDialog {
-
+    private String[] datos; // Almacena los datos ingresados
+    private boolean guardado = false; // Indica si se presionó "Guardar"
 
     /**
      * Creates new form nuevoMateriales
@@ -26,6 +27,15 @@ public class Crearcliente1 extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setTitle("Nuevo Material");
+    }
+    
+        public String[] getDatos() {
+        return datos;
+    }
+
+    // Método para verificar si se presionó "Guardar"
+    public boolean isGuardado() {
+        return guardado;
     }
  
    
@@ -43,17 +53,20 @@ public class Crearcliente1 extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        nombretxt = new RSMaterialComponent.RSTextFieldMaterial();
-        apellidotxt = new RSMaterialComponent.RSTextFieldMaterial();
-        jLabel3 = new javax.swing.JLabel();
-        numerotxt = new RSMaterialComponent.RSTextFieldMaterial();
-        direcciontxt = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel6 = new javax.swing.JLabel();
         identificaciontxt = new RSMaterialComponent.RSComboBoxMaterial();
+        jLabel9 = new javax.swing.JLabel();
+        nombretxt = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel10 = new javax.swing.JLabel();
+        apellidotxt = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel4 = new javax.swing.JLabel();
+        numerotxt = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel5 = new javax.swing.JLabel();
         telefonotxt = new RSMaterialComponent.RSTextFieldMaterial();
-        rSButton1 = new rojeru_san.RSButton();
+        jLabel11 = new javax.swing.JLabel();
+        direcciontxt = new RSMaterialComponent.RSTextFieldMaterial();
         guardar = new rojeru_san.RSButton();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        rSButton1 = new rojeru_san.RSButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -71,66 +84,84 @@ public class Crearcliente1 extends javax.swing.JDialog {
         jPanel3.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Crear cliente");
-        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, -1, -1));
+        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 170, 40));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 80));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel6.setText("Tipo de identificación:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
+
+        identificaciontxt.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Tipo de identificacion:", "CC", "CE", "TI", "RC", "NIT", "PA", "PEP", "PPT", "DNI" }));
+        identificaciontxt.setColorMaterial(new java.awt.Color(29, 30, 51));
+        identificaciontxt.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jPanel1.add(identificaciontxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 280, 30));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel9.setText("Nombre:");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
 
         nombretxt.setForeground(new java.awt.Color(29, 30, 51));
         nombretxt.setCaretColor(new java.awt.Color(29, 30, 51));
         nombretxt.setColorMaterial(new java.awt.Color(29, 30, 51));
-        nombretxt.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        nombretxt.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         nombretxt.setPhColor(new java.awt.Color(29, 30, 51));
         nombretxt.setPlaceholder("Ingrese el nombre");
         nombretxt.setSelectionColor(new java.awt.Color(29, 30, 51));
-        jPanel1.add(nombretxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 280, 30));
+        jPanel1.add(nombretxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 280, 30));
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel10.setText("Apellido:");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, -1));
 
         apellidotxt.setForeground(new java.awt.Color(29, 30, 31));
         apellidotxt.setColorMaterial(new java.awt.Color(29, 30, 31));
-        apellidotxt.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        apellidotxt.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         apellidotxt.setPhColor(new java.awt.Color(29, 30, 51));
         apellidotxt.setPlaceholder("Ingrese el apellido");
-        jPanel1.add(apellidotxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 240, 270, 30));
+        jPanel1.add(apellidotxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 270, 30));
 
-        jLabel3.setText("Numero de identificacion");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 130, -1, -1));
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel4.setText("Numero de identificación:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 90, -1, -1));
 
         numerotxt.setForeground(new java.awt.Color(0, 0, 0));
         numerotxt.setColorMaterial(new java.awt.Color(0, 0, 0));
         numerotxt.setDisabledTextColor(new java.awt.Color(51, 51, 51));
-        numerotxt.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        numerotxt.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         numerotxt.setPhColor(new java.awt.Color(29, 30, 51));
-        numerotxt.setPlaceholder("Numero de identificacion");
-        jPanel1.add(numerotxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 160, 280, 30));
+        numerotxt.setPlaceholder("Ingrese n° identificacion");
+        jPanel1.add(numerotxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 130, 270, 30));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel5.setText("Telefono:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 190, -1, -1));
+
+        telefonotxt.setForeground(new java.awt.Color(29, 30, 31));
+        telefonotxt.setColorMaterial(new java.awt.Color(29, 30, 31));
+        telefonotxt.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        telefonotxt.setPhColor(new java.awt.Color(29, 30, 51));
+        telefonotxt.setPlaceholder("Ingrese telefono");
+        jPanel1.add(telefonotxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 220, 270, 30));
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel11.setText("Dirección:");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 280, -1, -1));
 
         direcciontxt.setForeground(new java.awt.Color(29, 30, 31));
         direcciontxt.setColorMaterial(new java.awt.Color(29, 30, 31));
+        direcciontxt.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         direcciontxt.setPhColor(new java.awt.Color(29, 30, 51));
-        direcciontxt.setPlaceholder("Direccion");
+        direcciontxt.setPlaceholder("Ingrese direccion");
         direcciontxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 direcciontxtActionPerformed(evt);
             }
         });
-        jPanel1.add(direcciontxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 310, 260, 30));
-
-        identificaciontxt.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Tipo de identificacion:", "CC", "TI", "CE" }));
-        identificaciontxt.setColorMaterial(new java.awt.Color(29, 30, 51));
-        identificaciontxt.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jPanel1.add(identificaciontxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 280, 30));
-
-        telefonotxt.setForeground(new java.awt.Color(29, 30, 31));
-        telefonotxt.setColorMaterial(new java.awt.Color(29, 30, 31));
-        telefonotxt.setPhColor(new java.awt.Color(29, 30, 51));
-        telefonotxt.setPlaceholder("telefono");
-        jPanel1.add(telefonotxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 280, -1));
-
-        rSButton1.setBackground(new java.awt.Color(29, 30, 51));
-        rSButton1.setText("Cancelar");
-        rSButton1.setColorHover(new java.awt.Color(204, 0, 0));
-        jPanel1.add(rSButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 420, 100, -1));
+        jPanel1.add(direcciontxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 310, 270, 30));
 
         guardar.setBackground(new java.awt.Color(29, 30, 51));
         guardar.setText("Registrar");
@@ -140,15 +171,17 @@ public class Crearcliente1 extends javax.swing.JDialog {
                 guardarActionPerformed(evt);
             }
         });
-        jPanel1.add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 420, 90, -1));
+        jPanel1.add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 390, 100, -1));
 
-        jLabel7.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 18)); // NOI18N
-        jLabel7.setText("Telefono");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 70, 30));
-
-        jLabel8.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 18)); // NOI18N
-        jLabel8.setText("Nombre");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 70, 30));
+        rSButton1.setBackground(new java.awt.Color(29, 30, 51));
+        rSButton1.setText("Cancelar");
+        rSButton1.setColorHover(new java.awt.Color(204, 0, 0));
+        rSButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(rSButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 390, 100, -1));
 
         panelP.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 480));
 
@@ -162,24 +195,63 @@ public class Crearcliente1 extends javax.swing.JDialog {
     }//GEN-LAST:event_direcciontxtActionPerformed
 
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
-      
-       Cliente cliente = new Cliente();
-        cliente.setIdentificacion(identificaciontxt.getSelectedItem().toString());
-        cliente.setNumero(Integer.parseInt(numerotxt.getText()));
-        cliente.setNombre(nombretxt.getText());
-        cliente.setApellido(apellidotxt.getText());
-        cliente.setTelefono(telefonotxt.getText());
-        cliente.setDireccion(direcciontxt.getText());
+        // Validar que todos los campos estén llenos
+        if (identificaciontxt.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(null, "Seleccione un tipo de identificación válido");
+            return;
+        }
+        if (numerotxt.getText().trim().isEmpty() || nombretxt.getText().trim().isEmpty() ||
+            apellidotxt.getText().trim().isEmpty() || telefonotxt.getText().trim().isEmpty() ||
+            direcciontxt.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
+            return;
+        }
 
+        // Validar que el número sea un entero
+        int numero;
+        try {
+            numero = Integer.parseInt(numerotxt.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El número de identificación debe ser un valor numérico");
+            return;
+        }
+
+        // Crear el objeto Cliente
+        Cliente cliente = new Cliente();
+        cliente.setIdentificacion(identificaciontxt.getSelectedItem().toString());
+        cliente.setNumero(numero);
+        cliente.setNombre(nombretxt.getText().trim());
+        cliente.setApellido(apellidotxt.getText().trim());
+        cliente.setTelefono(telefonotxt.getText().trim());
+        cliente.setDireccion(direcciontxt.getText().trim());
+
+        // Guardar en la base de datos
         Ctrl_Cliente contro = new Ctrl_Cliente();
         if (contro.guardar(cliente)) {
             JOptionPane.showMessageDialog(null, "Se guardó correctamente en la base de datos");
+
+            // Actualizar la variable datos (opcional, si decides usar getDatos())
+            datos = new String[] {
+                "", // Código (se genera en la base de datos, déjalo vacío o usa el ID retornado por Ctrl_Cliente si está disponible)
+                cliente.getIdentificacion(),
+                String.valueOf(cliente.getNumero()),
+                cliente.getNombre(),
+                cliente.getApellido(),
+                cliente.getTelefono(),
+                cliente.getDireccion(),
+            };
+
+            guardado = true;
+            setVisible(false); // Cierra el diálogo
         } else {
             JOptionPane.showMessageDialog(null, "Error al guardar");
         }
-
-  
     }//GEN-LAST:event_guardarActionPerformed
+
+    private void rSButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButton1ActionPerformed
+        guardado = false;
+        setVisible(false); // Cerrar el diálogo
+    }//GEN-LAST:event_rSButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -230,9 +302,12 @@ public class Crearcliente1 extends javax.swing.JDialog {
     private rojeru_san.RSButton guardar;
     private RSMaterialComponent.RSComboBoxMaterial identificaciontxt;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private RSMaterialComponent.RSTextFieldMaterial nombretxt;
