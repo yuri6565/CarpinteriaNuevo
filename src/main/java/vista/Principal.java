@@ -32,6 +32,7 @@ public class Principal extends javax.swing.JFrame {
     private rojeru_san.RSButton item1; // Botón "Materiales" del submenú
     private rojeru_san.RSButton item2; // Botón "Herramientas" del submenú
 
+    //bfhfhb
     // Nuevas variables para el submenú de Ventas
     private JPanel submenuVentas;
     private boolean submenuVentasVisible = false; // Para controlar si el submenú de Ventas está visible
