@@ -73,5 +73,5 @@ public class ProveedorDatos {
         this.tipo = tipo;
     }
     
-    
+    //ojala le corra, esta igual de bien hecho que usted 
 }
