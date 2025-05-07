@@ -476,7 +476,7 @@ public class cotizacion extends javax.swing.JPanel {
         }
 
     }
-
+/*joa*/
     private void calcularTotal() {
       DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
     int total = 0;
