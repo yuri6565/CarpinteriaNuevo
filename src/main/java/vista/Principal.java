@@ -43,8 +43,10 @@ public class Principal extends javax.swing.JFrame {
 
         initComponents();
 
-        jPanel4.setVisible(false);
+        jPanel4.setVisible(true);
         jPanel5.setVisible(false);
+        jPanel3.setVisible(false);
+        
 
 
 //submenu inventario------------------
@@ -230,22 +232,38 @@ public class Principal extends javax.swing.JFrame {
 
     private void animacion() {
         int posicion = jPanel3.getX();
-        if (posicion > -1) {
+        System.out.println("Posición actual: " + posicion); // Debug
+        if (posicion >= -1) {  // Cambiar a >= para mayor seguridad
             Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
             Animacion.Animacion.mover_izquierda(258, +111, 2, 2, contenedor);
 
             jPanel4.setVisible(true);
             jPanel5.setVisible(false);
+            jPanel3.setVisible(false);
+        }
+    }
 
+    private void animation_salir() {
+        int posicion = jPanel3.getX();
+        System.out.println("Posición actual: " + posicion); // Debug
+        if (posicion >= -1) {
+            Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
+            Animacion.Animacion.mover_derecha(-2, +258, 2, 2, contenedor);
+
+            jPanel3.setVisible(true);
+            jPanel4.setVisible(false);
+            jPanel5.setVisible(true);
+            jPanel5.setOpaque(false);
         } else {
             Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
             Animacion.Animacion.mover_derecha(-2, +258, 2, 2, contenedor);
 
+            jPanel3.setVisible(true);
             jPanel4.setVisible(false);
             jPanel5.setVisible(true);
             jPanel5.setOpaque(false);
-
         }
+
     }
 
     private void ocultarSubmenus() {
@@ -376,7 +394,7 @@ public class Principal extends javax.swing.JFrame {
         contenedor.setLayout(contenedorLayout);
         contenedorLayout.setHorizontalGroup(
             contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1310, Short.MAX_VALUE)
+            .addGap(0, 1491, Short.MAX_VALUE)
         );
         contenedorLayout.setVerticalGroup(
             contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -891,13 +909,15 @@ public class Principal extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
+                .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 1491, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 1310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1316, Short.MAX_VALUE)))
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1316, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1166,35 +1186,35 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_ocho1ActionPerformed
 
     private void uno1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uno1MouseEntered
-        animacion();
+        animation_salir();
     }//GEN-LAST:event_uno1MouseEntered
 
     private void cuatro1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cuatro1MouseEntered
-        animacion();
+        animation_salir();
     }//GEN-LAST:event_cuatro1MouseEntered
 
     private void dos1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dos1MouseEntered
-        animacion();        // TODO add your handling code here:
+        animation_salir();
     }//GEN-LAST:event_dos1MouseEntered
 
     private void tres1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tres1MouseEntered
-        animacion();        // TODO add your handling code here:
+        animation_salir();
     }//GEN-LAST:event_tres1MouseEntered
 
     private void cinco1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cinco1MouseEntered
-        animacion();        // TODO add your handling code here:
+        animation_salir();
     }//GEN-LAST:event_cinco1MouseEntered
 
     private void seis1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seis1MouseEntered
-        animacion();        // TODO add your handling code here:
+        animation_salir();
     }//GEN-LAST:event_seis1MouseEntered
 
     private void siete2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_siete2MouseEntered
-        animacion();        // TODO add your handling code here:
+        animation_salir();
     }//GEN-LAST:event_siete2MouseEntered
 
     private void ocho1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ocho1MouseEntered
-        animacion();        // TODO add your handling code here:
+        animation_salir();
     }//GEN-LAST:event_ocho1MouseEntered
 
     private void jPanel5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseExited
