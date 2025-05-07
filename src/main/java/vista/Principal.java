@@ -17,6 +17,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import javax.swing.JScrollPane;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+import vista.Cotizacion.cotizacion;
+import vista.Inventario.herramientas;
+import vista.Inventario.materiales;
+
+
 import vista.catalogo.catalogo;
 import vista.Inventario0.herramientas;
 import vista.Inventario0.materiales;
@@ -203,8 +211,13 @@ public class Principal extends javax.swing.JFrame {
               
 
                 // Cargar la vista de Cotización (temporalmente un mensaje)
-                JOptionPane.showMessageDialog(null, "Funcionalidad de Cotización no implementada aún.");
+                
+                cotizacion co = new cotizacion();
+                co.setSize(1290, 730); // Ajustar tamaño dinámicamente
+                co.setLocation(0, 0);
+                
                 contenedor.removeAll();
+                contenedor.add(co);
                 contenedor.revalidate();
                 contenedor.repaint();
                 animacion();

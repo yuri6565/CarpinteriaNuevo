@@ -101,12 +101,22 @@ public class formuEgresos extends javax.swing.JDialog {
         jPanel1.add(txtPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 190, 30));
 
         txtCantidadnuevo.setPlaceholder("Ingrese cantidad de egreso");
+        txtCantidadnuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCantidadnuevoActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtCantidadnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 420, -1));
 
         jLabel2.setText("Cantidad del Egreso:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
 
         txtDetallenuevo.setPlaceholder("Ingrese detalles de egreso");
+        txtDetallenuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDetallenuevoActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtDetallenuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 420, -1));
 
         cmbStock.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione categoria:", "Servicios Publicos", "Compra de Productos e Insumos", "Arriendo", "Nómina", "Gastos Administrativos", "Mercadeo y Publicidad", "Transporte, Domicilios y Logistica", "mantenimineto y Reparaciones ", "Muebles, Equipos o Maquinaria", "Otros" }));
@@ -167,6 +177,14 @@ public class formuEgresos extends javax.swing.JDialog {
     private void cmbStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStockActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbStockActionPerformed
+
+    private void txtCantidadnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadnuevoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCantidadnuevoActionPerformed
+
+    private void txtDetallenuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDetallenuevoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDetallenuevoActionPerformed
 
     /**
      * @param args the command line arguments

@@ -33,7 +33,7 @@ public class Ctrl_CajaEgresos {
             return stmt.executeUpdate() > 0;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error de conexión: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
+            return false; 
         }
     }
 

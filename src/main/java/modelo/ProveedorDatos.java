@@ -64,4 +64,22 @@ public class ProveedorDatos {
     }
   
 
+
+    public String getProducto() {
+        return producto;
+    }
+
+    public void setProducto(String producto) {
+        this.producto = producto;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    
+    //ojala le corra, esta igual de bien hecho que usted
 }
