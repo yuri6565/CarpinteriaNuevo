@@ -78,7 +78,7 @@ public class armario extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
+    javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private rojerusan.RSLabelImage rSLabelImage1;
     private rojerusan.RSLabelImage rSLabelImage2;

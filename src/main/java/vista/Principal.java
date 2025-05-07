@@ -1130,7 +1130,6 @@ public class Principal extends javax.swing.JFrame {
 
         }
         animacion();
-
     }//GEN-LAST:event_siete1ActionPerformed
 
     private void uno1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uno1ActionPerformed

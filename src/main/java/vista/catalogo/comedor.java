@@ -16,7 +16,7 @@ public class comedor extends javax.swing.JPanel {
     
     public comedor() {
         initComponents();
-        
+       
         
         img  = new ImageIcon[6];
         
@@ -57,7 +57,7 @@ public void cargar (){
     
     
 }
-
+javax.swing.JPanel jPanel1;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojerusan.RSLabelImage rSLabelImage1;
     private rojerusan.RSLabelImage rSLabelImage2;
