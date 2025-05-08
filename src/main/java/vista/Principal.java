@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 
 import vista.Cotizacion.cotizacion;
 
+
 import vista.catalogo.catalogo;
 import vista.Inventario0.herramientas;
 import vista.Inventario0.materiales;
