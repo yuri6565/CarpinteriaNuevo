@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 
 import vista.Cotizacion.cotizacion;
 
-
 import vista.catalogo.catalogo;
 import vista.Inventario0.herramientas;
 import vista.Inventario0.materiales;
@@ -27,7 +26,7 @@ import vista.Inventario0.materiales;
  *
  * @author Personal
  */
-public class Principal extends javax.swing.JFrame {
+public class PrincipalUsu extends javax.swing.JFrame {
 
     private JPanel submenuInventario;
     private boolean submenuVisible = false; // Para controlar si el submenú está visible
@@ -41,7 +40,7 @@ public class Principal extends javax.swing.JFrame {
     private rojeru_san.RSButton item3; // Botón "Pedidos" del submenú de Ventas
     private rojeru_san.RSButton item4; // Botón "Cotización" del submenú de Ventas
 
-    public Principal() {
+    public PrincipalUsu() {
 
         initComponents();
 
@@ -171,7 +170,6 @@ public class Principal extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Deseleccionar otros botones del menú principal
                 deseleccionar();
-                cinco.setSelected(true); // Mantener "Ventas" resaltado
 
                 // Cargar la vista de Pedidos
                 vista.Ventas.pedido pedidos = new vista.Ventas.pedido(contenedor);
@@ -192,7 +190,6 @@ public class Principal extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Deseleccionar otros botones del menú principal
                 deseleccionar();
-                cinco.setSelected(true); // Mantener "Ventas" resaltado
 
                 // Cargar la vista de Cotización (temporalmente un mensaje)
                 cotizacion co = new cotizacion();
@@ -272,11 +269,8 @@ public class Principal extends javax.swing.JFrame {
             jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 250, 50));
             jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 250, 50));
             jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 250, 50));
-            jPanel3.add(cinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 250, 50));
-            jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 250, 50));
-            jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 250, 50));
-            jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 550, 250, 50));
-            jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 250, 50));
+            
+            jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 250, 50));
 
             dos.setText(" Inventario           ▼");
             submenuVisible = false;
@@ -294,13 +288,9 @@ public class Principal extends javax.swing.JFrame {
             jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 250, 50));
             jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 250, 50));
             jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 250, 50));
-            jPanel3.add(cinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 250, 50));
-            jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 250, 50));
-            jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 250, 50));
-            jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 550, 250, 50));
-            jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 250, 50));
+            
+            jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 250, 50));
 
-            cinco.setText(" Ventas                ▼");
             submenuVentasVisible = false;
 
         }
@@ -332,10 +322,6 @@ public class Principal extends javax.swing.JFrame {
         dos = new rojeru_san.RSButton();
         tres = new rojeru_san.RSButton();
         cuatro = new rojeru_san.RSButton();
-        cinco = new rojeru_san.RSButton();
-        seis = new rojeru_san.RSButton();
-        ocho = new rojeru_san.RSButton();
-        siete1 = new rojeru_san.RSButton();
         nueve = new rojeru_san.RSButton();
         uno = new rojeru_san.RSButton();
         rSPanelImage3 = new rojerusan.RSPanelImage();
@@ -345,10 +331,6 @@ public class Principal extends javax.swing.JFrame {
         dos1 = new rojeru_san.RSButton();
         tres1 = new rojeru_san.RSButton();
         cuatro1 = new rojeru_san.RSButton();
-        cinco1 = new rojeru_san.RSButton();
-        seis1 = new rojeru_san.RSButton();
-        siete2 = new rojeru_san.RSButton();
-        ocho1 = new rojeru_san.RSButton();
         nueve1 = new rojeru_san.RSButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -545,59 +527,6 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        cinco.setBackground(new java.awt.Color(29, 30, 81));
-        cinco.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        cinco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/etiqueta-de-precio.png"))); // NOI18N
-        cinco.setText(" Ventas                ▼");
-        cinco.setColorHover(new java.awt.Color(128, 128, 128));
-        cinco.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        cinco.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        cinco.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cincoActionPerformed(evt);
-            }
-        });
-
-        seis.setBackground(new java.awt.Color(29, 30, 81));
-        seis.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        seis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/caja-registradora_1.png"))); // NOI18N
-        seis.setText(" Caja");
-        seis.setColorHover(new java.awt.Color(128, 128, 128));
-        seis.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        seis.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        seis.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                seisActionPerformed(evt);
-            }
-        });
-
-        ocho.setBackground(new java.awt.Color(29, 30, 81));
-        ocho.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        ocho.setIcon(new javax.swing.ImageIcon(getClass().getResource("/public-service_1.png"))); // NOI18N
-        ocho.setText("Gestion de clientes");
-        ocho.setToolTipText("");
-        ocho.setColorHover(new java.awt.Color(128, 128, 128));
-        ocho.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        ocho.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        ocho.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ochoActionPerformed(evt);
-            }
-        });
-
-        siete1.setBackground(new java.awt.Color(29, 30, 81));
-        siete1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        siete1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gestion-de-usuarios.png"))); // NOI18N
-        siete1.setText("Gestion de usuarios");
-        siete1.setColorHover(new java.awt.Color(128, 128, 128));
-        siete1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        siete1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        siete1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                siete1ActionPerformed(evt);
-            }
-        });
-
         nueve.setBackground(new java.awt.Color(29, 30, 81));
         nueve.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
         nueve.setIcon(new javax.swing.ImageIcon(getClass().getResource("/public-service_1.png"))); // NOI18N
@@ -666,15 +595,11 @@ public class Principal extends javax.swing.JFrame {
                         .addComponent(rSPanelImage3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(uno, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
                     .addComponent(dos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(siete1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(tres, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(seis, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cuatro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cinco, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ocho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Diez, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(nueve, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(12, 12, 12))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -686,28 +611,14 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(1, 1, 1)
                 .addComponent(dos, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(197, 197, 197)
-                        .addComponent(siete1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(tres, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(seis, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(cuatro, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(97, 97, 97)
-                        .addComponent(cinco, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(247, 247, 247)
-                        .addComponent(ocho, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(tres, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cuatro, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(nueve, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Diez, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(208, 208, 208))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(29, 30, 81));
@@ -780,70 +691,6 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        cinco1.setBackground(new java.awt.Color(29, 30, 81));
-        cinco1.setBorder(null);
-        cinco1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/etiqueta-de-precio.png"))); // NOI18N
-        cinco1.setColorHover(new java.awt.Color(128, 128, 128));
-        cinco1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        cinco1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                cinco1MouseEntered(evt);
-            }
-        });
-        cinco1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cinco1ActionPerformed(evt);
-            }
-        });
-
-        seis1.setBackground(new java.awt.Color(29, 30, 81));
-        seis1.setBorder(null);
-        seis1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/caja-registradora_1.png"))); // NOI18N
-        seis1.setColorHover(new java.awt.Color(128, 128, 128));
-        seis1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        seis1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                seis1MouseEntered(evt);
-            }
-        });
-        seis1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                seis1ActionPerformed(evt);
-            }
-        });
-
-        siete2.setBackground(new java.awt.Color(29, 30, 81));
-        siete2.setBorder(null);
-        siete2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gestion-de-usuarios.png"))); // NOI18N
-        siete2.setColorHover(new java.awt.Color(128, 128, 128));
-        siete2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        siete2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                siete2MouseEntered(evt);
-            }
-        });
-        siete2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                siete2ActionPerformed(evt);
-            }
-        });
-
-        ocho1.setBackground(new java.awt.Color(29, 30, 81));
-        ocho1.setBorder(null);
-        ocho1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/public-service_1.png"))); // NOI18N
-        ocho1.setColorHover(new java.awt.Color(128, 128, 128));
-        ocho1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        ocho1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                ocho1MouseEntered(evt);
-            }
-        });
-        ocho1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ocho1ActionPerformed(evt);
-            }
-        });
-
         nueve1.setBackground(new java.awt.Color(29, 30, 81));
         nueve1.setBorder(null);
         nueve1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/public-service_1.png"))); // NOI18N
@@ -866,11 +713,7 @@ public class Principal extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(uno1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(dos1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(ocho1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(nueve1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(siete2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(cinco1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(seis1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(tres1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(cuatro1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
@@ -882,25 +725,12 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(dos1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(250, 250, 250)
-                        .addComponent(ocho1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(300, 300, 300)
-                        .addComponent(nueve1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(200, 200, 200)
-                        .addComponent(siete2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(100, 100, 100)
-                        .addComponent(cinco1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(150, 150, 150)
-                        .addComponent(seis1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(tres1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(50, 50, 50)
                         .addComponent(cuatro1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(nueve1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -932,7 +762,7 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(68, 68, 68)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 810, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 20, Short.MAX_VALUE))
         );
 
         contenedor.getAccessibleContext().setAccessibleName("");
@@ -951,82 +781,6 @@ public class Principal extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void ochoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ochoActionPerformed
-        ocultarSubmenus(); // Ocultar submenú si ya está visible
-        if (!this.ocho.isSelected()) {
-            deseleccionar();
-            this.ocho.setSelected(true);
-
-            Cliente cliente = new Cliente();
-            cliente.setSize(1290, 730);
-            cliente.setLocation(0, 0);
-
-            contenedor.removeAll();
-            contenedor.add(cliente);
-            contenedor.revalidate();
-            contenedor.repaint();
-
-        }
-        animacion();
-
-    }//GEN-LAST:event_ochoActionPerformed
-
-    private void seisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seisActionPerformed
-        ocultarSubmenus(); // Ocultar submenú si ya está visible
-        if (!this.seis.isSelected()) {
-            deseleccionar();
-            this.seis.setSelected(true);
-
-            Caja caja = new Caja();
-            caja.setSize(1290, 730);
-            caja.setLocation(0, 0);
-
-            contenedor.removeAll();
-            contenedor.add(caja);
-            contenedor.revalidate();
-            contenedor.repaint();
-        }
-        animacion();
-
-    }//GEN-LAST:event_seisActionPerformed
-
-    private void cincoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cincoActionPerformed
-
-        if (!this.cinco.isSelected()) {
-            deseleccionar();
-            this.cinco.setSelected(true);
-
-            if (!submenuVentasVisible) {
-                ocultarSubmenus(); // Cerrar otros submenús
-                jPanel3.removeAll();
-                jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-                // Reubicar los botones con el submenú de Ventas visible
-                jPanel3.add(rSPanelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 41, 158, 153));
-                jPanel3.add(uno, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 250, 50));
-                jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 250, 50));
-                jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 250, 50));
-                jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 250, 50));
-                jPanel3.add(cinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 250, 50));
-                jPanel3.add(submenuVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 250, 100)); // Submenú de Ventas
-                jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 550, 250, 50));
-                jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 250, 50));
-                jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 650, 250, 50));
-                jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 700, 250, 50));
-                jPanel1.add(contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 1290, 730));
-
-                cinco.setText(" Ventas                ▲");
-                submenuVentasVisible = true;
-                jPanel3.revalidate();
-                jPanel3.repaint();
-            }
-        } else {
-            ocultarSubmenus();
-            this.cinco.setSelected(false);
-        }
-
-    }//GEN-LAST:event_cincoActionPerformed
 
     private void cuatroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuatroActionPerformed
         ocultarSubmenus();
@@ -1107,11 +861,8 @@ public class Principal extends javax.swing.JFrame {
             jPanel3.add(submenuInventario, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 250, 100)); // Submenú (Materiales + Herramientas)
             jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 250, 50));
             jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 250, 50));
-            jPanel3.add(cinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 250, 50));
-            jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 550, 250, 50));
-            jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 250, 50));
-            jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 650, 250, 50));
-            jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 700, 250, 50));
+            
+            jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 250, 50));
             jPanel1.add(contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 1290, 730));
 
             dos.setText(" Inventario           ▲"); // Submenú abierto
@@ -1127,25 +878,6 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_dosActionPerformed
 
 
-    private void siete1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siete1ActionPerformed
-        ocultarSubmenus();
-        if (!this.siete1.isSelected()) {
-            deseleccionar();
-            this.siete1.setSelected(true);
-            // Crear y mostrar el panel de inventario
-            Usuario usu = new Usuario();
-            usu.setSize(1290, 730);
-            usu.setLocation(0, 0);
-
-            contenedor.removeAll();
-            contenedor.add(usu);
-            contenedor.revalidate();
-            contenedor.repaint();
-
-        }
-        animacion();
-    }//GEN-LAST:event_siete1ActionPerformed
-
     private void uno1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uno1ActionPerformed
 
     }//GEN-LAST:event_uno1ActionPerformed
@@ -1158,33 +890,9 @@ public class Principal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_tres1ActionPerformed
 
-    private void cuatro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuatro1ActionPerformed
-
-    }//GEN-LAST:event_cuatro1ActionPerformed
-
-    private void cinco1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cinco1ActionPerformed
-
-    }//GEN-LAST:event_cinco1ActionPerformed
-
-    private void seis1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seis1ActionPerformed
-
-    }//GEN-LAST:event_seis1ActionPerformed
-
-    private void siete2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siete2ActionPerformed
-
-    }//GEN-LAST:event_siete2ActionPerformed
-
-    private void ocho1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ocho1ActionPerformed
-
-    }//GEN-LAST:event_ocho1ActionPerformed
-
     private void uno1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uno1MouseEntered
         animation_salir();
     }//GEN-LAST:event_uno1MouseEntered
-
-    private void cuatro1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cuatro1MouseEntered
-        animation_salir();
-    }//GEN-LAST:event_cuatro1MouseEntered
 
     private void dos1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dos1MouseEntered
         animation_salir();
@@ -1193,22 +901,6 @@ public class Principal extends javax.swing.JFrame {
     private void tres1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tres1MouseEntered
         animation_salir();
     }//GEN-LAST:event_tres1MouseEntered
-
-    private void cinco1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cinco1MouseEntered
-        animation_salir();
-    }//GEN-LAST:event_cinco1MouseEntered
-
-    private void seis1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seis1MouseEntered
-        animation_salir();
-    }//GEN-LAST:event_seis1MouseEntered
-
-    private void siete2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_siete2MouseEntered
-        animation_salir();
-    }//GEN-LAST:event_siete2MouseEntered
-
-    private void ocho1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ocho1MouseEntered
-        animation_salir();
-    }//GEN-LAST:event_ocho1MouseEntered
 
     private void jPanel5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseExited
 
@@ -1287,6 +979,14 @@ public class Principal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_dosMouseEntered
 
+    private void cuatro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuatro1ActionPerformed
+
+    }//GEN-LAST:event_cuatro1ActionPerformed
+
+    private void cuatro1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cuatro1MouseEntered
+        animation_salir();
+    }//GEN-LAST:event_cuatro1MouseEntered
+
     /**
      * @param args the command line arguments
      */
@@ -1304,14 +1004,20 @@ public class Principal extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrincipalUsu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrincipalUsu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrincipalUsu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrincipalUsu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
@@ -1319,7 +1025,7 @@ public class Principal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new Principal().setVisible(true);
+                new PrincipalUsu().setVisible(true);
             }
         });
     }
@@ -1328,8 +1034,6 @@ public class Principal extends javax.swing.JFrame {
     private rojeru_san.RSButton Diez;
     private RSMaterialComponent.RSButtonShape btnMarcas;
     private RSMaterialComponent.RSButtonShape btnUnidad;
-    private rojeru_san.RSButton cinco;
-    private rojeru_san.RSButton cinco1;
     private javax.swing.JPanel contenedor;
     private rojeru_san.RSButton cuatro;
     private rojeru_san.RSButton cuatro1;
@@ -1346,13 +1050,7 @@ public class Principal extends javax.swing.JFrame {
     private rojeru_san.RSButton noti;
     private rojeru_san.RSButton nueve;
     private rojeru_san.RSButton nueve1;
-    private rojeru_san.RSButton ocho;
-    private rojeru_san.RSButton ocho1;
     private rojerusan.RSPanelImage rSPanelImage3;
-    private rojeru_san.RSButton seis;
-    private rojeru_san.RSButton seis1;
-    private rojeru_san.RSButton siete1;
-    private rojeru_san.RSButton siete2;
     private rojeru_san.RSButton tres;
     private rojeru_san.RSButton tres1;
     private rojeru_san.RSButton uno;
@@ -1364,11 +1062,9 @@ public class Principal extends javax.swing.JFrame {
         this.dos.setSelected(false);
         this.tres.setSelected(false);
         this.cuatro.setSelected(false);
-        this.cinco.setSelected(false);
-        this.seis.setSelected(false);
-        this.ocho.setSelected(false);
+        
         this.nueve.setSelected(false);
-        this.siete1.setSelected(false);
+        
     }
 
 }

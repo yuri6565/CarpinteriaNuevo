@@ -14,6 +14,7 @@ public class ProveedorDatos {
     private String correo_electronico;
     private String telefono;
     private String direccion;
+    
 
     public ProveedorDatos(String id_proveedor, String nombre, String correo_electronico, String telefono, String direccion) {
         this.id_proveedor = id_proveedor;
@@ -66,4 +67,5 @@ public class ProveedorDatos {
 
     
     //ojala le corra, esta igual de bien hecho que usted
+
 }
