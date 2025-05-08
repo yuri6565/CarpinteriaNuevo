@@ -106,14 +106,14 @@ public class Login1121 extends javax.swing.JFrame {
         );
         rSPanelImage1Layout.setVerticalGroup(
             rSPanelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 160, Short.MAX_VALUE)
+            .addGap(0, 180, Short.MAX_VALUE)
         );
 
-        jPanel6.add(rSPanelImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 180, 160));
+        jPanel6.add(rSPanelImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 180, 180));
 
         jLabel11.setFont(new java.awt.Font("SansSerif", 1, 30)); // NOI18N
         jLabel11.setText("¡BIENVENIDO! ");
-        jPanel6.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, -1, -1));
+        jPanel6.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 200, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
         jLabel7.setText("Usuario");
@@ -192,16 +192,15 @@ public class Login1121 extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void rSMaterialButtonRectangle2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonRectangle2ActionPerformed
-        Login();
-    }//GEN-LAST:event_rSMaterialButtonRectangle2ActionPerformed
-
     private void jLabel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MousePressed
         Contrasena1 dialog = new Contrasena1(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-
     }//GEN-LAST:event_jLabel2MousePressed
+
+    private void rSMaterialButtonRectangle2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonRectangle2ActionPerformed
+        Login();
+    }//GEN-LAST:event_rSMaterialButtonRectangle2ActionPerformed
 
     private void txt_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usuarioActionPerformed
         // TODO add your handling code here:
@@ -275,16 +274,24 @@ public class Login1121 extends javax.swing.JFrame {
             usuario.setContrasena(passtxt.getText().trim());
 
             if (controlUsuario.loginUser(usuario)) {
-                JOptionPane.showMessageDialog(null, "Bienvenido");
-                Principal pc = new Principal();
-                pc.setVisible(true);
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(null, "el usuario o las credenciales estan incorrectas, intente de nuevo");
-            }
+                JOptionPane.showMessageDialog(null, "Bienvenido " + usuario.getUsuario());
 
+                // Redirigir según el rol
+                if ("Trabajador".equals(usuario.getRol())) {
+                    PrincipalUsu principalUsuario = new PrincipalUsu(); // Ventana para trabajador
+                    principalUsuario.setVisible(true);
+
+                } else {
+                    Principal principalAdmin = new Principal(); // Ventana para admin
+                    principalAdmin.setVisible(true);
+                }
+
+                this.dispose(); // Cierra la ventana de login
+            } else {
+                JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
+            }
         } else {
-            JOptionPane.showMessageDialog(null, "porfavor rellene todos los campos");
+            JOptionPane.showMessageDialog(null, "Por favor complete todos los campos");
         }
     }
 

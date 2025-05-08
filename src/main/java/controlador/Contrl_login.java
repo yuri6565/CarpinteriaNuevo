@@ -1,6 +1,7 @@
 package controlador;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,36 +9,29 @@ import javax.swing.JOptionPane;
 import modelo.Usuario;
 import modelo.Conexion;
 
-
 public class Contrl_login {
+    private Usuario usuario;
+
     //ola
     //perro
-  public boolean loginUser(Usuario objeto){
+    public boolean loginUser(Usuario usuario) {
+    try {
+        Connection con = Conexion.getConnection();
+        String sql = "SELECT usuario, contrasena, rol FROM usuario WHERE usuario = ? AND contrasena = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, usuario.getUsuario());
+        ps.setString(2, usuario.getContrasena());
+        ResultSet rs = ps.executeQuery();
         
-        
-      boolean respuesta = false;
-      Connection cn= Conexion.getConnection();
-       String sql = "SELECT * FROM usuario WHERE usuario= '" + objeto.getUsuario() + "' AND Contrasena = '" +objeto.getContrasena()+ "'";
-       Statement st;
-        
-       try{
-           st = cn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            
-            while(rs.next()){
-               respuesta = true;
-            }
-            
-       }catch(SQLException e){
-            System.out.println("error al conectar la base de datos, no se encuentra");
-            JOptionPane.showMessageDialog(null, "error a inciiar sesion");
+        if (rs.next()) {
+            // Si las credenciales son correctas, establece el rol
+            usuario.setRol(rs.getString("rol")); // Asume que hay un campo "rol" en tu DB
+            return true;
         }
-        return respuesta;
+        return false;
+    } catch (SQLException e) {
+        System.err.println("Error en login: " + e.getMessage());
+        return false;
     }
-
-   
-        
-    
-    
-    
+}
 }
