@@ -4,7 +4,6 @@
  */
 package vista;
 
-
 import vista.proveedor.proveedores;
 import vista.Caja.Caja;
 import vista.Produccionn.Produccion;
@@ -15,15 +14,9 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import javax.swing.JScrollPane;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import vista.Cotizacion.cotizacion;
-import vista.Inventario.herramientas;
-import vista.Inventario.materiales;
-
 
 import vista.catalogo.catalogo;
 import vista.Inventario0.herramientas;
@@ -54,11 +47,8 @@ public class Principal extends javax.swing.JFrame {
         jPanel4.setVisible(true);
         jPanel5.setVisible(false);
         jPanel3.setVisible(false);
-        
-
 
 //submenu inventario------------------
-
         // Inicializar el submenú
         submenuInventario = new JPanel();
         submenuInventario.setBackground(new Color(29, 30, 81)); // Mismo color que el menú
@@ -100,7 +90,6 @@ public class Principal extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 deseleccionar();
                 dos.setSelected(true); // Mantener "Inventario" resaltado
-                
 
                 // Cargar la vista de Materiales
                 materiales m = new materiales();
@@ -119,10 +108,9 @@ public class Principal extends javax.swing.JFrame {
         item2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+
                 deseleccionar();
-                dos.setSelected(true); 
-              
+                dos.setSelected(true);
 
                 // Cargar la vista de Herramientas
                 herramientas h = new herramientas();
@@ -181,15 +169,8 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Deseleccionar otros botones del menú principal
-                uno.setSelected(false);
-                dos.setSelected(false);
-                tres.setSelected(false);
-                cuatro.setSelected(false);
+                deseleccionar();
                 cinco.setSelected(true); // Mantener "Ventas" resaltado
-                seis.setSelected(false);
-                siete1.setSelected(false);
-                ocho.setSelected(false);
-                nueve.setSelected(false);
 
                 // Cargar la vista de Pedidos
                 vista.Ventas.pedido pedidos = new vista.Ventas.pedido(contenedor);
@@ -201,6 +182,7 @@ public class Principal extends javax.swing.JFrame {
                 contenedor.repaint();
                 animacion();
             }
+
         });
 
         // ActionListener para "Cotización"
@@ -210,14 +192,12 @@ public class Principal extends javax.swing.JFrame {
                 // Deseleccionar otros botones del menú principal
                 deseleccionar();
                 cinco.setSelected(true); // Mantener "Ventas" resaltado
-              
 
                 // Cargar la vista de Cotización (temporalmente un mensaje)
-                
                 cotizacion co = new cotizacion();
                 co.setSize(1290, 730); // Ajustar tamaño dinámicamente
                 co.setLocation(0, 0);
-                
+
                 contenedor.removeAll();
                 contenedor.add(co);
                 contenedor.revalidate();
@@ -299,7 +279,7 @@ public class Principal extends javax.swing.JFrame {
 
             dos.setText(" Inventario           ▼");
             submenuVisible = false;
-
+            animacion();
         }
 
         // Cerrar submenú de Ventas si está visible
@@ -527,6 +507,11 @@ public class Principal extends javax.swing.JFrame {
         dos.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         dos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         dos.setMaximumSize(new java.awt.Dimension(127, 24));
+        dos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                dosMouseEntered(evt);
+            }
+        });
         dos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dosActionPerformed(evt);
@@ -928,8 +913,8 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 1491, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 6, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1316, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -970,8 +955,7 @@ public class Principal extends javax.swing.JFrame {
         if (!this.ocho.isSelected()) {
             deseleccionar();
             this.ocho.setSelected(true);
-            
-            
+
             Cliente cliente = new Cliente();
             cliente.setSize(1290, 730);
             cliente.setLocation(0, 0);
@@ -992,8 +976,6 @@ public class Principal extends javax.swing.JFrame {
             deseleccionar();
             this.seis.setSelected(true);
 
-            
-            
             Caja caja = new Caja();
             caja.setSize(1290, 730);
             caja.setLocation(0, 0);
@@ -1012,7 +994,6 @@ public class Principal extends javax.swing.JFrame {
         if (!this.cinco.isSelected()) {
             deseleccionar();
             this.cinco.setSelected(true);
-            
 
             if (!submenuVentasVisible) {
                 ocultarSubmenus(); // Cerrar otros submenús
@@ -1031,6 +1012,7 @@ public class Principal extends javax.swing.JFrame {
                 jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 250, 50));
                 jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 650, 250, 50));
                 jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 700, 250, 50));
+                jPanel1.add(contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 1290, 730));
 
                 cinco.setText(" Ventas                ▲");
                 submenuVentasVisible = true;
@@ -1049,7 +1031,6 @@ public class Principal extends javax.swing.JFrame {
         if (!this.cuatro.isSelected()) {
             deseleccionar();
             this.cuatro.setSelected(true);
-            
 
             Produccion pr = new Produccion(new javax.swing.JFrame(), true);
             pr.setSize(1290, 730);
@@ -1071,7 +1052,6 @@ public class Principal extends javax.swing.JFrame {
         if (!this.tres.isSelected()) {
             deseleccionar();
             this.tres.setSelected(true);
-            
 
             proveedores pr = new proveedores();
             pr.setSize(1290, 730);
@@ -1092,7 +1072,6 @@ public class Principal extends javax.swing.JFrame {
         if (!this.uno.isSelected()) {
             deseleccionar();
             this.uno.setSelected(true);
-            
 
             Escritorio1 es = new Escritorio1();
             es.setSize(1090, 690);
@@ -1111,7 +1090,6 @@ public class Principal extends javax.swing.JFrame {
         if (!this.dos.isSelected()) {
             deseleccionar();
             this.dos.setSelected(true);
-            
 
         }
         // Alternar visibilidad del submenú
@@ -1132,6 +1110,7 @@ public class Principal extends javax.swing.JFrame {
             jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 250, 50));
             jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 650, 250, 50));
             jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 700, 250, 50));
+            jPanel1.add(contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 1290, 730));
 
             dos.setText(" Inventario           ▲"); // Submenú abierto
 
@@ -1283,8 +1262,8 @@ public class Principal extends javax.swing.JFrame {
 
     private void DiezActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DiezActionPerformed
         // TODO add your handling code here:
-        
-           if (!this.Diez.isSelected()) {
+
+        if (!this.Diez.isSelected()) {
             deseleccionar();
             this.Diez.setSelected(true);
 
@@ -1301,6 +1280,10 @@ public class Principal extends javax.swing.JFrame {
         }
         animacion();
     }//GEN-LAST:event_DiezActionPerformed
+
+    private void dosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dosMouseEntered
+
+    }//GEN-LAST:event_dosMouseEntered
 
     /**
      * @param args the command line arguments
