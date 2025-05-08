@@ -14,6 +14,7 @@ public class ProveedorDatos {
     private String correo_electronico;
     private String telefono;
     private String direccion;
+    
 
     public ProveedorDatos(String id_proveedor, String nombre, String correo_electronico, String telefono, String direccion) {
         this.id_proveedor = id_proveedor;
@@ -64,22 +65,4 @@ public class ProveedorDatos {
     }
   
 
-
-    public String getProducto() {
-        return producto;
-    }
-
-    public void setProducto(String producto) {
-        this.producto = producto;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-    
-    //ojala le corra, esta igual de bien hecho que usted
 }
