@@ -4,7 +4,7 @@
  */
 package vista;
 
-import vista.proveedor.proveedores;
+import vista.ProveedoresUsu.proveedores;
 import vista.Caja.Caja;
 import vista.Produccionn.Produccion;
 import java.awt.BorderLayout;
@@ -19,8 +19,8 @@ import javax.swing.JPanel;
 import vista.Cotizacion.cotizacion;
 
 import vista.catalogo.catalogo;
-import vista.Inventario0.herramientas;
-import vista.Inventario0.materiales;
+import vista.InventarioUsu.herramientas;
+import vista.InventarioUsu.materiales;
 
 /**
  *
