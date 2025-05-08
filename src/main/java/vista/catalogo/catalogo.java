@@ -40,7 +40,6 @@ public class catalogo extends javax.swing.JPanel {
         rSLabelImage1 = new rojerusan.RSLabelImage();
         panelPrincipal = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        Añadir = new rojeru_san.RSButtonRiple();
         Añadir1 = new rojeru_san.RSButtonRiple();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -147,17 +146,6 @@ public class catalogo extends javax.swing.JPanel {
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, -1, -1));
 
-        Añadir.setBackground(new java.awt.Color(46, 49, 82));
-        Añadir.setText("Producto");
-        Añadir.setColorHover(new java.awt.Color(0, 153, 51));
-        Añadir.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        Añadir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AñadirActionPerformed(evt);
-            }
-        });
-        jPanel2.add(Añadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 200, 140, -1));
-
         Añadir1.setBackground(new java.awt.Color(46, 49, 82));
         Añadir1.setText("categoria");
         Añadir1.setColorHover(new java.awt.Color(0, 153, 51));
@@ -256,13 +244,6 @@ public class catalogo extends javax.swing.JPanel {
         
     }//GEN-LAST:event_rSLabelImage1MouseClicked
 
-    private void AñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AñadirActionPerformed
-        // TODO add your handling code here:
-        catalogoNuevo dialog = new catalogoNuevo(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-    }//GEN-LAST:event_AñadirActionPerformed
-
     private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
         // TODO add your handling code here:
         catalogocategoria dialog = new catalogocategoria(new javax.swing.JFrame(), true);
@@ -272,7 +253,6 @@ public class catalogo extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private rojeru_san.RSButtonRiple Añadir;
     private rojeru_san.RSButtonRiple Añadir1;
     private rojerusan.RSLabelImage armario;
     private rojerusan.RSLabelImage comedor;

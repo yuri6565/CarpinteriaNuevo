@@ -3,22 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package vista.catalogo;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class catalogocategoria extends javax.swing.JDialog {
-private byte[] imagenBytes;
+
     
     public catalogocategoria(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -38,12 +25,10 @@ private byte[] imagenBytes;
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        btnSubirImagen = new rojeru_san.RSButton();
         txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
         txtDescripcion = new RSMaterialComponent.RSTextFieldMaterial();
         btnCancelar = new rojeru_san.RSButtonRiple();
         btnGuardar = new rojeru_san.RSButtonRiple();
-        lblImagen = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -65,15 +50,6 @@ private byte[] imagenBytes;
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel3.setText("Nombre:");
         panelP.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, -1, -1));
-
-        btnSubirImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/up-arrow (1).png"))); // NOI18N
-        btnSubirImagen.setText(" Subir imagen");
-        btnSubirImagen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSubirImagenActionPerformed(evt);
-            }
-        });
-        panelP.add(btnSubirImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 170, 140, 30));
 
         txtNombre.setForeground(new java.awt.Color(0, 0, 0));
         txtNombre.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -123,10 +99,6 @@ private byte[] imagenBytes;
         });
         panelP.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 370, 140, -1));
 
-        lblImagen.setBackground(new java.awt.Color(153, 204, 255));
-        lblImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        panelP.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 220, 180, 120));
-
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel11.setText("Id:");
         panelP.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
@@ -155,32 +127,6 @@ private byte[] imagenBytes;
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSubirImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirImagenActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "png", "jpeg"));
-
-        int opcion = fileChooser.showOpenDialog(null);
-        if (opcion == JFileChooser.APPROVE_OPTION) {
-            try {
-                File archivo = fileChooser.getSelectedFile();
-                // Convertir la imagen a bytes
-                imagenBytes = Files.readAllBytes(archivo.toPath());
-
-                // Obtener dimensiones del lblImagen
-                int width = lblImagen.getWidth();  // 150
-                int height = lblImagen.getHeight(); // 140
-
-                // Mostrar previsualización
-                ImageIcon imagen = new ImageIcon(archivo.getAbsolutePath());
-                Image img = imagen.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-                lblImagen.setIcon(new ImageIcon(img));
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Error al leer la imagen: " + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_btnSubirImagenActionPerformed
-
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
@@ -195,47 +141,7 @@ private byte[] imagenBytes;
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        /*
-        if (txtNombre.getText().isEmpty() || cmbCategoria.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "Nombre y categoría son obligatorios",
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Obtener datos del formulario
-        String nombre = txtNombre.getText();
-        String categoria = cmbCategoria.getSelectedItem().toString();
-        String descripcion = txtDescripcion.getText();
-        String cantidad = txtCantidad.getText();
-
-        // Crear la tarjeta del producto
-        JPanel card = new JPanel();
-        card.setLayout(new BorderLayout());
-        card.setPreferredSize(new java.awt.Dimension(150, 180));
-        card.setBorder(new LineBorder(Color.LIGHT_GRAY));
-
-        // Mostrar la imagen si existe
-        if (lblImagen.getIcon() != null) {
-            ImageIcon originalIcon = (ImageIcon) lblImagen.getIcon();
-            Image img = originalIcon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-            JLabel imageLabel = new JLabel(new ImageIcon(img));
-            imageLabel.setHorizontalAlignment(JLabel.CENTER);
-            card.add(imageLabel, BorderLayout.CENTER);
-        } else {
-            JLabel noImageLabel = new JLabel("Sin imagen");
-            noImageLabel.setHorizontalAlignment(JLabel.CENTER);
-            card.add(noImageLabel, BorderLayout.CENTER);
-        }
-
-        // Mostrar el nombre del producto
-        JLabel nameLabel = new JLabel(nombre);
-        nameLabel.setHorizontalAlignment(JLabel.CENTER);
-        card.add(nameLabel, BorderLayout.SOUTH);
-
-        // Obtener la instancia del catálogo principal y agregar la tarjeta
-        catalogo parentCatalog = (catalogo) this.getParent();
-        parentCatalog.addProductCard(card, categoria);
-        */
+   
         dispose();
 
     }//GEN-LAST:event_btnGuardarActionPerformed
@@ -285,12 +191,10 @@ private byte[] imagenBytes;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
-    private rojeru_san.RSButton btnSubirImagen;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel lblImagen;
     private javax.swing.JPanel panelP;
     private RSMaterialComponent.RSTextFieldMaterial txtDescripcion;
     private RSMaterialComponent.RSTextFieldMaterial txtNombre;
