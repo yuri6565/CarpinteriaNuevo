@@ -5,9 +5,6 @@
 package vista;
 
 import vista.ProveedoresUsu.proveedores;
-import vista.Caja.Caja;
-import vista.Produccionn.Produccion;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -21,6 +18,7 @@ import vista.Cotizacion.cotizacion;
 import vista.catalogo.catalogo;
 import vista.InventarioUsu.herramientas;
 import vista.InventarioUsu.materiales;
+import vista.Produccion.Produccion;
 
 /**
  *
@@ -209,6 +207,7 @@ public class PrincipalUsu extends javax.swing.JFrame {
 //submenu ventas------------------
 
         // Seleccionar el botón "uno" por defecto y cargar el panel Escritorio1
+/*
         this.uno.setSelected(true);
         Escritorio1 es = new Escritorio1();
         es.setSize(1290, 730); // Ajustar tamaño dinámicamente
@@ -218,8 +217,10 @@ public class PrincipalUsu extends javax.swing.JFrame {
         contenedor.add(es, BorderLayout.CENTER);
         contenedor.revalidate();
         contenedor.repaint();
-
+*/
     }
+    
+    
 
     private void animacion() {
         int posicion = jPanel3.getX();
@@ -370,7 +371,7 @@ public class PrincipalUsu extends javax.swing.JFrame {
         contenedor.setLayout(contenedorLayout);
         contenedorLayout.setHorizontalGroup(
             contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1491, Short.MAX_VALUE)
+            .addGap(0, 1321, Short.MAX_VALUE)
         );
         contenedorLayout.setVerticalGroup(
             contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -741,8 +742,8 @@ public class PrincipalUsu extends javax.swing.JFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-                .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 1491, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(211, 211, 211)
+                .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 1321, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 6, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -788,7 +789,7 @@ public class PrincipalUsu extends javax.swing.JFrame {
             deseleccionar();
             this.cuatro.setSelected(true);
 
-            Produccion pr = new Produccion(new javax.swing.JFrame(), true);
+            Produccion pr = new Produccion(new javax.swing.JFrame());
             pr.setSize(1290, 730);
             pr.setLocation(0, 0);
 
@@ -824,7 +825,7 @@ public class PrincipalUsu extends javax.swing.JFrame {
     }//GEN-LAST:event_tresActionPerformed
 
     private void unoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unoActionPerformed
-        ocultarSubmenus();
+      /*  ocultarSubmenus();
         if (!this.uno.isSelected()) {
             deseleccionar();
             this.uno.setSelected(true);
@@ -839,6 +840,7 @@ public class PrincipalUsu extends javax.swing.JFrame {
             contenedor.repaint();
 
         }
+        */
         animacion();
     }//GEN-LAST:event_unoActionPerformed
 

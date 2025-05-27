@@ -1,17 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package vista.proveedor;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -20,21 +16,18 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-
-
+import vista.TemaManager;
 
 public class proveedores extends javax.swing.JPanel {
-private DefaultTableModel modeloTabla;
-    /**
-     * Creates new form proveedores
-     */
+    private DefaultTableModel modeloTabla;
+
     public proveedores() {
         initComponents();
-        
-      TablaP.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        TablaP.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         TablaP.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
-                new String[]{"ID", "Nombre","correo", "Telefono", "Direccion"}
+                new String[]{"ID", "Nombre", "correo", "Telefono", "Direccion"}
         ));
 
         TablaP.setCellSelectionEnabled(false);
@@ -63,10 +56,84 @@ private DefaultTableModel modeloTabla;
                 filtrarTabla();
             }
         });
-        
-        cargarTablaProveedor();// Carga Tabla1
+
+        cargarTablaProveedor(); // Carga Tabla1
+        aplicarTema(); // Apply initial theme
+        // Register for theme changes
+        TemaManager.getInstance().addThemeChangeListener(() -> {
+            aplicarTema(); // Update theme when it changes
+        });
     }
 
+    public void aplicarTema() {
+        if (TemaManager.getInstance().isOscuro()) {
+            Color fondo = new Color(18, 18, 28);
+            Color primario = new Color(40, 60, 150);
+            Color texto = Color.WHITE;
+
+            jPanel1.setBackground(fondo);
+            jPanel2.setBackground(fondo);
+            jPanel3.setBackground(fondo);
+            jPanel4.setBackground(fondo);
+            txtbuscar.setBackground(fondo);
+            txtbuscar.setForeground(texto);
+            txtbuscar.setColorIcon(texto);
+            txtbuscar.setPhColor(Color.LIGHT_GRAY);
+
+            TablaP.setBackgoundHead(primario);
+            TablaP.setForegroundHead(Color.WHITE);
+            TablaP.setBackgoundHover(new Color(40, 50, 90));
+            TablaP.setForegroundHover(Color.WHITE);
+            TablaP.setColorPrimary(fondo);
+            TablaP.setColorPrimaryText(texto);
+            TablaP.setColorSecondary(fondo.darker());
+            TablaP.setColorSecundaryText(texto);
+            TablaP.setColorBorderHead(primario);
+            TablaP.setColorBorderRows(fondo.darker());
+            TablaP.setFontHead(new Font("Segoe UI", Font.BOLD, 12));
+            TablaP.setFontRowHover(new Font("Segoe UI", Font.PLAIN, 12));
+            TablaP.setFontRowSelect(new Font("Segoe UI", Font.PLAIN, 12));
+            TablaP.setEffectHover(true);
+
+            Añadir1.setBackground(new Color(46, 49, 82));
+            editarBtn.setBackground(new Color(46, 49, 82));
+            eliminarBtn.setBackground(new Color(46, 49, 82));
+            producto.setBackground(new Color(46, 49, 82));
+        } else {
+            Color fondo = new Color(242, 247, 255);
+            Color texto = Color.BLACK;
+            Color primario = new Color(72, 92, 188);
+
+            jPanel1.setBackground(fondo);
+            jPanel2.setBackground(fondo);
+            jPanel3.setBackground(fondo);
+            jPanel4.setBackground(fondo);
+            txtbuscar.setBackground(fondo);
+            txtbuscar.setForeground(texto);
+            txtbuscar.setColorIcon(texto);
+            txtbuscar.setPhColor(Color.GRAY);
+
+            TablaP.setBackgoundHead(primario);
+            TablaP.setForegroundHead(Color.WHITE);
+            TablaP.setBackgoundHover(new Color(220, 220, 240));
+            TablaP.setForegroundHover(texto);
+            TablaP.setColorPrimary(fondo);
+            TablaP.setColorPrimaryText(texto);
+            TablaP.setColorSecondary(new Color(245, 245, 245));
+            TablaP.setColorSecundaryText(texto);
+            TablaP.setColorBorderHead(primario);
+            TablaP.setColorBorderRows(new Color(200, 200, 200));
+            TablaP.setFontHead(new Font("Segoe UI", Font.BOLD, 12));
+            TablaP.setFontRowHover(new Font("Segoe UI", Font.PLAIN, 12));
+            TablaP.setFontRowSelect(new Font("Segoe UI", Font.PLAIN, 12));
+            TablaP.setEffectHover(true);
+
+            Añadir1.setBackground(new Color(46, 49, 82));
+            editarBtn.setBackground(new Color(46, 49, 82));
+            eliminarBtn.setBackground(new Color(46, 49, 82));
+            producto.setBackground(new Color(46, 49, 82));
+        }
+    }
    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

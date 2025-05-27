@@ -39,7 +39,7 @@ public class Ctrl_catalogocategoria {
     }
     
     // Método para obtener todas las categorías
-    public List<Catalogocategoria> obtenerTodasCategorias() {
+   /* public List<Catalogocategoria> obtenerTodasCategorias() {
         List<Catalogocategoria> categorias = new ArrayList<>();
         String sql = "SELECT idCategoria, nombre FROM categoria";
         
@@ -78,6 +78,8 @@ public class Ctrl_catalogocategoria {
         }
         return false;
     }
+
+*/
     
     // Método para eliminar una categoría
     public boolean eliminarCategoria(int idCategoria) {
@@ -94,12 +96,12 @@ public class Ctrl_catalogocategoria {
         }
         return false;
     }
-    
+    /*
    public void cargarCategoriasEnCombo(RSMaterialComponent.RSComboBoxMaterial comboBox) {
     try {
         comboBox.removeAllItems();
-        comboBox.addItem(new Catalogocategoria(0, "Seleccione categoría"));
-        
+
+/*        
         List<Catalogocategoria> categorias = obtenerTodasCategorias();
         if (categorias.isEmpty()) {
             System.out.println("No se encontraron categorías en la base de datos");
@@ -120,4 +122,7 @@ public class Ctrl_catalogocategoria {
             JOptionPane.ERROR_MESSAGE);
     }
 }
+
+
+*/
 }

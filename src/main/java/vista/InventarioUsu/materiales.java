@@ -304,7 +304,7 @@ public class materiales extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(1290, 730));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panelprincipal.setBackground(new java.awt.Color(255, 255, 255));
+        panelprincipal.setBackground(new java.awt.Color(245, 246, 250));
         panelprincipal.setPreferredSize(new java.awt.Dimension(1240, 580));
         panelprincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -362,9 +362,9 @@ public class materiales extends javax.swing.JPanel {
         });
         panelprincipal.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 90, 110, 30));
 
-        principalPanel.setBackground(new java.awt.Color(245, 246, 250));
+        principalPanel.setBackground(new java.awt.Color(255, 255, 255));
         principalPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        panelprincipal.add(principalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 1210, 570));
+        panelprincipal.add(principalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, 1170, 570));
 
         cmbCategoria.setForeground(new java.awt.Color(153, 153, 153));
         cmbCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione una categoria:" }));
@@ -383,7 +383,7 @@ public class materiales extends javax.swing.JPanel {
                 txtBuscarActionPerformed(evt);
             }
         });
-        panelprincipal.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 410, 30));
+        panelprincipal.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 390, 30));
 
         add(panelprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, 730));
     }// </editor-fold>//GEN-END:initComponents

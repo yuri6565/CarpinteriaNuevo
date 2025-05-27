@@ -9,93 +9,108 @@ package modelo;
  * @author Yuri 5
  */
 public class Usuario {
-    private int Id_usuario;
-    private String Nombre;
-    private String Apellido;
-    private String Correo_electronico;
-    private String Usuario;
-    private String Contrasena;
-    private String Telefono;
-    private String Rol;
+    private int id;
+    private String imagen;
+    private String nombre;
+    private String apellido;
+    private String usuario;
+    private String contrasena;
+    private String correoElectronico;
+     private String telefono;
 
-    
-    
-public Usuario(){
-    this.Id_usuario = 0;
-    this.Nombre = "";
-    this.Apellido= "";
-    this.Correo_electronico = "";
-    this.Usuario="";
-    this.Contrasena= "";
-    this.Telefono = "";
-    this.Rol=""; 
-    
-    
-}
+    private String rol;
 
-    public int getId_usuario() {
-        return Id_usuario;
+    // Getters y setters
+
+    public int getId() {
+        return id;
     }
 
-    public void setId_usuario(int Id_usuario) {
-        this.Id_usuario = Id_usuario;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getApellido() {
-        return Apellido;
+        return apellido;
     }
 
-    public void setApellido(String Apellido) {
-        this.Apellido = Apellido;
-    }
-
-    public String getCorreo_electronico() {
-        return Correo_electronico;
-    }
-
-    public void setCorreo_electronico(String Correo_electronico) {
-        this.Correo_electronico = Correo_electronico;
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 
     public String getUsuario() {
-        return Usuario;
+        return usuario;
     }
 
-    public void setUsuario(String Usuario) {
-        this.Usuario = Usuario;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public String getContrasena() {
-        return Contrasena;
+        return contrasena;
     }
 
-    public void setContrasena(String Contrasena) {
-        this.Contrasena = Contrasena;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
     }
 
     public String getTelefono() {
-        return Telefono;
+        return telefono;
     }
 
-    public void setTelefono(String Telefono) {
-        this.Telefono = Telefono;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     public String getRol() {
-        return Rol;
+        return rol;
     }
 
-    public void setRol(String Rol) {
-        this.Rol = Rol;
+    public void setRol(String rol) {
+        this.rol = rol;
     }
+
+    public Usuario(int id, String imagen, String nombre, String apellido, String usuario, String contrasena, String correoElectronico, String telefono, String rol) {
+        this.id = id;
+        this.imagen = imagen;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.usuario = usuario;
+        this.contrasena = contrasena;
+        this.correoElectronico = correoElectronico;
+        this.telefono = telefono;
+        this.rol = rol;
+    }
+
+    public Usuario() {
+    }
+
+
+    
 
 
 

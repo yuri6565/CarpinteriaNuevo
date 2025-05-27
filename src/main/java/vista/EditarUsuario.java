@@ -47,6 +47,7 @@ public class EditarUsuario extends javax.swing.JDialog {
         btnBusca = new rojeru_san.RSButtonRiple();
         txtCodigo = new RSMaterialComponent.RSTextFieldMaterial();
         txtContraseña = new RSMaterialComponent.RSTextFieldMaterial();
+        jComboBoxPedido = new RSMaterialComponent.RSComboBoxMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -121,7 +122,7 @@ public class EditarUsuario extends javax.swing.JDialog {
                 txtRolActionPerformed(evt);
             }
         });
-        jPanel1.add(txtRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 200, 30));
+        jPanel1.add(txtRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 330, 200, 30));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setText("Usuario:");
@@ -192,6 +193,16 @@ public class EditarUsuario extends javax.swing.JDialog {
             }
         });
         jPanel1.add(txtContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 200, 30));
+
+        jComboBoxPedido.setForeground(new java.awt.Color(102, 102, 102));
+        jComboBoxPedido.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar" }));
+        jComboBoxPedido.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        jComboBoxPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxPedidoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jComboBoxPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 210, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -319,6 +330,10 @@ public class EditarUsuario extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtContraseñaActionPerformed
 
+    private void jComboBoxPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxPedidoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxPedidoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -365,6 +380,7 @@ public class EditarUsuario extends javax.swing.JDialog {
     private rojeru_san.RSButtonRiple btnBusca;
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
+    private RSMaterialComponent.RSComboBoxMaterial jComboBoxPedido;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

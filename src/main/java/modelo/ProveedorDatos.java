@@ -9,26 +9,17 @@ package modelo;
  * @author buitr
  */
 public class ProveedorDatos {
-    private String id_proveedor;
+    private int id_proveedor;
     private String nombre;
     private String correo_electronico;
     private String telefono;
     private String direccion;
-    
 
-    public ProveedorDatos(String id_proveedor, String nombre, String correo_electronico, String telefono, String direccion) {
-        this.id_proveedor = id_proveedor;
-        this.nombre = nombre;
-        this.correo_electronico = correo_electronico;
-        this.telefono = telefono;
-        this.direccion = direccion;
-    }
-
-    public String getId_proveedor() {
+    public int getId_proveedor() {
         return id_proveedor;
     }
 
-    public void setId_proveedor(String id_proveedor) {
+    public void setId_proveedor(int id_proveedor) {
         this.id_proveedor = id_proveedor;
     }
 
@@ -63,9 +54,19 @@ public class ProveedorDatos {
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
-  
 
+    public ProveedorDatos(int id_proveedor, String nombre, String correo_electronico, String telefono, String direccion) {
+        this.id_proveedor = id_proveedor;
+        this.nombre = nombre;
+        this.correo_electronico = correo_electronico;
+        this.telefono = telefono;
+        this.direccion = direccion;
+    }
+
+    public ProveedorDatos() {
+    }
     
-    //ojala le corra, esta igual de bien hecho que usted
+
+   
 
 }

@@ -27,6 +27,12 @@
             <type>jar</type>
         </dependency>
         <dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-core</artifactId>
+    <version>5.8.4</version> <!-- o la versión más reciente -->
+</dependency>
+
+        <dependency>
             <groupId>mysql-connector-j-9.2.0</groupId>
             <artifactId>mysql-connector-j-9.2.0</artifactId>
             <version>9.2.0</version>
@@ -77,6 +83,35 @@
             <groupId>unknown.binary</groupId>
             <artifactId>RojeruSan.full</artifactId>
             <version>SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>unknown.binary</groupId>
+            <artifactId>RSCustomPopuMenu</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.10.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.10.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.10.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.8.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <properties>

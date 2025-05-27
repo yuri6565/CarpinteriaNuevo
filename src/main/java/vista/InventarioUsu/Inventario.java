@@ -7,7 +7,7 @@ package vista.InventarioUsu;
 
 import vista.Inventario0.*;
 import java.awt.BorderLayout;
-import vista.movimientos;
+
 
 /**
  *
@@ -102,10 +102,7 @@ public class Inventario extends javax.swing.JPanel {
     this.btnMateriales.setSelected(false);  
     this.btnHerramientas.setSelected(false);  
       this.btnMovimientos.setSelected(true);
-      
-        movimientos es = new movimientos();
-        es.setSize(960, 570);
-        es.setLocation(0,0);
+
         
         
             }

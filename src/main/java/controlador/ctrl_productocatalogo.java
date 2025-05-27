@@ -4,19 +4,15 @@
  */
 package controlador;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JOptionPane;
-import modelo.Conexion;
+
 import modelo.catalogoproducto;
 
 /**
  *
  * @author buitr
  */
+
+/*
 public class ctrl_productocatalogo {
 
     public static class productoConDetalles {
@@ -52,6 +48,8 @@ public class ctrl_productocatalogo {
 
     
 // Modifica el método insertar
+    
+    /*
 public boolean insertar(catalogoproducto producto) {
     String sql = "INSERT INTO catalogo_producto(nombre, Categoria_idCategoria, img) VALUES (?, ?, ?)";
     
@@ -59,7 +57,7 @@ public boolean insertar(catalogoproducto producto) {
          PreparedStatement stmt = con.prepareStatement(sql)) {
 
         stmt.setString(1, producto.getNombre());
-        stmt.setInt(2, Integer.parseInt(producto.getCategoria())); // Convertir a int
+        stmt.setInt(2, Integer.parseInt(producto.())); // Convertir a int
         stmt.setBytes(3, producto.getImagen());
         
         return stmt.executeUpdate() > 0;
@@ -142,3 +140,4 @@ public List<productoConDetalles> obtenerproducto() {
     }
 
 }
+*/

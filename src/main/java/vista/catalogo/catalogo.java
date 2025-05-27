@@ -1,30 +1,102 @@
 package vista.catalogo;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 
-/**
- *
- * @author buitr
- */
+
+
 public class catalogo extends javax.swing.JPanel {
 
+private int cardsPerPage = 10; // Mostrar 5 cards por página
+private int currentPage = 0;
+private java.util.List<javax.swing.JPanel> allCards = new java.util.ArrayList<>();
+private rojerusan.RSLabelIcon nextIcon;
+private javax.swing.JScrollPane scrollPane;
     public catalogo(JFrame jFrame, boolean par) {
         initComponents();
-
-      
-
-        silla s = new silla();
-            s.setSize(1250, 630);
-            s.setLocation(0, 0);
-
-        panelPrincipal.removeAll();
-        panelPrincipal.add(s);
-        panelPrincipal.revalidate();
-        panelPrincipal.repaint();
-
+        initializePagination();
     }
 
+
+private void initializePagination() {
+    nextIcon = new rojerusan.RSLabelIcon();
+    nextIcon.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.TRENDING_FLAT); // Icono de flecha horizontal
+    nextIcon.setForeground(new java.awt.Color(0, 0, 0)); // Color del icono (ajustable)
+    nextIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+            currentPage++;
+            updateCardsDisplay();
+        }
+    });
+
+   // Creamos un contenedor intermedio con BorderLayout
+JPanel container = new JPanel(new BorderLayout());
+
+// Agregamos el scrollPane al centro de ese contenedor
+scrollPane = new JScrollPane();
+scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+container.add(scrollPane, BorderLayout.CENTER);
+
+// Agregamos el botón de flecha a la derecha del contenedor
+container.add(nextIcon, BorderLayout.EAST);
+
+// Finalmente agregamos el contenedor al panelCards (que puede estar en null o BorderLayout, pero mejor usar uno consistente)
+panelCards.setLayout(new BorderLayout());
+panelCards.add(container, BorderLayout.CENTER);
+
+}
+
+private void updateCardsDisplay() {
+    // Crear un nuevo panel para las cards con GridLayout (2 filas, 3 y 2 columnas)
+    JPanel cardsPanel = new JPanel(new java.awt.GridBagLayout());
+    cardsPanel.setBackground(new Color(242, 247, 255));
+
+    java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+    gbc.insets = new java.awt.Insets(15, 15, 15, 15); // Espaciado entre cards
+    gbc.fill = java.awt.GridBagConstraints.NONE;
+
+    int startIndex = currentPage * cardsPerPage;
+    int endIndex = Math.min(startIndex + cardsPerPage, allCards.size());
+
+    int cardIndex = 0;
+    for (int i = startIndex; i < endIndex; i++) {
+        if (cardIndex < 5) {
+            // Primera fila: 3 cards
+            gbc.gridx = cardIndex;
+            gbc.gridy = 0;
+        } else {
+            // Segunda fila: 2 cards
+            gbc.gridx = cardIndex - 5;
+            gbc.gridy = 1;
+        }
+        cardsPanel.add(allCards.get(i), gbc);
+        cardIndex++;
+    }
+
+    // Rellenar con espacios vacíos si es necesario para mantener la estructura
+    while (cardIndex < 5) {
+        gbc.gridx = cardIndex < 3 ? cardIndex : cardIndex - 3;
+        gbc.gridy = cardIndex < 3 ? 0 : 1;
+        cardsPanel.add(new JLabel(), gbc);
+        cardIndex++;
+    }
+
+    // Actualizar el JScrollPane con el panel de cards
+    scrollPane.setViewportView(cardsPanel);
+    nextIcon.setVisible(endIndex < allCards.size()); // Mostrar icono si hay más cards
+    panelCards.revalidate();
+    panelCards.repaint();
+}
   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -32,122 +104,31 @@ public class catalogo extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        comedor = new rojerusan.RSLabelImage();
-        silla = new rojerusan.RSLabelImage();
-        armario = new rojerusan.RSLabelImage();
-        rSLabelImage2 = new rojerusan.RSLabelImage();
-        jPanel3 = new javax.swing.JPanel();
-        rSLabelImage1 = new rojerusan.RSLabelImage();
-        panelPrincipal = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        panelCards = new javax.swing.JPanel();
+        rSLabelIcon2 = new rojerusan.RSLabelIcon();
         Añadir1 = new rojeru_san.RSButtonRiple();
+        txtBuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
 
-        setBackground(new java.awt.Color(255, 255, 255));
+        setBackground(new java.awt.Color(242, 247, 255));
 
+        jPanel1.setBackground(new java.awt.Color(242, 247, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBackground(new java.awt.Color(242, 247, 255));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        comedor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        comedor.setText("Comedor y Bar");
-        comedor.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        comedor.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        comedor.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                comedorMouseClicked(evt);
-            }
-        });
-        jPanel2.add(comedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 60, 130, 110));
+        panelCards.setBackground(new java.awt.Color(255, 255, 255));
+        panelCards.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        silla.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        silla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/catalogo/silla2-png.png"))); // NOI18N
-        silla.setText("Sala y Estar");
-        silla.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        silla.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        silla.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                sillaMouseClicked(evt);
-            }
-        });
-        jPanel2.add(silla, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 120, 110));
+        rSLabelIcon2.setForeground(new java.awt.Color(153, 0, 153));
+        rSLabelIcon2.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.KEYBOARD_ARROW_RIGHT);
+        rSLabelIcon2.setInheritsPopupMenu(true);
+        panelCards.add(rSLabelIcon2, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 200, 50, 50));
 
-        armario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        armario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/catalogo/armarioextendido-png.png"))); // NOI18N
-        armario.setText("Armario y Closet");
-        armario.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        armario.setAlignmentY(5.0F);
-        armario.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        armario.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                armarioMouseClicked(evt);
-            }
-        });
-        jPanel2.add(armario, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 70, 130, 100));
-
-        rSLabelImage2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        rSLabelImage2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/catalogo/camama-png.png"))); // NOI18N
-        rSLabelImage2.setText("Camas");
-        rSLabelImage2.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        rSLabelImage2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        rSLabelImage2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rSLabelImage2MouseClicked(evt);
-            }
-        });
-        jPanel2.add(rSLabelImage2, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 60, 120, 110));
-
-        rSLabelImage1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        rSLabelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/catalogo/cocinadefinitiva-png.png"))); // NOI18N
-        rSLabelImage1.setText("Cocina");
-        rSLabelImage1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        rSLabelImage1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        rSLabelImage1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rSLabelImage1MouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(560, Short.MAX_VALUE)
-                .addComponent(rSLabelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(220, 220, 220))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(rSLabelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 910, 120));
-
-        javax.swing.GroupLayout panelPrincipalLayout = new javax.swing.GroupLayout(panelPrincipal);
-        panelPrincipal.setLayout(panelPrincipalLayout);
-        panelPrincipalLayout.setHorizontalGroup(
-            panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 980, Short.MAX_VALUE)
-        );
-        panelPrincipalLayout.setVerticalGroup(
-            panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
-        );
-
-        jPanel2.add(panelPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, 980, 450));
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/catalogo/catalogo.png"))); // NOI18N
-        jLabel1.setText("Catalogo");
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, -1, -1));
+        jPanel2.add(panelCards, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 190, 970, 450));
 
         Añadir1.setBackground(new java.awt.Color(46, 49, 82));
-        Añadir1.setText("categoria");
+        Añadir1.setText("Agregar Categoria");
         Añadir1.setColorHover(new java.awt.Color(0, 153, 51));
         Añadir1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
         Añadir1.addActionListener(new java.awt.event.ActionListener() {
@@ -155,9 +136,23 @@ public class catalogo extends javax.swing.JPanel {
                 Añadir1ActionPerformed(evt);
             }
         });
-        jPanel2.add(Añadir1, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 20, 140, -1));
+        jPanel2.add(Añadir1, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 90, 160, 40));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1110, 710));
+        txtBuscar.setBackground(new java.awt.Color(242, 247, 255));
+        txtBuscar.setForeground(new java.awt.Color(0, 0, 0));
+        txtBuscar.setColorIcon(new java.awt.Color(0, 0, 0));
+        txtBuscar.setColorMaterial(new java.awt.Color(153, 153, 153));
+        txtBuscar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
+        txtBuscar.setPhColor(new java.awt.Color(102, 102, 102));
+        txtBuscar.setPlaceholder("Buscar...");
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 110, 430, 40));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1090, 700));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -181,89 +176,85 @@ public class catalogo extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void comedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comedorMouseClicked
-        // TODO add your handling code here:
-        
-  
-            comedor c = new comedor();
-            c.setSize(1250, 630);
-            c.setLocation(0, 0);
-            panelPrincipal.removeAll();
-            panelPrincipal.add(c);
-            panelPrincipal.revalidate();
-            panelPrincipal.repaint();
-
-        
-    }//GEN-LAST:event_comedorMouseClicked
-
-    private void sillaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sillaMouseClicked
-        // TODO add your handling code here:
-        
-          silla s = new silla();
-            s.setSize(1250, 630);
-            s.setLocation(0, 0);
-            panelPrincipal.removeAll();
-            panelPrincipal.add(s);
-            panelPrincipal.revalidate();
-            panelPrincipal.repaint();
-    }//GEN-LAST:event_sillaMouseClicked
-
-    private void armarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_armarioMouseClicked
-        // TODO add your handling code here:
-          armario a = new armario();
-            a.setSize(1250, 630);
-            a.setLocation(0, 0);
-            panelPrincipal.removeAll();
-            panelPrincipal.add(a);
-            panelPrincipal.revalidate();
-            panelPrincipal.repaint();
-
-    }//GEN-LAST:event_armarioMouseClicked
-
-    private void rSLabelImage2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSLabelImage2MouseClicked
-        // TODO add your handling code here:
-         cama ca = new cama();
-            ca.setSize(1250, 630);
-            ca.setLocation(0, 0);
-            panelPrincipal.removeAll();
-            panelPrincipal.add(ca);
-            panelPrincipal.revalidate();
-            panelPrincipal.repaint();
-        
-    }//GEN-LAST:event_rSLabelImage2MouseClicked
-
-    private void rSLabelImage1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSLabelImage1MouseClicked
-        // TODO add your handling code here:
-         cocina co = new cocina();
-            co.setSize(1250, 630);
-            co.setLocation(0, 0);
-            panelPrincipal.removeAll();
-            panelPrincipal.add(co);
-            panelPrincipal.revalidate();
-            panelPrincipal.repaint();
-        
-    }//GEN-LAST:event_rSLabelImage1MouseClicked
-
     private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
-        // TODO add your handling code here:
-        catalogocategoria dialog = new catalogocategoria(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
+catalogocategoria cat = new catalogocategoria((JFrame) getTopLevelAncestor(), true); // Use getTopLevelAncestor() to get the parent JFrame
+    cat.setVisible(true); // Aquí se detiene hasta que se cierre
+
+    String rutaImagen = cat.getRutaImagenSeleccionada();
+    String categoriaNombre = cat.getCategoriaNombre();
+    if (rutaImagen != null && !rutaImagen.isEmpty() && !categoriaNombre.isEmpty()) {
+        agregarCard(rutaImagen, categoriaNombre);
+    }
+  
+  
     }//GEN-LAST:event_Añadir1ActionPerformed
+
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple Añadir1;
-    private rojerusan.RSLabelImage armario;
-    private rojerusan.RSLabelImage comedor;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel panelPrincipal;
-    private rojerusan.RSLabelImage rSLabelImage1;
-    private rojerusan.RSLabelImage rSLabelImage2;
-    private rojerusan.RSLabelImage silla;
+    private javax.swing.JPanel panelCards;
+    private rojerusan.RSLabelIcon rSLabelIcon2;
+    private RSMaterialComponent.RSTextFieldMaterialIcon txtBuscar;
     // End of variables declaration//GEN-END:variables
+private void agregarCard(String rutaImagen, String categoriaNombre) {
+    javax.swing.JPanel cardPanel = new javax.swing.JPanel();
+    cardPanel.setBackground(new Color(242, 247, 255));
+    cardPanel.setPreferredSize(new java.awt.Dimension(150, 180));
+
+    rojerusan.RSPanelCircleImage nuevaCard = new rojerusan.RSPanelCircleImage();
+    nuevaCard.setPreferredSize(new java.awt.Dimension(150, 150));
+    nuevaCard.setImagen(new javax.swing.ImageIcon(rutaImagen));
+    nuevaCard.setColorBorde(new Color(242, 247, 255));
+
+    JLabel cardLabel = new JLabel(categoriaNombre);
+    cardLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 17));
+    cardLabel.setHorizontalAlignment(JLabel.CENTER);
+
+    cardPanel.setLayout(new java.awt.BorderLayout());
+    cardPanel.add(nuevaCard, java.awt.BorderLayout.CENTER);
+    cardPanel.add(cardLabel, java.awt.BorderLayout.SOUTH);
+
+    cardPanel.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            mostrarVistaCategoria(categoriaNombre);
+        }
+    });
+
+    allCards.add(cardPanel);
+    updateCardsDisplay();
+}
+
+
+    private void mostrarVistaCategoria(String categoriaNombre) {
+        // Limpiar el panelCards
+        panelCards.removeAll();
+        panelCards.setLayout(new java.awt.BorderLayout());
+
+        // Crear un nuevo panel para la vista de la categoría seleccionada
+        JPanel categoriaVista = new JPanel();
+        categoriaVista.setBackground(new Color(242, 247, 255));
+        categoriaVista.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+
+        JLabel tituloCategoria = new JLabel("Categoría: " + categoriaNombre);
+        tituloCategoria.setFont(new java.awt.Font("Segoe UI Black", 0, 20));
+        categoriaVista.add(tituloCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 300, 30));
+
+
+        JLabel contenido = new JLabel("Aquí se mostrarían los productos de " + categoriaNombre);
+        contenido.setFont(new java.awt.Font("Segoe UI", 0, 16));
+        categoriaVista.add(contenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 400, 30));
+
+        // Agregar botón de regresar
+    
+    }
+
 
 }

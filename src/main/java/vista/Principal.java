@@ -4,9 +4,9 @@
  */
 package vista;
 
+import controlador.Ctrl_Perfil;
 import vista.proveedor.proveedores;
 import vista.Caja.Caja;
-import vista.Produccionn.Produccion;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,14 +14,25 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import modelo.UsuarioModelo;
+import rojeru_san.RSButton;
 
 import vista.Cotizacion.cotizacion;
 
-
-import vista.catalogo.catalogo;
 import vista.Inventario0.herramientas;
 import vista.Inventario0.materiales;
+import vista.Produccion.Produccion;
+import vista.catalogo.Productos;
+import vista.catalogo.catalogo;
+
 
 /**
  *
@@ -29,25 +40,42 @@ import vista.Inventario0.materiales;
  */
 public class Principal extends javax.swing.JFrame {
 
-    private JPanel submenuInventario;
+  private JPanel submenuInventario;
     private boolean submenuVisible = false; // Para controlar si el submenú está visible
-    private rojeru_san.RSButton item1; // Botón "Materiales" del submenú
+// Botón "Materiales" del submenú
     private rojeru_san.RSButton item2; // Botón "Herramientas" del submenú
+     private int idUsuarioValido ;
+    private String nombreUsuario;
+     private int idUsuario;
+     private Ctrl_Perfil controlador;
+
 
     //bfhfhb
     // Nuevas variables para el submenú de Ventas
     private JPanel submenuVentas;
     private boolean submenuVentasVisible = false; // Para controlar si el submenú de Ventas está visible
-    private rojeru_san.RSButton item3; // Botón "Pedidos" del submenú de Ventas
-    private rojeru_san.RSButton item4; // Botón "Cotización" del submenú de Ventas
+  private rojeru_san.RSButton item1; 
+private rojeru_san.RSButton item4;
+private rojeru_san.RSButton item3;
 
-    public Principal() {
+    public Principal(int idUsuario) {
+        this.idUsuario = idUsuario;
+        this.controlador = new Ctrl_Perfil();
+        this.item1 = new rojeru_san.RSButton(); // ✔️ usa la variable de instancia
+this.item4 = new rojeru_san.RSButton();
+  this.item3 = new rojeru_san.RSButton(); // ✔️
 
+         boolean oscuro = TemaManager.getInstance().isOscuro();
         initComponents();
-
+        aplicarTema();
+         
+        cargarUsuarioLogueado();
+       cargarrol();
+       
         jPanel4.setVisible(true);
         jPanel5.setVisible(false);
         jPanel3.setVisible(false);
+
 
 //submenu inventario------------------
         // Inicializar el submenú
@@ -59,7 +87,7 @@ public class Principal extends javax.swing.JFrame {
         // Añadir ítems al submenú (como botones RSButton)
         //boton para materiales
         rojeru_san.RSButton item1 = new rojeru_san.RSButton();
-        item1.setBackground(new Color(29, 30, 81)); // Fondo igual que el menú
+        item1.setBackground(new Color(30, 30, 45)); // Fondo igual que el menú
         item1.setForeground(Color.WHITE);
         item1.setFont(new Font("Tahoma", Font.BOLD, 15));
         item1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 60, 1, 1)); // Margen izquierdo para alinear con el texto del menú
@@ -70,6 +98,7 @@ public class Principal extends javax.swing.JFrame {
         item1.setText("Materiales");
         item1.setColorHover(new Color(150, 150, 150)); // Mismo color de hover que los botones del menú
         item1.setColorTextHover(Color.WHITE);
+   aplicarTema();
 
         //boton para herramientas
         rojeru_san.RSButton item2 = new rojeru_san.RSButton();
@@ -223,6 +252,223 @@ public class Principal extends javax.swing.JFrame {
         contenedor.repaint();
 
     }
+    
+      private void cambiarEstiloBotonRS(RSButton boton, Color fondo, Color texto) {
+    boton.setBackground(fondo);                // Fondo (si es compatible en tu versión)
+    boton.setColorText(texto);                 // Texto
+    boton.setColorHover(new Color(72, 92, 188)); // Hover fijo azul
+    boton.setColorTextHover(texto); 
+
+}
+    private void aplicarTema() {
+    Color fondoPrincipal, fondoPanel, fondoBoton, textoBoton, textoLabel, contenedorc;
+    String rutaLogo;
+
+    // Use TemaManager to get the current theme
+    boolean oscuro = TemaManager.getInstance().isOscuro();
+
+    if (oscuro) {
+   fondoPrincipal = new Color(21,21,33);  
+        fondoPanel = new Color(21,21,33);     
+        fondoBoton = new Color(30, 30, 45);      
+        textoBoton = Color.WHITE;                
+        textoLabel = Color.WHITE;                
+        contenedorc = new Color(21,21,33);
+jPanel1.setBackground (new Color(21,21,33)); 
+jPanel2.setBackground(new Color(30,30,45));
+jPanel3.setBackground(new Color(30,30,45)); 
+jPanel4.setBackground(new Color(30,30,45)); 
+contenedor.setBackground(new Color(21,21,33)); 
+jPanel5.setBackground(new Color(30,30,45));     
+lblUsuarioLogueado.setForeground(Color.WHITE);
+rolusuario.setForeground(Color.WHITE);
+lblTituloPrincipal.setForeground(Color.WHITE);
+cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
+
+
+        uno.setIcon(new ImageIcon(getClass().getResource("/imagenes/casa.png")));
+        dos.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-negra.png")));
+        tres.setIcon(new ImageIcon(getClass().getResource("/imagenes/proveedor-de-servicio.png")));
+        cuatro.setIcon(new ImageIcon(getClass().getResource("/imagenes/productivity_1.png")));
+        cinco.setIcon(new ImageIcon(getClass().getResource("/imagenes/etiqueta-de-precio.png")));
+        seis.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-registradora_1.png")));
+        siete1.setIcon(new ImageIcon(getClass().getResource("/imagenes/gestion-de-usuarios_1.png")));
+        ocho.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service_1.png")));
+        nueve.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogar.png")));
+        Diez.setIcon(new ImageIcon(getClass().getResource("/imagenes/ajustesblanco.png")));
+        
+       rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/WhatsApp Image 2025-03-20 at 3.58.18 PM (1).png")));
+        rSLabelImage3.setIcon(new ImageIcon(getClass().getResource("/imagenes/luna (6).png")));
+        rSLabelImage1.setIcon(new ImageIcon(getClass().getResource("/imagenes/feliz-sol-negro.png")));
+        
+
+        uno1.setIcon(new ImageIcon(getClass().getResource("/imagenes/casa.png")));
+        dos1.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-negra.png")));
+        tres1.setIcon(new ImageIcon(getClass().getResource("/imagenes/proveedor-de-servicio.png")));
+        cuatro1.setIcon(new ImageIcon(getClass().getResource("/imagenes/productivity_1.png")));
+        cinco1.setIcon(new ImageIcon(getClass().getResource("/imagenes/etiqueta-de-precio.png")));
+        seis1.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-registradora_1.png")));
+        siete2.setIcon(new ImageIcon(getClass().getResource("/imagenes/gestion-de-usuarios_1.png")));
+        ocho1.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service_1.png")));
+        nueve1.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogar.png")));
+        menu.setIcon(new ImageIcon(getClass().getResource("/imagenes/burger-bar.png")));
+      rSLabelIcon1.setForeground(new Color (255,255,255));
+        //rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/logo_blanco.png")));
+
+
+
+    } else {
+     fondoPrincipal = new Color(255, 255, 255);
+    fondoPanel = new Color(242, 247, 255);
+    fondoBoton = new Color(255, 255, 255);
+    textoBoton = Color.BLACK;
+    textoLabel = Color.BLACK;
+    contenedorc = new Color(242, 247, 255);
+    
+    jPanel1.setBackground (new Color(242, 247, 255));
+jPanel2.setBackground(new Color(255, 255, 255)); 
+jPanel3.setBackground(new Color(255, 255, 255)); 
+jPanel4.setBackground(new Color(255, 255, 255)); 
+contenedor.setBackground(new Color(242, 247, 255)); 
+jPanel5.setBackground(new Color(242, 247, 255)); 
+lblUsuarioLogueado.setForeground(textoLabel);
+rolusuario.setForeground(textoLabel);
+lblTituloPrincipal.setForeground(textoLabel);
+item4.setForeground(fondoBoton);
+      rSLabelIcon1.setForeground(new Color (0,0,0));
+        uno.setIcon(new ImageIcon(getClass().getResource("/imagenes/home.png")));
+        dos.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-blanca.png")));
+        tres.setIcon(new ImageIcon(getClass().getResource("/imagenes/proveedor-de-servicio_1.png")));
+        cuatro.setIcon(new ImageIcon(getClass().getResource("/imagenes/productivity.png")));
+        cinco.setIcon(new ImageIcon(getClass().getResource("/imagenes/etiqueta-del-precionegro.png")));
+        seis.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-registradora.png")));
+        siete1.setIcon(new ImageIcon(getClass().getResource("/imagenes/gestion-de-usuarios.png")));
+        ocho.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service.png")));
+        nueve.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogarnegro.png")));
+        Diez.setIcon(new ImageIcon(getClass().getResource("/imagenes/ajustess.png")));
+        menu.setIcon(new ImageIcon(getClass().getResource("/imagenes/menu22.png")));
+        rSLabelImage1.setIcon(new ImageIcon(getClass().getResource("/imagenes/feliz-sol (6).png")));
+        rSLabelImage3.setIcon(new ImageIcon(getClass().getResource("/imagenes/luna (7).png")));
+
+        uno1.setIcon(new ImageIcon(getClass().getResource("/imagenes/home.png")));
+        dos1.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-blanca.png")));
+        tres1.setIcon(new ImageIcon(getClass().getResource("/imagenes/proveedor-de-servicio_1.png")));
+        cuatro1.setIcon(new ImageIcon(getClass().getResource("/imagenes/productivity.png")));
+        cinco1.setIcon(new ImageIcon(getClass().getResource("/imagenes/etiqueta-del-precionegro.png")));
+        seis1.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-registradora.png")));
+        siete2.setIcon(new ImageIcon(getClass().getResource("/imagenes/gestion-de-usuarios.png")));
+        ocho1.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service.png")));
+        nueve1.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogarnegro.png")));
+        rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/logo_azul.png")));
+rSPanelImage3.setPreferredSize(new Dimension(160, 109));
+
+}
+
+
+
+    // Botones
+    cambiarEstiloBotonRS(uno, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(dos, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(tres, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(cuatro, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(cinco, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(seis, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(siete1, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(ocho, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(nueve, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(Diez, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(menu, fondoBoton, textoBoton);
+
+cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
+
+
+    cambiarEstiloBotonRS(uno1, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(dos1, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(tres1, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(cuatro1, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(cinco1, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(seis1, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(siete2, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(ocho1, fondoBoton, textoBoton);
+    cambiarEstiloBotonRS(nueve1, fondoBoton, textoBoton);
+
+    // Labels
+  
+}
+  private void configurarPopupMenu() {  
+    JPopupMenu userPopupMenu = new JPopupMenu();  
+    userPopupMenu.setOpaque(false);  
+    userPopupMenu.setBackground(new Color(255, 255, 255));  
+    userPopupMenu.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));  
+  
+    // Crear los ítems del menú  
+    JMenuItem settingsItem = new JMenuItem("Configuraciones");  
+    JMenuItem profileItem = new JMenuItem("Perfil");  
+    JMenuItem messagesItem = new JMenuItem("Mensajes");  
+    JMenuItem logoutItem = new JMenuItem("Salir");  
+  
+    // Personalizar los ítems sin hover
+    Font menuFont = new Font("Arial", Font.PLAIN, 14);  
+    Dimension itemSize = new Dimension(150, 30);  
+  
+    settingsItem.setFont(menuFont);  
+    settingsItem.setForeground(new Color(100, 100, 100));  
+    settingsItem.setBackground(new Color(255, 255, 255));  
+    settingsItem.setOpaque(false);  
+    settingsItem.setPreferredSize(itemSize);  
+    settingsItem.setBorderPainted(false);  // Eliminar bordes al hacer hover
+  
+    profileItem.setFont(menuFont);  
+    profileItem.setForeground(new Color(100, 100, 100));  
+    profileItem.setBackground(new Color(255, 255, 255));  
+    profileItem.setOpaque(false);  
+    profileItem.setPreferredSize(itemSize);  
+    profileItem.setBorderPainted(false);
+  
+    messagesItem.setFont(menuFont);  
+    messagesItem.setForeground(new Color(100, 100, 100));  
+    messagesItem.setBackground(new Color(255, 255, 255));  
+    messagesItem.setOpaque(false);  
+    messagesItem.setPreferredSize(itemSize);  
+    messagesItem.setBorderPainted(false);
+  
+    logoutItem.setFont(menuFont);  
+    logoutItem.setForeground(new Color(100, 100, 100));  
+    logoutItem.setBackground(new Color(255, 255, 255));  
+    logoutItem.setOpaque(false);  
+    logoutItem.setPreferredSize(itemSize);  
+    logoutItem.setBorderPainted(false);
+  
+    // Agregar ítems al menú  
+    userPopupMenu.add(settingsItem);  
+    userPopupMenu.add(profileItem);  
+    userPopupMenu.add(messagesItem);  
+    userPopupMenu.add(logoutItem);  
+  
+    // Mostrar el JPopupMenu al hacer clic en rSLabelCircleImage1  
+    rSLabelCircleImage1.addMouseListener(new MouseAdapter() {  
+        @Override  
+        public void mouseClicked(MouseEvent e) {  
+            userPopupMenu.show(rSLabelCircleImage1, 0, rSLabelCircleImage1.getHeight());  
+        }  
+    });  
+  
+    // Acciones de los ítems del menú  
+    settingsItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Abriendo configuración..."));  
+    profileItem.addActionListener(e -> {  
+        // Cargar la vista de InformacionBasica en el contenedor  
+        perfil1 info = new perfil1(idUsuario);  
+  
+        info.setSize(1290, 730);  
+        info.setLocation(0, 0);  
+        contenedor.removeAll();  
+        contenedor.add(info);  
+        contenedor.revalidate();  
+        contenedor.repaint();  
+    });  
+    messagesItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Abriendo mensajes..."));  
+    logoutItem.addActionListener(e -> System.exit(0));  
+}
 
     private void animacion() {
         int posicion = jPanel3.getX();
@@ -322,12 +568,15 @@ public class Principal extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         contenedor = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         menu = new rojeru_san.RSButton();
-        noti = new rojeru_san.RSButton();
-        btnUnidad = new RSMaterialComponent.RSButtonShape();
-        btnMarcas = new RSMaterialComponent.RSButtonShape();
+        rSLabelImage1 = new rojerusan.RSLabelImage();
+        rSSwitch1 = new rojerusan.RSSwitch();
+        rSLabelImage3 = new rojerusan.RSLabelImage();
+        rSLabelIcon1 = new rojerusan.RSLabelIcon();
+        rSLabelCircleImage1 = new rojerusan.RSLabelCircleImage();
+        rolusuario = new javax.swing.JLabel();
+        lblUsuarioLogueado = new javax.swing.JLabel();
+        lblTituloPrincipal = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         dos = new rojeru_san.RSButton();
         tres = new rojeru_san.RSButton();
@@ -397,14 +646,6 @@ public class Principal extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(29, 30, 81));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("CARPINTERIA");
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("JOSE ABEL");
-
         menu.setBackground(new java.awt.Color(29, 30, 81));
         menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/burger-bar.png"))); // NOI18N
         menu.addActionListener(new java.awt.event.ActionListener() {
@@ -413,48 +654,45 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        noti.setBackground(new java.awt.Color(29, 30, 81));
-        noti.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        noti.setIcon(new javax.swing.ImageIcon(getClass().getResource("/notificacion (1).png"))); // NOI18N
-        noti.setText("Notificaiones");
-        noti.setToolTipText("");
-        noti.setColorHover(new java.awt.Color(29, 30, 81));
-        noti.setDoubleBuffered(true);
-        noti.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        noti.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        noti.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        noti.setIconTextGap(10);
-        noti.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                notiActionPerformed(evt);
+        rSLabelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/feliz-sol-negro.png"))); // NOI18N
+
+        rSSwitch1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rSSwitch1MouseClicked(evt);
             }
         });
 
-        btnUnidad.setBackground(new java.awt.Color(29, 30, 81));
-        btnUnidad.setBorder(javax.swing.BorderFactory.createCompoundBorder());
-        btnUnidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/usuario (2).png"))); // NOI18N
-        btnUnidad.setText("Usuario");
-        btnUnidad.setToolTipText("");
-        btnUnidad.setBackgroundHover(new java.awt.Color(67, 150, 209));
-        btnUnidad.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
-        btnUnidad.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
-        btnUnidad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUnidadActionPerformed(evt);
+        rSLabelImage3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/luna (6).png"))); // NOI18N
+
+        rSLabelIcon1.setBackground(new java.awt.Color(255, 255, 255));
+        rSLabelIcon1.setForeground(new java.awt.Color(255, 255, 255));
+        rSLabelIcon1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.NOTIFICATIONS);
+
+        rSLabelCircleImage1.setBackground(new java.awt.Color(29, 30, 81));
+        rSLabelCircleImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/WhatsApp Image 2025-03-28 at 11.10.17 AM.jpeg"))); // NOI18N
+        rSLabelCircleImage1.setColorBorde(new java.awt.Color(29, 30, 81));
+        rSLabelCircleImage1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rSLabelCircleImage1MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                rSLabelCircleImage1MouseEntered(evt);
             }
         });
 
-        btnMarcas.setBackground(new java.awt.Color(29, 30, 81));
-        btnMarcas.setBorder(javax.swing.BorderFactory.createCompoundBorder());
-        btnMarcas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
-        btnMarcas.setBackgroundHover(new java.awt.Color(67, 150, 209));
-        btnMarcas.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
-        btnMarcas.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
-        btnMarcas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMarcasActionPerformed(evt);
-            }
-        });
+        rolusuario.setBackground(new java.awt.Color(0, 0, 0));
+        rolusuario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        rolusuario.setForeground(new java.awt.Color(255, 255, 255));
+        rolusuario.setText("Escritorio");
+
+        lblUsuarioLogueado.setBackground(new java.awt.Color(0, 0, 0));
+        lblUsuarioLogueado.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
+        lblUsuarioLogueado.setForeground(new java.awt.Color(255, 255, 255));
+        lblUsuarioLogueado.setText("Escritorio");
+
+        lblTituloPrincipal.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
+        lblTituloPrincipal.setForeground(new java.awt.Color(255, 255, 255));
+        lblTituloPrincipal.setText("Escritorio");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -463,38 +701,46 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(260, 260, 260)
                 .addComponent(menu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel1)))
-                .addGap(669, 669, 669)
-                .addComponent(noti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnMarcas, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(lblTituloPrincipal)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(rSLabelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(rSSwitch1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(rSLabelImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(rSLabelIcon1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rSLabelCircleImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(lblUsuarioLogueado))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rolusuario)))
+                .addGap(209, 209, 209))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
+                    .addComponent(rSLabelCircleImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel1))
+                        .addComponent(lblUsuarioLogueado)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rolusuario))
+                    .addComponent(menu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(menu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnMarcas, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(noti, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(rSLabelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(rSSwitch1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(rSLabelImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(rSLabelIcon1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblTituloPrincipal)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -628,7 +874,8 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        rSPanelImage3.setImagen(new javax.swing.ImageIcon(getClass().getResource("/logo blanco.png"))); // NOI18N
+        rSPanelImage3.setImagen(new javax.swing.ImageIcon(getClass().getResource("/logo_blanco.png"))); // NOI18N
+        rSPanelImage3.setPreferredSize(new java.awt.Dimension(158, 109));
 
         javax.swing.GroupLayout rSPanelImage3Layout = new javax.swing.GroupLayout(rSPanelImage3);
         rSPanelImage3.setLayout(rSPanelImage3Layout);
@@ -638,7 +885,7 @@ public class Principal extends javax.swing.JFrame {
         );
         rSPanelImage3Layout.setVerticalGroup(
             rSPanelImage3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 153, Short.MAX_VALUE)
+            .addGap(0, 109, Short.MAX_VALUE)
         );
 
         Diez.setBackground(new java.awt.Color(29, 30, 81));
@@ -679,7 +926,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
+                .addGap(78, 78, 78)
                 .addComponent(rSPanelImage3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(uno, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -958,7 +1205,7 @@ public class Principal extends javax.swing.JFrame {
             deseleccionar();
             this.ocho.setSelected(true);
 
-            Cliente cliente = new Cliente();
+            VistaClientes cliente = new VistaClientes();
             cliente.setSize(1290, 730);
             cliente.setLocation(0, 0);
 
@@ -966,7 +1213,7 @@ public class Principal extends javax.swing.JFrame {
             contenedor.add(cliente);
             contenedor.revalidate();
             contenedor.repaint();
-
+ lblTituloPrincipal.setText("Gestion de clientes"); 
         }
         animacion();
 
@@ -986,6 +1233,8 @@ public class Principal extends javax.swing.JFrame {
             contenedor.add(caja);
             contenedor.revalidate();
             contenedor.repaint();
+            
+             lblTituloPrincipal.setText("Caja"); 
         }
         animacion();
 
@@ -1025,6 +1274,7 @@ public class Principal extends javax.swing.JFrame {
             ocultarSubmenus();
             this.cinco.setSelected(false);
         }
+         lblTituloPrincipal.setText("Ventas"); 
 
     }//GEN-LAST:event_cincoActionPerformed
 
@@ -1034,7 +1284,7 @@ public class Principal extends javax.swing.JFrame {
             deseleccionar();
             this.cuatro.setSelected(true);
 
-            Produccion pr = new Produccion(new javax.swing.JFrame(), true);
+         Produccion pr = new Produccion(new javax.swing.JFrame());
             pr.setSize(1290, 730);
             pr.setLocation(0, 0);
 
@@ -1042,7 +1292,7 @@ public class Principal extends javax.swing.JFrame {
             contenedor.add(pr);
             contenedor.revalidate();
             contenedor.repaint();
-
+ lblTituloPrincipal.setText("Producción"); 
         }
 
         animacion();
@@ -1055,7 +1305,7 @@ public class Principal extends javax.swing.JFrame {
             deseleccionar();
             this.tres.setSelected(true);
 
-            proveedores pr = new proveedores();
+            Proveedor pr = new Proveedor();
             pr.setSize(1290, 730);
             pr.setLocation(0, 0);
 
@@ -1063,7 +1313,7 @@ public class Principal extends javax.swing.JFrame {
             contenedor.add(pr);
             contenedor.revalidate();
             contenedor.repaint();
-
+ lblTituloPrincipal.setText("Proveedores"); 
         }
         animacion();
 
@@ -1133,7 +1383,7 @@ public class Principal extends javax.swing.JFrame {
             deseleccionar();
             this.siete1.setSelected(true);
             // Crear y mostrar el panel de inventario
-            Usuario usu = new Usuario();
+             Usuarios1 usu = new Usuarios1(); 
             usu.setSize(1290, 730);
             usu.setLocation(0, 0);
 
@@ -1141,7 +1391,7 @@ public class Principal extends javax.swing.JFrame {
             contenedor.add(usu);
             contenedor.revalidate();
             contenedor.repaint();
-
+ lblTituloPrincipal.setText("Gestión de Usuarios"); 
         }
         animacion();
     }//GEN-LAST:event_siete1ActionPerformed
@@ -1229,7 +1479,8 @@ public class Principal extends javax.swing.JFrame {
             this.nueve.setSelected(true);
 
             // Crear y mostrar el panel de inventario
-            catalogo cat = new catalogo(this, submenuVisible);
+          Productos cat = new Productos(new javax.swing.JFrame(), true);
+           //catalogo cat = new catalogo(this, submenuVisible);
             cat.setSize(1290, 730);
             cat.setLocation(0, 0);
 
@@ -1237,7 +1488,7 @@ public class Principal extends javax.swing.JFrame {
             contenedor.add(cat);
             contenedor.revalidate();
             contenedor.repaint();
-
+ lblTituloPrincipal.setText("Catalogo"); 
         }
         animacion();
     }//GEN-LAST:event_nueveActionPerformed
@@ -1249,18 +1500,6 @@ public class Principal extends javax.swing.JFrame {
     private void nueve1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nueve1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_nueve1ActionPerformed
-
-    private void notiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_notiActionPerformed
-
-    private void btnUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnidadActionPerformed
-
-    }//GEN-LAST:event_btnUnidadActionPerformed
-
-    private void btnMarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcasActionPerformed
-
-    }//GEN-LAST:event_btnMarcasActionPerformed
 
     private void DiezActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DiezActionPerformed
         // TODO add your handling code here:
@@ -1287,15 +1526,28 @@ public class Principal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_dosMouseEntered
 
+    private void rSSwitch1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSSwitch1MouseClicked
+
+        boolean nuevoTema = !TemaManager.getInstance().isOscuro();
+        TemaManager.getInstance().guardarTema(nuevoTema);
+        aplicarTema(); // Update this panel
+    }//GEN-LAST:event_rSSwitch1MouseClicked
+
+    private void rSLabelCircleImage1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSLabelCircleImage1MouseClicked
+        configurarPopupMenu();
+        // Acciones de los ítems del menú
+    }//GEN-LAST:event_rSLabelCircleImage1MouseClicked
+
+    private void rSLabelCircleImage1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSLabelCircleImage1MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rSLabelCircleImage1MouseEntered
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+        //<editor-fold desc=" Look and feel setting code (optional) ">
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -1313,21 +1565,23 @@ public class Principal extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new Principal().setVisible(true);
+                // Nota: No ejecutes este main directamente en el flujo real.
+                // Inicia desde Login11211.java para pasar el idUsuario real.
+                // Usa un idUsuario de prueba solo para depuración local.
+                int idUsuarioPrueba = Integer.parseInt(args.length > 0 ? args[0] : "0");
+                new Principal(idUsuarioPrueba).setVisible(true);
             }
         });
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButton Diez;
-    private RSMaterialComponent.RSButtonShape btnMarcas;
-    private RSMaterialComponent.RSButtonShape btnUnidad;
     private rojeru_san.RSButton cinco;
     private rojeru_san.RSButton cinco1;
     private javax.swing.JPanel contenedor;
@@ -1335,20 +1589,25 @@ public class Principal extends javax.swing.JFrame {
     private rojeru_san.RSButton cuatro1;
     private rojeru_san.RSButton dos;
     private rojeru_san.RSButton dos1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JLabel lblTituloPrincipal;
+    private javax.swing.JLabel lblUsuarioLogueado;
     private rojeru_san.RSButton menu;
-    private rojeru_san.RSButton noti;
     private rojeru_san.RSButton nueve;
     private rojeru_san.RSButton nueve1;
     private rojeru_san.RSButton ocho;
     private rojeru_san.RSButton ocho1;
+    private rojerusan.RSLabelCircleImage rSLabelCircleImage1;
+    private rojerusan.RSLabelIcon rSLabelIcon1;
+    private rojerusan.RSLabelImage rSLabelImage1;
+    private rojerusan.RSLabelImage rSLabelImage3;
     private rojerusan.RSPanelImage rSPanelImage3;
+    private rojerusan.RSSwitch rSSwitch1;
+    private javax.swing.JLabel rolusuario;
     private rojeru_san.RSButton seis;
     private rojeru_san.RSButton seis1;
     private rojeru_san.RSButton siete1;
@@ -1370,5 +1629,36 @@ public class Principal extends javax.swing.JFrame {
         this.nueve.setSelected(false);
         this.siete1.setSelected(false);
     }
+    
+    
+    
+    private void cargarUsuarioLogueado() {
+        if (idUsuario == 0) {
+            lblUsuarioLogueado.setText("Usuario logueado: No identificado");
+            return;
+        }
+        UsuarioModelo usuario = controlador.obtenerUsuario(idUsuario);
+        if (usuario.getId_usuario() != 0) {
+           lblUsuarioLogueado.setText(usuario.getNombre() + " " + usuario.getApellido());
+
+        } else {
+            lblUsuarioLogueado.setText("Usuario logueado: No encontrado (ID: " + idUsuario + ")");
+        }
+    }
+        
+   private void cargarrol() {
+if (idUsuario == 0) {
+            rolusuario.setText("Rol: No identificado");
+            return;
+        }
+ UsuarioModelo usuario = controlador.obtenerUsuario(idUsuario);
+
+if (usuario.getId_usuario() != 0) {
+           rolusuario.setText(usuario.getRol());
+
+        } else {
+            rolusuario.setText("Usuario logueado: No encontrado (ID: " + idUsuario + ")");
+        }
+}
 
 }

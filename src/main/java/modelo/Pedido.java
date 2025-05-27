@@ -13,25 +13,18 @@ import java.util.Date;
 public class Pedido {
     private int id_pedido;
     private String nombre;
-    private double preciototal;
     private String estado;
     private Date fecha_inicio;
     private Date fecha_fin;
     private int idCliente;
 
-    public Pedido(String nombre, double preciototal, String estado, Date fecha_inicio, Date fecha_fin, int idCliente) {
-        this.nombre = nombre;
-        this.preciototal = preciototal;
-        this.estado = estado;
-        this.fecha_inicio = fecha_inicio;
-        this.fecha_fin = fecha_fin;
-        this.idCliente = idCliente;
+    public Pedido() {
     }
 
-    public Pedido(int id_pedido, String nombre, double preciototal, String estado, Date fecha_inicio, Date fecha_fin, int idCliente) {
+
+    public Pedido(int id_pedido, String nombre, String estado, Date fecha_inicio, Date fecha_fin, int idCliente) {
         this.id_pedido = id_pedido;
         this.nombre = nombre;
-        this.preciototal = preciototal;
         this.estado = estado;
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
@@ -52,14 +45,6 @@ public class Pedido {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public double getPreciototal() {
-        return preciototal;
-    }
-
-    public void setPreciototal(double preciototal) {
-        this.preciototal = preciototal;
     }
 
     public String getEstado() {
@@ -93,7 +78,6 @@ public class Pedido {
     public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
     }
-
-
     
 }
+

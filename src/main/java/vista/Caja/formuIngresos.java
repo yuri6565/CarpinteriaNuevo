@@ -13,16 +13,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
-import vista.Caja.Alertaa;
-import vista.Produccionn.Datos_guardados;
-import vista.Produccionn.espacio_alerta;
+import vista.Produccion.Datos_guardados;
+import vista.Produccion.espacio_alerta;
 
+import vista.TemaManager;
 /**
  *
  * @author ADSO
  */
 public class formuIngresos extends javax.swing.JDialog {
-
     private Ingresos ingresoPanel;
 
     /**

@@ -7,13 +7,13 @@ package vista.Cotizacion;
 import RSMaterialComponent.RSTextFieldMaterial;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import vista.TemaManager;
 
 /**
  *
  * @author ADSO
  */
 public class cotizacion extends javax.swing.JPanel {
-
     private String clienteActual = "";
 
     private boolean clienteIngresado = false;

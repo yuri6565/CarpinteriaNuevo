@@ -14,14 +14,15 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
 import modelo.Pedido;
+import modelo.PedidoDetalle;
 
 /**
  *
  * @author ZenBook
  */
 public class Ctrl_Pedido {
-    // Clase pública y estática para poder acceder desde fuera
 
+    // Clase para combinar pedido y nombre del cliente
     public static class MaterialConDetalles {
 
         private Pedido pedido;
@@ -30,10 +31,8 @@ public class Ctrl_Pedido {
         public MaterialConDetalles(Pedido pedido, String nombreCliente) {
             this.pedido = pedido;
             this.nombreCliente = nombreCliente;
-
         }
 
-        // Getters
         public Pedido getPedido() {
             return pedido;
         }
@@ -41,106 +40,244 @@ public class Ctrl_Pedido {
         public String getNombreCliente() {
             return nombreCliente != null ? nombreCliente : "Sin cliente";
         }
-
     }
 
-    public int insertar(Pedido pedido) {
-        Connection con = Conexion.getConnection();
-        String sql = "INSERT INTO pedido (nombre, preciototal, estado, fecha_inicio, fecha_fin, cliente_codigo) VALUES (?, ?, ?, ?, ?, ?)";
+    // Insertar un pedido y sus detalles
+    public int insertar(Pedido pedido, List<PedidoDetalle> detalles) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int idPedido = -1;
+
         try {
-            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, pedido.getNombre());
-            ps.setDouble(2, pedido.getPreciototal());
-            ps.setString(3, pedido.getEstado());
-            ps.setDate(4, new java.sql.Date(pedido.getFecha_inicio().getTime()));
-            ps.setDate(5, new java.sql.Date(pedido.getFecha_fin().getTime()));
-            ps.setInt(6, pedido.getIdCliente());
+            con = Conexion.getConnection();
+            con.setAutoCommit(false); // Iniciar transacción
 
-            int filasAfectadas = ps.executeUpdate();
+            // Insertar el pedido
+            String sql = "INSERT INTO pedido (nombre, estado, fecha_inicio, fecha_fin, cliente_codigo) VALUES (?, ?, ?, ?, ?)";
+            stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, pedido.getNombre());
+            stmt.setString(2, pedido.getEstado());
+            stmt.setDate(3, new java.sql.Date(pedido.getFecha_inicio().getTime()));
+            stmt.setDate(4, new java.sql.Date(pedido.getFecha_fin().getTime()));
+            stmt.setInt(5, pedido.getIdCliente());
+            stmt.executeUpdate();
 
-            if (filasAfectadas > 0) {
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    return rs.getInt(1); // Devuelve el ID generado
+            // Obtener el ID del pedido generado
+            rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                idPedido = rs.getInt(1);
+            }
+
+            // Insertar los detalles
+            if (detalles != null && !detalles.isEmpty()) {
+                String sqlDetalle = "INSERT INTO detalle_pedido (descripcion, cantidad, dimension, precio_unitario, subtotal, total, pedido_id_pedido) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                stmt = con.prepareStatement(sqlDetalle);
+                for (PedidoDetalle detalle : detalles) {
+                    stmt.setString(1, detalle.getDescripcion());
+                    stmt.setInt(2, detalle.getCantidad());
+                    stmt.setString(3, detalle.getDimensiones());
+                    stmt.setDouble(4, detalle.getPrecioUnitario());
+                    stmt.setDouble(5, detalle.getSubtotal());
+                    stmt.setDouble(6, detalle.getTotal());
+                    stmt.setInt(7, idPedido);
+                    stmt.executeUpdate();
                 }
             }
-            con.close();
-            return -1;
+
+            con.commit(); // Confirmar transacción
+            return idPedido;
+
         } catch (SQLException e) {
+            try {
+                if (con != null) {
+                    con.rollback(); // Revertir transacción en caso de error
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            JOptionPane.showMessageDialog(null, "Error al insertar el pedido: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
             return -1;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-public List<MaterialConDetalles> obtenerMateriales() {
-    List<MaterialConDetalles> lista = new ArrayList<>();
-    String sql = "SELECT p.*, CONCAT(c.nombre, ' ', c.apellido) AS nombre_cliente_completo " +
-                 "FROM pedido p " +
-                 "LEFT JOIN cliente c ON p.cliente_codigo = c.codigo";
+    // Obtener todos los pedidos con el nombre del cliente
+    public List<MaterialConDetalles> obtenerMateriales() {
+        List<MaterialConDetalles> lista = new ArrayList<>();
+        String sql = "SELECT p.*, CONCAT(c.nombre, ' ', c.apellido) AS nombre_cliente_completo "
+                + "FROM pedido p "
+                + "LEFT JOIN cliente c ON p.cliente_codigo = c.codigo";
 
-    try (Connection con = Conexion.getConnection();
-         PreparedStatement stmt = con.prepareStatement(sql);
-         ResultSet rs = stmt.executeQuery()) {
+        try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
-        while (rs.next()) {
-            Pedido pedido = new Pedido(
-                rs.getInt("id_pedido"),
-                rs.getString("nombre"),
-                rs.getDouble("preciototal"),
-                rs.getString("estado"),
-                rs.getDate("fecha_inicio"),
-                rs.getDate("fecha_fin"),
-                rs.getInt("cliente_codigo")
-            );
-            
-            String nombreClienteCompleto = rs.getString("nombre_cliente_completo");
-            if (rs.wasNull()) nombreClienteCompleto = "Sin cliente";
-            
-            lista.add(new MaterialConDetalles(pedido, nombreClienteCompleto));
+            while (rs.next()) {
+                Pedido pedido = new Pedido(
+                        rs.getInt("id_pedido"),
+                        rs.getString("nombre"),
+                        rs.getString("estado"),
+                        rs.getDate("fecha_inicio"),
+                        rs.getDate("fecha_fin"),
+                        rs.getInt("cliente_codigo")
+                );
+
+                String nombreClienteCompleto = rs.getString("nombre_cliente_completo");
+                if (rs.wasNull()) {
+                    nombreClienteCompleto = "Sin cliente";
+                }
+
+                lista.add(new MaterialConDetalles(pedido, nombreClienteCompleto));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener materiales: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error al obtener materiales: " + e.getMessage());
-        e.printStackTrace();
+        return lista;
     }
-    return lista;
-}
 
+    public MaterialConDetalles obtenerPedidoPorId(int idPedido) {
+        String sql = "SELECT p.*, CONCAT(c.nombre, ' ', c.apellido) AS nombre_cliente_completo "
+                + "FROM pedido p "
+                + "LEFT JOIN cliente c ON p.cliente_codigo = c.codigo "
+                + "WHERE p.id_pedido = ?";
+
+        try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, idPedido);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Pedido pedido = new Pedido(
+                        rs.getInt("id_pedido"),
+                        rs.getString("nombre"),
+                        rs.getString("estado"),
+                        rs.getDate("fecha_inicio"),
+                        rs.getDate("fecha_fin"),
+                        rs.getInt("cliente_codigo")
+                );
+                String nombreClienteCompleto = rs.getString("nombre_cliente_completo");
+                if (rs.wasNull()) {
+                    nombreClienteCompleto = "Sin cliente";
+                }
+                return new MaterialConDetalles(pedido, nombreClienteCompleto);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener el pedido: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<PedidoDetalle> obtenerDetallesPorPedido(int idPedido) {
+        List<PedidoDetalle> detalles = new ArrayList<>();
+        String sql = "SELECT * FROM detalle_pedido WHERE pedido_id_pedido = ?";
+
+        try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, idPedido);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                PedidoDetalle detalle = new PedidoDetalle(
+                        rs.getInt("iddetalle_pedido"),
+                        rs.getString("descripcion"),
+                        rs.getInt("cantidad"),
+                        rs.getString("dimension"),
+                        rs.getDouble("precio_unitario"),
+                        rs.getDouble("subtotal"),
+                        rs.getDouble("total"),
+                        rs.getInt("pedido_id_pedido")
+                );
+                detalles.add(detalle);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener detalles del pedido: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        return detalles;
+    }
+
+    // Actualizar un pedido
     public boolean actualizar(Pedido pedido) {
-        String sql = "UPDATE pedido SET nombre = ?, preciototal = ?, estado = ?, fecha_inicio = ?, fecha_fin = ?, "
-                + "cliente_codigo = ?, "
-                + "WHERE id_pedido = ? ";
+        String sql = "UPDATE pedido SET nombre = ?, estado = ?, fecha_inicio = ?, fecha_fin = ?, cliente_codigo = ? WHERE id_pedido = ?";
 
         try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setString(1, pedido.getNombre());
-            stmt.setDouble(2, pedido.getPreciototal());
-            stmt.setString(3, pedido.getEstado());
-            stmt.setDate(4, new java.sql.Date(pedido.getFecha_inicio().getTime()));
-            stmt.setDate(5, new java.sql.Date(pedido.getFecha_fin().getTime()));
-            stmt.setInt(6, pedido.getIdCliente());
-            stmt.setInt(7, pedido.getId_pedido());
+            stmt.setString(2, pedido.getEstado());
+            stmt.setDate(3, new java.sql.Date(pedido.getFecha_inicio().getTime()));
+            stmt.setDate(4, new java.sql.Date(pedido.getFecha_fin().getTime()));
+            stmt.setInt(5, pedido.getIdCliente());
+            stmt.setInt(6, pedido.getId_pedido());
 
             return stmt.executeUpdate() > 0;
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar pedido: " + e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar pedido: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
             return false;
         }
     }
 
-    public boolean eliminar(int idPedido) {
-        String sql = "DELETE FROM pedido WHERE id_pedido = ? ";
+    // Eliminar un pedido y sus detalles
+    public boolean eliminarPedido(int idPedido) {
+        Connection con = null;
+        try {
+            con = Conexion.getConnection();
+            con.setAutoCommit(false); // Iniciar transacción
 
-        try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
+            // Eliminar detalles asociados
+            String sqlDeleteDetalles = "DELETE FROM detalle_pedido WHERE pedido_id_pedido = ?";
+            try (PreparedStatement stmtDetalles = con.prepareStatement(sqlDeleteDetalles)) {
+                stmtDetalles.setInt(1, idPedido);
+                stmtDetalles.executeUpdate();
+            }
 
-            stmt.setInt(1, idPedido);
-            return stmt.executeUpdate() > 0;
+            // Eliminar el pedido
+            String sqlDeletePedido = "DELETE FROM pedido WHERE id_pedido = ?";
+            try (PreparedStatement stmtPedido = con.prepareStatement(sqlDeletePedido)) {
+                stmtPedido.setInt(1, idPedido);
+                int rowsAffected = stmtPedido.executeUpdate();
+                if (rowsAffected == 0) {
+                    throw new SQLException("No se encontró el pedido con ID: " + idPedido);
+                }
+            }
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al eliminar material: " + e.getMessage());
+            con.commit(); // Confirmar transacción
+            return true;
+
+        } catch (SQLException e) {
+            if (con != null) {
+                try {
+                    con.rollback(); // Revertir transacción en caso de error
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
             e.printStackTrace();
             return false;
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
+
 }

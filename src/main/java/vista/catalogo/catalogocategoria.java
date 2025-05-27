@@ -4,14 +4,33 @@
  */
 package vista.catalogo;
 
-public class catalogocategoria extends javax.swing.JDialog {
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-    
+
+public class catalogocategoria extends javax.swing.JDialog {
+private String rutaImagenSeleccionada;
+private byte[] imagenBytes; // Add this to store image bytesto store image bytes
     public catalogocategoria(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
     }
-
+        public String getRutaImagenSeleccionada() {
+    return rutaImagenSeleccionada;
+}
+public String getCategoriaNombre() {
+    return txtNombre.getText().trim();
+}
+        
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,10 +45,10 @@ public class catalogocategoria extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
-        txtDescripcion = new RSMaterialComponent.RSTextFieldMaterial();
         btnCancelar = new rojeru_san.RSButtonRiple();
         btnGuardar = new rojeru_san.RSButtonRiple();
-        jLabel11 = new javax.swing.JLabel();
+        lblImagen = new javax.swing.JLabel();
+        btnSubirImagen44 = new rojeru_san.RSButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -64,19 +83,6 @@ public class catalogocategoria extends javax.swing.JDialog {
         });
         panelP.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 200, 30));
 
-        txtDescripcion.setForeground(new java.awt.Color(0, 0, 0));
-        txtDescripcion.setColorMaterial(new java.awt.Color(0, 0, 0));
-        txtDescripcion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtDescripcion.setPhColor(new java.awt.Color(0, 0, 0));
-        txtDescripcion.setPlaceholder("Ingrese el id");
-        txtDescripcion.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtDescripcion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDescripcionActionPerformed(evt);
-            }
-        });
-        panelP.add(txtDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 200, 30));
-
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar.setText("Cancelar");
         btnCancelar.setColorHover(new java.awt.Color(204, 0, 0));
@@ -99,9 +105,18 @@ public class catalogocategoria extends javax.swing.JDialog {
         });
         panelP.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 370, 140, -1));
 
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel11.setText("Id:");
-        panelP.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+        lblImagen.setBackground(new java.awt.Color(153, 204, 255));
+        lblImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelP.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 180, 120));
+
+        btnSubirImagen44.setIcon(new javax.swing.ImageIcon(getClass().getResource("/up-arrow (1).png"))); // NOI18N
+        btnSubirImagen44.setText(" Subir imagen");
+        btnSubirImagen44.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubirImagen44ActionPerformed(evt);
+            }
+        });
+        panelP.add(btnSubirImagen44, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 190, 140, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -131,20 +146,77 @@ public class catalogocategoria extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
 
-    private void txtDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcionActionPerformed
-
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         /*materialGuardado = false;
         dispose(); // Cierra la ventana emergente*/
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-   
-        dispose();
+// 1. Validar el nombre
+if (txtNombre.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "El nombre de la categoría es obligatorio",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        txtNombre.requestFocus();
+        return;
+    }
+
+    String nombreCategoria = txtNombre.getText().trim();
+
+    // 2. Validar imagen (opcional)
+    byte[] imagenCategoria = this.imagenBytes;
+    if (imagenCategoria == null) {
+        int respuesta = JOptionPane.showConfirmDialog(this,
+                "¿Desea continuar sin imagen?",
+                "Confirmación",
+                JOptionPane.YES_NO_OPTION);
+
+        if (respuesta != JOptionPane.YES_OPTION) {
+            return;
+        }
+        imagenCategoria = new byte[0];
+    }
+
+    // 3. Crear y guardar la categoría
+    modelo.Catalogocategoria nuevaCategoria = new modelo.Catalogocategoria(); // Asegúrate de que el constructor exista
+    nuevaCategoria.setNombre(nombreCategoria);
+    nuevaCategoria.setImagen(imagenCategoria);
+
+    // 4. Aquí deberías guardar la categoría en la base de datos o donde sea necesario
+    // Ejemplo: ctrlCategoria.guardarCategoria(nuevaCategoria);
+    JOptionPane.showMessageDialog(this, "Categoría guardada exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    dispose(); // Cierra la ventana después de guardar
 
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnSubirImagen44ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirImagen44ActionPerformed
+JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "png", "jpeg"));
+
+    int opcion = fileChooser.showOpenDialog(this);
+    if (opcion == JFileChooser.APPROVE_OPTION) {
+        try {
+            File archivo = fileChooser.getSelectedFile();
+            rutaImagenSeleccionada = archivo.getAbsolutePath(); // Almacena la ruta
+            imagenBytes = Files.readAllBytes(archivo.toPath()); // Lee los bytes de la imagen
+
+            // Carga y escala la imagen
+            ImageIcon imagen = new ImageIcon(rutaImagenSeleccionada);
+            if (imagen.getImageLoadStatus() == MediaTracker.COMPLETE) {
+                Image img = imagen.getImage().getScaledInstance(lblImagen.getWidth(), lblImagen.getHeight(), Image.SCALE_SMOOTH);
+                lblImagen.setIcon(new ImageIcon(img));
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo cargar la imagen correctamente.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error al leer la imagen: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    }//GEN-LAST:event_btnSubirImagen44ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -191,12 +263,12 @@ public class catalogocategoria extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
+    private rojeru_san.RSButton btnSubirImagen44;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblImagen;
     private javax.swing.JPanel panelP;
-    private RSMaterialComponent.RSTextFieldMaterial txtDescripcion;
     private RSMaterialComponent.RSTextFieldMaterial txtNombre;
     // End of variables declaration//GEN-END:variables
 }

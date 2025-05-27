@@ -14,13 +14,13 @@ import modelo.Categoria;
 import modelo.Marca;
 import modelo.MaterialDatos;
 import modelo.Unidad;
+import vista.TemaManager;
 
 /**
  *
  * @author ZenBook
  */
 public class herramientaInfo extends javax.swing.JDialog {
-
     /**
      * Creates new form herramientaInfo
      */

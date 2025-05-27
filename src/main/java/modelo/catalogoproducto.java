@@ -9,17 +9,22 @@ package modelo;
  * @author buitr
  */
 public class catalogoproducto {
-    private int id;
+    private int idproducto;
     private String nombre;
-    private String categoria; // Ahora puede ser ID o nombre según el contexto
+    private String alto;
+     private String ancho;// Ahora puede ser ID o nombre según el contexto
+      private String profundidad;
+       private String material;
+        private String color;
     private byte[] imagen;
+   private int Categoria_idCategoria; 
 
-    public int getId() {
-        return id;
+    public int getIdproducto() {
+        return idproducto;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdproducto(int idproducto) {
+        this.idproducto = idproducto;
     }
 
     public String getNombre() {
@@ -30,12 +35,44 @@ public class catalogoproducto {
         this.nombre = nombre;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getAlto() {
+        return alto;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setAlto(String alto) {
+        this.alto = alto;
+    }
+
+    public String getAncho() {
+        return ancho;
+    }
+
+    public void setAncho(String ancho) {
+        this.ancho = ancho;
+    }
+
+    public String getProfundidad() {
+        return profundidad;
+    }
+
+    public void setProfundidad(String profundidad) {
+        this.profundidad = profundidad;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(String material) {
+        this.material = material;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public byte[] getImagen() {
@@ -46,18 +83,28 @@ public class catalogoproducto {
         this.imagen = imagen;
     }
 
-    public catalogoproducto(int id, String nombre, String categoria, byte[] imagen) {
-        this.id = id;
+    public int getCategoria_idCategoria() {
+        return Categoria_idCategoria;
+    }
+
+    public void setCategoria_idCategoria(int Categoria_idCategoria) {
+        this.Categoria_idCategoria = Categoria_idCategoria;
+    }
+
+    public catalogoproducto() {
+    }
+
+    public catalogoproducto(int idproducto, String nombre, String alto, String ancho, String profundidad, String material, String color, byte[] imagen, int Categoria_idCategoria) {
+        this.idproducto = idproducto;
         this.nombre = nombre;
-        this.categoria = categoria;
+        this.alto = alto;
+        this.ancho = ancho;
+        this.profundidad = profundidad;
+        this.material = material;
+        this.color = color;
         this.imagen = imagen;
+        this.Categoria_idCategoria = Categoria_idCategoria;
     }
-    
-     public int getIdCategoria() {
-        try {
-            return Integer.parseInt(this.categoria);
-        } catch (NumberFormatException e) {
-            return -1; // Retorna -1 si no es un número (cuando es nombre)
-        }
-    }
+
+  
 }

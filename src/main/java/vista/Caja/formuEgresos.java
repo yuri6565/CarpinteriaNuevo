@@ -10,13 +10,13 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
+import vista.TemaManager;
 
 /**
  *
  * @author ADSO
  */
 public class formuEgresos extends javax.swing.JDialog {
-
     /**
      * Creates new form formuEgresos
      */

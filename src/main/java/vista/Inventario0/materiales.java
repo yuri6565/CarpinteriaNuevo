@@ -33,6 +33,8 @@ import modelo.MaterialDatos;
 import java.util.List;
 import modelo.Marca;
 import modelo.Unidad;
+import rojeru_san.RSButton;
+import vista.TemaManager;
 
 /** 
  *
@@ -46,6 +48,7 @@ public class materiales extends javax.swing.JPanel {
     
     public materiales() {
         initComponents();
+     
         ctrlInventario = new Ctrl_InventarioMaterial();
         principalPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Layout para las tarjetas
         
@@ -59,8 +62,15 @@ public class materiales extends javax.swing.JPanel {
         cmbCategoria.addItem(cat.getNombre());
         }
         // Cargar materiales existentes al iniciar
+                       aplicarTema();
         cargarMateriales();
+         TemaManager.getInstance().addThemeChangeListener(() -> {
+ // Update theme when it changes
+        });
     }
+    
+    
+    
     
     // Método para cargar los materiales desde la base de datos
     private void cargarMateriales() {
@@ -162,7 +172,7 @@ public class materiales extends javax.swing.JPanel {
     JButton editarBtn = new JButton(new ImageIcon(getClass().getResource("/edit.png")));
     editarBtn.setPreferredSize(new Dimension(36, 28)); // Ancho: 30, Alto: 30
     editarBtn.setBackground(new Color(166,199,245));
-    //accion del boton de editar
+
     editarBtn.addActionListener(new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -229,7 +239,38 @@ public class materiales extends javax.swing.JPanel {
     principalPanel.revalidate();
     principalPanel.repaint();
 }
+      private void cambiarEstiloBotonRS(RSButton boton, Color fondo, Color texto) {
+    boton.setBackground(fondo);                // Fondo (si es compatible en tu versión)
+    boton.setColorText(texto);                 // Texto
+    boton.setColorHover(new Color(72, 92, 188)); // Hover fijo azul
+    boton.setColorTextHover(texto); 
+
+}
     
+      public void aplicarTema() {
+        boolean oscuro = TemaManager.getInstance().isOscuro();
+
+        if (oscuro) { //245, 245, 245
+            Color fondo = new Color(21,21,33);
+            Color primario = new Color(40, 60, 150);
+            Color texto = Color.WHITE;
+
+         principalPanel.setBackground(new Color (30, 30, 45));
+            txtBuscar.setBackground(fondo);
+      
+            
+       
+        } else {
+            Color fondo = new Color(242, 247, 255);
+            Color texto = Color.BLACK;
+            Color primario = new Color(72, 92, 188);
+
+   
+        
+          principalPanel.setBackground(new Color (245,245,245));
+            
+        }
+    }
 //metodo para actualizar tarjeta
     public void actualizarTarjeta(JPanel tarjeta, MaterialDatos material, String nombreCategoria, String nombreMarca, String nombreUnidadMedida) {
         // Obtener el panel de información (panelInfo) de la tarjeta
@@ -347,7 +388,7 @@ public class materiales extends javax.swing.JPanel {
                 categoriaActionPerformed(evt);
             }
         });
-        panelprincipal.add(categoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 20, 140, 40));
+        panelprincipal.add(categoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 20, 130, 40));
 
         marca.setBackground(new java.awt.Color(46, 49, 82));
         marca.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -361,7 +402,7 @@ public class materiales extends javax.swing.JPanel {
                 marcaActionPerformed(evt);
             }
         });
-        panelprincipal.add(marca, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 20, 120, 40));
+        panelprincipal.add(marca, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 20, 120, 40));
 
         unidadM.setBackground(new java.awt.Color(46, 49, 82));
         unidadM.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -376,7 +417,7 @@ public class materiales extends javax.swing.JPanel {
                 unidadMActionPerformed(evt);
             }
         });
-        panelprincipal.add(unidadM, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 20, 170, 40));
+        panelprincipal.add(unidadM, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 20, 170, 40));
 
         btnNuevo.setBackground(new java.awt.Color(46, 49, 82));
         btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
@@ -387,9 +428,9 @@ public class materiales extends javax.swing.JPanel {
                 btnNuevoActionPerformed(evt);
             }
         });
-        panelprincipal.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 90, 110, 30));
+        panelprincipal.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 90, 110, 30));
 
-        principalPanel.setBackground(new java.awt.Color(245, 246, 250));
+        principalPanel.setBackground(new java.awt.Color(30, 30, 45));
         principalPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         panelprincipal.add(principalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 1210, 570));
 
@@ -410,7 +451,7 @@ public class materiales extends javax.swing.JPanel {
                 txtBuscarActionPerformed(evt);
             }
         });
-        panelprincipal.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 410, 30));
+        panelprincipal.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 390, 30));
 
         add(panelprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, 730));
     }// </editor-fold>//GEN-END:initComponents

@@ -1,11 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package vista.Caja;
 
 import controlador.Ctrl_CajaEgresos;
 import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -13,24 +10,17 @@ import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import vista.TemaManager;
 
-/**
- *
- * @author ADSO
- */
 public final class Egresos extends javax.swing.JPanel {
 
-    /**
-     * Creates new form CajaContenido
-     */
     public Egresos() {
         initComponents();
-        
-        
+
         Tabla1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
-                new String[]{"Id Registro", "Fecha Pago", "Detalle", "Categoria",  "Cantidad ingresada"}
+                new String[]{"Id Registro", "Fecha Pago", "Detalle", "Categoria", "Cantidad ingresada"}
         ));
 
         Tabla1.setCellSelectionEnabled(false);
@@ -44,23 +34,92 @@ public final class Egresos extends javax.swing.JPanel {
         Tabla1.setSelectionForeground(colorTexto);
 
         cargarTablaEgresos();
-    }
-    public void cargarTablaEgresos() {
-    DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-    model.setRowCount(0);
-
-    Ctrl_CajaEgresos ctrl = new Ctrl_CajaEgresos();
-    for (modelo.Caja caja : ctrl.obtenerEgresos()) {
-        model.addRow(new Object[]{
-            caja.getId_codigo(),
-            caja.getFecha(),
-            caja.getDescripcion(),
-            caja.getCategoria(),
-            caja.getMonto()
+        aplicarTema(); // Apply initial theme
+        // Register for theme changes
+        TemaManager.getInstance().addThemeChangeListener(() -> {
+            aplicarTema(); // Update theme when it changes
         });
     }
-}
 
+    public void cargarTablaEgresos() {
+        DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+        model.setRowCount(0);
+
+        Ctrl_CajaEgresos ctrl = new Ctrl_CajaEgresos();
+        for (modelo.Caja caja : ctrl.obtenerEgresos()) {
+            model.addRow(new Object[]{
+                caja.getId_codigo(),
+                caja.getFecha(),
+                caja.getDescripcion(),
+                caja.getCategoria(),
+                caja.getMonto()
+            });
+        }
+    }
+
+    public void aplicarTema() {
+        if (TemaManager.getInstance().isOscuro()) {
+            Color fondo = new Color(18, 18, 28);
+            Color primario = new Color(40, 60, 150);
+            Color texto = Color.WHITE;
+
+            jPanel2.setBackground(fondo);
+            jPanel3.setBackground(fondo);
+            txtbuscar.setBackground(fondo);
+            txtbuscar.setForeground(texto);
+            txtbuscar.setColorIcon(texto);
+            txtbuscar.setPhColor(Color.LIGHT_GRAY);
+
+            Tabla1.setBackgoundHead(primario);
+            Tabla1.setForegroundHead(Color.WHITE);
+            Tabla1.setBackgoundHover(new Color(40, 50, 90));
+            Tabla1.setForegroundHover(Color.WHITE);
+            Tabla1.setColorPrimary(fondo);
+            Tabla1.setColorPrimaryText(texto);
+            Tabla1.setColorSecondary(fondo.darker());
+            Tabla1.setColorSecundaryText(texto);
+            Tabla1.setColorBorderHead(primario);
+            Tabla1.setColorBorderRows(fondo.darker());
+            Tabla1.setFontHead(new Font("Segoe UI", Font.BOLD, 12));
+            Tabla1.setFontRowHover(new Font("Segoe UI", Font.PLAIN, 12));
+            Tabla1.setFontRowSelect(new Font("Segoe UI", Font.PLAIN, 12));
+            Tabla1.setEffectHover(true);
+
+            btnNuevoProduc.setBackground(new Color(46, 49, 82));
+            btnGuardar.setBackground(new Color(46, 49, 82));
+            btnEliminar.setBackground(new Color(46, 49, 82));
+        } else {
+            Color fondo = new Color(242, 247, 255);
+            Color texto = Color.BLACK;
+            Color primario = new Color(72, 92, 188);
+
+            jPanel2.setBackground(fondo);
+            jPanel3.setBackground(fondo);
+            txtbuscar.setBackground(fondo);
+            txtbuscar.setForeground(texto);
+            txtbuscar.setColorIcon(texto);
+            txtbuscar.setPhColor(Color.GRAY);
+
+            Tabla1.setBackgoundHead(primario);
+            Tabla1.setForegroundHead(Color.WHITE);
+            Tabla1.setBackgoundHover(new Color(220, 220, 240));
+            Tabla1.setForegroundHover(texto);
+            Tabla1.setColorPrimary(fondo);
+            Tabla1.setColorPrimaryText(texto);
+            Tabla1.setColorSecondary(new Color(245, 245, 245));
+            Tabla1.setColorSecundaryText(texto);
+            Tabla1.setColorBorderHead(primario);
+            Tabla1.setColorBorderRows(new Color(200, 200, 200));
+            Tabla1.setFontHead(new Font("Segoe UI", Font.BOLD, 12));
+            Tabla1.setFontRowHover(new Font("Segoe UI", Font.PLAIN, 12));
+            Tabla1.setFontRowSelect(new Font("Segoe UI", Font.PLAIN, 12));
+            Tabla1.setEffectHover(true);
+
+            btnNuevoProduc.setBackground(new Color(46, 49, 82));
+            btnGuardar.setBackground(new Color(46, 49, 82));
+            btnEliminar.setBackground(new Color(46, 49, 82));
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -14,6 +14,7 @@ import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import modelo.Caja;
+import vista.TemaManager;
 
 
 /**
@@ -21,7 +22,6 @@ import modelo.Caja;
  * @author ADSO
  */
 public final class Ingresos extends javax.swing.JPanel {
-
     /**
      * Creates new form Ingresos
      */

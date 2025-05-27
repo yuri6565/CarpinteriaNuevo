@@ -1,18 +1,12 @@
 package modelo;
 
+
 public class Catalogocategoria {
     private int idCategoria;
     private String nombre;
+private byte[] imagen;
+private int id;
 
-    public Catalogocategoria() {
-    }
-
-    public Catalogocategoria(int idCategoria, String nombre) {
-        this.idCategoria = idCategoria;
-        this.nombre = nombre;
-    }
-
-    // Getters y Setters
     public int getIdCategoria() {
         return idCategoria;
     }
@@ -29,8 +23,30 @@ public class Catalogocategoria {
         this.nombre = nombre;
     }
 
-    @Override
-    public String toString() {
-        return nombre; // Para mostrar correctamente en JComboBox
+    public byte[] getImagen() {
+        return imagen;
     }
+
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Catalogocategoria() {
+    }
+
+    public Catalogocategoria(int idCategoria, String nombre, byte[] imagen, int id) {
+        this.idCategoria = idCategoria;
+        this.nombre = nombre;
+        this.imagen = imagen;
+        this.id = id;
+    }
+   
 }

@@ -4,13 +4,14 @@
  */
 package vista.Caja;
 
+import vista.TemaManager;
+
 
 /**
  *
  * @author ADSO
  */
 public class Caja extends javax.swing.JPanel {
-
     /**
      * Creates new form caja
      */

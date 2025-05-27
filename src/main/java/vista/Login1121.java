@@ -7,6 +7,7 @@ package vista;
 import controlador.Contrl_login;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
@@ -16,6 +17,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import modelo.UsuarioModelo;
+import vista.alertas.LoginAlerta;
+import vista.alertas.LoginAlertaContrasena;
+import vista.alertas.LoginAlertaContrasenaIncorrecta;
+import vista.alertas.LoginAlertaUsuario;
 
 /**
  *
@@ -35,9 +41,27 @@ public class Login1121 extends javax.swing.JFrame {
      * Creates new form Login1
      */
     public Login1121() {
-        initComponents();
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setLocationRelativeTo(null);
+           initComponents();
+    setExtendedState(JFrame.MAXIMIZED_BOTH); 
+setLocationRelativeTo(null); 
+txt_usuario.addKeyListener(new java.awt.event.KeyAdapter() {
+    @Override
+    public void keyPressed(java.awt.event.KeyEvent evt) {
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            passtxt.requestFocus();
+        }
+    }
+});
+
+
+passtxt.addKeyListener(new java.awt.event.KeyAdapter() {
+    @Override
+    public void keyPressed(java.awt.event.KeyEvent evt) {
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            iniciar.doClick(); 
+        }
+    }
+});
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -82,10 +106,12 @@ public class Login1121 extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        rSMaterialButtonRectangle2 = new rojerusan.RSMaterialButtonRectangle();
+        iniciar = new rojerusan.RSMaterialButtonRectangle();
         txt_usuario = new RSMaterialComponent.RSTextFieldIconOne();
         passtxt = new RSMaterialComponent.RSPasswordIconOne();
         btnVer = new rojeru_san.RSButton();
+        rSPanelImage2 = new rojerusan.RSPanelImage();
+        rSPanelImage3 = new rojerusan.RSPanelImage();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -96,7 +122,7 @@ public class Login1121 extends javax.swing.JFrame {
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        rSPanelImage1.setImagen(new javax.swing.ImageIcon(getClass().getResource("/logo azul.png"))); // NOI18N
+        rSPanelImage1.setImagen(new javax.swing.ImageIcon(getClass().getResource("/logo_azul.png"))); // NOI18N
 
         javax.swing.GroupLayout rSPanelImage1Layout = new javax.swing.GroupLayout(rSPanelImage1);
         rSPanelImage1.setLayout(rSPanelImage1Layout);
@@ -112,7 +138,7 @@ public class Login1121 extends javax.swing.JFrame {
         jPanel6.add(rSPanelImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 180, 180));
 
         jLabel11.setFont(new java.awt.Font("SansSerif", 1, 30)); // NOI18N
-        jLabel11.setText("¡BIENVENIDO! ");
+        jLabel11.setText("Iniciar Sesión");
         jPanel6.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 200, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
@@ -134,14 +160,14 @@ public class Login1121 extends javax.swing.JFrame {
         });
         jPanel6.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 400, -1, 20));
 
-        rSMaterialButtonRectangle2.setBackground(new java.awt.Color(29, 30, 51));
-        rSMaterialButtonRectangle2.setText("INGRESAR ");
-        rSMaterialButtonRectangle2.addActionListener(new java.awt.event.ActionListener() {
+        iniciar.setBackground(new java.awt.Color(29, 30, 51));
+        iniciar.setText("INGRESAR ");
+        iniciar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSMaterialButtonRectangle2ActionPerformed(evt);
+                iniciarActionPerformed(evt);
             }
         });
-        jPanel6.add(rSMaterialButtonRectangle2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 480, 380, 50));
+        jPanel6.add(iniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 480, 380, 50));
 
         txt_usuario.setForeground(new java.awt.Color(0, 0, 0));
         txt_usuario.setBorderColor(new java.awt.Color(230, 230, 230));
@@ -176,39 +202,68 @@ public class Login1121 extends javax.swing.JFrame {
         });
         jPanel6.add(btnVer, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 370, 30, 30));
 
-        kGradientPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 190, 460, 590));
+        kGradientPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 130, 460, 590));
+
+        rSPanelImage2.setImagen(new javax.swing.ImageIcon(getClass().getResource("/Vector 6.png"))); // NOI18N
+        rSPanelImage2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        rSPanelImage3.setImagen(new javax.swing.ImageIcon(getClass().getResource("/WhatsApp_Image_2025-03-28_at_10.59.04_AM-removebg-preview.png"))); // NOI18N
+        rSPanelImage3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        rSPanelImage2.add(rSPanelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, 720, 660));
+
+        kGradientPanel1.add(rSPanelImage2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 830, 710));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(kGradientPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1300, Short.MAX_VALUE)
+            .addComponent(kGradientPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(kGradientPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 810, Short.MAX_VALUE)
+            .addComponent(kGradientPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MousePressed
-        Contrasena1 dialog = new Contrasena1(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-    }//GEN-LAST:event_jLabel2MousePressed
-
-    private void rSMaterialButtonRectangle2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonRectangle2ActionPerformed
-        Login();
-    }//GEN-LAST:event_rSMaterialButtonRectangle2ActionPerformed
+    private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
+        togglePasswordVisibility();
+    }//GEN-LAST:event_btnVerActionPerformed
 
     private void txt_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_usuarioActionPerformed
 
-    private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
-        togglePasswordVisibility();
-    }//GEN-LAST:event_btnVerActionPerformed
+    private void iniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarActionPerformed
+      autenticarUsuario();
+    }//GEN-LAST:event_iniciarActionPerformed
+
+    private void jLabel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MousePressed
+        
+         cargando11 cargando = new cargando11(new JFrame(), true);
+
+        new Thread(() -> {
+            cargando.setVisible(true);
+        }).start();
+
+        javax.swing.Timer timer = new javax.swing.Timer(2000, e -> {
+            cargando.dispose();
+
+        });
+
+        timer.setRepeats(false);
+        timer.start();
+         this.dispose();
+        Correo_electronico dialog = new Correo_electronico();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+     
+
+
+
+       
+    }//GEN-LAST:event_jLabel2MousePressed
 
     /**
      * @param args the command line arguments
@@ -254,6 +309,7 @@ public class Login1121 extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButton btnVer;
+    private rojerusan.RSMaterialButtonRectangle iniciar;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
@@ -261,38 +317,86 @@ public class Login1121 extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private keeptoo.KGradientPanel kGradientPanel1;
     private RSMaterialComponent.RSPasswordIconOne passtxt;
-    private rojerusan.RSMaterialButtonRectangle rSMaterialButtonRectangle2;
     private rojerusan.RSPanelImage rSPanelImage1;
+    private rojerusan.RSPanelImage rSPanelImage2;
+    private rojerusan.RSPanelImage rSPanelImage3;
     private RSMaterialComponent.RSTextFieldIconOne txt_usuario;
     // End of variables declaration//GEN-END:variables
 
-    private void Login() {
-        if (!txt_usuario.getText().isEmpty() && !passtxt.getText().isEmpty()) {
-            Contrl_login controlUsuario = new Contrl_login();
-            modelo.Usuario usuario = new modelo.Usuario();
-            usuario.setUsuario(txt_usuario.getText().trim());
-            usuario.setContrasena(passtxt.getText().trim());
+   
 
-            if (controlUsuario.loginUser(usuario)) {
-                JOptionPane.showMessageDialog(null, "Bienvenido " + usuario.getUsuario());
 
-                // Redirigir según el rol
-                if ("Trabajador".equals(usuario.getRol())) {
-                    PrincipalUsu principalUsuario = new PrincipalUsu(); // Ventana para trabajador
-                    principalUsuario.setVisible(true);
+private void autenticarUsuario() {
+    String nombreUsuario = txt_usuario.getText().trim();
+    String contrasena = new String(passtxt.getPassword()).trim();
 
-                } else {
-                    Principal principalAdmin = new Principal(); // Ventana para admin
-                    principalAdmin.setVisible(true);
-                }
-
-                this.dispose(); // Cierra la ventana de login
-            } else {
-                JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Por favor complete todos los campos");
-        }
+    if (nombreUsuario.isEmpty() && contrasena.isEmpty()) {
+        LoginAlerta confirmDialog = new LoginAlerta(
+                (Frame) this.getParent(),
+                true,
+                "Confirmar",
+                "¿Desea guardar los datos?"
+        );
+        confirmDialog.setVisible(true);
+        return;
+    } else if (nombreUsuario.isEmpty()) {
+        LoginAlertaUsuario confirmDialog = new LoginAlertaUsuario(
+                (Frame) this.getParent(),
+                true,
+                "Confirmar",
+                "¿Desea guardar los datos?"
+        );
+        confirmDialog.setVisible(true);
+        return;
+    } else if (contrasena.isEmpty()) {
+        LoginAlertaContrasena confirmDialog = new LoginAlertaContrasena(
+                (Frame) this.getParent(),
+                true,
+                "Confirmar",
+                "¿Desea guardar los datos?"
+        );
+        confirmDialog.setVisible(true);
+        return;
     }
 
+    Contrl_login controlUsuario = new Contrl_login();
+    modelo.UsuarioModelo usuario = new modelo.UsuarioModelo();
+    usuario.setUsuario(nombreUsuario);
+    usuario.setContrasena(contrasena);
+
+
+    UsuarioModelo usuarioAutenticado = controlUsuario.loginUser(usuario);
+
+    if (usuarioAutenticado != null) {
+        JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso", "Bienvenido", JOptionPane.INFORMATION_MESSAGE);
+    
+     
+        kla cargando = new kla(new JFrame(), true);
+        new Thread(() -> cargando.setVisible(true)).start();
+
+
+        int idUsuario = usuarioAutenticado.getId_usuario();
+
+        javax.swing.Timer timer = new javax.swing.Timer(2000, e -> {
+            cargando.dispose();
+            // Pasar el idUsuario a Principal1
+              this.dispose();
+              cargando.dispose();
+            Principal principal = new Principal(idUsuario);
+            principal.setVisible(true);
+          
+        });
+
+        timer.setRepeats(false);
+        timer.start();
+    } else {
+        LoginAlertaContrasenaIncorrecta confirmDialog = new LoginAlertaContrasenaIncorrecta(
+                (Frame) this.getParent(),
+                true,
+                "Confirmar",
+                "¿Desea guardar los datos?"
+        );
+        confirmDialog.setVisible(true);
+    }
+}
 }

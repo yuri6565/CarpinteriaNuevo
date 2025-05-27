@@ -20,13 +20,17 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import static javax.swing.SwingConstants.CENTER;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import rojeru_san.RSButtonRiple;
+import vista.TemaManager;
 import vista.Ventas.DetallesPedido; // Si decides mover DetallesPedido a vista.Ventas
 
 /**
@@ -37,6 +41,7 @@ public class pedido extends javax.swing.JPanel {
 
     private JPanel contenedor; // Referencia al contenedor de Principal
     private Ctrl_Pedido controlador;
+    private int idPedido;
 
     /**
      * Creates new form pedido
@@ -45,20 +50,39 @@ public class pedido extends javax.swing.JPanel {
         this.contenedor = contenedor;
         this.controlador = new Ctrl_Pedido();
         initComponents();
+           aplicarTema(); // Apply initial theme
 
-        tablaM.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        // Register for theme changes
+        TemaManager.getInstance().addThemeChangeListener(() -> {
+            aplicarTema(); // Update theme when it changes
+        });
 
         // Configurar la columna "Detalle"
         TableColumn detailColumn = tablaM.getColumnModel().getColumn(6);
         detailColumn.setCellRenderer(new ButtonRenderer());
-        detailColumn.setCellEditor(new ButtonEditor(new JCheckBox(), contenedor));
         detailColumn.setPreferredWidth(35); // Ajustar el ancho de la columna
         tablaM.setRowHeight(30); // Ajusta este valor según necesites
-        tablaM.setColorSecondary(new java.awt.Color(255, 255, 255)); // Fondo blanco para las celdas
 
-        tablaM.setBorderRows(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153))); // Aumentar el grosor a 2 píxeles
-        tablaM.setShowGrid(true); // Asegurar que las líneas de la cuadrícula sean visibles
-        tablaM.setGridColor(new java.awt.Color(153, 153, 153)); // Color gris de las líneas
+        tablaM.setRowHeight(23); // Altura más delgada para las filas
+
+        DefaultTableModel modelo = new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Codigo", "Nombre", "Estado", "Cliente", "Fecha inicio", "Fecha final", "Detalle"} // Usa tus nombres de columnas reales
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Hace que todas las celdas sean no editables
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return String.class; // Ajusta el tipo si usas tipos distintos (Double, Date, etc.)
+            }
+        };
+
+        tablaM.setModel(modelo);
+
+        tablaM.getColumnModel().getColumn(2).setCellRenderer(new EstadoTableCellRenderer());
 
         // Cargar datos desde la base de datos
         cargarDatosIniciales();
@@ -89,125 +113,176 @@ public class pedido extends javax.swing.JPanel {
         }
     }
 
-    // Renderizador para mostrar un botón en la columna "Detalle"
-    // Renderizador para mostrar un botón pequeño centrado en la celda
-    class ButtonRenderer extends JPanel implements TableCellRenderer {
+// Renderizador para la columna "Ver"
+    private class ButtonRenderer extends DefaultTableCellRenderer {
 
-        private RSButtonShape button;
+        private final Color textColor = new Color(46, 49, 82); // Color de texto normal
+        private final Font fontNormal = new Font("Tahoma", Font.PLAIN, 14);
+        private final Font fontBold = new Font("Tahoma", Font.BOLD, 14);
 
-        public ButtonRenderer() {
-            // Layout sin márgenes internos ni externos
-            super(new BorderLayout());
-            setOpaque(true);
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            c.setForeground(isSelected ? Color.WHITE : Color.BLACK);
+            c.setBackground(isSelected ? table.getSelectionBackground() : Color.WHITE);
+            c.setFont(isSelected ? fontBold : fontNormal);
+
+            setHorizontalAlignment(CENTER);
+            setText("Ver");
+
+            // Bordes iguales al resto
             setBorder(BorderFactory.createLineBorder(new Color(153, 153, 153), 1));
-            setBackground(new Color(255,255,255));
+            tablaM.setRowHeight(23); // Altura más delgada para las filas
+            return c;
+        }
+    }
 
-            button = new RSButtonShape();
-            button.setText("Ver");
-            button.setFont(new Font("Tahoma", Font.BOLD, 12));
-            button.setPreferredSize(new Dimension(70, 25));       // ancho x alto
-            button.setMargin(new Insets(0, 0, 0, 0));             // recorta márgenes
-            button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-            button.setBackground(new Color(46, 49, 82));
-            button.setBorder(javax.swing.BorderFactory.createCompoundBorder());
-            button.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
-            button.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    // Renderizador para la columna de estado
+    private class EstadoTableCellRenderer extends DefaultTableCellRenderer {
 
-            // Lo metemos en un flow centrado y transparente
-            JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-            wrapper.setOpaque(false);
-            wrapper.add(button);
+        private final Color textColor = new Color(46, 49, 82);
+        private final Font fontNormal = new Font("Tahoma", Font.PLAIN, 14);
+        private final Font fontBold = new Font("Tahoma", Font.BOLD, 14);
 
-            // Y añadimos al Sur del BorderLayout
-            add(wrapper, BorderLayout.SOUTH);
+        public EstadoTableCellRenderer() {
+            setHorizontalAlignment(JLabel.CENTER); // Centrar el texto
         }
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
-            // Ajustar colores de fondo de la celda al estado de selección
-            // Fondo de la celda
+
+            // Llamar al método padre primero
+            JLabel label = (JLabel) super.getTableCellRendererComponent(
+                    table, value, isSelected, hasFocus, row, column);
+
+            label.setHorizontalAlignment(CENTER);
+            label.setText(value != null ? value.toString() : "");
+
             if (isSelected) {
-                setBackground(table.getSelectionBackground());
+                // Cuando está seleccionado, texto blanco y fondo de selección
+                label.setForeground(Color.WHITE);
+                label.setBackground(table.getSelectionBackground());
+                label.setFont(fontBold);
             } else {
-                setBackground(new Color(255,255,255));
+                // Cuando no está seleccionado, mantener el color original del texto
+                label.setForeground(textColor);
+                label.setFont(fontNormal);
+
+                // Aplicar colores de fondo según el estado
+                String estado = value != null ? value.toString() : "";
+                switch (estado.toLowerCase()) {
+                    case "pendiente":
+                        label.setBackground(new Color(255, 204, 204)); // Rojo claro
+                        break;
+                    case "proceso":
+                        label.setBackground(new Color(255, 255, 153)); // Amarillo claro
+                        break;
+                    case "finalizado":
+                        label.setBackground(new Color(204, 255, 204)); // Verde claro
+                        break;
+                    default:
+                        label.setBackground(Color.WHITE);
+                        break;
+                }
             }
-            return this;
+
+            // Borde igual al resto de la tabla
+            label.setBorder(BorderFactory.createLineBorder(new Color(153, 153, 153), 1));
+            tablaM.setRowHeight(23); // Altura más delgada para las filas
+            return label;
         }
     }
 
-// Editor que también devuelve un panel
-    class ButtonEditor extends DefaultCellEditor {
-
-        private JPanel panel;
-        private RSButtonShape button;
-        private int row;
-        private JTable table;
-        private JPanel contenedor;
-
-        public ButtonEditor(JCheckBox checkBox, JPanel contenedor) {
-            super(checkBox);
-            this.contenedor = contenedor;
-
-            panel = new JPanel(new BorderLayout());
-            panel.setOpaque(true);
-            panel.setBorder(BorderFactory.createLineBorder(new Color(153, 153, 153), 1));
-            panel.setBackground(new Color(255,255,255));
-
-            button = new RSButtonShape();
-            button.setText("Ver");
-            button.setFont(new Font("Tahoma", Font.BOLD, 12));
-            button.setPreferredSize(new Dimension(70, 25));
-            button.setMargin(new Insets(0, 0, 0, 0));
-            button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-            button.setBackground(new Color(46, 49, 82));
-            button.setBorder(javax.swing.BorderFactory.createCompoundBorder());
-            button.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
-            button.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-
-            button.addActionListener(e -> {
-                fireEditingStopped();
-                String id = table.getValueAt(row, 0).toString();
-                DetallesPedido detalles = new DetallesPedido(id, contenedor);
-                detalles.setSize(1290, 730);
-                detalles.setLocation(0, 0);
-                contenedor.removeAll();
-                contenedor.add(detalles);
-                contenedor.revalidate();
-                contenedor.repaint();
-            });
-
-            JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-            wrapper.setOpaque(false);
-            wrapper.add(button);
-
-            panel.add(wrapper, BorderLayout.SOUTH);
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value,
-                boolean isSelected, int row, int column) {
-            this.row = row;
-            this.table = table;
-            if (isSelected) {
-                panel.setBackground(table.getSelectionBackground());
-            } else {
-                panel.setBackground(new Color(255,255,255));
-            }
-            return panel;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return "Ver";
-        }
-
-        @Override
-        public boolean stopCellEditing() {
-            return super.stopCellEditing();
-        }
+    private void mostrarDetallesPedido(String id) {
+        DetallesPedido detalles = new DetallesPedido(id, contenedor);
+        detalles.setSize(1290, 730);
+        detalles.setLocation(0, 0);
+        contenedor.removeAll();
+        contenedor.add(detalles);
+        contenedor.revalidate();
+        contenedor.repaint();
     }
 
+    
+    
+    
+      public void aplicarTema() {
+        boolean oscuro = TemaManager.getInstance().isOscuro();
+
+        if (oscuro) {
+            Color fondo = new Color(21,21,33);
+            Color primario = new Color(40, 60, 150);
+            Color texto = Color.WHITE;
+
+            jPanel1.setBackground(fondo);
+            txtBuscar.setBackground(fondo);
+            txtBuscar.setForeground(texto);
+            txtBuscar.setColorIcon(texto);
+            txtBuscar.setPhColor(Color.LIGHT_GRAY);
+            
+            
+          tablaM.setBackground(new Color (21,21,33));
+            tablaM.setBackgoundHead(new Color (67, 71, 120));
+            tablaM.setForegroundHead(new Color (255,255,255));
+            tablaM.setBackgoundHover(new Color(40, 50, 90));
+         tablaM.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            tablaM.setColorPrimary(new Color(37,37,52));
+            tablaM.setColorPrimaryText(texto);
+            tablaM.setColorSecondary(new Color(30,30,45));
+            tablaM.setColorSecundaryText(texto);
+            tablaM.setColorBorderHead(primario);
+            tablaM.setColorBorderRows(fondo.darker());
+            tablaM.setFontHead(new Font("Tahoma", Font.BOLD, 15));
+            tablaM.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
+            tablaM.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
+            tablaM.setEffectHover(true);
+              tablaM.setShowGrid(true);
+tablaM.setGridColor(Color.WHITE); // o el color que desees
+
+            btnEliminar1.setBackground(new Color(67, 71, 120));
+            btnNuevo.setBackgroundHover(new Color(118,142,240));
+            btnNuevo.setBackground(new Color(67, 71, 120));
+           btnEliminar1.setBackgroundHover(new Color(118,142,240));
+            btnEliminar1.setBackground(new Color(67, 71, 120));
+            btnEliminar1.setBackgroundHover(new Color(118,142,240));
+        } else {
+            Color fondo = new Color(242, 247, 255);
+            Color texto = Color.BLACK;
+            Color primario = new Color(72, 92, 188);
+
+            jPanel1.setBackground(fondo);
+            txtBuscar.setBackground(fondo);
+            txtBuscar.setForeground(texto);
+            txtBuscar.setColorIcon(texto);
+            txtBuscar.setPhColor(Color.GRAY);
+            
+            
+      tablaM.setBackground(new Color (255,255,255));
+            tablaM.setBackgoundHead(new Color (46,49,82));
+            tablaM.setForegroundHead(Color.WHITE);
+            tablaM.setBackgoundHover(new Color(67,150,209));
+           tablaM.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            tablaM.setColorPrimary(new Color(242, 242, 242));
+            tablaM.setColorPrimaryText(texto);
+            tablaM.setColorSecondary(new Color(255, 255, 255));
+            tablaM.setColorSecundaryText(texto);
+            tablaM.setColorBorderHead(primario);
+            tablaM.setColorBorderRows(new Color(0,0,0));
+            tablaM.setFontHead(new Font("Tahoma", Font.BOLD, 15));
+            tablaM.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
+            tablaM.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
+            tablaM.setEffectHover(true);
+            tablaM.setSelectionBackground(new Color(67,150,209));
+            tablaM.setShowGrid(true);
+tablaM.setGridColor(Color.BLACK); // o el color que desees
+
+            btnNuevo.setBackground(new Color(46, 49, 82));
+            btnEliminar1.setBackground(new Color(46, 49, 82));
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -218,66 +293,25 @@ public class pedido extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tablaM = new RSMaterialComponent.RSTableMetroCustom();
         cmbCategoria = new RSMaterialComponent.RSComboBoxMaterial();
         txtBuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
         btnNuevo = new RSMaterialComponent.RSButtonShape();
+        btnEliminar1 = new RSMaterialComponent.RSButtonShape();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tablaM = new RSMaterialComponent.RSTableMetroCustom();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setPreferredSize(new java.awt.Dimension(1240, 580));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1304, 742));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        tablaM.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Codigo", "Nombre", "Estado", "Cliente", "Fecha inicio", "Fecha fin", "Detalle"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, true
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tablaM.setBackgoundHead(new java.awt.Color(46, 49, 82));
-        tablaM.setBackgoundHover(new java.awt.Color(67, 150, 209));
-        tablaM.setBorderHead(null);
-        tablaM.setBorderRows(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        tablaM.setColorBorderHead(new java.awt.Color(46, 49, 82));
-        tablaM.setColorBorderRows(new java.awt.Color(46, 49, 82));
-        tablaM.setColorPrimaryText(new java.awt.Color(0, 0, 0));
-        tablaM.setColorSecondary(new java.awt.Color(255, 255, 255));
-        tablaM.setColorSecundaryText(new java.awt.Color(0, 0, 0));
-        tablaM.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        tablaM.setFontHead(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        tablaM.setFontRowHover(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        tablaM.setFontRowSelect(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        tablaM.setSelectionBackground(new java.awt.Color(67, 150, 209));
-        jScrollPane2.setViewportView(tablaM);
-        tablaM.getColumnModel().getColumn(0).setPreferredWidth(10);
-
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 1180, 420));
 
         cmbCategoria.setForeground(new java.awt.Color(153, 153, 153));
         cmbCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione una categoria:" }));
         cmbCategoria.setColorMaterial(new java.awt.Color(153, 153, 153));
         cmbCategoria.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jPanel1.add(cmbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 20, 280, 30));
+        jPanel1.add(cmbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 40, 280, 30));
 
         txtBuscar.setForeground(new java.awt.Color(0, 0, 0));
         txtBuscar.setColorIcon(new java.awt.Color(0, 0, 0));
@@ -290,7 +324,7 @@ public class pedido extends javax.swing.JPanel {
                 txtBuscarActionPerformed(evt);
             }
         });
-        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 410, 30));
+        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 400, 30));
 
         btnNuevo.setBackground(new java.awt.Color(46, 49, 82));
         btnNuevo.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -305,9 +339,76 @@ public class pedido extends javax.swing.JPanel {
                 btnNuevoActionPerformed(evt);
             }
         });
-        jPanel1.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 30, 110, 30));
+        jPanel1.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 40, 110, 30));
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1240, 580));
+        btnEliminar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnEliminar1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnEliminar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (1).png"))); // NOI18N
+        btnEliminar1.setText(" Eliminar");
+        btnEliminar1.setToolTipText("");
+        btnEliminar1.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnEliminar1.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        btnEliminar1.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnEliminar1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnEliminar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminar1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEliminar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 40, 110, 30));
+
+        tablaM.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Codigo", "Nombre", "Estado", "Cliente", "Fecha Inicio", "Fecha Final", "Detalle"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tablaM.setBackgoundHead(new java.awt.Color(46, 49, 82));
+        tablaM.setBackgoundHover(new java.awt.Color(109, 160, 221));
+        tablaM.setBorderHead(null);
+        tablaM.setBorderRows(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        tablaM.setColorBorderHead(new java.awt.Color(46, 49, 82));
+        tablaM.setColorBorderRows(new java.awt.Color(46, 49, 82));
+        tablaM.setColorPrimaryText(new java.awt.Color(0, 0, 0));
+        tablaM.setColorSecondary(new java.awt.Color(255, 255, 255));
+        tablaM.setColorSecundaryText(new java.awt.Color(0, 0, 0));
+        tablaM.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tablaM.setFontHead(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        tablaM.setFontRowHover(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tablaM.setFontRowSelect(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        tablaM.setRowHeight(23);
+        tablaM.setSelectionBackground(new java.awt.Color(109, 160, 221));
+        tablaM.setShowGrid(false);
+        tablaM.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaMMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tablaM);
+        tablaM.getColumnModel().getColumn(0).setPreferredWidth(10);
+
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 1200, 500));
+
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1304, 742));
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
@@ -315,17 +416,74 @@ public class pedido extends javax.swing.JPanel {
     }//GEN-LAST:event_txtBuscarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        pedidoNuevo dialog = new pedidoNuevo(new javax.swing.JFrame(), true, this);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
+        while (true) {
+            pedidoNuevo dialog = new pedidoNuevo(new javax.swing.JFrame(), true, this);
+            dialog.setLocationRelativeTo(null);
+            dialog.setVisible(true);
+        }
     }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed
+        int[] selectedRows = tablaM.getSelectedRows();
+
+        // Verificar si hay filas seleccionadas
+        if (selectedRows.length == 0) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione al menos un pedido para eliminar.", "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Confirmar eliminación
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de que desea eliminar " + selectedRows.length + " pedido(s)? Esto también eliminará sus detalles asociados.",
+                "Confirmar eliminación",
+                javax.swing.JOptionPane.YES_NO_OPTION);
+
+        if (confirm != javax.swing.JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // Eliminar los pedidos seleccionados usando el controlador
+        int deletedCount = 0;
+        for (int row : selectedRows) {
+            int idPedido = (int) tablaM.getValueAt(row, 0); // Obtener el id_pedido de la columna 0
+            if (controlador.eliminarPedido(idPedido)) {
+                deletedCount++;
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "Error al eliminar el pedido con ID " + idPedido + ".",
+                        "Error",
+                        javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        // Mostrar mensaje de éxito
+        if (deletedCount > 0) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    deletedCount + " pedido(s) eliminado(s) exitosamente.",
+                    "Éxito",
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            // Recargar datos en la tabla
+            cargarDatosIniciales();
+        }
+    }//GEN-LAST:event_btnEliminar1ActionPerformed
+
+    private void tablaMMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMMouseClicked
+        int column = tablaM.columnAtPoint(evt.getPoint());
+        int row = tablaM.rowAtPoint(evt.getPoint());
+
+        if (column == 6) { // Columna "Ver"
+            String id = tablaM.getValueAt(row, 0).toString();
+            mostrarDetallesPedido(id);
+        }
+    }//GEN-LAST:event_tablaMMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private RSMaterialComponent.RSButtonShape btnEliminar1;
     private RSMaterialComponent.RSButtonShape btnNuevo;
     private RSMaterialComponent.RSComboBoxMaterial cmbCategoria;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private RSMaterialComponent.RSTableMetroCustom tablaM;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtBuscar;
     // End of variables declaration//GEN-END:variables

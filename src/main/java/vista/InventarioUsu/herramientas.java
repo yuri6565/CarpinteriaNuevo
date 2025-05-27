@@ -287,7 +287,7 @@ public class herramientas extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(1240, 580));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panelprincipal.setBackground(new java.awt.Color(255, 255, 255));
+        panelprincipal.setBackground(new java.awt.Color(245, 246, 250));
         panelprincipal.setPreferredSize(new java.awt.Dimension(1290, 730));
         panelprincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -302,7 +302,7 @@ public class herramientas extends javax.swing.JPanel {
                 txtBuscarActionPerformed(evt);
             }
         });
-        panelprincipal.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 420, 30));
+        panelprincipal.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 400, 30));
 
         btnNuevo.setBackground(new java.awt.Color(46, 49, 82));
         btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
@@ -313,11 +313,11 @@ public class herramientas extends javax.swing.JPanel {
                 btnNuevoActionPerformed(evt);
             }
         });
-        panelprincipal.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 90, 110, 30));
+        panelprincipal.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 20, 110, 30));
 
-        principalPanel.setBackground(new java.awt.Color(245, 246, 250));
+        principalPanel.setBackground(new java.awt.Color(255, 255, 255));
         principalPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        panelprincipal.add(principalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 1210, 550));
+        panelprincipal.add(principalPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, 1170, 550));
 
         btnUnidad.setBackground(new java.awt.Color(46, 49, 82));
         btnUnidad.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -332,7 +332,7 @@ public class herramientas extends javax.swing.JPanel {
                 btnUnidadActionPerformed(evt);
             }
         });
-        panelprincipal.add(btnUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 20, 170, 40));
+        panelprincipal.add(btnUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 70, 170, 40));
 
         btnCategoria.setBackground(new java.awt.Color(46, 49, 82));
         btnCategoria.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -346,7 +346,7 @@ public class herramientas extends javax.swing.JPanel {
                 btnCategoriaActionPerformed(evt);
             }
         });
-        panelprincipal.add(btnCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 20, 140, 40));
+        panelprincipal.add(btnCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 70, 130, 40));
 
         btnMarcas.setBackground(new java.awt.Color(46, 49, 82));
         btnMarcas.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -360,7 +360,7 @@ public class herramientas extends javax.swing.JPanel {
                 btnMarcasActionPerformed(evt);
             }
         });
-        panelprincipal.add(btnMarcas, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 20, 120, 40));
+        panelprincipal.add(btnMarcas, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 70, 120, 40));
 
         cmbCategoria.setForeground(new java.awt.Color(153, 153, 153));
         cmbCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione una categoria:" }));
@@ -371,7 +371,7 @@ public class herramientas extends javax.swing.JPanel {
                 cmbCategoriaActionPerformed(evt);
             }
         });
-        panelprincipal.add(cmbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 90, 280, 30));
+        panelprincipal.add(cmbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 80, 260, 30));
 
         add(panelprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, -1));
     }// </editor-fold>//GEN-END:initComponents

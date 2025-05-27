@@ -11,13 +11,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
+import vista.TemaManager;
 
 /**
  *
  * @author ADSO
  */
 public class EditEgresos extends javax.swing.JDialog {
-
     private int idEgresoActual;
     private int id_codigo;
     /**

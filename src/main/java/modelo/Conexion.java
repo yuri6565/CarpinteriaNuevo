@@ -27,7 +27,5 @@ public class Conexion {
         
     }
 
-    public static Connection getCon() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+  
 }
