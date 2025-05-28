@@ -93,6 +93,7 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
         }
     }
     // Renderizador para la columna de estado
+    // Renderizador para la columna de estado
 
     private void mostrarDetalleEtapa(DefaultTableModel model, int modelRow, int idEtapa) {
         try {
@@ -104,10 +105,10 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
             String estado = model.getValueAt(modelRow, 5).toString();
             String asignado = model.getValueAt(modelRow, 6) != null
                     ? model.getValueAt(modelRow, 6).toString() : "No asignado";
-            String materiales = model.getColumnCount() > 8 && model.getValueAt(modelRow, 8) != null
-                    ? model.getValueAt(modelRow, 8).toString() : "No especificado";
-            String herramientas = model.getColumnCount() > 9 && model.getValueAt(modelRow, 9) != null
+            String materiales = model.getColumnCount() > 9 && model.getValueAt(modelRow, 9) != null
                     ? model.getValueAt(modelRow, 9).toString() : "No especificado";
+            String herramientas = model.getColumnCount() > 10 && model.getValueAt(modelRow, 10) != null
+                    ? model.getValueAt(modelRow, 10).toString() : "No especificado";
 
             // Crear el diálogo
             DetallleEtapa dialog = new DetallleEtapa(
@@ -136,55 +137,6 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
         }
     }
 
-    private void editarProduccion(DefaultTableModel model, int modelRow, int idEtapa) {
-        try {
-
-            String nombre = model.getValueAt(modelRow, 1).toString();
-            String cantidad = String.valueOf(model.getValueAt(modelRow, 2));
-            String fechaInicio = model.getValueAt(modelRow, 3).toString();
-            String fechaFin = model.getValueAt(modelRow, 4).toString();
-            String estado = model.getValueAt(modelRow, 5).toString();
-            String asignado = model.getValueAt(modelRow, 6) != null ? model.getValueAt(modelRow, 6).toString() : "No asignado";
-            String materiales = model.getColumnCount() > 8 && model.getValueAt(modelRow, 8) != null
-                    ? model.getValueAt(modelRow, 8).toString() : "No especificado";
-            String herramientas = model.getColumnCount() > 9 && model.getValueAt(modelRow, 9) != null
-                    ? model.getValueAt(modelRow, 9).toString() : "No especificado";
-
-            // Debug: Verifica los valores
-            System.out.println("Datos a enviar:");
-            System.out.println("ID: " + idEtapa);
-            System.out.println("Nombre: " + nombre);
-            System.out.println("Cantidad: " + cantidad);
-            System.out.println("Fecha inicio: " + fechaInicio);
-            System.out.println("Fecha fin: " + fechaFin);
-            System.out.println("Estado: " + estado);
-            System.out.println("Asignado: " + asignado);
-            System.out.println("Materiales: " + materiales);
-            System.out.println("Herramientas: " + herramientas);
-
-            // Crear y mostrar el panel
-            DetallleEtapa detallePanel = new DetallleEtapa(
-                    (JFrame) SwingUtilities.getWindowAncestor(this), true, idEtapa,
-                    nombre,
-                    cantidad,
-                    fechaInicio,
-                    fechaFin,
-                    estado,
-                    materiales,
-                    herramientas,
-                    asignado
-            );
-
-            removeAll();
-            setLayout(new BorderLayout());
-            add(detallePanel, BorderLayout.CENTER);
-            revalidate();
-            repaint();
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error al mostrar detalle: " + e.getMessage(), e);
-        }
-    }
 
     private class EstadoTableCellRenderer extends DefaultTableCellRenderer {
 
