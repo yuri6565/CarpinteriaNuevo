@@ -3,10 +3,12 @@ package vista.catalogo;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,19 +24,19 @@ import rojerusan.RSPanelImage;
  *
  * @author buitr
  */
-public class Productos extends javax.swing.JPanel {
+public class catalogo22 extends javax.swing.JPanel {
 
     private JScrollPane scrollPane;
-    private int cardX = 10; // Starting X position for cards
-    private int cardY = 10; // Starting Y position for cards
+    private int cardX = 15; // Starting X position for cards
+    private int cardY = 15; // Starting Y position for cards
 
-    public Productos(JFrame jFrame, boolean par) {
-      panelCards.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-    scrollPane = new JScrollPane(panelCards);
-    scrollPane.setBounds(40, 210, 1070, 400); // Adjusted y to 210 and height to 400
-    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    jPanel2.add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 1070, 400));
-    jPanel2.remove(panelCards);
+    public catalogo22(JFrame jFrame, boolean par) {
+        initComponents();
+panelCards.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));        scrollPane = new JScrollPane(panelCards);
+        scrollPane.setBounds(40, 160, 1070, 600); // Match the original panelCards bounds
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        jPanel2.add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 1070, 600));
+        jPanel2.remove(panelCards); // Remove the original panelCards
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -164,15 +166,14 @@ public class Productos extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
-productocategoria cat = new productocategoria((JFrame) getTopLevelAncestor(), true); // Use getTopLevelAncestor() to get the parent JFrame
+catalogocategoria cat = new catalogocategoria((JFrame) getTopLevelAncestor(), true); // Use getTopLevelAncestor() to get the parent JFrame
     cat.setVisible(true); // Aquí se detiene hasta que se cierre
 
     String rutaImagen = cat.getRutaImagenSeleccionada();
-    String categoriaNombre = cat.getNombre();
+    String categoriaNombre = cat.getCategoriaNombre();
     if (rutaImagen != null && !rutaImagen.isEmpty() && !categoriaNombre.isEmpty()) {
         agregarCard(rutaImagen, categoriaNombre);
     }
-  
   
     }//GEN-LAST:event_Añadir1ActionPerformed
 
@@ -199,83 +200,51 @@ productocategoria cat = new productocategoria((JFrame) getTopLevelAncestor(), tr
     private javax.swing.JPanel panelCards;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtBuscar;
     // End of variables declaration//GEN-END:variables
-
 private void agregarCard(String rutaImagen, String categoriaNombre) {
-        RSPanelEffect cardPanel = new RSPanelEffect();
-        cardPanel.setBackground(Color.WHITE);
-        cardPanel.setPreferredSize(new Dimension(200, 290));
-        cardPanel.setLayout(new BorderLayout());
+        // Create a parent panel to stack the image and text vertically
+        JPanel cardWrapper = new JPanel();
+        cardWrapper.setLayout(new BoxLayout(cardWrapper, BoxLayout.Y_AXIS));
+        cardWrapper.setOpaque(false);
 
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setOpaque(false);
-        topPanel.setPreferredSize(new Dimension(200, 190));
+        // Circular image panel
+        rojerusan.RSPanelCircleImage cardPanel = new rojerusan.RSPanelCircleImage();
+        cardPanel.setPreferredSize(new java.awt.Dimension(150, 150)); // Square for circular effect
+        cardPanel.setImagen(new javax.swing.ImageIcon(rutaImagen));
+        cardPanel.setColorBorde(new Color(242, 247, 255));
+        cardPanel.setOpaque(false);
 
-        JPanel iconPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
-        iconPanel.setOpaque(false);
+        // Text label for the category
+        JLabel tituloCategoria = new JLabel(categoriaNombre);
+        tituloCategoria.setFont(new java.awt.Font("Century751 BT", 0, 20));
+        tituloCategoria.setHorizontalAlignment(JLabel.CENTER);
+        tituloCategoria.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align in BoxLayout
 
-        RSLabelIcon iconDelete = new RSLabelIcon();
-        iconDelete.setIcons(ValoresEnum.ICONS.DELETE);
-        iconDelete.setPreferredSize(new Dimension(25, 25));
-        iconDelete.setForeground(Color.RED);
+        // Add components to the wrapper panel
+        cardWrapper.add(cardPanel);
+        cardWrapper.add(tituloCategoria);
 
-        RSLabelIcon iconEdit = new RSLabelIcon();
-        iconEdit.setIcons(ValoresEnum.ICONS.EDIT);
-        iconEdit.setPreferredSize(new Dimension(25, 25));
-        iconEdit.setForeground(Color.BLACK);
+        // Determine row (top 5 cards or bottom 5 cards)
+        int totalCards = panelCards.getComponentCount();
+        int row = (totalCards < 5) ? 0 : 1; // Row 0 for first 5, Row 1 for next 5
+        int cardIndex = totalCards % 5; // Index within the row (0 to 4)
 
-        iconPanel.add(iconDelete);
-        iconPanel.add(iconEdit);
+        // Calculate position
+        int cardX = 10 + cardIndex * 165; // 10px gap + 165px width per card
+        int cardY = row * 210 + 10; // 210px height per row + 10px gap
 
-        JPanel imageWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 5));
-        imageWrapper.setOpaque(false);
+        // Set bounds for the wrapper panel
+        cardWrapper.setBounds(cardX, cardY, 150, 200);
 
-        RSPanelImage imagenCard = new RSPanelImage();
-        imagenCard.setPreferredSize(new Dimension(170, 150));
-        imagenCard.setImagen(new ImageIcon(rutaImagen));
-
-        imageWrapper.add(imagenCard);
-
-        topPanel.add(iconPanel, BorderLayout.NORTH);
-        topPanel.add(imageWrapper, BorderLayout.CENTER);
-
-        JPanel textPanel = new JPanel(new GridLayout(4, 1, 0, 2));
-        textPanel.setOpaque(false);
-
-        JLabel titleLabel = new JLabel("Armario tres puertas");
-        titleLabel.setFont(new Font("Sans Serif", Font.BOLD, 17));
-        titleLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        JLabel categoryLabel = new JLabel(categoriaNombre);
-        categoryLabel.setFont(new Font("Sans Serif", Font.PLAIN, 16));
-        categoryLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        JLabel sizeLabel = new JLabel("10x100");
-        sizeLabel.setFont(new Font("Sans Serif", Font.PLAIN, 12));
-        sizeLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        textPanel.add(titleLabel);
-        textPanel.add(categoryLabel);
-        textPanel.add(sizeLabel);
-
-        cardPanel.add(topPanel, BorderLayout.NORTH);
-        cardPanel.add(textPanel, BorderLayout.SOUTH);
-
-        cardPanel.setBounds(cardX, cardY, 200, 300);
-        cardX += 215; 
-        if (cardX + 200 > 1075) { // 7 cards per row (1505px  )
-            cardX = 10;
-            cardY += 310;
-        }
-panelCards.setPreferredSize(new Dimension(Math.max(cardX + 200, scrollPane.getWidth()), cardY + 310));
-        panelCards.add(cardPanel);
+        // Add to panelCards
+        panelCards.add(cardWrapper);
         panelCards.revalidate();
         panelCards.repaint();
 
-        int nuevoAlto = cardY + 310;
-        panelCards.setPreferredSize(new Dimension(1505, nuevoAlto));
+        // Update panelCards size
+        int nuevoAlto = (row + 1) * 210 + 10;
+        panelCards.setPreferredSize(new Dimension(1070, nuevoAlto)); // 1070px width to fit 5 cards
         scrollPane.revalidate();
         scrollPane.repaint();
     }
-
 
 }

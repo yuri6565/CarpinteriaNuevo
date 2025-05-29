@@ -7,6 +7,7 @@ package vista.Caja;
 import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.logging.Level;
@@ -28,10 +29,26 @@ public class formuIngresos extends javax.swing.JDialog {
      * Creates new form formuIngresos
      */
     public formuIngresos(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-    }
+    super(parent, modal);
+    initComponents();
+    ohtaniahea();
+  
+    setPreferredSize(new java.awt.Dimension(520, 600));
+    
+}
 
+private void ohtaniahea() {
+    jLabel8.setVisible(false);
+    comboProveedor.setVisible(false);
+    btnClienteN1.setVisible(false);
+    jLabel3.setVisible(false);
+    comboProductos.setVisible(false);
+    btnClienteN.setVisible(false);
+    
+    jPanel1.revalidate();
+    jPanel1.repaint();
+}
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,18 +61,26 @@ public class formuIngresos extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        btnGuardar = new rojeru_san.RSButtonRiple();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        btnCancelar = new rojeru_san.RSButtonRiple();
         txtPago = new com.toedter.calendar.JDateChooser();
         txtCantidadnuevo = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel2 = new javax.swing.JLabel();
         txtDetallenuevo = new RSMaterialComponent.RSTextFieldMaterial();
-        jLabel3 = new javax.swing.JLabel();
         comboCategoria = new RSMaterialComponent.RSComboBoxMaterial();
+        jLabel7 = new javax.swing.JLabel();
+        comboProveedor = new RSMaterialComponent.RSComboBoxMaterial();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        comboProductos = new RSMaterialComponent.RSComboBoxMaterial();
+        btnClienteN1 = new RSMaterialComponent.RSButtonShape();
+        btnClienteN = new RSMaterialComponent.RSButtonShape();
+        btnGuardar = new rojeru_san.RSButtonRiple();
+        btnCancelar1 = new rojeru_san.RSButtonRiple();
+        rSLabelHora1 = new rojeru_san.rsdate.RSLabelHora();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(520, 600));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -70,47 +95,34 @@ public class formuIngresos extends javax.swing.JDialog {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
 
-        btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
-        btnGuardar.setText("Guardar");
-        btnGuardar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 400, 140, -1));
-
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setText("Detalle de Ingreso:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 130, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 130, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel10.setText("Fecha Pago:");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
-
-        btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
-        btnCancelar.setText("Volver");
-        btnCancelar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 140, -1));
 
         txtPago.setBackground(new java.awt.Color(255, 255, 255));
         txtPago.setForeground(new java.awt.Color(255, 255, 255));
         txtPago.setDateFormatString("y-MM-d");
         txtPago.setMaxSelectableDate(new java.util.Date(253370786472000L));
         jPanel1.add(txtPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 190, 30));
-        jPanel1.add(txtCantidadnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 420, -1));
+
+        txtCantidadnuevo.setPlaceholder("");
+        jPanel1.add(txtCantidadnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 430, -1));
 
         jLabel2.setText("Cantidad a Ingresar:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
-        jPanel1.add(txtDetallenuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 420, -1));
 
-        jLabel3.setText("Categoria");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, -1));
+        txtDetallenuevo.setForeground(new java.awt.Color(0, 0, 0));
+        txtDetallenuevo.setPlaceholder("");
+        txtDetallenuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDetallenuevoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtDetallenuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 420, 30));
 
         comboCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione categoria:", "Servicios Publicos", "Compra de Productos e Insumos", "Arriendo", "Nómina", "Gastos Administrativos", "Mercadeo y Publicidad", "Transporte", "Domicilios y Logistica", "mantenimineto y Reparaciones", "Muebles", "Equipos o Maquinaria", "Otros" }));
         comboCategoria.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -120,7 +132,57 @@ public class formuIngresos extends javax.swing.JDialog {
                 comboCategoriaActionPerformed(evt);
             }
         });
-        jPanel1.add(comboCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 420, 30));
+        jPanel1.add(comboCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 420, 30));
+
+        jLabel7.setText("Categoria");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, -1, -1));
+
+        comboProveedor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione cliente:" }));
+        comboProveedor.setColorMaterial(new java.awt.Color(0, 0, 0));
+        comboProveedor.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        jPanel1.add(comboProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 170, 30));
+
+        jLabel8.setText("Proveedor");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, -1, -1));
+
+        jLabel3.setText("Proveedor");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 330, -1, -1));
+
+        comboProductos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione cliente:" }));
+        comboProductos.setColorMaterial(new java.awt.Color(0, 0, 0));
+        comboProductos.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        jPanel1.add(comboProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 350, 170, 30));
+
+        btnClienteN1.setBackground(new java.awt.Color(46, 49, 82));
+        btnClienteN1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnClienteN1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnClienteN1.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnClienteN1.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
+        btnClienteN1.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnClienteN1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel1.add(btnClienteN1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 350, 25, 25));
+
+        btnClienteN.setBackground(new java.awt.Color(46, 49, 82));
+        btnClienteN.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnClienteN.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnClienteN.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnClienteN.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
+        btnClienteN.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnClienteN.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel1.add(btnClienteN, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 350, 25, 25));
+
+        btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
+        btnGuardar.setText("Guardar");
+        btnGuardar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 490, 140, -1));
+
+        btnCancelar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnCancelar1.setText("Volver");
+        btnCancelar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 490, 140, -1));
+
+        rSLabelHora1.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(rSLabelHora1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, 120, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -130,73 +192,11 @@ public class formuIngresos extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 468, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-                                     
-    // Validar campos obligatorios
-    if (!validarCampos()) {
-        return;
-    }
-
-    // Mostrar diálogo de confirmación
-    Alertaa confirmDialog = new Alertaa(
-            (Frame) this.getParent(),
-            true,
-            "Confirmar",
-            "¿Desea guardar los datos?"
-    );
-    confirmDialog.setVisible(true);
-
-    if (confirmDialog.opcionConfirmada()) {
-        try {
-            // Obtener valores
-            java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
-            String descripcion = txtDetallenuevo.getText();
-            double monto = Double.parseDouble(txtCantidadnuevo.getText().trim());
-            String categoria = comboCategoria.getSelectedItem().toString();
-
-            // Validar categoría seleccionada
-            if (comboCategoria.getSelectedIndex() == 0) {
-                mostrarError("Debe seleccionar una categoría válida");
-                return;
-            }
-
-            // Insertar en BD usando el método correcto
-            boolean exito = insertarIngreso(
-                new java.sql.Date(txtPago.getDate().getTime()).toString(),
-                monto,
-                "ingreso",
-                descripcion,
-                categoria
-            );
-            
-            if (exito) {
-                Datos_guardados exitoDialog = new Datos_guardados(
-                    (Frame) this.getParent(),
-                    true,
-                    "Éxito",
-                    "Datos guardados correctamente"
-                );
-                exitoDialog.setLocationRelativeTo(null);
-                exitoDialog.setVisible(true);
-                this.dispose();
-            } else {
-                mostrarError("No se pudo guardar el registro");
-            }
-        } catch (NumberFormatException e) {
-            mostrarError("El monto debe ser un número válido");
-        } catch (SQLException ex) {
-            Logger.getLogger(formuIngresos.class.getName()).log(Level.SEVERE, null, ex);
-            mostrarError("Error al guardar en la base de datos");
-        }
-    
-}
-    }//GEN-LAST:event_btnGuardarActionPerformed
    private boolean insertarIngreso(String fecha,Double monto,String movimiento, String descripcion, String categoria)throws SQLException{
    String sql = "INSERT INTO caja (fecha, monto, descripcion, categoria, movimiento) VALUES (?, ?, ?, ?, ?)";
    
@@ -230,13 +230,32 @@ public class formuIngresos extends javax.swing.JDialog {
     return true;
 }
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnCancelarActionPerformed
-
     private void comboCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCategoriaActionPerformed
-        // TODO add your handling code here:
+String seleccion = comboCategoria.getSelectedItem().toString();
+
+        if (seleccion.equals("Compra de Productos e Insumos")) {
+            jLabel8.setVisible(true);
+            comboProveedor.setVisible(true);
+            btnClienteN1.setVisible(true);
+            jLabel3.setVisible(true);
+            comboProductos.setVisible(true);
+            btnClienteN.setVisible(true);
+        } else {
+            jLabel8.setVisible(false);
+            comboProveedor.setVisible(false);
+            btnClienteN1.setVisible(false);
+            jLabel3.setVisible(false);
+            comboProductos.setVisible(false);
+            btnClienteN.setVisible(false);
+        }
+        jPanel1.revalidate();
+        jPanel1.repaint(); // Forzar actualización de la interfaz
+    
     }//GEN-LAST:event_comboCategoriaActionPerformed
+
+    private void txtDetallenuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDetallenuevoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDetallenuevoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -281,16 +300,23 @@ public class formuIngresos extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private rojeru_san.RSButtonRiple btnCancelar;
+    private rojeru_san.RSButtonRiple btnCancelar1;
+    private RSMaterialComponent.RSButtonShape btnClienteN;
+    private RSMaterialComponent.RSButtonShape btnClienteN1;
     private rojeru_san.RSButtonRiple btnGuardar;
     private RSMaterialComponent.RSComboBoxMaterial comboCategoria;
+    private RSMaterialComponent.RSComboBoxMaterial comboProductos;
+    private RSMaterialComponent.RSComboBoxMaterial comboProveedor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private rojeru_san.rsdate.RSLabelHora rSLabelHora1;
     private RSMaterialComponent.RSTextFieldMaterial txtCantidadnuevo;
     private RSMaterialComponent.RSTextFieldMaterial txtDetallenuevo;
     private com.toedter.calendar.JDateChooser txtPago;
@@ -328,4 +354,7 @@ public class formuIngresos extends javax.swing.JDialog {
         JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
     }
+    
+    
+  
 }
