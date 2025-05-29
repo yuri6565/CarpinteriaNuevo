@@ -105,9 +105,8 @@ private void updateCardsDisplay() {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         panelCards = new javax.swing.JPanel();
-        rSLabelIcon2 = new rojerusan.RSLabelIcon();
-        Añadir1 = new rojeru_san.RSButtonRiple();
         txtBuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
+        Añadir2 = new rojeru_san.RSButtonRiple();
 
         setBackground(new java.awt.Color(242, 247, 255));
 
@@ -119,24 +118,7 @@ private void updateCardsDisplay() {
 
         panelCards.setBackground(new java.awt.Color(255, 255, 255));
         panelCards.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        rSLabelIcon2.setForeground(new java.awt.Color(153, 0, 153));
-        rSLabelIcon2.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.KEYBOARD_ARROW_RIGHT);
-        rSLabelIcon2.setInheritsPopupMenu(true);
-        panelCards.add(rSLabelIcon2, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 200, 50, 50));
-
         jPanel2.add(panelCards, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 190, 970, 450));
-
-        Añadir1.setBackground(new java.awt.Color(46, 49, 82));
-        Añadir1.setText("Agregar Categoria");
-        Añadir1.setColorHover(new java.awt.Color(0, 153, 51));
-        Añadir1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        Añadir1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Añadir1ActionPerformed(evt);
-            }
-        });
-        jPanel2.add(Añadir1, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 90, 160, 40));
 
         txtBuscar.setBackground(new java.awt.Color(242, 247, 255));
         txtBuscar.setForeground(new java.awt.Color(0, 0, 0));
@@ -152,65 +134,70 @@ private void updateCardsDisplay() {
         });
         jPanel2.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 110, 430, 40));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1090, 700));
+        Añadir2.setBackground(new java.awt.Color(46, 49, 82));
+        Añadir2.setText("Agregar Categoria");
+        Añadir2.setColorHover(new java.awt.Color(0, 153, 51));
+        Añadir2.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        Añadir2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Añadir2ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(Añadir2, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 90, 160, 40));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1090, 720));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1089, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1089, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(222, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 706, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 706, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(61, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 698, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(60, 60, 60))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
-catalogocategoria cat = new catalogocategoria((JFrame) getTopLevelAncestor(), true); // Use getTopLevelAncestor() to get the parent JFrame
-    cat.setVisible(true); // Aquí se detiene hasta que se cierre
-
-    String rutaImagen = cat.getRutaImagenSeleccionada();
-    String categoriaNombre = cat.getCategoriaNombre();
-    if (rutaImagen != null && !rutaImagen.isEmpty() && !categoriaNombre.isEmpty()) {
-        agregarCard(rutaImagen, categoriaNombre);
-    }
-  
-  
-    }//GEN-LAST:event_Añadir1ActionPerformed
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBuscarActionPerformed
 
+    private void Añadir2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Añadir2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private rojeru_san.RSButtonRiple Añadir1;
+    private rojeru_san.RSButtonRiple Añadir2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel panelCards;
-    private rojerusan.RSLabelIcon rSLabelIcon2;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtBuscar;
     // End of variables declaration//GEN-END:variables
 private void agregarCard(String rutaImagen, String categoriaNombre) {
     javax.swing.JPanel cardPanel = new javax.swing.JPanel();
     cardPanel.setBackground(new Color(242, 247, 255));
     cardPanel.setPreferredSize(new java.awt.Dimension(150, 180));
+   
+  
 
     rojerusan.RSPanelCircleImage nuevaCard = new rojerusan.RSPanelCircleImage();
     nuevaCard.setPreferredSize(new java.awt.Dimension(150, 150));
     nuevaCard.setImagen(new javax.swing.ImageIcon(rutaImagen));
     nuevaCard.setColorBorde(new Color(242, 247, 255));
+    
+    
+    
+
+    
+
 
     JLabel cardLabel = new JLabel(categoriaNombre);
     cardLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 17));
@@ -232,29 +219,87 @@ private void agregarCard(String rutaImagen, String categoriaNombre) {
 }
 
 
-    private void mostrarVistaCategoria(String categoriaNombre) {
-        // Limpiar el panelCards
-        panelCards.removeAll();
-        panelCards.setLayout(new java.awt.BorderLayout());
+private void mostrarVistaCategoria(String categoriaNombre) {
+    // Clear the current panelCards content
+    panelCards.removeAll();
+    panelCards.setLayout(new java.awt.BorderLayout());
 
-        // Crear un nuevo panel para la vista de la categoría seleccionada
-        JPanel categoriaVista = new JPanel();
-        categoriaVista.setBackground(new Color(242, 247, 255));
-        categoriaVista.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+    // Create a new panel for the category view
+    JPanel categoriaVista = new JPanel();
+    categoriaVista.setBackground(new Color(242, 247, 255));
+  
 
+    // Add category title
+    JLabel tituloCategoria = new JLabel("Categoría: " + categoriaNombre);
+    tituloCategoria.setFont(new java.awt.Font("Segoe UI Black", 0, 20));
 
-        JLabel tituloCategoria = new JLabel("Categoría: " + categoriaNombre);
-        tituloCategoria.setFont(new java.awt.Font("Segoe UI Black", 0, 20));
-        categoriaVista.add(tituloCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 300, 30));
+    // Create a panel to hold the product list
+    JPanel productosPanel = new JPanel();
+    productosPanel.setLayout(new java.awt.GridLayout(0, 1, 10, 10)); // Una columna, espaciado de 10
+    productosPanel.setBackground(new Color(242, 247, 255));
 
-
-        JLabel contenido = new JLabel("Aquí se mostrarían los productos de " + categoriaNombre);
-        contenido.setFont(new java.awt.Font("Segoe UI", 0, 16));
-        categoriaVista.add(contenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 400, 30));
-
-        // Agregar botón de regresar
-    
+    // Ejemplo de lista de productos (reemplaza con tu lógica real)
+    java.util.List<String> productos = obtenerProductosPorCategoria(categoriaNombre);
+    for (String producto : productos) {
+        JLabel productoLabel = new JLabel(producto);
+        productoLabel.setFont(new java.awt.Font("Segoe UI", 0, 16));
+        productosPanel.add(productoLabel);
     }
+
+    // Agregar el panel de productos al categoriaVista con desplazamiento si es necesario
+    JScrollPane scrollProductos = new JScrollPane(productosPanel);
+    scrollProductos.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    scrollProductos.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+    // Add "back" button
+    rojeru_san.RSButtonRiple btnBack = new rojeru_san.RSButtonRiple();
+    btnBack.setBackground(new java.awt.Color(46, 49, 82));
+    btnBack.setText("Regresar");
+    btnBack.setColorHover(new java.awt.Color(0, 153, 51));
+    btnBack.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14));
+    btnBack.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            // Return to the catalog view
+            panelCards.removeAll();
+            panelCards.setLayout(new BorderLayout());
+            initializePagination();
+            updateCardsDisplay();
+            panelCards.revalidate();
+            panelCards.repaint();
+        }
+    });
+
+
+    // Add the category view to panelCards
+    panelCards.add(categoriaVista, BorderLayout.CENTER);
+    panelCards.revalidate();
+    panelCards.repaint();
+}
+
+// Método de ejemplo para obtener productos por categoría (reemplaza con tu lógica real)
+private java.util.List<String> obtenerProductosPorCategoria(String categoriaNombre) {
+    java.util.List<String> productos = new java.util.ArrayList<>();
+    switch (categoriaNombre.toLowerCase()) {
+        case "cama":
+            productos.add("Cama Individual");
+            productos.add("Cama Queen");
+            productos.add("Cama King");
+            break;
+        case "comedor":
+            productos.add("Mesa de Comedor 6 Sillas");
+            productos.add("Mesa de Comedor 4 Sillas");
+            break;
+        case "sala":
+            productos.add("Sofá 3 Cuerpos");
+            productos.add("Silla Reclinable");
+            break;
+        // Agrega más casos para otras categorías
+        default:
+            productos.add("No hay productos disponibles");
+            break;
+    }
+    return productos;
+}
 
 
 }

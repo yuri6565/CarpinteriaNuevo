@@ -313,7 +313,7 @@ public class EditEgresos extends javax.swing.JDialog {
     }//GEN-LAST:event_txtBuscaActionPerformed
 
     private void comboCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCategoriaActionPerformed
-        // TODO add your handling code here:
+      
     }//GEN-LAST:event_comboCategoriaActionPerformed
 
     /**
