@@ -34,49 +34,46 @@ import vista.catalogo.Productos;
 import vista.catalogo.catalogo;
 import vista.catalogo.catalogo22;
 
-
 /**
  *
  * @author Personal
  */
 public class Principal extends javax.swing.JFrame {
 
-  private JPanel submenuInventario;
+    private JPanel submenuInventario;
     private boolean submenuVisible = false; // Para controlar si el submenú está visible
 // Botón "Materiales" del submenú
     private rojeru_san.RSButton item2; // Botón "Herramientas" del submenú
-     private int idUsuarioValido ;
+    private int idUsuarioValido;
     private String nombreUsuario;
-     private int idUsuario;
-     private Ctrl_Perfil controlador;
-
+    private int idUsuario;
+    private Ctrl_Perfil controlador;
 
     //bfhfhb
     // Nuevas variables para el submenú de Ventas
     private JPanel submenuVentas;
     private boolean submenuVentasVisible = false; // Para controlar si el submenú de Ventas está visible
-  private rojeru_san.RSButton item1; 
-private rojeru_san.RSButton item4;
-private rojeru_san.RSButton item3;
+    private rojeru_san.RSButton item1;
+    private rojeru_san.RSButton item4;
+    private rojeru_san.RSButton item3;
 
     public Principal(int idUsuario) {
         this.idUsuario = idUsuario;
         this.controlador = new Ctrl_Perfil();
         this.item1 = new rojeru_san.RSButton(); // ✔️ usa la variable de instancia
-this.item4 = new rojeru_san.RSButton();
-  this.item3 = new rojeru_san.RSButton(); // ✔️
+        this.item4 = new rojeru_san.RSButton();
+        this.item3 = new rojeru_san.RSButton(); // ✔️
 
-         boolean oscuro = TemaManager.getInstance().isOscuro();
+        boolean oscuro = TemaManager.getInstance().isOscuro();
         initComponents();
         aplicarTema();
-         
+
         cargarUsuarioLogueado();
-       cargarrol();
-       
+        cargarrol();
+
         jPanel4.setVisible(true);
         jPanel5.setVisible(false);
         jPanel3.setVisible(false);
-
 
 //submenu inventario------------------
         // Inicializar el submenú
@@ -99,7 +96,7 @@ this.item4 = new rojeru_san.RSButton();
         item1.setText("Materiales");
         item1.setColorHover(new Color(150, 150, 150)); // Mismo color de hover que los botones del menú
         item1.setColorTextHover(Color.WHITE);
-   aplicarTema();
+        aplicarTema();
 
         //boton para herramientas
         rojeru_san.RSButton item2 = new rojeru_san.RSButton();
@@ -253,223 +250,217 @@ this.item4 = new rojeru_san.RSButton();
         contenedor.repaint();
 
     }
-    
-      private void cambiarEstiloBotonRS(RSButton boton, Color fondo, Color texto) {
-    boton.setBackground(fondo);                // Fondo (si es compatible en tu versión)
-    boton.setColorText(texto);                 // Texto
-    boton.setColorHover(new Color(72, 92, 188)); // Hover fijo azul
-    boton.setColorTextHover(texto); 
 
-}
+    private void cambiarEstiloBotonRS(RSButton boton, Color fondo, Color texto) {
+        boton.setBackground(fondo);                // Fondo (si es compatible en tu versión)
+        boton.setColorText(texto);                 // Texto
+        boton.setColorHover(new Color(72, 92, 188)); // Hover fijo azul
+        boton.setColorTextHover(texto);
+
+    }
+
     private void aplicarTema() {
-    Color fondoPrincipal, fondoPanel, fondoBoton, textoBoton, textoLabel, contenedorc;
-    String rutaLogo;
+        Color fondoPrincipal, fondoPanel, fondoBoton, textoBoton, textoLabel, contenedorc;
+        String rutaLogo;
 
-    // Use TemaManager to get the current theme
-    boolean oscuro = TemaManager.getInstance().isOscuro();
+        // Use TemaManager to get the current theme
+        boolean oscuro = TemaManager.getInstance().isOscuro();
 
-    if (oscuro) {
-   fondoPrincipal = new Color(21,21,33);  
-        fondoPanel = new Color(21,21,33);     
-        fondoBoton = new Color(30, 30, 45);      
-        textoBoton = Color.WHITE;                
-        textoLabel = Color.WHITE;                
-        contenedorc = new Color(21,21,33);
-jPanel1.setBackground (new Color(21,21,33)); 
-jPanel2.setBackground(new Color(30,30,45));
-jPanel3.setBackground(new Color(30,30,45)); 
-jPanel4.setBackground(new Color(30,30,45)); 
-contenedor.setBackground(new Color(21,21,33)); 
-jPanel5.setBackground(new Color(30,30,45));     
-lblUsuarioLogueado.setForeground(Color.WHITE);
-rolusuario.setForeground(Color.WHITE);
-lblTituloPrincipal.setForeground(Color.WHITE);
-cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
+        if (oscuro) {
+            fondoPrincipal = new Color(21, 21, 33);
+            fondoPanel = new Color(21, 21, 33);
+            fondoBoton = new Color(30, 30, 45);
+            textoBoton = Color.WHITE;
+            textoLabel = Color.WHITE;
+            contenedorc = new Color(21, 21, 33);
+            jPanel1.setBackground(new Color(21, 21, 33));
+            jPanel2.setBackground(new Color(30, 30, 45));
+            jPanel3.setBackground(new Color(30, 30, 45));
+            jPanel4.setBackground(new Color(30, 30, 45));
+            contenedor.setBackground(new Color(21, 21, 33));
+            jPanel5.setBackground(new Color(30, 30, 45));
+            lblUsuarioLogueado.setForeground(Color.WHITE);
+            rolusuario.setForeground(Color.WHITE);
+            lblTituloPrincipal.setForeground(Color.WHITE);
+            cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
 
+            uno.setIcon(new ImageIcon(getClass().getResource("/imagenes/casa.png")));
+            dos.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-negra.png")));
+            tres.setIcon(new ImageIcon(getClass().getResource("/imagenes/proveedor-de-servicio.png")));
+            cuatro.setIcon(new ImageIcon(getClass().getResource("/imagenes/productivity_1.png")));
+            cinco.setIcon(new ImageIcon(getClass().getResource("/imagenes/etiqueta-de-precio.png")));
+            seis.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-registradora_1.png")));
+            siete1.setIcon(new ImageIcon(getClass().getResource("/imagenes/gestion-de-usuarios_1.png")));
+            ocho.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service_1.png")));
+            nueve.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogar.png")));
+            Diez.setIcon(new ImageIcon(getClass().getResource("/imagenes/ajustesblanco.png")));
 
-        uno.setIcon(new ImageIcon(getClass().getResource("/imagenes/casa.png")));
-        dos.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-negra.png")));
-        tres.setIcon(new ImageIcon(getClass().getResource("/imagenes/proveedor-de-servicio.png")));
-        cuatro.setIcon(new ImageIcon(getClass().getResource("/imagenes/productivity_1.png")));
-        cinco.setIcon(new ImageIcon(getClass().getResource("/imagenes/etiqueta-de-precio.png")));
-        seis.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-registradora_1.png")));
-        siete1.setIcon(new ImageIcon(getClass().getResource("/imagenes/gestion-de-usuarios_1.png")));
-        ocho.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service_1.png")));
-        nueve.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogar.png")));
-        Diez.setIcon(new ImageIcon(getClass().getResource("/imagenes/ajustesblanco.png")));
-        
-       rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/WhatsApp Image 2025-03-20 at 3.58.18 PM (1).png")));
-        rSLabelImage3.setIcon(new ImageIcon(getClass().getResource("/imagenes/luna (6).png")));
-        rSLabelImage1.setIcon(new ImageIcon(getClass().getResource("/imagenes/feliz-sol-negro.png")));
-        
+            rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/WhatsApp Image 2025-03-20 at 3.58.18 PM (1).png")));
+            rSLabelImage3.setIcon(new ImageIcon(getClass().getResource("/imagenes/luna (6).png")));
+            rSLabelImage1.setIcon(new ImageIcon(getClass().getResource("/imagenes/feliz-sol-negro.png")));
 
-        uno1.setIcon(new ImageIcon(getClass().getResource("/imagenes/casa.png")));
-        dos1.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-negra.png")));
-        tres1.setIcon(new ImageIcon(getClass().getResource("/imagenes/proveedor-de-servicio.png")));
-        cuatro1.setIcon(new ImageIcon(getClass().getResource("/imagenes/productivity_1.png")));
-        cinco1.setIcon(new ImageIcon(getClass().getResource("/imagenes/etiqueta-de-precio.png")));
-        seis1.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-registradora_1.png")));
-        siete2.setIcon(new ImageIcon(getClass().getResource("/imagenes/gestion-de-usuarios_1.png")));
-        ocho1.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service_1.png")));
-        nueve1.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogar.png")));
-        menu.setIcon(new ImageIcon(getClass().getResource("/imagenes/burger-bar.png")));
-      rSLabelIcon1.setForeground(new Color (255,255,255));
-        //rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/logo_blanco.png")));
+            uno1.setIcon(new ImageIcon(getClass().getResource("/imagenes/casa.png")));
+            dos1.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-negra.png")));
+            tres1.setIcon(new ImageIcon(getClass().getResource("/imagenes/proveedor-de-servicio.png")));
+            cuatro1.setIcon(new ImageIcon(getClass().getResource("/imagenes/productivity_1.png")));
+            cinco1.setIcon(new ImageIcon(getClass().getResource("/imagenes/etiqueta-de-precio.png")));
+            seis1.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-registradora_1.png")));
+            siete2.setIcon(new ImageIcon(getClass().getResource("/imagenes/gestion-de-usuarios_1.png")));
+            ocho1.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service_1.png")));
+            nueve1.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogar.png")));
+            menu.setIcon(new ImageIcon(getClass().getResource("/imagenes/burger-bar.png")));
+            rSLabelIcon1.setForeground(new Color(255, 255, 255));
+            //rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/logo_blanco.png")));
 
+        } else {
+            fondoPrincipal = new Color(255, 255, 255);
+            fondoPanel = new Color(242, 247, 255);
+            fondoBoton = new Color(255, 255, 255);
+            textoBoton = Color.BLACK;
+            textoLabel = Color.BLACK;
+            contenedorc = new Color(242, 247, 255);
 
+            jPanel1.setBackground(new Color(242, 247, 255));
+            jPanel2.setBackground(new Color(255, 255, 255));
+            jPanel3.setBackground(new Color(255, 255, 255));
+            jPanel4.setBackground(new Color(255, 255, 255));
+            contenedor.setBackground(new Color(242, 247, 255));
+            jPanel5.setBackground(new Color(242, 247, 255));
+            lblUsuarioLogueado.setForeground(textoLabel);
+            rolusuario.setForeground(textoLabel);
+            lblTituloPrincipal.setForeground(textoLabel);
+            item4.setForeground(fondoBoton);
+            rSLabelIcon1.setForeground(new Color(0, 0, 0));
+            uno.setIcon(new ImageIcon(getClass().getResource("/imagenes/home.png")));
+            dos.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-blanca.png")));
+            tres.setIcon(new ImageIcon(getClass().getResource("/imagenes/proveedor-de-servicio_1.png")));
+            cuatro.setIcon(new ImageIcon(getClass().getResource("/imagenes/productivity.png")));
+            cinco.setIcon(new ImageIcon(getClass().getResource("/imagenes/etiqueta-del-precionegro.png")));
+            seis.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-registradora.png")));
+            siete1.setIcon(new ImageIcon(getClass().getResource("/imagenes/gestion-de-usuarios.png")));
+            ocho.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service.png")));
+            nueve.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogarnegro.png")));
+            Diez.setIcon(new ImageIcon(getClass().getResource("/imagenes/ajustess.png")));
+            menu.setIcon(new ImageIcon(getClass().getResource("/imagenes/menu22.png")));
+            rSLabelImage1.setIcon(new ImageIcon(getClass().getResource("/imagenes/feliz-sol (6).png")));
+            rSLabelImage3.setIcon(new ImageIcon(getClass().getResource("/imagenes/luna (7).png")));
 
-    } else {
-     fondoPrincipal = new Color(255, 255, 255);
-    fondoPanel = new Color(242, 247, 255);
-    fondoBoton = new Color(255, 255, 255);
-    textoBoton = Color.BLACK;
-    textoLabel = Color.BLACK;
-    contenedorc = new Color(242, 247, 255);
-    
-    jPanel1.setBackground (new Color(242, 247, 255));
-jPanel2.setBackground(new Color(255, 255, 255)); 
-jPanel3.setBackground(new Color(255, 255, 255)); 
-jPanel4.setBackground(new Color(255, 255, 255)); 
-contenedor.setBackground(new Color(242, 247, 255)); 
-jPanel5.setBackground(new Color(242, 247, 255)); 
-lblUsuarioLogueado.setForeground(textoLabel);
-rolusuario.setForeground(textoLabel);
-lblTituloPrincipal.setForeground(textoLabel);
-item4.setForeground(fondoBoton);
-      rSLabelIcon1.setForeground(new Color (0,0,0));
-        uno.setIcon(new ImageIcon(getClass().getResource("/imagenes/home.png")));
-        dos.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-blanca.png")));
-        tres.setIcon(new ImageIcon(getClass().getResource("/imagenes/proveedor-de-servicio_1.png")));
-        cuatro.setIcon(new ImageIcon(getClass().getResource("/imagenes/productivity.png")));
-        cinco.setIcon(new ImageIcon(getClass().getResource("/imagenes/etiqueta-del-precionegro.png")));
-        seis.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-registradora.png")));
-        siete1.setIcon(new ImageIcon(getClass().getResource("/imagenes/gestion-de-usuarios.png")));
-        ocho.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service.png")));
-        nueve.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogarnegro.png")));
-        Diez.setIcon(new ImageIcon(getClass().getResource("/imagenes/ajustess.png")));
-        menu.setIcon(new ImageIcon(getClass().getResource("/imagenes/menu22.png")));
-        rSLabelImage1.setIcon(new ImageIcon(getClass().getResource("/imagenes/feliz-sol (6).png")));
-        rSLabelImage3.setIcon(new ImageIcon(getClass().getResource("/imagenes/luna (7).png")));
+            uno1.setIcon(new ImageIcon(getClass().getResource("/imagenes/home.png")));
+            dos1.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-blanca.png")));
+            tres1.setIcon(new ImageIcon(getClass().getResource("/imagenes/proveedor-de-servicio_1.png")));
+            cuatro1.setIcon(new ImageIcon(getClass().getResource("/imagenes/productivity.png")));
+            cinco1.setIcon(new ImageIcon(getClass().getResource("/imagenes/etiqueta-del-precionegro.png")));
+            seis1.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-registradora.png")));
+            siete2.setIcon(new ImageIcon(getClass().getResource("/imagenes/gestion-de-usuarios.png")));
+            ocho1.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service.png")));
+            nueve1.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogarnegro.png")));
+            rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/logo_azul.png")));
+            rSPanelImage3.setPreferredSize(new Dimension(160, 109));
 
-        uno1.setIcon(new ImageIcon(getClass().getResource("/imagenes/home.png")));
-        dos1.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-blanca.png")));
-        tres1.setIcon(new ImageIcon(getClass().getResource("/imagenes/proveedor-de-servicio_1.png")));
-        cuatro1.setIcon(new ImageIcon(getClass().getResource("/imagenes/productivity.png")));
-        cinco1.setIcon(new ImageIcon(getClass().getResource("/imagenes/etiqueta-del-precionegro.png")));
-        seis1.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-registradora.png")));
-        siete2.setIcon(new ImageIcon(getClass().getResource("/imagenes/gestion-de-usuarios.png")));
-        ocho1.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service.png")));
-        nueve1.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogarnegro.png")));
-        rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/logo_azul.png")));
-rSPanelImage3.setPreferredSize(new Dimension(160, 109));
+        }
 
-}
+        // Botones
+        cambiarEstiloBotonRS(uno, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(dos, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(tres, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(cuatro, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(cinco, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(seis, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(siete1, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(ocho, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(nueve, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(Diez, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(menu, fondoBoton, textoBoton);
 
+        cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
 
+        cambiarEstiloBotonRS(uno1, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(dos1, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(tres1, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(cuatro1, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(cinco1, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(seis1, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(siete2, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(ocho1, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(nueve1, fondoBoton, textoBoton);
 
-    // Botones
-    cambiarEstiloBotonRS(uno, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(dos, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(tres, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(cuatro, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(cinco, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(seis, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(siete1, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(ocho, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(nueve, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(Diez, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(menu, fondoBoton, textoBoton);
+        // Labels
+    }
 
-cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
+    private void configurarPopupMenu() {
+        JPopupMenu userPopupMenu = new JPopupMenu();
+        userPopupMenu.setOpaque(false);
+        userPopupMenu.setBackground(new Color(255, 255, 255));
+        userPopupMenu.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
 
+        // Crear los ítems del menú  
+        JMenuItem settingsItem = new JMenuItem("Configuraciones");
+        JMenuItem profileItem = new JMenuItem("Perfil");
+        JMenuItem messagesItem = new JMenuItem("Mensajes");
+        JMenuItem logoutItem = new JMenuItem("Salir");
 
-    cambiarEstiloBotonRS(uno1, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(dos1, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(tres1, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(cuatro1, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(cinco1, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(seis1, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(siete2, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(ocho1, fondoBoton, textoBoton);
-    cambiarEstiloBotonRS(nueve1, fondoBoton, textoBoton);
+        // Personalizar los ítems sin hover
+        Font menuFont = new Font("Arial", Font.PLAIN, 14);
+        Dimension itemSize = new Dimension(150, 30);
 
-    // Labels
-  
-}
-  private void configurarPopupMenu() {  
-    JPopupMenu userPopupMenu = new JPopupMenu();  
-    userPopupMenu.setOpaque(false);  
-    userPopupMenu.setBackground(new Color(255, 255, 255));  
-    userPopupMenu.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));  
-  
-    // Crear los ítems del menú  
-    JMenuItem settingsItem = new JMenuItem("Configuraciones");  
-    JMenuItem profileItem = new JMenuItem("Perfil");  
-    JMenuItem messagesItem = new JMenuItem("Mensajes");  
-    JMenuItem logoutItem = new JMenuItem("Salir");  
-  
-    // Personalizar los ítems sin hover
-    Font menuFont = new Font("Arial", Font.PLAIN, 14);  
-    Dimension itemSize = new Dimension(150, 30);  
-  
-    settingsItem.setFont(menuFont);  
-    settingsItem.setForeground(new Color(100, 100, 100));  
-    settingsItem.setBackground(new Color(255, 255, 255));  
-    settingsItem.setOpaque(false);  
-    settingsItem.setPreferredSize(itemSize);  
-    settingsItem.setBorderPainted(false);  // Eliminar bordes al hacer hover
-  
-    profileItem.setFont(menuFont);  
-    profileItem.setForeground(new Color(100, 100, 100));  
-    profileItem.setBackground(new Color(255, 255, 255));  
-    profileItem.setOpaque(false);  
-    profileItem.setPreferredSize(itemSize);  
-    profileItem.setBorderPainted(false);
-  
-    messagesItem.setFont(menuFont);  
-    messagesItem.setForeground(new Color(100, 100, 100));  
-    messagesItem.setBackground(new Color(255, 255, 255));  
-    messagesItem.setOpaque(false);  
-    messagesItem.setPreferredSize(itemSize);  
-    messagesItem.setBorderPainted(false);
-  
-    logoutItem.setFont(menuFont);  
-    logoutItem.setForeground(new Color(100, 100, 100));  
-    logoutItem.setBackground(new Color(255, 255, 255));  
-    logoutItem.setOpaque(false);  
-    logoutItem.setPreferredSize(itemSize);  
-    logoutItem.setBorderPainted(false);
-  
-    // Agregar ítems al menú  
-    userPopupMenu.add(settingsItem);  
-    userPopupMenu.add(profileItem);  
-    userPopupMenu.add(messagesItem);  
-    userPopupMenu.add(logoutItem);  
-  
-    // Mostrar el JPopupMenu al hacer clic en rSLabelCircleImage1  
-    rSLabelCircleImage1.addMouseListener(new MouseAdapter() {  
-        @Override  
-        public void mouseClicked(MouseEvent e) {  
-            userPopupMenu.show(rSLabelCircleImage1, 0, rSLabelCircleImage1.getHeight());  
-        }  
-    });  
-  
-    // Acciones de los ítems del menú  
-    settingsItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Abriendo configuración..."));  
-    profileItem.addActionListener(e -> {  
-        // Cargar la vista de InformacionBasica en el contenedor  
-        perfil1 info = new perfil1(idUsuario);  
-  
-        info.setSize(1290, 730);  
-        info.setLocation(0, 0);  
-        contenedor.removeAll();  
-        contenedor.add(info);  
-        contenedor.revalidate();  
-        contenedor.repaint();  
-    });  
-    messagesItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Abriendo mensajes..."));  
-    logoutItem.addActionListener(e -> System.exit(0));  
-}
+        settingsItem.setFont(menuFont);
+        settingsItem.setForeground(new Color(100, 100, 100));
+        settingsItem.setBackground(new Color(255, 255, 255));
+        settingsItem.setOpaque(false);
+        settingsItem.setPreferredSize(itemSize);
+        settingsItem.setBorderPainted(false);  // Eliminar bordes al hacer hover
+
+        profileItem.setFont(menuFont);
+        profileItem.setForeground(new Color(100, 100, 100));
+        profileItem.setBackground(new Color(255, 255, 255));
+        profileItem.setOpaque(false);
+        profileItem.setPreferredSize(itemSize);
+        profileItem.setBorderPainted(false);
+
+        messagesItem.setFont(menuFont);
+        messagesItem.setForeground(new Color(100, 100, 100));
+        messagesItem.setBackground(new Color(255, 255, 255));
+        messagesItem.setOpaque(false);
+        messagesItem.setPreferredSize(itemSize);
+        messagesItem.setBorderPainted(false);
+
+        logoutItem.setFont(menuFont);
+        logoutItem.setForeground(new Color(100, 100, 100));
+        logoutItem.setBackground(new Color(255, 255, 255));
+        logoutItem.setOpaque(false);
+        logoutItem.setPreferredSize(itemSize);
+        logoutItem.setBorderPainted(false);
+
+        // Agregar ítems al menú  
+        userPopupMenu.add(settingsItem);
+        userPopupMenu.add(profileItem);
+        userPopupMenu.add(messagesItem);
+        userPopupMenu.add(logoutItem);
+
+        // Mostrar el JPopupMenu al hacer clic en rSLabelCircleImage1  
+        rSLabelCircleImage1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                userPopupMenu.show(rSLabelCircleImage1, 0, rSLabelCircleImage1.getHeight());
+            }
+        });
+
+        // Acciones de los ítems del menú  
+        settingsItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Abriendo configuración..."));
+        profileItem.addActionListener(e -> {
+            // Cargar la vista de InformacionBasica en el contenedor  
+            perfil1 info = new perfil1(idUsuario);
+
+            info.setSize(1290, 730);
+            info.setLocation(0, 0);
+            contenedor.removeAll();
+            contenedor.add(info);
+            contenedor.revalidate();
+            contenedor.repaint();
+        });
+        messagesItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Abriendo mensajes..."));
+        logoutItem.addActionListener(e -> System.exit(0));
+    }
 
     private void animacion() {
         int posicion = jPanel3.getX();
@@ -1214,7 +1205,7 @@ cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
             contenedor.add(cliente);
             contenedor.revalidate();
             contenedor.repaint();
- lblTituloPrincipal.setText("Gestion de clientes"); 
+            lblTituloPrincipal.setText("Gestion de clientes");
         }
         animacion();
 
@@ -1234,8 +1225,8 @@ cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
             contenedor.add(caja);
             contenedor.revalidate();
             contenedor.repaint();
-            
-             lblTituloPrincipal.setText("Caja"); 
+
+            lblTituloPrincipal.setText("Caja");
         }
         animacion();
 
@@ -1275,7 +1266,7 @@ cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
             ocultarSubmenus();
             this.cinco.setSelected(false);
         }
-         lblTituloPrincipal.setText("Ventas"); 
+        lblTituloPrincipal.setText("Ventas");
 
     }//GEN-LAST:event_cincoActionPerformed
 
@@ -1285,7 +1276,7 @@ cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
             deseleccionar();
             this.cuatro.setSelected(true);
 
-         Produccion pr = new Produccion(new javax.swing.JFrame());
+            Produccion pr = new Produccion(new javax.swing.JFrame());
             pr.setSize(1290, 730);
             pr.setLocation(0, 0);
 
@@ -1293,7 +1284,7 @@ cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
             contenedor.add(pr);
             contenedor.revalidate();
             contenedor.repaint();
- lblTituloPrincipal.setText("Producción"); 
+            lblTituloPrincipal.setText("Producción");
         }
 
         animacion();
@@ -1314,7 +1305,7 @@ cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
             contenedor.add(pr);
             contenedor.revalidate();
             contenedor.repaint();
- lblTituloPrincipal.setText("Proveedores"); 
+            lblTituloPrincipal.setText("Proveedores");
         }
         animacion();
 
@@ -1384,7 +1375,7 @@ cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
             deseleccionar();
             this.siete1.setSelected(true);
             // Crear y mostrar el panel de inventario
-             Usuarios1 usu = new Usuarios1(); 
+            Usuarios1 usu = new Usuarios1();
             usu.setSize(1290, 730);
             usu.setLocation(0, 0);
 
@@ -1392,7 +1383,7 @@ cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
             contenedor.add(usu);
             contenedor.revalidate();
             contenedor.repaint();
- lblTituloPrincipal.setText("Gestión de Usuarios"); 
+            lblTituloPrincipal.setText("Gestión de Usuarios");
         }
         animacion();
     }//GEN-LAST:event_siete1ActionPerformed
@@ -1480,16 +1471,10 @@ cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
             this.nueve.setSelected(true);
 
             // Crear y mostrar el panel de inventario
-          catalogo22 cat = new catalogo22(new javax.swing.JFrame(), true);
-           //catalogo cat = new catalogo(this, submenuVisible);
-            cat.setSize(1290, 730);
-            cat.setLocation(0, 0);
 
-            contenedor.removeAll();
-            contenedor.add(cat);
-            contenedor.revalidate();
-            contenedor.repaint();
- lblTituloPrincipal.setText("Catalogo"); 
+          catalogo22 cat = new catalogo22(new javax.swing.JFrame(), true);
+
+       
         }
         animacion();
     }//GEN-LAST:event_nueveActionPerformed
@@ -1630,9 +1615,7 @@ cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
         this.nueve.setSelected(false);
         this.siete1.setSelected(false);
     }
-    
-    
-    
+
     private void cargarUsuarioLogueado() {
         if (idUsuario == 0) {
             lblUsuarioLogueado.setText("Usuario logueado: No identificado");
@@ -1640,26 +1623,26 @@ cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
         }
         UsuarioModelo usuario = controlador.obtenerUsuario(idUsuario);
         if (usuario.getId_usuario() != 0) {
-           lblUsuarioLogueado.setText(usuario.getNombre() + " " + usuario.getApellido());
+            lblUsuarioLogueado.setText(usuario.getNombre() + " " + usuario.getApellido());
 
         } else {
             lblUsuarioLogueado.setText("Usuario logueado: No encontrado (ID: " + idUsuario + ")");
         }
     }
-        
-   private void cargarrol() {
-if (idUsuario == 0) {
+
+    private void cargarrol() {
+        if (idUsuario == 0) {
             rolusuario.setText("Rol: No identificado");
             return;
         }
- UsuarioModelo usuario = controlador.obtenerUsuario(idUsuario);
+        UsuarioModelo usuario = controlador.obtenerUsuario(idUsuario);
 
-if (usuario.getId_usuario() != 0) {
-           rolusuario.setText(usuario.getRol());
+        if (usuario.getId_usuario() != 0) {
+            rolusuario.setText(usuario.getRol());
 
         } else {
             rolusuario.setText("Usuario logueado: No encontrado (ID: " + idUsuario + ")");
         }
-}
+    }
 
 }
