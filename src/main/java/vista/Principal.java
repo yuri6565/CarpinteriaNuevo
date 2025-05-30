@@ -1473,7 +1473,15 @@ public class Principal extends javax.swing.JFrame {
             // Crear y mostrar el panel de inventario
 
           catalogo22 cat = new catalogo22(new javax.swing.JFrame(), true);
+        
+            cat.setSize(1290, 730);
+            cat.setLocation(0, 0);
 
+            contenedor.removeAll();
+            contenedor.add(cat);
+            contenedor.revalidate();
+            contenedor.repaint();
+            lblTituloPrincipal.setText("Gestión de Usuarios");
        
         }
         animacion();
