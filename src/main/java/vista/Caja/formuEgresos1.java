@@ -14,41 +14,46 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
+import vista.Inventario0.nuevoMateriales;
 import vista.Produccion.Datos_guardados;
 import vista.Produccion.espacio_alerta;
 
 import vista.TemaManager;
+import vista.proveedor.proveedornuevo;
+
 /**
  *
  * @author ADSO
  */
-public class formuIngresos extends javax.swing.JDialog {
+public class formuEgresos1 extends javax.swing.JDialog {
+
     private Ingresos ingresoPanel;
 
     /**
      * Creates new form formuIngresos
      */
-    public formuIngresos(java.awt.Frame parent, boolean modal) {
-    super(parent, modal);
-    initComponents();
-    ohtaniahea();
-  
-    setPreferredSize(new java.awt.Dimension(522, 460));
-    
-}
+    public formuEgresos1(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+        cargarProveedores();
+        ohtaniahea();
 
-private void ohtaniahea() {
-    jLabel8.setVisible(false);
-    comboProveedor.setVisible(false);
-    btnClienteN1.setVisible(false);
-    jLabel3.setVisible(false);
-    comboProductos.setVisible(false);
-    btnClienteN.setVisible(false);
-    
-    jPanel1.revalidate();
-    jPanel1.repaint();
-}
-    
+        setPreferredSize(new java.awt.Dimension(522, 460));
+
+    }
+
+    private void ohtaniahea() {
+        jLabel8.setVisible(false);
+        comboProveedor.setVisible(false);
+        btnClienteN1.setVisible(false);
+        jLabel3.setVisible(false);
+        comboProductos.setVisible(false);
+        btnClienteN.setVisible(false);
+
+        jPanel1.revalidate();
+        jPanel1.repaint();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -80,7 +85,6 @@ private void ohtaniahea() {
         rSLabelHora1 = new rojeru_san.rsdate.RSLabelHora();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(504, 500));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -99,7 +103,7 @@ private void ohtaniahea() {
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setText("Detalle de Ingreso:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 130, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 130, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel10.setText("Fecha Pago:");
@@ -112,10 +116,11 @@ private void ohtaniahea() {
         jPanel1.add(txtPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 190, 30));
 
         txtCantidadnuevo.setPlaceholder("");
-        jPanel1.add(txtCantidadnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 430, -1));
+        jPanel1.add(txtCantidadnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 420, 30));
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel2.setText("Cantidad a Ingresar:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, 30));
 
         txtDetallenuevo.setForeground(new java.awt.Color(0, 0, 0));
         txtDetallenuevo.setPlaceholder("");
@@ -124,7 +129,7 @@ private void ohtaniahea() {
                 txtDetallenuevoActionPerformed(evt);
             }
         });
-        jPanel1.add(txtDetallenuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 420, 30));
+        jPanel1.add(txtDetallenuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 420, 30));
 
         comboCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione categoria:", "Servicios Publicos", "Compra de Productos e Insumos", "Arriendo", "Nómina", "Gastos Administrativos", "Mercadeo y Publicidad", "Transporte", "Domicilios y Logistica", "mantenimineto y Reparaciones", "Muebles", "Equipos o Maquinaria", "Otros" }));
         comboCategoria.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -134,26 +139,39 @@ private void ohtaniahea() {
                 comboCategoriaActionPerformed(evt);
             }
         });
-        jPanel1.add(comboCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 420, 30));
+        jPanel1.add(comboCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 420, 30));
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel7.setText("Categoria");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, -1, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, -1, -1));
 
-        comboProveedor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione cliente:" }));
+        comboProveedor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione proveedor:" }));
         comboProveedor.setColorMaterial(new java.awt.Color(0, 0, 0));
         comboProveedor.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        jPanel1.add(comboProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 170, 30));
+        comboProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboProveedorActionPerformed(evt);
+            }
+        });
+        jPanel1.add(comboProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 170, 30));
 
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel8.setText("Proveedor");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, -1, -1));
 
-        jLabel3.setText("Proveedor");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 330, -1, -1));
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel3.setText("Producto");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 330, -1, -1));
 
-        comboProductos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione cliente:" }));
+        comboProductos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione producto:" }));
         comboProductos.setColorMaterial(new java.awt.Color(0, 0, 0));
         comboProductos.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        jPanel1.add(comboProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 350, 170, 30));
+        comboProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboProductosActionPerformed(evt);
+            }
+        });
+        jPanel1.add(comboProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 360, 190, 30));
 
         btnClienteN1.setBackground(new java.awt.Color(46, 49, 82));
         btnClienteN1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -162,7 +180,12 @@ private void ohtaniahea() {
         btnClienteN1.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
         btnClienteN1.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
         btnClienteN1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel1.add(btnClienteN1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 350, 25, 25));
+        btnClienteN1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClienteN1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnClienteN1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 330, 20, 20));
 
         btnClienteN.setBackground(new java.awt.Color(46, 49, 82));
         btnClienteN.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -171,17 +194,32 @@ private void ohtaniahea() {
         btnClienteN.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
         btnClienteN.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
         btnClienteN.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel1.add(btnClienteN, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 350, 25, 25));
+        btnClienteN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClienteNActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnClienteN, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 330, 20, 20));
 
         btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar.setText("Guardar");
         btnGuardar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 400, 140, -1));
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 430, 140, -1));
 
         btnCancelar1.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar1.setText("Volver");
         btnCancelar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 400, 140, -1));
+        btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelar1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 430, 140, -1));
 
         rSLabelHora1.setForeground(new java.awt.Color(0, 0, 0));
         jPanel1.add(rSLabelHora1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, 120, -1));
@@ -190,41 +228,40 @@ private void ohtaniahea() {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-   private boolean insertarIngreso(String fecha,Double monto,String movimiento, String descripcion, String categoria)throws SQLException{
-   String sql = "INSERT INTO caja (fecha, monto, descripcion, categoria, movimiento) VALUES (?, ?, ?, ?, ?)";
-   
-    try (Connection con = new Conexion().getConnection(); 
-         PreparedStatement ps = con.prepareStatement(sql)) {
-        ps.setString(1, fecha);
-        ps.setDouble(2, monto);
-        ps.setString(3, descripcion);
-        ps.setString(4, categoria);
-        ps.setString(5, "ingreso"); // Usamos el valor fijo "ingreso" aquí
-        return ps.executeUpdate() > 0;
-    }
-   }
+   private boolean insertarIngreso(String fecha, Double monto, String movimiento, String descripcion, String categoria) throws SQLException {
+        String sql = "INSERT INTO caja (fecha, monto, descripcion, categoria, movimiento) VALUES (?, ?, ?, ?, ?)";
 
-   private boolean validarCampos() {
-    if (txtPago.getDate() == null || 
-        txtCantidadnuevo.getText().trim().isEmpty() || 
-        txtDetallenuevo.getText().trim().isEmpty() || 
-        comboCategoria.getSelectedIndex() == 0) {
-        
-        espacio_alerta errorDialog = new espacio_alerta(
-            (Frame) this.getParent(),
-            true,
-            "Error",
-            "Todos los campos son obligatorios"
-        );
-        errorDialog.setLocationRelativeTo(null);
-        errorDialog.setVisible(true);
-        return false;
+        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, fecha);
+            ps.setDouble(2, monto);
+            ps.setString(3, descripcion);
+            ps.setString(4, categoria);
+            ps.setString(5, "ingreso"); // Usamos el valor fijo "ingreso" aquí
+            return ps.executeUpdate() > 0;
+        }
     }
-    return true;
-}
+
+    private boolean validarCampos() {
+        if (txtPago.getDate() == null
+                || txtCantidadnuevo.getText().trim().isEmpty()
+                || txtDetallenuevo.getText().trim().isEmpty()
+                || comboCategoria.getSelectedIndex() == 0) {
+
+            espacio_alerta errorDialog = new espacio_alerta(
+                    (Frame) this.getParent(),
+                    true,
+                    "Error",
+                    "Todos los campos son obligatorios"
+            );
+            errorDialog.setLocationRelativeTo(null);
+            errorDialog.setVisible(true);
+            return false;
+        }
+        return true;
+    }
 
     private void comboCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCategoriaActionPerformed
-String seleccion = comboCategoria.getSelectedItem().toString();
+        String seleccion = comboCategoria.getSelectedItem().toString();
 
         if (seleccion.equals("Compra de Productos e Insumos")) {
             jLabel8.setVisible(true);
@@ -243,12 +280,97 @@ String seleccion = comboCategoria.getSelectedItem().toString();
         }
         jPanel1.revalidate();
         jPanel1.repaint(); // Forzar actualización de la interfaz
-    
+
     }//GEN-LAST:event_comboCategoriaActionPerformed
 
     private void txtDetallenuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDetallenuevoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDetallenuevoActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+ String seleccion = comboCategoria.getSelectedItem().toString();
+        if (seleccion.equals("Compra de Productos e Insumos")) {}
+        try {
+            // Obtener valores
+
+            java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
+            String descripcion = txtDetallenuevo.getText();
+            Double monto = Double.parseDouble(txtCantidadnuevo.getText().trim());
+            String categoria = (String) comboCategoria.getSelectedItem();
+
+            // Insertar en BD
+            if (insertarEtapa(fecha, descripcion, monto, categoria)) {
+                this.dispose();
+
+            }
+
+            if (ingresoPanel != null) {
+
+            }
+        } catch (Exception e) {
+            mostrarError("Error al guardar: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnClienteN1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteN1ActionPerformed
+        proveedornuevo dialog = new proveedornuevo(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
+    }//GEN-LAST:event_btnClienteN1ActionPerformed
+
+    private void btnClienteNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteNActionPerformed
+        nuevoMateriales dialog = new nuevoMateriales(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnClienteNActionPerformed
+
+    private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
+      this.dispose();
+    }//GEN-LAST:event_btnCancelar1ActionPerformed
+
+    private void comboProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboProductosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboProductosActionPerformed
+
+    private void comboProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboProveedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboProveedorActionPerformed
+    private void cargarProveedores() {
+        try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement("SELECT nombre FROM proveedor"); ResultSet rs = ps.executeQuery()) {
+
+            // Limpiar ComboBox
+            comboProveedor.removeAllItems();
+            comboProveedor.addItem("Seleccione un Proveedor:");
+
+            // Agregar proveedores
+            while (rs.next()) {
+                comboProveedor.addItem(rs.getString("nombre"));
+            }
+        } catch (SQLException e) {
+            mostrarError("Error al cargar proveedores: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    private void cargarProductos() {
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT nombre FROM inventario WHERE tipo = 'material'");
+             ResultSet rs = ps.executeQuery()) {
+
+            // Limpiar ComboBox
+            comboProductos.removeAllItems();
+            comboProductos.addItem("Seleccione Producto:");
+
+            // Agregar productos
+            while (rs.next()) {
+                comboProductos.addItem(rs.getString("nombre"));
+            }
+        } catch (SQLException e) {
+            mostrarError("Error al cargar productos: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -267,20 +389,23 @@ String seleccion = comboCategoria.getSelectedItem().toString();
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(formuIngresos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formuEgresos1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(formuIngresos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formuEgresos1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(formuIngresos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formuEgresos1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(formuIngresos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formuEgresos1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                formuIngresos dialog = new formuIngresos(new javax.swing.JFrame(), true);
+                formuEgresos1 dialog = new formuEgresos1(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -315,8 +440,8 @@ String seleccion = comboCategoria.getSelectedItem().toString();
     private com.toedter.calendar.JDateChooser txtPago;
     // End of variables declaration//GEN-END:variables
 
-    private boolean insertarEtapa(Date fecha, double monto, String descripcion, String categoria) throws SQLException {
-        String sql = "INSERT INTO caja (fecha, descripcion, monto) VALUES (?, ?,?)";
+    private boolean insertarEtapa(java.util.Date fecha, String descripcion, Double monto, String categoria) throws SQLException {
+        String sql = "INSERT INTO caja (fecha, descripcion, monto, movimiento,categoria) VALUES (?, ?,?,'egreso',?)";
 
         try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -326,6 +451,7 @@ String seleccion = comboCategoria.getSelectedItem().toString();
 
             // Usar setDouble para valores numéricos
             ps.setDouble(3, monto);
+            ps.setString(4, categoria);
 
             int resultado = ps.executeUpdate();
             if (resultado > 0) {
@@ -347,7 +473,5 @@ String seleccion = comboCategoria.getSelectedItem().toString();
         JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
     }
-    
-    
-  
+
 }

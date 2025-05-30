@@ -85,7 +85,7 @@ public final class Egresos extends javax.swing.JPanel {
             Tabla1.setFontRowSelect(new Font("Segoe UI", Font.PLAIN, 12));
             Tabla1.setEffectHover(true);
 
-            btnNuevoProduc.setBackground(new Color(46, 49, 82));
+            btnNuevo.setBackground(new Color(46, 49, 82));
             btnGuardar.setBackground(new Color(46, 49, 82));
             btnEliminar.setBackground(new Color(46, 49, 82));
         } else {
@@ -115,7 +115,7 @@ public final class Egresos extends javax.swing.JPanel {
             Tabla1.setFontRowSelect(new Font("Segoe UI", Font.PLAIN, 12));
             Tabla1.setEffectHover(true);
 
-            btnNuevoProduc.setBackground(new Color(46, 49, 82));
+            btnNuevo.setBackground(new Color(46, 49, 82));
             btnGuardar.setBackground(new Color(46, 49, 82));
             btnEliminar.setBackground(new Color(46, 49, 82));
         }
@@ -132,7 +132,7 @@ public final class Egresos extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         txtbuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
-        btnNuevoProduc = new rojeru_san.RSButtonRiple();
+        btnNuevo = new rojeru_san.RSButtonRiple();
         btnGuardar = new rojeru_san.RSButtonRiple();
         btnEliminar = new rojeru_san.RSButtonRiple();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -159,14 +159,14 @@ public final class Egresos extends javax.swing.JPanel {
         });
         jPanel3.add(txtbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 430, 40));
 
-        btnNuevoProduc.setBackground(new java.awt.Color(46, 49, 82));
-        btnNuevoProduc.setText(" Nuevo");
-        btnNuevoProduc.addActionListener(new java.awt.event.ActionListener() {
+        btnNuevo.setBackground(new java.awt.Color(46, 49, 82));
+        btnNuevo.setText(" Nuevo");
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoProducActionPerformed(evt);
+                btnNuevoActionPerformed(evt);
             }
         });
-        jPanel3.add(btnNuevoProduc, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 120, 40));
+        jPanel3.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 120, 40));
 
         btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar.setText("Editar");
@@ -238,12 +238,12 @@ public final class Egresos extends javax.swing.JPanel {
 filtrarTabla();
     }//GEN-LAST:event_txtbuscarActionPerformed
 
-    private void btnNuevoProducActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProducActionPerformed
-        formuEgresos dialog = new formuEgresos(new javax.swing.JFrame(), true);
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        formuEgresos1 dialog = new formuEgresos1(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
         cargarTablaEgresos();
-    }//GEN-LAST:event_btnNuevoProducActionPerformed
+    }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         EditEgresos dialog = new EditEgresos(new javax.swing.JFrame(), true);
@@ -330,7 +330,7 @@ filtrarTabla();
     private RSMaterialComponent.RSTableMetro Tabla1;
     private rojeru_san.RSButtonRiple btnEliminar;
     private rojeru_san.RSButtonRiple btnGuardar;
-    private rojeru_san.RSButtonRiple btnNuevoProduc;
+    private rojeru_san.RSButtonRiple btnNuevo;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;

@@ -110,7 +110,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="rojeru_san.RSButtonRiple" name="btnNuevoProduc">
+            <Component class="rojeru_san.RSButtonRiple" name="btnNuevo">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="52" green="31" red="2e" type="rgb"/>
@@ -118,7 +118,7 @@
                 <Property name="text" type="java.lang.String" value=" Nuevo"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNuevoProducActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNuevoActionPerformed"/>
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
