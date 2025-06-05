@@ -10,6 +10,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
 
@@ -75,7 +76,6 @@ public class formuProduccion extends javax.swing.JDialog {
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("fecha final:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, -1, -1));
 
@@ -92,12 +92,10 @@ public class formuProduccion extends javax.swing.JDialog {
         jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 330, 140, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Estado:");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 230, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("fecha inicial:");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, -1, -1));
 
@@ -148,7 +146,6 @@ public class formuProduccion extends javax.swing.JDialog {
         jPanel1.add(txtcantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 190, 30));
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
         jLabel12.setText("Nombre pedido:");
         jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
 
@@ -166,7 +163,6 @@ public class formuProduccion extends javax.swing.JDialog {
         jPanel1.add(txtdimensiones, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 190, 30));
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
         jLabel13.setText("Dimensiones:");
         jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, -1, -1));
 
@@ -181,7 +177,6 @@ public class formuProduccion extends javax.swing.JDialog {
         jPanel1.add(Boxnombrepedi, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, -1));
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(0, 0, 0));
         jLabel14.setText("Cantidad:");
         jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
 
@@ -202,66 +197,105 @@ public class formuProduccion extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-// Validar campos
-    if (txtinicio.getDate() == null || txtfinal.getDate() == null
-            || Boxestado.getSelectedIndex() == 0
-            || Boxnombrepedi.getSelectedIndex() == 0) {
+        // Validar campos
+        if (txtinicio.getDate() == null || txtfinal.getDate() == null
+                || Boxestado.getSelectedIndex() == 0
+                || Boxnombrepedi.getSelectedIndex() == 0) {
 
-        new espacio_alerta((Frame) this.getParent(), true, "Error", 
-            "Todos los campos son obligatorios").setVisible(true);
-        return;
-    }
-
-    // Validar fechas
-    Date fechaInicio = new Date(txtinicio.getDate().getTime());
-    Date fechaFin = new Date(txtfinal.getDate().getTime());
-    String estado = Boxestado.getSelectedItem().toString();
-
-    if (fechaFin.before(fechaInicio)) {
-        new Error_fecha((Frame) this.getParent(), true, "Error", 
-            "La fecha final no puede ser anterior a la inicial").setVisible(true);
-        return;
-    }
-
-    // Confirmación
-    alertaa confirmDialog = new alertaa(
-            (Frame) this.getParent(),
-            true,
-            "Confirmar",
-            "¿Desea guardar los datos?"
-    );
-    confirmDialog.setVisible(true);
-
-    if (confirmDialog.opcionConfirmada) {
-        try (Connection con = new Conexion().getConnection(); 
-             PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO produccion (fecha_inicio, fecha_fin, estado, detalle_pedido_iddetalle_pedido) " +
-                "VALUES (?, ?, ?, ?)")) {
-
-            ps.setDate(1, fechaInicio);
-            ps.setDate(2, fechaFin);
-            ps.setString(3, estado);
-            ps.setInt(4, this.idDetallePedido);
-            ps.executeUpdate();
-
-            Datos_guardados exitoDialog = new Datos_guardados(
-                    (Frame) this.getParent(),
-                    true,
-                    "Éxito",
-                    "Datos guardados correctamente"
-            );
-            exitoDialog.setLocationRelativeTo(null);
-            exitoDialog.setVisible(true);
-
-            this.dispose();
-        } catch (SQLException e) {
-            new Error_guardar((Frame) this.getParent(), true, "Error",
-                    "Error al guardar: " + e.getMessage()).setVisible(true);
-            e.printStackTrace();
+            new espacio_alerta((Frame) this.getParent(), true, "Error",
+                    "Todos los campos son obligatorios").setVisible(true);
+            return;
         }
-    } else {
-        this.dispose();
-    }
+
+        // Obtener fechas
+        Date fechaInicio = new Date(txtinicio.getDate().getTime());
+        Date fechaFinProduccion = new Date(txtfinal.getDate().getTime());
+        String estado = Boxestado.getSelectedItem().toString();
+
+        // Validar que fecha final no sea anterior a la inicial
+        if (fechaFinProduccion.before(fechaInicio)) {
+            new Error_fecha((Frame) this.getParent(), true, "Error",
+                    "La fecha final no puede ser anterior a la inicial").setVisible(true);
+            return;
+        }
+
+        // Obtener la fecha límite del pedido desde la base de datos
+        try (Connection con = new Conexion().getConnection(); 
+         PreparedStatement ps = con.prepareStatement(
+            "SELECT p.fecha_fin FROM pedido p " +
+            "JOIN detalle_pedido dp ON p.id_pedido = dp.pedido_id_pedido " +
+            "WHERE dp.iddetalle_pedido = ?")) {
+        
+        ps.setInt(1, this.idDetallePedido);
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            Date fechaFinPedido = rs.getDate("fecha_fin");
+            
+            if (fechaFinProduccion.after(fechaFinPedido)) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String fechaPedidoStr = sdf.format(fechaFinPedido);
+                String fechaProduccionStr = sdf.format(fechaFinProduccion);
+                
+                // Crear el mensaje personalizado
+                String mensajeError = "La fecha final de producción (" + fechaProduccionStr + ") " +
+                                     "sobrepasa la fecha límite del pedido";
+                
+                // Mostrar la alerta personalizada
+                new AlertaFechaPedido(
+                    (Frame) this.getParent(), 
+                    true, 
+                    mensajeError,
+                    fechaPedidoStr
+                ).setVisible(true);
+                return;
+            }
+        }
+    } catch (SQLException e) {
+            new Error_guardar((Frame) this.getParent(), true, "Error",
+                    "Error al verificar fechas: " + e.getMessage()).setVisible(true);
+            return;
+        }
+
+        // Confirmación
+        alertaa confirmDialog = new alertaa(
+                (Frame) this.getParent(),
+                true,
+                "Confirmar",
+                "¿Desea guardar los datos?"
+        );
+        confirmDialog.setVisible(true);
+
+        if (confirmDialog.opcionConfirmada) {
+            try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(
+                    "INSERT INTO produccion (fecha_inicio, fecha_fin, estado, detalle_pedido_iddetalle_pedido) "
+                    + "VALUES (?, ?, ?, ?)")) {
+
+                ps.setDate(1, fechaInicio);
+                ps.setDate(2, fechaFinProduccion);
+                ps.setString(3, estado);
+                ps.setInt(4, this.idDetallePedido);
+                ps.executeUpdate();
+
+                Datos_guardados exitoDialog = new Datos_guardados(
+                        (Frame) this.getParent(),
+                        true,
+                        "Éxito",
+                        "Datos guardados correctamente"
+                );
+                exitoDialog.setLocationRelativeTo(null);
+                exitoDialog.setVisible(true);
+
+                this.dispose();
+            } catch (SQLException e) {
+                new Error_guardar((Frame) this.getParent(), true, "Error",
+                        "Error al guardar: " + e.getMessage()).setVisible(true);
+                e.printStackTrace();
+            }
+        } else {
+            this.dispose();
+
+        }
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -292,7 +326,10 @@ public class formuProduccion extends javax.swing.JDialog {
 
     private void cargarDetallesPedido(int idDetalle) {
         try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(
-                "SELECT cantidad, dimension FROM detalle_pedido WHERE iddetalle_pedido = ?")) {
+                "SELECT dp.cantidad, dp.dimension, p.fecha_fin "
+                + "FROM detalle_pedido dp "
+                + "JOIN pedido p ON dp.pedido_id_pedido = p.id_pedido "
+                + "WHERE dp.iddetalle_pedido = ?")) {
 
             ps.setInt(1, idDetalle);
             ResultSet rs = ps.executeQuery();
@@ -300,12 +337,14 @@ public class formuProduccion extends javax.swing.JDialog {
             if (rs.next()) {
                 txtcantidad.setText(String.valueOf(rs.getInt("cantidad")));
                 txtdimensiones.setText(rs.getString("dimension"));
+                txtfinal.setDate(rs.getDate("fecha_fin"));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al cargar detalles: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+
     }//GEN-LAST:event_BoxnombrepediActionPerformed
 
     /**
@@ -367,9 +406,6 @@ public class formuProduccion extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private RSMaterialComponent.RSTextFieldMaterial txtcantidad;
     private RSMaterialComponent.RSTextFieldMaterial txtdimensiones;
-    private RSMaterialComponent.RSTextFieldMaterial txtetapa;
-    private RSMaterialComponent.RSTextFieldMaterial txtetapa1;
-    private RSMaterialComponent.RSTextFieldMaterial txtetapa2;
     private com.toedter.calendar.JDateChooser txtfinal;
     private com.toedter.calendar.JDateChooser txtinicio;
     // End of variables declaration//GEN-END:variables
