@@ -5,9 +5,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import vista.TemaManager;
@@ -17,22 +19,22 @@ public final class Egresos extends javax.swing.JPanel {
     public Egresos() {
         initComponents();
 
-        Tabla1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
-                new String[]{"Id Registro", "Fecha Pago", "Detalle", "Categoria", "Cantidad ingresada"}
-        ));
+                new String[]{"Codigo", "Fecha Pago", "Monto", "Descripcion", "Categoria", "Detalle", "Editar", "proveedor", "productos", "cantidad"}
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
+        Tabla1.removeColumn(Tabla1.getColumnModel().getColumn(7)); // Oculta proveedor
+        Tabla1.removeColumn(Tabla1.getColumnModel().getColumn(7)); // Oculta productos
+        Tabla1.removeColumn(Tabla1.getColumnModel().getColumn(7)); // Oculta productos
 
-        Tabla1.setCellSelectionEnabled(false);
-        Tabla1.setRowSelectionAllowed(true);
         Tabla1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-        Color colorSeleccion = new Color(109, 160, 221);
-        Color colorTexto = Color.white;
-
-        Tabla1.setSelectionBackground(colorSeleccion);
-        Tabla1.setSelectionForeground(colorTexto);
-
+        Tabla1.setRowSelectionAllowed(true);
+        Tabla1.setFocusable(false);
         cargarTablaEgresos();
         aplicarTema(); // Apply initial theme
         // Register for theme changes
@@ -43,18 +45,38 @@ public final class Egresos extends javax.swing.JPanel {
 
     public void cargarTablaEgresos() {
         DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-        model.setRowCount(0);
+        model.setRowCount(0); // Limpiar tabla
 
         Ctrl_CajaEgresos ctrl = new Ctrl_CajaEgresos();
-        for (modelo.Caja caja : ctrl.obtenerEgresos()) {
+        List<modelo.Caja> egresos = ctrl.obtenerEgresos();
+
+        if (egresos.isEmpty()) {
+            System.out.println("No se encontraron egresos en la base de datos");
+            return;
+        }
+
+        for (modelo.Caja caja : egresos) {
             model.addRow(new Object[]{
                 caja.getId_codigo(),
                 caja.getFecha(),
+                caja.getMonto(),
                 caja.getDescripcion(),
                 caja.getCategoria(),
-                caja.getMonto()
+                "Ver",
+                "editar",
+                caja.getProveedor() != null ? caja.getProveedor() : "",
+                caja.getProductos() != null ? String.join(", ", caja.getProductos()) : "",
+                caja.getCantidad()
+
             });
         }
+
+        // Ajustar ancho de columnas
+        Tabla1.getColumnModel().getColumn(0).setPreferredWidth(50);  // ID
+        Tabla1.getColumnModel().getColumn(1).setPreferredWidth(100); // Fecha
+        Tabla1.getColumnModel().getColumn(2).setPreferredWidth(80);  // Monto
+        Tabla1.getColumnModel().getColumn(3).setPreferredWidth(200); // Descripción
+        Tabla1.getColumnModel().getColumn(4).setPreferredWidth(150); // Categoría
     }
 
     public void aplicarTema() {
@@ -120,6 +142,7 @@ public final class Egresos extends javax.swing.JPanel {
             btnEliminar.setBackground(new Color(46, 49, 82));
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -235,7 +258,7 @@ public final class Egresos extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarActionPerformed
-filtrarTabla();
+        filtrarTabla();
     }//GEN-LAST:event_txtbuscarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
@@ -257,19 +280,19 @@ filtrarTabla();
 
         if (selectedRows.length == 0) {
             JOptionPane.showMessageDialog(
-                this,
-                "Por favor seleccione al menos una fila para eliminar",
-                "Advertencia",
-                JOptionPane.WARNING_MESSAGE
+                    this,
+                    "Por favor seleccione al menos una fila para eliminar",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE
             );
             return;
         }
 
         int confirm = JOptionPane.showConfirmDialog(
-            this,
-            "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION
+                this,
+                "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION
         );
 
         if (confirm != JOptionPane.YES_OPTION) {
@@ -289,18 +312,18 @@ filtrarTabla();
         }
 
         JOptionPane.showMessageDialog(
-            this,
-            "Se eliminaron " + eliminados + " registros correctamente.",
-            "Éxito",
-            JOptionPane.INFORMATION_MESSAGE
+                this,
+                "Se eliminaron " + eliminados + " registros correctamente.",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE
         );
     }//GEN-LAST:event_btnEliminarActionPerformed
- private void filtrarTabla() {
+    private void filtrarTabla() {
         String textoBusqueda = txtbuscar.getText().trim();
         DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(modelo);
         Tabla1.setRowSorter(tr);
-            List<RowFilter<Object, Object>> filters = new ArrayList<>();
+        List<RowFilter<Object, Object>> filters = new ArrayList<>();
 
         if (textoBusqueda.isEmpty()) {
             tr.setRowFilter(null);
@@ -313,16 +336,16 @@ filtrarTabla();
             filters.add(RowFilter.regexFilter(textoBusqueda, 1));
             filters.add(RowFilter.regexFilter(textoBusqueda, 4));
 
-        }  // Si contiene letras (aunque sea parcial)
+        } // Si contiene letras (aunque sea parcial)
         else {
-        // Buscar en Detalle (columna 2) y Categoría (columna 3)
-        String regex = "(?i)" + textoBusqueda; // (?i) = ignore case
-        filters.add(RowFilter.regexFilter(regex, 2)); // Detalle
-        filters.add(RowFilter.regexFilter(regex, 3)); // Categoría
-    }
+            // Buscar en Detalle (columna 2) y Categoría (columna 3)
+            String regex = "(?i)" + textoBusqueda; // (?i) = ignore case
+            filters.add(RowFilter.regexFilter(regex, 2)); // Detalle
+            filters.add(RowFilter.regexFilter(regex, 3)); // Categoría
+        }
 
-    // Aplicar todos los filtros combinados con OR
-    tr.setRowFilter(RowFilter.orFilter(filters));
+        // Aplicar todos los filtros combinados con OR
+        tr.setRowFilter(RowFilter.orFilter(filters));
 
     }
 
@@ -336,6 +359,114 @@ filtrarTabla();
     private javax.swing.JScrollPane jScrollPane2;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtbuscar;
     // End of variables declaration//GEN-END:variables
+private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {
+        try {
+            int column = Tabla1.columnAtPoint(evt.getPoint());
+            int viewRow = Tabla1.rowAtPoint(evt.getPoint());
 
-    
+            if (viewRow < 0 || column < 0) {
+                return;
+            }
+
+            int modelRow = Tabla1.convertRowIndexToModel(viewRow);
+            DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+            int idEgreso = (int) model.getValueAt(modelRow, 0);
+
+            if (column == 5) { // Columna "Ver"
+                mostrarDetalleEgreso(model, modelRow, idEgreso);
+            } else if (column == 6) { // Columna "Editar"
+                abrirEditarEgreso(idEgreso); // Nuevo método para abrir el formulario de edición
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al procesar clic: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+    private void abrirEditarEgreso(int idEgreso) {
+        try {
+            Ctrl_CajaEgresos ctrl = new Ctrl_CajaEgresos();
+            modelo.Caja caja = ctrl.obtenerEgresoPorId(idEgreso); // Obtener datos del egreso
+
+            if (caja != null) {
+                // Crear y mostrar el formulario de edición
+                EditarEgresos2 dialog = new EditarEgresos2(
+                        (JFrame) SwingUtilities.getWindowAncestor(this),
+                        true,
+                        caja.getId_codigo(),
+                        caja.getFecha(),
+                        caja.getMonto(),
+                        caja.getDescripcion(),
+                        caja.getCategoria(),
+                        caja.getProveedor(),
+                        caja.getProductos(),
+                        caja.getCantidad()
+                );
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
+
+                // Recargar la tabla después de editar
+                cargarTablaEgresos();
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontraron datos para este egreso.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al abrir editor: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+    private void mostrarDetalleEgreso(DefaultTableModel model, int modelRow, int idEgreso) {
+        try {
+            Ctrl_CajaEgresos ctrl = new Ctrl_CajaEgresos();
+            modelo.Caja caja = ctrl.obtenerEgresoPorId(idEgreso);
+
+            if (caja != null) {
+                // Preparar los datos con valores por defecto si son nulos
+                String fecha = caja.getFecha() != null ? caja.getFecha() : "No especificado";
+                String descripcion = caja.getDescripcion() != null ? caja.getDescripcion() : "No especificado";
+                String categoria = caja.getCategoria() != null ? caja.getCategoria() : "No especificado";
+                String monto = caja.getMonto() == 0.0 ? "No especificado" : String.valueOf(caja.getMonto());
+                String proveedor = caja.getProveedor() != null ? caja.getProveedor() : "No especificado";
+                String cantidad = caja.getCantidad() != 0 ? String.valueOf(caja.getCantidad()) : "No especificado";
+                // Manejar productos (puede ser null o lista vacía)
+                String productosStr;
+                if (caja.getProductos() == null || caja.getProductos().isEmpty()) {
+                    productosStr = "No especificado";
+                } else {
+                    productosStr = String.join(", ", caja.getProductos());
+                }
+
+                DetalleEgreso dialog = new DetalleEgreso(
+                        (JFrame) SwingUtilities.getWindowAncestor(this),
+                        true,
+                        caja.getId_codigo(),
+                        fecha,
+                        descripcion,
+                        categoria,
+                        monto,
+                        proveedor,
+                        productosStr,
+                        cantidad
+                );
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontraron detalles para este egreso",
+                        "Información", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al mostrar detalle: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
 }
