@@ -29,8 +29,7 @@ public class DetallleEtapa extends javax.swing.JDialog {
         fecha_ini.setText(fechaInicio);
         fecha_fin.setText(fechaFin);
         estado.setText(estado1);
-        materiales.setText(materiales1);
-        herramientas.setText(herramientas1);
+        
         asignado.setText(asignado1);
 
         // Centrar el diálogo
@@ -51,17 +50,12 @@ public class DetallleEtapa extends javax.swing.JDialog {
         fecha_ini = new javax.swing.JLabel();
         fecha_fin = new javax.swing.JLabel();
         cantidad = new javax.swing.JLabel();
-        materiales = new javax.swing.JLabel();
         estado = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
         nombre = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        herramientas = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
         asignado = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
@@ -72,6 +66,7 @@ public class DetallleEtapa extends javax.swing.JDialog {
         setUndecorated(true);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153), 2));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("Nombre:");
@@ -85,33 +80,14 @@ public class DetallleEtapa extends javax.swing.JDialog {
         cantidad.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cantidad.setText("cantidad");
 
-        materiales.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        materiales.setText("materiales");
-
         estado.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         estado.setText("estado");
-
-        jPanel3.setBackground(new java.awt.Color(0, 0, 0));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2, Short.MAX_VALUE)
-        );
 
         nombre.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         nombre.setText("Nombre");
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel11.setText("Fecha de final:");
-
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel12.setText("Material:");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel5.setText("Cantidad:");
@@ -121,12 +97,6 @@ public class DetallleEtapa extends javax.swing.JDialog {
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel15.setText("Fecha de inicio: ");
-
-        herramientas.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        herramientas.setText("herramientas");
-
-        jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel16.setText("Herramientas:");
 
         asignado.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         asignado.setText("asignado");
@@ -176,44 +146,31 @@ public class DetallleEtapa extends javax.swing.JDialog {
             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addComponent(jLabel1)
-                .addGap(16, 16, 16)
-                .addComponent(nombre))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel15)
-                .addGap(15, 15, 15)
-                .addComponent(fecha_ini)
-                .addGap(43, 43, 43)
-                .addComponent(jLabel5)
-                .addGap(15, 15, 15)
-                .addComponent(cantidad)
-                .addGap(32, 32, 32)
-                .addComponent(jLabel17)
-                .addGap(10, 10, 10)
-                .addComponent(asignado))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel11)
-                .addGap(28, 28, 28)
-                .addComponent(fecha_fin)
-                .addGap(41, 41, 41)
-                .addComponent(jLabel13)
-                .addGap(12, 12, 12)
-                .addComponent(estado))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel16)
-                .addGap(11, 11, 11)
-                .addComponent(herramientas))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel12)
-                .addGap(13, 13, 13)
-                .addComponent(materiales))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(16, 16, 16)
+                        .addComponent(nombre))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel15)
+                        .addGap(15, 15, 15)
+                        .addComponent(fecha_ini)
+                        .addGap(43, 43, 43)
+                        .addComponent(jLabel5)
+                        .addGap(15, 15, 15)
+                        .addComponent(cantidad)
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabel17)
+                        .addGap(10, 10, 10)
+                        .addComponent(asignado))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addGap(28, 28, 28)
+                        .addComponent(fecha_fin)
+                        .addGap(41, 41, 41)
+                        .addComponent(jLabel13)
+                        .addGap(12, 12, 12)
+                        .addComponent(estado))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -237,17 +194,7 @@ public class DetallleEtapa extends javax.swing.JDialog {
                     .addComponent(fecha_fin)
                     .addComponent(jLabel13)
                     .addComponent(estado))
-                .addGap(15, 15, 15)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel16)
-                    .addComponent(herramientas))
-                .addGap(15, 15, 15)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel12)
-                    .addComponent(materiales))
-                .addGap(35, 35, 35)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(191, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -284,20 +231,15 @@ public class DetallleEtapa extends javax.swing.JDialog {
     private javax.swing.JLabel estado;
     private javax.swing.JLabel fecha_fin;
     private javax.swing.JLabel fecha_ini;
-    private javax.swing.JLabel herramientas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JLabel materiales;
     private javax.swing.JLabel nombre;
     // End of variables declaration//GEN-END:variables
 }
