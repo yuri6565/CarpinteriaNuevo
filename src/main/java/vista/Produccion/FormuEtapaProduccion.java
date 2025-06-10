@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -107,6 +108,17 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         return model;
     }
 // Clases internas para el CheckedComboBox
+
+    private List<String> obtenerSeleccionados(CheckedComboBox<CheckableItem> combo) {
+        List<String> seleccionados = new ArrayList<>();
+        for (int i = 0; i < combo.getModel().getSize(); i++) {
+            CheckableItem item = combo.getModel().getElementAt(i);
+            if (item.isSelected()) {
+                seleccionados.add(item.toString());
+            }
+        }
+        return seleccionados;
+    }
 
     class CheckableItem {
 
@@ -442,67 +454,198 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
                 return;
             }
 
-            // 2. Obtener datos
-            String nombreEtapa = txtetapa.getText().trim();
-            String estado = Boxestado.getSelectedItem().toString();
-            Date fechaInicio = new Date(txtFechainicio.getDate().getTime());
-            Date fechaFin = txtfechafin.getDate() != null ? new Date(txtfechafin.getDate().getTime()) : null;
-            int cantidad = Integer.parseInt(txtcantidad.getText().trim());
-            String trabajador = BoxAsignado.getSelectedItem().toString();
+            // 2. Obtener materiales/herramientas seleccionados del CheckedComboBox
+            List<String> materiales = obtenerSeleccionados(cmbMateriales);
+            List<String> herramientas = obtenerSeleccionados(cmbHerramientas);
 
-            // 3. Guardar en la base de datos
-            try (Connection con = Conexion.getConnection()) {
-                con.setAutoCommit(false);
+            // 3. Abrir el formulario dinámico
+            FormularioMH dialog = new FormularioMH(
+                    (Frame) this.getParent(),
+                    true,
+                    materiales,
+                    herramientas
+            );
+            dialog.setLocationRelativeTo(this);
+            dialog.setVisible(true);
 
-                // Insertar etapa
-                String sqlEtapa = "INSERT INTO etapa_produccion (nombre_etapa, estado, fecha_inicio, fecha_fin, produccion_id_produccion, cantidad) VALUES (?, ?, ?, ?, ?, ?)";
-                int idEtapa;
+            // 4. Procesar los datos solo si se confirmó
+            if (dialog.isConfirmado()) {
+                // Obtener datos
+                String nombreEtapa = txtetapa.getText().trim();
+                String estado = Boxestado.getSelectedItem().toString();
+                java.sql.Date fechaInicio = new java.sql.Date(txtFechainicio.getDate().getTime());
+                java.sql.Date fechaFin = txtfechafin.getDate() != null ? new java.sql.Date(txtfechafin.getDate().getTime()) : null;
+                int cantidadEtapa = Integer.parseInt(txtcantidad.getText().trim());
+                String trabajador = BoxAsignado.getSelectedItem().toString();
+                Map<String, String> cantidadesMateriales = dialog.getCantidadesMateriales();
+                Map<String, String> observacionesHerramientas = dialog.getObservacionesHerramientas();
 
-                try (PreparedStatement ps = con.prepareStatement(sqlEtapa, Statement.RETURN_GENERATED_KEYS)) {
-                    ps.setString(1, nombreEtapa);
-                    ps.setString(2, estado);
-                    ps.setDate(3, new java.sql.Date(fechaInicio.getTime()));
-                    ps.setDate(4, fechaFin != null ? new java.sql.Date(fechaFin.getTime()) : null);
-                    ps.setInt(5, idProduccion);
-                    ps.setInt(6, cantidad);
-                    ps.executeUpdate();
+                // 5. Guardar en la base de datos
+                try (Connection con = Conexion.getConnection()) {
+                    con.setAutoCommit(false);
+                    try {
+                        // Insertar etapa
+                        String sqlEtapa = "INSERT INTO etapa_produccion (nombre_etapa, estado, fecha_inicio, fecha_fin, produccion_id_produccion, cantidad) VALUES (?, ?, ?, ?, ?, ?)";
+                        int idEtapa;
+                        try (PreparedStatement ps = con.prepareStatement(sqlEtapa, Statement.RETURN_GENERATED_KEYS)) {
+                            ps.setString(1, nombreEtapa);
+                            ps.setString(2, estado);
+                            ps.setDate(3, fechaInicio);
+                            ps.setDate(4, fechaFin);
+                            ps.setInt(5, idProduccion);
+                            ps.setInt(6, cantidadEtapa);
+                            ps.executeUpdate();
 
-                    // Obtener ID de la etapa insertada
-                    ResultSet rs = ps.getGeneratedKeys();
-                    if (rs.next()) {
-                        idEtapa = rs.getInt(1);
-                    } else {
-                        throw new SQLException("No se generó ID para la etapa");
+                            ResultSet rs = ps.getGeneratedKeys();
+                            if (rs.next()) {
+                                idEtapa = rs.getInt(1);
+                            } else {
+                                throw new SQLException("No se generó ID para la etapa");
+                            }
+                        }
+
+                        // Guardar materiales con cantidades
+                        String sqlUtilizado = "INSERT INTO utilizado (etapa_produccion_idetapa_produccion, inventario_id_inventario, cantidad, observacion) VALUES (?, ?, ?, ?)";
+                        for (Map.Entry<String, String> entry : cantidadesMateriales.entrySet()) {
+                            if (!entry.getValue().isEmpty() && !entry.getValue().equals("0")) {
+                                int idInventario = obtenerIdInventario(con, entry.getKey(), "material");
+                                try (PreparedStatement ps = con.prepareStatement(sqlUtilizado)) {
+                                    ps.setInt(1, idEtapa);
+                                    ps.setInt(2, idInventario);
+                                    ps.setString(3, entry.getValue());
+                                    ps.setNull(4, java.sql.Types.VARCHAR);
+                                    ps.executeUpdate();
+                                }
+                            }
+                        }
+
+                        // Guardar herramientas con observaciones
+                        for (Map.Entry<String, String> entry : observacionesHerramientas.entrySet()) {
+                            int idInventario = obtenerIdInventario(con, entry.getKey(), "herramienta");
+                            try (PreparedStatement ps = con.prepareStatement(sqlUtilizado)) {
+                                ps.setInt(1, idEtapa);
+                                ps.setInt(2, idInventario);
+                                ps.setString(3, "1"); // Cantidad fija de 1 para herramientas
+                                ps.setString(4, entry.getValue());
+                                ps.executeUpdate();
+                            }
+                        }
+
+                        // Guardar usuario asignado
+                        guardarAsignado(con, idEtapa, trabajador);
+
+                        con.commit();
+                        Datos_guardados exitoDialog = new Datos_guardados(
+                                (Frame) this.getParent(),
+                                true,
+                                "Éxito",
+                                "Datos guardados correctamente"
+                        );
+                        exitoDialog.setLocationRelativeTo(null);
+                        exitoDialog.setVisible(true);
+                        this.dispose();
+                    } catch (SQLException e) {
+                        con.rollback();
+                        throw e; // Relanzar para que el catch externo lo maneje
                     }
+                } catch (SQLException e) {
+                    new Error_guardar((Frame) this.getParent(), true, "Error",
+                            "Error al guardar: " + e.getMessage()).setVisible(true);
+                    e.printStackTrace();
                 }
-
-                // Guardar materiales/herramientas en 'utilizado'
-                guardarUtilizados(con, idEtapa, cmbMateriales, "material");
-                guardarUtilizados(con, idEtapa, cmbHerramientas, "herramienta");
-
-                // Guardar usuario en 'asignado'
-                guardarAsignado(con, idEtapa, trabajador);
-
-                con.commit();
-                Datos_guardados exitoDialog = new Datos_guardados(
-                        (Frame) this.getParent(),
-                        true,
-                        "Éxito",
-                        "Datos guardados correctamente"
-                );
-                exitoDialog.setLocationRelativeTo(null);
-                exitoDialog.setVisible(true);
-                this.dispose();
             }
-        } catch (SQLException | NumberFormatException e) {
+        } catch (NumberFormatException e) {
             new Error_guardar((Frame) this.getParent(), true, "Error",
-                    "Error al guardar: " + e.getMessage()).setVisible(true);
-            e.printStackTrace();
+                    "La cantidad debe ser un número válido").setVisible(true);
         }
 
     }
 
-// Método auxiliar para obtener ID de inventario
+    private void guardarDatosCompletos(Map<String, String> cantidadesMateriales, Map<String, String> observacionesHerramientas) {
+    try (Connection con = Conexion.getConnection()) {
+        con.setAutoCommit(false);
+        try {
+            // Obtener datos del formulario
+            String nombreEtapa = txtetapa.getText().trim();
+            String estado = Boxestado.getSelectedItem().toString();
+            java.sql.Date fechaInicio = new java.sql.Date(txtFechainicio.getDate().getTime());
+            java.sql.Date fechaFin = txtfechafin.getDate() != null ? new java.sql.Date(txtfechafin.getDate().getTime()) : null;
+            int cantidadEtapa = Integer.parseInt(txtcantidad.getText().trim());
+            String trabajador = BoxAsignado.getSelectedItem().toString();
+
+            // Insertar etapa
+            String sqlEtapa = "INSERT INTO etapa_produccion (nombre_etapa, estado, fecha_inicio, fecha_fin, produccion_id_produccion, cantidad) VALUES (?, ?, ?, ?, ?, ?)";
+            int idEtapa;
+            try (PreparedStatement ps = con.prepareStatement(sqlEtapa, Statement.RETURN_GENERATED_KEYS)) {
+                ps.setString(1, nombreEtapa);
+                ps.setString(2, estado);
+                ps.setDate(3, fechaInicio);
+                ps.setDate(4, fechaFin);
+                ps.setInt(5, idProduccion);
+                ps.setInt(6, cantidadEtapa);
+                ps.executeUpdate();
+
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    idEtapa = rs.getInt(1);
+                } else {
+                    throw new SQLException("No se generó ID para la etapa");
+                }
+            }
+
+            // Guardar materiales con cantidades
+            String sqlUtilizado = "INSERT INTO utilizado (etapa_produccion_idetapa_produccion, inventario_id_inventario, cantidad, observacion) VALUES (?, ?, ?, ?)";
+            for (Map.Entry<String, String> entry : cantidadesMateriales.entrySet()) {
+                if (!entry.getValue().isEmpty() && !entry.getValue().equals("0")) {
+                    int idInventario = obtenerIdInventario(con, entry.getKey(), "material");
+                    try (PreparedStatement ps = con.prepareStatement(sqlUtilizado)) {
+                        ps.setInt(1, idEtapa);
+                        ps.setInt(2, idInventario);
+                        ps.setString(3, entry.getValue());
+                        ps.setNull(4, java.sql.Types.VARCHAR);
+                        ps.executeUpdate();
+                    }
+                }
+            }
+
+            // Guardar herramientas con observaciones
+            for (Map.Entry<String, String> entry : observacionesHerramientas.entrySet()) {
+                int idInventario = obtenerIdInventario(con, entry.getKey(), "herramienta");
+                try (PreparedStatement ps = con.prepareStatement(sqlUtilizado)) {
+                    ps.setInt(1, idEtapa);
+                    ps.setInt(2, idInventario);
+                    ps.setString(3, "1");
+                    ps.setString(4, entry.getValue());
+                    ps.executeUpdate();
+                }
+            }
+
+            // Guardar usuario asignado
+            guardarAsignado(con, idEtapa, trabajador);
+
+            con.commit();
+            Datos_guardados exitoDialog = new Datos_guardados(
+                    (Frame) this.getParent(),
+                    true,
+                    "Éxito",
+                    "Datos guardados correctamente"
+            );
+            exitoDialog.setLocationRelativeTo(null);
+            exitoDialog.setVisible(true);
+            this.dispose();
+        } catch (SQLException | NumberFormatException e) {
+            con.rollback();
+            new Error_guardar((Frame) this.getParent(), true, "Error",
+                    "Error al guardar: " + e.getMessage()).setVisible(true);
+            e.printStackTrace();
+        }
+    } catch (SQLException e) {
+        new Error_guardar((Frame) this.getParent(), true, "Error",
+                "No se pudo establecer conexión: " + e.getMessage()).setVisible(true);
+        e.printStackTrace();
+    }
+}
+
     private int obtenerIdInventario(Connection con, String nombre, String tipo) throws SQLException {
         String sql = "SELECT id_inventario FROM inventario WHERE nombre = ? AND tipo = ?";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -614,7 +757,6 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -623,27 +765,20 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
                 }
             }
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(FormuEtapaProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormuEtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            private Produccion produccionPanel;
-            private int idProduccion;
-
-            public void run() {
-                FormuEtapaProduccion dialog = new FormuEtapaProduccion(new javax.swing.JFrame(), true, this.idProduccion);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            FormuEtapaProduccion dialog = new FormuEtapaProduccion(new javax.swing.JFrame(), true, 1); // ID de prueba
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
+                }
+            });
+            dialog.setVisible(true);
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSComboBoxMaterial BoxAsignado;
     private RSMaterialComponent.RSComboBoxMaterial Boxestado;
