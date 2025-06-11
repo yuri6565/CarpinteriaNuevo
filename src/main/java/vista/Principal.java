@@ -5,7 +5,6 @@
 package vista;
 
 import controlador.Ctrl_Perfil;
-import vista.proveedor.proveedores;
 import vista.Caja.Caja;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,6 +22,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.Timer;
 import modelo.UsuarioModelo;
 import rojeru_san.RSButton;
 
@@ -31,8 +31,6 @@ import vista.Cotizacion.cotizacion;
 import vista.Inventario0.herramientas;
 import vista.Inventario0.materiales;
 import vista.Produccion.Produccion;
-import vista.catalogo.Productos;
-import vista.catalogo.catalogo;
 import vista.catalogo.catalogo22;
 
 /**
@@ -42,21 +40,22 @@ import vista.catalogo.catalogo22;
 public class Principal extends javax.swing.JFrame {
 
     private JPanel submenuInventario;
-    private boolean submenuVisible = false; // Para controlar si el submenú está visible
+    private boolean submenuVisible = false;
 // Botón "Materiales" del submenú
-    private rojeru_san.RSButton item2; // Botón "Herramientas" del submenú
-    private int idUsuarioValido;
-    private String nombreUsuario;
-    private int idUsuario;
-    private Ctrl_Perfil controlador;
+    // Botón "Herramientas" del submenú
+    // Para controlar si el submenú está visible
+    private final int idUsuario;
+    private final Ctrl_Perfil controlador;
 
-    //bfhfhb
     // Nuevas variables para el submenú de Ventas
-    private JPanel submenuVentas;
+    private final JPanel submenuVentas;
     private boolean submenuVentasVisible = false; // Para controlar si el submenú de Ventas está visible
     private rojeru_san.RSButton item1;
     private rojeru_san.RSButton item4;
     private rojeru_san.RSButton item3;
+    private boolean menuExpanded = true; // Inicialmente expandido
+    private final int MENU_COLLAPSED_WIDTH = 60;
+    private final int MENU_EXPANDED_WIDTH = 250;
 
     public Principal(int idUsuario) {
         this.idUsuario = idUsuario;
@@ -67,17 +66,32 @@ public class Principal extends javax.swing.JFrame {
 
         boolean oscuro = TemaManager.getInstance().isOscuro();
         initComponents();
-            setIconImage(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE));
+
+        // Oculta el panel lateral derecho (jPanel5)
+        jPanel5.setVisible(false);
+
+// Configura el panel de contenido
+        contenedor.setBounds(menuExpanded ? MENU_EXPANDED_WIDTH : MENU_COLLAPSED_WIDTH,
+                0,
+                getWidth() - (menuExpanded ? MENU_EXPANDED_WIDTH : MENU_COLLAPSED_WIDTH),
+                getHeight());
+
+        setIconImage(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE));
 
         aplicarTema();
 
         cargarUsuarioLogueado();
         cargarrol();
 
+        jPanel1.setLayout(new BorderLayout());
         jPanel4.setVisible(true);
         jPanel5.setVisible(false);
         jPanel3.setVisible(false);
+// Cambia el layout del panel del menú a null (después de initComponents())
+        jPanel3.setLayout(null);
 
+        // Establece tamaño inicial
+        jPanel3.setPreferredSize(new Dimension(MENU_EXPANDED_WIDTH, jPanel3.getHeight()));
 //submenu inventario------------------
         // Inicializar el submenú
         submenuInventario = new JPanel();
@@ -255,7 +269,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void cambiarEstiloBotonRS(RSButton boton, Color fondo, Color texto) {
-        boton.setBackground(fondo);                // Fondo (si es compatible en tu versión)
+        boton.setBackground(fondo);                // Fondo 
         boton.setColorText(texto);                 // Texto
         boton.setColorHover(new Color(72, 92, 188)); // Hover fijo azul
         boton.setColorTextHover(texto);
@@ -390,6 +404,66 @@ public class Principal extends javax.swing.JFrame {
         // Labels
     }
 
+    private void toggleMenu() {
+        int targetWidth = menuExpanded ? MENU_COLLAPSED_WIDTH : MENU_EXPANDED_WIDTH;
+
+        Timer timer = new Timer(10, new ActionListener() {
+            int currentWidth = jPanel3.getWidth();
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (menuExpanded) {
+                    currentWidth -= 10;
+                    if (currentWidth <= MENU_COLLAPSED_WIDTH) {
+                        currentWidth = MENU_COLLAPSED_WIDTH;
+                        ((Timer) e.getSource()).stop();
+                        updateMenuIcons(false);
+                    }
+                } else {
+                    currentWidth += 10;
+                    if (currentWidth >= MENU_EXPANDED_WIDTH) {
+                        currentWidth = MENU_EXPANDED_WIDTH;
+                        ((Timer) e.getSource()).stop();
+                        updateMenuIcons(true);
+                    }
+                }
+
+                jPanel3.setPreferredSize(new Dimension(currentWidth, jPanel3.getHeight()));
+                jPanel3.revalidate();
+                contenedor.revalidate();
+            }
+        });
+
+        timer.start();
+        menuExpanded = !menuExpanded;
+    }
+
+    private void updateMenuIcons(boolean expanded) {
+        // Actualiza el texto de los botones según el estado
+        uno.setText(expanded ? "Escritorio" : "");
+        dos.setText(expanded ? "Inventario ▼" : "");
+        tres.setText(expanded ? "Proveedores" : "");
+        cuatro.setText(expanded ? "Producción" : "");
+        cinco.setText(expanded ? "Ventas ▼" : "");
+        seis.setText(expanded ? "Caja" : "");
+        siete1.setText(expanded ? "Usuarios" : "");
+        ocho.setText(expanded ? "Clientes" : "");
+        nueve.setText(expanded ? "Catálogo" : "");
+        Diez.setText(expanded ? "Config" : "");
+
+        // Oculta submenús si se contrae el menú
+        if (!expanded) {
+            if (submenuVisible) {
+                jPanel3.remove(submenuInventario);
+                submenuVisible = false;
+            }
+            if (submenuVentasVisible) {
+                jPanel3.remove(submenuVentas);
+                submenuVentasVisible = false;
+            }
+        }
+    }
+
     private void configurarPopupMenu() {
         JPopupMenu userPopupMenu = new JPopupMenu();
         userPopupMenu.setOpaque(false);
@@ -504,46 +578,16 @@ public class Principal extends javax.swing.JFrame {
     private void ocultarSubmenus() {
         // Cerrar submenú de Inventario si está visible
         if (submenuVisible) {
-            jPanel3.removeAll();
-            jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-            // Restaurar posiciones originales de los botones con un alto de 50 píxeles
-            jPanel3.add(rSPanelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 41, 158, 153));
-            jPanel3.add(uno, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 250, 50));
-            jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 250, 50));
-            jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 250, 50));
-            jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 250, 50));
-            jPanel3.add(cinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 250, 50));
-            jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 250, 50));
-            jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 250, 50));
-            jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 550, 250, 50));
-            jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 250, 50));
-
-            dos.setText(" Inventario           ▼");
+            jPanel3.remove(submenuInventario);
             submenuVisible = false;
-            animacion();
+            dos.setText("Inventario ▼");
         }
 
         // Cerrar submenú de Ventas si está visible
         if (submenuVentasVisible) {
-            jPanel3.removeAll();
-            jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-            // Restaurar posiciones originales de los botones con un alto de 50 píxeles
-            jPanel3.add(rSPanelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 41, 158, 153));
-            jPanel3.add(uno, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 250, 50));
-            jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 250, 50));
-            jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 250, 50));
-            jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 250, 50));
-            jPanel3.add(cinco, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 250, 50));
-            jPanel3.add(seis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 250, 50));
-            jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 250, 50));
-            jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 550, 250, 50));
-            jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 250, 50));
-
-            cinco.setText(" Ventas                ▼");
+            jPanel3.remove(submenuVentas);
             submenuVentasVisible = false;
-
+            cinco.setText("Ventas ▼");
         }
 
         jPanel3.revalidate();
@@ -1236,7 +1280,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_seisActionPerformed
 
     private void cincoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cincoActionPerformed
-
+        /*
         if (!this.cinco.isSelected()) {
             deseleccionar();
             this.cinco.setSelected(true);
@@ -1270,7 +1314,36 @@ public class Principal extends javax.swing.JFrame {
             this.cinco.setSelected(false);
         }
         lblTituloPrincipal.setText("Ventas");
+         */
+        if (!menuExpanded) {
+            toggleMenu(); // Primero expande el menú si está contraído
+            return;
+        }
 
+        if (!submenuVentasVisible) {
+            // Ocultar otros submenús primero
+            if (submenuVisible) {
+                jPanel3.remove(submenuInventario);
+                submenuVisible = false;
+                dos.setText("Inventario ▼");
+            }
+
+            // Mostrar submenú de Ventas
+            submenuVentas.setBounds(0, cinco.getY() + cinco.getHeight(),
+                    MENU_EXPANDED_WIDTH, submenuVentas.getPreferredSize().height);
+            jPanel3.add(submenuVentas);
+            jPanel3.setComponentZOrder(submenuVentas, 0);
+            submenuVentasVisible = true;
+            cinco.setText("Ventas ▲");
+        } else {
+            jPanel3.remove(submenuVentas);
+            submenuVentasVisible = false;
+            cinco.setText("Ventas ▼");
+        }
+
+        jPanel3.revalidate();
+        jPanel3.repaint();
+        lblTituloPrincipal.setText("Ventas");
     }//GEN-LAST:event_cincoActionPerformed
 
     private void cuatroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuatroActionPerformed
@@ -1334,7 +1407,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_unoActionPerformed
 
     private void dosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dosActionPerformed
-        if (!this.dos.isSelected()) {
+        /*if (!this.dos.isSelected()) {
             deseleccionar();
             this.dos.setSelected(true);
 
@@ -1368,7 +1441,32 @@ public class Principal extends javax.swing.JFrame {
             ocultarSubmenus(); // Ocultar submenú si ya está visible
             this.dos.setSelected(false);
         }
+         */
 
+        if (!menuExpanded) {
+            toggleMenu(); // Primero expande el menú si está contraído
+            return;
+        }
+
+        if (!submenuVisible) {
+            // Mostrar submenú de inventario
+            jPanel3.remove(submenuInventario); // Cerrar ventas si está abierto
+            submenuVentasVisible = false;
+
+            submenuInventario.setBounds(0, dos.getY() + dos.getHeight(),
+                    MENU_EXPANDED_WIDTH, submenuInventario.getPreferredSize().height);
+            jPanel3.add(submenuInventario);
+            jPanel3.setComponentZOrder(submenuInventario, 0);
+            submenuVisible = true;
+            dos.setText("Inventario ▲");
+        } else {
+            jPanel3.remove(submenuInventario);
+            submenuVisible = false;
+            dos.setText("Inventario ▼");
+        }
+
+        jPanel3.revalidate();
+        jPanel3.repaint();
     }//GEN-LAST:event_dosActionPerformed
 
 
@@ -1460,7 +1558,40 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel5MouseExited
 
     private void menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuActionPerformed
-        animacion();
+        // Animación suave con Timer
+        int targetWidth = menuExpanded ? MENU_COLLAPSED_WIDTH : MENU_EXPANDED_WIDTH;
+
+        Timer timer = new Timer(2, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int currentWidth = jPanel3.getWidth();
+
+                if (menuExpanded) {
+                    currentWidth -= 10;
+                    if (currentWidth <= MENU_COLLAPSED_WIDTH) {
+                        currentWidth = MENU_COLLAPSED_WIDTH;
+                        ((Timer) e.getSource()).stop();
+                        updateMenuIcons(false);
+                    }
+                } else {
+                    currentWidth += 10;
+                    if (currentWidth >= MENU_EXPANDED_WIDTH) {
+                        currentWidth = MENU_EXPANDED_WIDTH;
+                        ((Timer) e.getSource()).stop();
+                        updateMenuIcons(true);
+                    }
+                }
+
+                jPanel3.setPreferredSize(new Dimension(currentWidth, jPanel3.getHeight()));
+                jPanel3.revalidate();
+                //contenedor.setLocation(currentWidth, contenedor.getY());
+                contenedor.revalidate();
+            }
+        });
+
+        timer.start();
+        menuExpanded = !menuExpanded;
+
 
     }//GEN-LAST:event_menuActionPerformed
 
@@ -1474,9 +1605,8 @@ public class Principal extends javax.swing.JFrame {
             this.nueve.setSelected(true);
 
             // Crear y mostrar el panel de inventario
+            catalogo22 cat = new catalogo22(new javax.swing.JFrame(), true);
 
-          catalogo22 cat = new catalogo22(new javax.swing.JFrame(), true);
-        
             cat.setSize(1290, 730);
             cat.setLocation(0, 0);
 
@@ -1485,7 +1615,7 @@ public class Principal extends javax.swing.JFrame {
             contenedor.revalidate();
             contenedor.repaint();
             lblTituloPrincipal.setText("Gestión de Usuarios");
-       
+
         }
         animacion();
     }//GEN-LAST:event_nueveActionPerformed
