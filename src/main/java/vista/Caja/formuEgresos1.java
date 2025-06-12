@@ -27,7 +27,6 @@ import vista.proveedor.proveedornuevo;
  */
 public class formuEgresos1 extends javax.swing.JDialog {
 
-    private Ingresos ingresoPanel;
 
     /**
      * Creates new form formuIngresos
@@ -288,29 +287,7 @@ public class formuEgresos1 extends javax.swing.JDialog {
     }//GEN-LAST:event_txtDetallenuevoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
- String seleccion = comboCategoria.getSelectedItem().toString();
-        if (seleccion.equals("Compra de Productos e Insumos")) {}
-        try {
-            // Obtener valores
 
-            java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
-            String descripcion = txtDetallenuevo.getText();
-            Double monto = Double.parseDouble(txtCantidadnuevo.getText().trim());
-            String categoria = (String) comboCategoria.getSelectedItem();
-
-            // Insertar en BD
-            if (insertarEtapa(fecha, descripcion, monto, categoria)) {
-                this.dispose();
-
-            }
-
-            if (ingresoPanel != null) {
-
-            }
-        } catch (Exception e) {
-            mostrarError("Error al guardar: " + e.getMessage());
-            e.printStackTrace();
-        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnClienteN1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteN1ActionPerformed

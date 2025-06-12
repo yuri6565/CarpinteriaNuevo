@@ -19,7 +19,7 @@ public class Caja extends javax.swing.JPanel {
         initComponents();
         
         
-            Ingresos es = new Ingresos();
+            ingresos es = new ingresos();
             es.setSize(1260, 730);
             es.setLocation(0,0);
             
@@ -94,7 +94,7 @@ public class Caja extends javax.swing.JPanel {
             this.btnIngresos.setSelected(true);
             this.btnEgresos2.setSelected(false);
 
-            Ingresos es = new Ingresos();
+            ingresos es = new ingresos();
             es.setSize(1260, 730);
             es.setLocation(0,0);
             

@@ -21,7 +21,6 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
-import vista.Caja.Ingresos;
 import vista.Inventario0.nuevoMateriales;
 
 import vista.proveedor.proveedornuevo;
@@ -32,7 +31,6 @@ import vista.proveedor.proveedornuevo;
  */
 public class EditarEgresos2 extends javax.swing.JDialog {
 
-    private Ingresos ingresoPanel;
     private int id_codigo;
 
     /**
