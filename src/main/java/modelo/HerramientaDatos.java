@@ -11,31 +11,48 @@ import javax.swing.ImageIcon;
  * @author Personal
  */
 public class HerramientaDatos {
-    private String codigo;
+    private int idInventario;
     private String nombre;
-    private String tipo;
-    private String marca;
+    private String descripcion;
+    private int cantidad;
+    private double precioUnitario;
     private String estado;
-    private String detalles;
-    private ImageIcon imagen;
+    private int idCategoria;
+    private int idMarca;
+    private int idUnidadMedida;
+    private byte[] imagen; // imagen en formato binario
 
-    public HerramientaDatos(String codigo, String nombre, String tipo, String marca,
-                    String estado, String detalles, ImageIcon imagen) {
-        this.codigo = codigo;
+    public HerramientaDatos(String nombre, String descripcion, int cantidad, double precioUnitario, String estado, int idCategoria, int idMarca, int idUnidadMedida, byte[] imagen) {
         this.nombre = nombre;
-        this.tipo = tipo;
-        this.marca = marca;
+        this.descripcion = descripcion;
+        this.cantidad = cantidad;
+        this.precioUnitario = precioUnitario;
         this.estado = estado;
-        this.detalles = detalles;
+        this.idCategoria = idCategoria;
+        this.idMarca = idMarca;
+        this.idUnidadMedida = idUnidadMedida;
         this.imagen = imagen;
     }
 
-    public String getCodigo() {
-        return codigo;
+    public HerramientaDatos(int idInventario, String nombre, String descripcion, int cantidad, double precioUnitario, String estado, int idCategoria, int idMarca, int idUnidadMedida, byte[] imagen) {
+        this.idInventario = idInventario;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.cantidad = cantidad;
+        this.precioUnitario = precioUnitario;
+        this.estado = estado;
+        this.idCategoria = idCategoria;
+        this.idMarca = idMarca;
+        this.idUnidadMedida = idUnidadMedida;
+        this.imagen = imagen;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public int getIdInventario() {
+        return idInventario;
+    }
+
+    public void setIdInventario(int idInventario) {
+        this.idInventario = idInventario;
     }
 
     public String getNombre() {
@@ -46,20 +63,28 @@ public class HerramientaDatos {
         this.nombre = nombre;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public String getMarca() {
-        return marca;
+    public int getCantidad() {
+        return cantidad;
     }
 
-    public void setMarca(String marca) {
-        this.marca = marca;
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public double getPrecioUnitario() {
+        return precioUnitario;
+    }
+
+    public void setPrecioUnitario(double precioUnitario) {
+        this.precioUnitario = precioUnitario;
     }
 
     public String getEstado() {
@@ -70,21 +95,36 @@ public class HerramientaDatos {
         this.estado = estado;
     }
 
-    public String getDetalles() {
-        return detalles;
+    public int getIdCategoria() {
+        return idCategoria;
     }
 
-    public void setDetalles(String detalles) {
-        this.detalles = detalles;
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
 
-    public ImageIcon getImagen() {
+    public int getIdMarca() {
+        return idMarca;
+    }
+
+    public void setIdMarca(int idMarca) {
+        this.idMarca = idMarca;
+    }
+
+    public int getIdUnidadMedida() {
+        return idUnidadMedida;
+    }
+
+    public void setIdUnidadMedida(int idUnidadMedida) {
+        this.idUnidadMedida = idUnidadMedida;
+    }
+
+    public byte[] getImagen() {
         return imagen;
     }
 
-    public void setImagen(ImageIcon imagen) {
+    public void setImagen(byte[] imagen) {
         this.imagen = imagen;
     }
-    
     
 }

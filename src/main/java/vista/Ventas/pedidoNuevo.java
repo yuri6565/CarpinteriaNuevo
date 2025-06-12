@@ -6,9 +6,12 @@ package vista.Ventas;
 
 import controlador.Ctrl_Cliente;
 import controlador.Ctrl_Pedido;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -17,13 +20,14 @@ import javax.swing.table.TableColumn;
 import modelo.Cliente;
 import modelo.Pedido;
 import modelo.PedidoDetalle;
+import vista.crear_cliente;
 
 /**
  *
  * @author ZenBook
  */
 public class pedidoNuevo extends javax.swing.JDialog {
-
+    
     private List<Cliente> clientes;
     private List<PedidoDetalle> detalles = new ArrayList<>(); // Lista para almacenar los detalles
     public boolean clienteGuardado = false;
@@ -39,7 +43,7 @@ public class pedidoNuevo extends javax.swing.JDialog {
         this.parent = pedidoParent;
         this.controlador = new Ctrl_Pedido();
         initComponents();
-        
+
         tablaDetalles.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         TableColumn descripcionColumn = tablaDetalles.getColumnModel().getColumn(0);
@@ -74,17 +78,22 @@ public class pedidoNuevo extends javax.swing.JDialog {
                     Object precioUnitarioObj = model.getValueAt(row, 3);
 
                     int cantidad = (cantidadObj != null) ? Integer.parseInt(cantidadObj.toString().trim().isEmpty() ? "0" : cantidadObj.toString()) : 0;
-                    double precioUnitario = (precioUnitarioObj != null) ? Double.parseDouble(precioUnitarioObj.toString().trim().isEmpty() ? "0.0" : precioUnitarioObj.toString()) : 0.0;
+                    double precioUnitario = (precioUnitarioObj != null) ? Double.parseDouble(precioUnitarioObj.toString().trim().replace("$", "").replace(".", "")) : 0.0;
 
                     double subtotal = cantidad * precioUnitario;
-                    model.setValueAt(subtotal, row, 4);
+                    // Formatear subtotal con signo de pesos y sin decimales si son .00
+                    DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+                    symbols.setGroupingSeparator('.'); // Usar punto como separador de miles
+                    DecimalFormat df = new DecimalFormat("$#,##0.##", symbols);
+                    model.setValueAt(df.format(subtotal), row, 4);
                 } catch (NumberFormatException ex) {
-                    model.setValueAt(0.0, row, 4); // Si hay un error, establecer el subtotal a 0
+                    model.setValueAt("$0", row, 4); // Si hay un error, establecer el subtotal a 0 con signo de pesos
                 }
 
                 actualizarTotal();
             }
         });
+
     }
 
     private void actualizarTotal() {
@@ -93,14 +102,18 @@ public class pedidoNuevo extends javax.swing.JDialog {
 
         for (int i = 0; i < model.getRowCount(); i++) {
             try {
-                double subtotal = Double.parseDouble(model.getValueAt(i, 4).toString());
+                double subtotal = Double.parseDouble(model.getValueAt(i, 4).toString().replace("$", "").replace(".", ""));
                 total += subtotal;
             } catch (NumberFormatException e) {
                 // Ignorar filas con valores inválidos
             }
         }
 
-        lblTotal.setText(String.format("%.2f", total)); // Mostrar el total en el label
+        // Formatear total con signo de pesos y sin decimales si son .00
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+        symbols.setGroupingSeparator('.'); // Usar punto como separador de miles
+        DecimalFormat df = new DecimalFormat("$#,##0.##", symbols);
+        lblTotal.setText(df.format(total)); // Mostrar el total en el label
     }
 
     private void cargarClientes() {
@@ -359,6 +372,7 @@ public class pedidoNuevo extends javax.swing.JDialog {
     }//GEN-LAST:event_cmbEstadoActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        clienteGuardado = false;
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
@@ -403,8 +417,8 @@ public class pedidoNuevo extends javax.swing.JDialog {
             String descripcion = (model.getValueAt(i, 0) != null) ? model.getValueAt(i, 0).toString().trim() : "";
             String cantidadStr = (model.getValueAt(i, 1) != null) ? model.getValueAt(i, 1).toString().trim() : "0";
             String dimensiones = (model.getValueAt(i, 2) != null) ? model.getValueAt(i, 2).toString().trim() : "";
-            String precioUnitarioStr = (model.getValueAt(i, 3) != null) ? model.getValueAt(i, 3).toString().trim() : "0.0";
-            String subtotalStr = (model.getValueAt(i, 4) != null) ? model.getValueAt(i, 4).toString().trim() : "0.0";
+            String precioUnitarioStr = (model.getValueAt(i, 3) != null) ? model.getValueAt(i, 3).toString().trim() : "0";
+            String subtotalStr = (model.getValueAt(i, 4) != null) ? model.getValueAt(i, 4).toString().trim() : "0";
 
             if (descripcion.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "La descripción en la fila " + (i + 1) + " no puede estar vacía.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -484,12 +498,12 @@ public class pedidoNuevo extends javax.swing.JDialog {
 
         // Crear el objeto Pedido
         Pedido nuevoPedido = new Pedido(
-            0, // id_pedido (se genera automáticamente)
-            nombre,
-            estado,
-            fechaInicio,
-            fechaFin,
-            clienteCodigo
+                0, // id_pedido (se genera automáticamente)
+                nombre,
+                estado,
+                fechaInicio,
+                fechaFin,
+                clienteCodigo
         );
 
         // Insertar pedido y detalles
@@ -514,9 +528,9 @@ public class pedidoNuevo extends javax.swing.JDialog {
         if (row < tablaDetalles.getRowCount() && row >= 0 && column == 5) { // Si se hace clic en la columna "Eliminar"
             DefaultTableModel model = (DefaultTableModel) tablaDetalles.getModel();
             int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de que desea eliminar esta fila?",
-                "Confirmar eliminación",
-                JOptionPane.YES_NO_OPTION);
+                    "¿Está seguro de que desea eliminar esta fila?",
+                    "Confirmar eliminación",
+                    JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) {
                 model.removeRow(row);
@@ -526,7 +540,19 @@ public class pedidoNuevo extends javax.swing.JDialog {
     }//GEN-LAST:event_tablaDetallesMouseClicked
 
     private void btnClienteNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteNActionPerformed
+        // Crear el diálogo de cliente
+        crear_cliente dialog = new crear_cliente(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
 
+        // Configurar el listener para recargar clientes cuando se guarde uno nuevo
+        dialog.setClienteGuardadoListener(() -> {
+            cargarClientes(); // Recargar la lista de clientes
+        });
+
+        dialog.setVisible(true);
+
+        // Volver a mostrar el diálogo de pedidoNuevo (si se ocultó)
+        this.setVisible(true);
     }//GEN-LAST:event_btnClienteNActionPerformed
 
     private void btnAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirActionPerformed
