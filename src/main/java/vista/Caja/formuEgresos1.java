@@ -4,21 +4,21 @@
  */
 package vista.Caja;
 
-import java.awt.Frame;
+import java.awt.Component;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
 import vista.Inventario0.nuevoMateriales;
-import vista.Produccion.Datos_guardados;
-import vista.Produccion.espacio_alerta;
 
-import vista.TemaManager;
 import vista.proveedor.proveedornuevo;
 
 /**
@@ -34,11 +34,13 @@ public class formuEgresos1 extends javax.swing.JDialog {
      */
     public formuEgresos1(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+
         initComponents();
         cargarProveedores();
+        cargarPrductos();
         ohtaniahea();
-
         setPreferredSize(new java.awt.Dimension(522, 460));
+
 
     }
 
@@ -49,9 +51,31 @@ public class formuEgresos1 extends javax.swing.JDialog {
         jLabel3.setVisible(false);
         comboProductos.setVisible(false);
         btnClienteN.setVisible(false);
+        txtcantidad.setVisible(false);
+        jLabel11CC.setVisible(false);
 
         jPanel1.revalidate();
         jPanel1.repaint();
+    }
+
+    class ProductoItem {
+
+        private final int id;
+        private final String nombre;
+
+        public ProductoItem(int id, String nombre) {
+            this.id = id;
+            this.nombre = nombre;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
     }
 
     /**
@@ -77,15 +101,16 @@ public class formuEgresos1 extends javax.swing.JDialog {
         comboProveedor = new RSMaterialComponent.RSComboBoxMaterial();
         jLabel8 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        comboProductos = new RSMaterialComponent.RSComboBoxMaterial();
         btnClienteN1 = new RSMaterialComponent.RSButtonShape();
         btnClienteN = new RSMaterialComponent.RSButtonShape();
         btnGuardar = new rojeru_san.RSButtonRiple();
         btnCancelar1 = new rojeru_san.RSButtonRiple();
         rSLabelHora1 = new rojeru_san.rsdate.RSLabelHora();
+        jLabel11CC = new javax.swing.JLabel();
+        txtcantidad = new RSMaterialComponent.RSTextFieldMaterial();
+        comboProductos = new RSMaterialComponent.RSComboBoxMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(504, 526));
@@ -103,24 +128,24 @@ public class formuEgresos1 extends javax.swing.JDialog {
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setText("Detalle de Ingreso:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 130, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 130, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel10.setText("Fecha Pago:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, -1, -1));
 
         txtPago.setBackground(new java.awt.Color(255, 255, 255));
         txtPago.setForeground(new java.awt.Color(255, 255, 255));
         txtPago.setDateFormatString("y-MM-d");
         txtPago.setMaxSelectableDate(new java.util.Date(253370786472000L));
-        jPanel1.add(txtPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 190, 30));
+        jPanel1.add(txtPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 190, 30));
 
         txtCantidadnuevo.setPlaceholder("");
-        jPanel1.add(txtCantidadnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 420, 30));
+        jPanel1.add(txtCantidadnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 420, 30));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel2.setText("Cantidad a Ingresar:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, 30));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, -1, 30));
 
         txtDetallenuevo.setForeground(new java.awt.Color(0, 0, 0));
         txtDetallenuevo.setPlaceholder("");
@@ -129,7 +154,7 @@ public class formuEgresos1 extends javax.swing.JDialog {
                 txtDetallenuevoActionPerformed(evt);
             }
         });
-        jPanel1.add(txtDetallenuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 420, 30));
+        jPanel1.add(txtDetallenuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 420, 30));
 
         comboCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione categoria:", "Servicios Publicos", "Compra de Productos e Insumos", "Arriendo", "Nómina", "Gastos Administrativos", "Mercadeo y Publicidad", "Transporte", "Domicilios y Logistica", "mantenimineto y Reparaciones", "Muebles", "Equipos o Maquinaria", "Otros" }));
         comboCategoria.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -139,11 +164,11 @@ public class formuEgresos1 extends javax.swing.JDialog {
                 comboCategoriaActionPerformed(evt);
             }
         });
-        jPanel1.add(comboCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 420, 30));
+        jPanel1.add(comboCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, 420, 30));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel7.setText("Categoria");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, -1, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, -1, -1));
 
         comboProveedor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione proveedor:" }));
         comboProveedor.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -153,25 +178,15 @@ public class formuEgresos1 extends javax.swing.JDialog {
                 comboProveedorActionPerformed(evt);
             }
         });
-        jPanel1.add(comboProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 170, 30));
+        jPanel1.add(comboProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 170, 30));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel8.setText("Proveedor");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel3.setText("Producto");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 330, -1, -1));
-
-        comboProductos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione producto:" }));
-        comboProductos.setColorMaterial(new java.awt.Color(0, 0, 0));
-        comboProductos.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        comboProductos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboProductosActionPerformed(evt);
-            }
-        });
-        jPanel1.add(comboProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 360, 190, 30));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 330, -1, -1));
 
         btnClienteN1.setBackground(new java.awt.Color(46, 49, 82));
         btnClienteN1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -185,7 +200,7 @@ public class formuEgresos1 extends javax.swing.JDialog {
                 btnClienteN1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnClienteN1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 330, 20, 20));
+        jPanel1.add(btnClienteN1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 330, 20, 20));
 
         btnClienteN.setBackground(new java.awt.Color(46, 49, 82));
         btnClienteN.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -199,7 +214,7 @@ public class formuEgresos1 extends javax.swing.JDialog {
                 btnClienteNActionPerformed(evt);
             }
         });
-        jPanel1.add(btnClienteN, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 330, 20, 20));
+        jPanel1.add(btnClienteN, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, 20, 20));
 
         btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar.setText("Guardar");
@@ -209,7 +224,7 @@ public class formuEgresos1 extends javax.swing.JDialog {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 430, 140, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 460, 140, -1));
 
         btnCancelar1.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar1.setText("Volver");
@@ -219,46 +234,48 @@ public class formuEgresos1 extends javax.swing.JDialog {
                 btnCancelar1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 430, 140, -1));
+        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 460, 140, -1));
 
         rSLabelHora1.setForeground(new java.awt.Color(0, 0, 0));
         jPanel1.add(rSLabelHora1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, 120, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 510));
+        jLabel11CC.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel11CC.setText("Cantidad:");
+        jPanel1.add(jLabel11CC, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, -1, -1));
+
+        txtcantidad.setForeground(new java.awt.Color(0, 0, 0));
+        txtcantidad.setPlaceholder("");
+        txtcantidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtcantidadActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtcantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, 160, 30));
+
+        comboProductos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione productos:" }));
+        comboProductos.setColorMaterial(new java.awt.Color(0, 0, 0));
+        comboProductos.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        comboProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboProductosActionPerformed(evt);
+            }
+        });
+        jPanel1.add(comboProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 360, 170, 30));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-   private boolean insertarIngreso(String fecha, Double monto, String movimiento, String descripcion, String categoria) throws SQLException {
-        String sql = "INSERT INTO caja (fecha, monto, descripcion, categoria, movimiento) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, fecha);
-            ps.setDouble(2, monto);
-            ps.setString(3, descripcion);
-            ps.setString(4, categoria);
-            ps.setString(5, "ingreso"); // Usamos el valor fijo "ingreso" aquí
-            return ps.executeUpdate() > 0;
-        }
-    }
-
-    private boolean validarCampos() {
-        if (txtPago.getDate() == null
-                || txtCantidadnuevo.getText().trim().isEmpty()
-                || txtDetallenuevo.getText().trim().isEmpty()
-                || comboCategoria.getSelectedIndex() == 0) {
-
-            espacio_alerta errorDialog = new espacio_alerta(
-                    (Frame) this.getParent(),
-                    true,
-                    "Error",
-                    "Todos los campos son obligatorios"
-            );
-            errorDialog.setLocationRelativeTo(null);
-            errorDialog.setVisible(true);
-            return false;
-        }
-        return true;
-    }
 
     private void comboCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCategoriaActionPerformed
         String seleccion = comboCategoria.getSelectedItem().toString();
@@ -270,6 +287,9 @@ public class formuEgresos1 extends javax.swing.JDialog {
             jLabel3.setVisible(true);
             comboProductos.setVisible(true);
             btnClienteN.setVisible(true);
+            txtcantidad.setVisible(true);
+            jLabel11CC.setVisible(true);
+
         } else {
             jLabel8.setVisible(false);
             comboProveedor.setVisible(false);
@@ -277,6 +297,8 @@ public class formuEgresos1 extends javax.swing.JDialog {
             jLabel3.setVisible(false);
             comboProductos.setVisible(false);
             btnClienteN.setVisible(false);
+            txtcantidad.setVisible(false);
+            jLabel11CC.setVisible(false);
         }
         jPanel1.revalidate();
         jPanel1.repaint(); // Forzar actualización de la interfaz
@@ -288,29 +310,111 @@ public class formuEgresos1 extends javax.swing.JDialog {
     }//GEN-LAST:event_txtDetallenuevoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
- String seleccion = comboCategoria.getSelectedItem().toString();
-        if (seleccion.equals("Compra de Productos e Insumos")) {}
         try {
-            // Obtener valores
+            // 1. Validación de campos obligatorios básicos
+            if (txtPago.getDate() == null) {
+                mostrarError("La fecha de pago es requerida");
+                return;
+            }
 
+            if (txtCantidadnuevo.getText().trim().isEmpty()) {
+                mostrarError("El monto es requerido");
+                return;
+            }
+
+            if (txtDetallenuevo.getText().trim().isEmpty()) {
+                mostrarError("La descripción es requerida");
+                return;
+            }
+
+            if (comboCategoria.getSelectedIndex() == 0) {
+                mostrarError("Debe seleccionar una categoría");
+                return;
+            }
+
+            // 2. Obtener valores comunes del formulario
             java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
+            double monto = Double.parseDouble(txtCantidadnuevo.getText().trim());
             String descripcion = txtDetallenuevo.getText();
-            Double monto = Double.parseDouble(txtCantidadnuevo.getText().trim());
-            String categoria = (String) comboCategoria.getSelectedItem();
+            String categoria = comboCategoria.getSelectedItem().toString();
 
-            // Insertar en BD
-            if (insertarEtapa(fecha, descripcion, monto, categoria)) {
+            // 3. Manejo especial para compra de productos
+            List<Integer> productosSeleccionadosIds = new ArrayList<>();
+            String proveedorSeleccionado = null;
+            double cantidad = 0;
+
+            if (categoria.equals("Compra de Productos e Insumos")) {
+                // Validar proveedor
+                if (comboProveedor.getSelectedIndex() <= 0) {
+                    mostrarError("Debe seleccionar un proveedor");
+                    return;
+                }
+                proveedorSeleccionado = comboProveedor.getSelectedItem().toString();
+
+                // Validar producto seleccionado
+                Object selectedItem = comboProductos.getSelectedItem();
+                if (!(selectedItem instanceof ProductoItem)) {
+                    mostrarError("Error al obtener el producto seleccionado");
+                    return;
+                }
+
+                ProductoItem productoSeleccionado = (ProductoItem) selectedItem;
+                if (productoSeleccionado.getId() == 0) {
+                    mostrarError("Debe seleccionar un producto");
+                    return;
+                }
+                productosSeleccionadosIds.add(productoSeleccionado.getId());
+
+                // Validar cantidad
+                if (txtcantidad.getText().trim().isEmpty()) {
+                    mostrarError("La cantidad es requerida");
+                    return;
+                }
+                cantidad = Double.parseDouble(txtcantidad.getText().trim());
+
+                // Validar que la cantidad sea positiva
+                if (cantidad <= 0) {
+                    mostrarError("La cantidad debe ser mayor que cero");
+                    return;
+                }
+            }
+
+            // 4. Validar que el monto sea positivo
+            if (monto <= 0) {
+                mostrarError("El monto debe ser mayor que cero");
+                return;
+            }
+
+            // 5. Insertar en la base de datos
+            if (insertarEgreso(fecha, descripcion, monto, categoria,
+                    proveedorSeleccionado, productosSeleccionadosIds, cantidad)) {
+                mostrarMensaje("Egreso registrado correctamente");
                 this.dispose();
 
+                // Opcional: Limpiar el formulario después de guardar
+                limpiarFormulario();
+            } else {
+                mostrarError("No se pudo registrar el egreso");
             }
 
-            if (ingresoPanel != null) {
-
-            }
+        } catch (NumberFormatException e) {
+            mostrarError("El monto y la cantidad deben ser números válidos");
         } catch (Exception e) {
-            mostrarError("Error al guardar: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+// Método auxiliar para limpiar el formulario (opcional)
+    private void limpiarFormulario() {
+        txtPago.setDate(null);
+        txtCantidadnuevo.setText("");
+        txtDetallenuevo.setText("");
+        txtcantidad.setText("");
+        comboCategoria.setSelectedIndex(0);
+        comboProveedor.setSelectedIndex(0);
+        comboProductos.setSelectedIndex(0);
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnClienteN1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteN1ActionPerformed
@@ -327,16 +431,20 @@ public class formuEgresos1 extends javax.swing.JDialog {
     }//GEN-LAST:event_btnClienteNActionPerformed
 
     private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
-      this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnCancelar1ActionPerformed
-
-    private void comboProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboProductosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboProductosActionPerformed
 
     private void comboProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboProveedorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboProveedorActionPerformed
+
+    private void txtcantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcantidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtcantidadActionPerformed
+
+    private void comboProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboProductosActionPerformed
+
+    }//GEN-LAST:event_comboProductosActionPerformed
     private void cargarProveedores() {
         try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement("SELECT nombre FROM proveedor"); ResultSet rs = ps.executeQuery()) {
 
@@ -353,19 +461,20 @@ public class formuEgresos1 extends javax.swing.JDialog {
             e.printStackTrace();
         }
     }
-    private void cargarProductos() {
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT nombre FROM inventario WHERE tipo = 'material'");
-             ResultSet rs = ps.executeQuery()) {
 
-            // Limpiar ComboBox
-            comboProductos.removeAllItems();
-            comboProductos.addItem("Seleccione Producto:");
+    private void cargarPrductos() {
+        try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement("SELECT id_inventario, nombre FROM inventario WHERE tipo = 'material'"); ResultSet rs = ps.executeQuery()) {
 
-            // Agregar productos
+            DefaultComboBoxModel<ProductoItem> model = new DefaultComboBoxModel<>();
+            model.addElement(new ProductoItem(0, "Seleccione un producto:"));
+
             while (rs.next()) {
-                comboProductos.addItem(rs.getString("nombre"));
+                int id = rs.getInt("id_inventario");
+                String nombre = rs.getString("nombre");
+                model.addElement(new ProductoItem(id, nombre));
             }
+
+            comboProductos.setModel(model);
         } catch (SQLException e) {
             mostrarError("Error al cargar productos: " + e.getMessage());
             e.printStackTrace();
@@ -376,45 +485,22 @@ public class formuEgresos1 extends javax.swing.JDialog {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(formuEgresos1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(formuEgresos1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(formuEgresos1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(formuEgresos1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                formuEgresos1 dialog = new formuEgresos1(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    try {
+                        formuEgresos1 dialog = new formuEgresos1(new javax.swing.JFrame(), true);
+                        dialog.setVisible(true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Error al abrir el formulario: " + e.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                });
-                dialog.setVisible(true);
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -427,6 +513,7 @@ public class formuEgresos1 extends javax.swing.JDialog {
     private RSMaterialComponent.RSComboBoxMaterial comboProveedor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11CC;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
@@ -438,31 +525,107 @@ public class formuEgresos1 extends javax.swing.JDialog {
     private RSMaterialComponent.RSTextFieldMaterial txtCantidadnuevo;
     private RSMaterialComponent.RSTextFieldMaterial txtDetallenuevo;
     private com.toedter.calendar.JDateChooser txtPago;
+    private RSMaterialComponent.RSTextFieldMaterial txtcantidad;
     // End of variables declaration//GEN-END:variables
 
-    private boolean insertarEtapa(java.util.Date fecha, String descripcion, Double monto, String categoria) throws SQLException {
-        String sql = "INSERT INTO caja (fecha, descripcion, monto, movimiento,categoria) VALUES (?, ?,?,'egreso',?)";
+    private boolean insertarEgreso(java.sql.Date fecha, String descripcion, Double monto,
+            String categoria, String proveedor, List<Integer> productosIds, double cantidad)
+            throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
 
-        try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+        try {
+            con = Conexion.getConnection();
+            con.setAutoCommit(false); // Iniciar transacción
 
-            // Convertir java.util.Date a java.sql.Date
-            ps.setDate(1, new java.sql.Date(fecha.getTime()));
-            ps.setString(2, descripcion);
+            // 1. Manejo de suministra solo para compra de productos
+            Integer idSuministra = null;
+            if (categoria.equals("Compra de Productos e Insumos")
+                    && productosIds != null && !productosIds.isEmpty()
+                    && proveedor != null && !proveedor.isEmpty()) {
 
-            // Usar setDouble para valores numéricos
-            ps.setDouble(3, monto);
-            ps.setString(4, categoria);
+                int idProveedor = obtenerIdProveedor(con, proveedor);
+                idSuministra = insertarSuministra(con, productosIds.get(0), idProveedor);
+            }
+
+            // 2. Insertar en caja
+            String sql = "INSERT INTO caja (fecha, movimiento, monto, cantidad, descripcion, suministra_idSuministra, categoria) "
+                    + "VALUES (?, 'egreso', ?, ?, ?, ?, ?)";
+
+            ps = con.prepareStatement(sql);
+            ps.setDate(1, fecha);
+            ps.setDouble(2, monto);
+            ps.setDouble(3, cantidad);
+            ps.setString(4, descripcion);
+
+            if (idSuministra != null) {
+                ps.setInt(5, idSuministra);
+            } else {
+                ps.setNull(5, java.sql.Types.INTEGER);
+            }
+
+            ps.setString(6, categoria);
 
             int resultado = ps.executeUpdate();
-            if (resultado > 0) {
-                mostrarMensaje("Registro guardado correctamente");
-                return true;
-            }
+            con.commit(); // Confirmar transacción
+            return resultado > 0;
+
         } catch (SQLException e) {
-            mostrarError("Error de base de datos: " + e.getMessage());
-            throw e;  // Relanzar la excepción para manejo superior
+            if (con != null) {
+                con.rollback(); // Revertir en caso de error
+            }
+            throw e;
+        } finally {
+            if (ps != null) {
+                ps.close();
+            }
+            if (con != null) {
+                con.close();
+            }
         }
-        return false;
+    }
+
+    private int insertarSuministra(Connection con, int idInventario, int idProveedor) throws SQLException {
+        String sql = "INSERT INTO suministra (inventario_id_inventario, proveedor_id_proveedor) VALUES (?, ?)";
+
+        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, idInventario);
+            ps.setInt(2, idProveedor);
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        throw new SQLException("No se pudo insertar en suministra");
+    }
+
+    private int obtenerIdProveedor(Connection con, String nombreProveedor) throws SQLException {
+        String sql = "SELECT id_proveedor FROM proveedor WHERE nombre = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, nombreProveedor);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_proveedor");
+                }
+            }
+        }
+        throw new SQLException("Proveedor no encontrado: " + nombreProveedor);
+    }
+
+    private int obtenerIdInventario(Connection con, String nombreProducto) throws SQLException {
+        String sql = "SELECT id_inventario FROM inventario WHERE nombre = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, nombreProducto);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_inventario");
+                }
+            }
+        }
+        throw new SQLException("Producto no encontrado: " + nombreProducto);
     }
 
     private void mostrarError(String mensaje) {

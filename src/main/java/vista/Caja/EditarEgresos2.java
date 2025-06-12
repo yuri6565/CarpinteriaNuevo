@@ -21,7 +21,6 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
-import vista.Caja.Ingresos;
 import vista.Inventario0.nuevoMateriales;
 
 import vista.proveedor.proveedornuevo;

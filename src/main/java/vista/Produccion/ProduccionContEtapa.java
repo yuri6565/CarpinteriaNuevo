@@ -235,7 +235,7 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         Tabla1 = new RSMaterialComponent.RSTableMetroCustom();
 
-        setBackground(new java.awt.Color(255, 255, 255));
+        setBackground(new java.awt.Color(242, 247, 255));
         setMaximumSize(new java.awt.Dimension(1150, 510));
         setMinimumSize(new java.awt.Dimension(1150, 510));
         setPreferredSize(new java.awt.Dimension(1150, 510));

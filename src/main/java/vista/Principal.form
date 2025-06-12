@@ -407,9 +407,9 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/caja.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Inventario           &#x25bc;"/>
+                <Property name="text" type="java.lang.String" value=" Inventario           &#x25bc;"/>
                 <Property name="colorHover" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="80" green="80" red="80" type="rgb"/>
+                  <Color blue="f0" green="8e" red="76" type="rgb"/>
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="18" style="1"/>
@@ -624,7 +624,7 @@
                 <Property name="text" type="java.lang.String" value="Escritorio"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
                 <Property name="colorHover" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="80" green="80" red="80" type="rgb"/>
+                  <Color blue="f0" green="8e" red="76" type="rgb"/>
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="18" style="1"/>

@@ -60,7 +60,7 @@ public class DetalleProduProducto extends javax.swing.JPanel {
         btndetalle = new RSMaterialComponent.RSButtonShape();
         jPanel2 = new javax.swing.JPanel();
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(242, 247, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(1250, 630));
 
         btnvolver.setBackground(new java.awt.Color(46, 49, 82));

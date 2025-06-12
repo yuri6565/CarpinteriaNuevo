@@ -189,7 +189,7 @@ public class DetallePedido extends javax.swing.JPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         Tabla1 = new RSMaterialComponent.RSTableMetroCustom();
 
-        jPanel2.setBackground(new java.awt.Color(234, 234, 234));
+        jPanel2.setBackground(new java.awt.Color(242, 247, 255));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N

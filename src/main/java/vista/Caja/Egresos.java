@@ -1,8 +1,10 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ */
 package vista.Caja;
 
 import controlador.Ctrl_CajaEgresos;
-import java.awt.Color;
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -12,10 +14,17 @@ import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import vista.TemaManager;
+import modelo.Caja;
 
+/**
+ *
+ * @author ADSO
+ */
 public final class Egresos extends javax.swing.JPanel {
 
+    /**
+     * Creates new form CajaContenido
+     */
     public Egresos() {
         initComponents();
 
@@ -36,11 +45,6 @@ public final class Egresos extends javax.swing.JPanel {
         Tabla1.setRowSelectionAllowed(true);
         Tabla1.setFocusable(false);
         cargarTablaEgresos();
-        aplicarTema(); // Apply initial theme
-        // Register for theme changes
-        TemaManager.getInstance().addThemeChangeListener(() -> {
-            aplicarTema(); // Update theme when it changes
-        });
     }
 
     public void cargarTablaEgresos() {
@@ -48,14 +52,14 @@ public final class Egresos extends javax.swing.JPanel {
         model.setRowCount(0); // Limpiar tabla
 
         Ctrl_CajaEgresos ctrl = new Ctrl_CajaEgresos();
-        List<modelo.Caja> egresos = ctrl.obtenerEgresos();
+        List<Caja> egresos = ctrl.obtenerEgresos();
 
         if (egresos.isEmpty()) {
             System.out.println("No se encontraron egresos en la base de datos");
             return;
         }
 
-        for (modelo.Caja caja : egresos) {
+        for (Caja caja : egresos) {
             model.addRow(new Object[]{
                 caja.getId_codigo(),
                 caja.getFecha(),
@@ -72,75 +76,14 @@ public final class Egresos extends javax.swing.JPanel {
         }
 
         // Ajustar ancho de columnas
-        Tabla1.getColumnModel().getColumn(0).setPreferredWidth(50);  // ID
+        Tabla1.getColumnModel().getColumn(0).setPreferredWidth(20);  // ID
         Tabla1.getColumnModel().getColumn(1).setPreferredWidth(100); // Fecha
         Tabla1.getColumnModel().getColumn(2).setPreferredWidth(80);  // Monto
         Tabla1.getColumnModel().getColumn(3).setPreferredWidth(200); // Descripción
-        Tabla1.getColumnModel().getColumn(4).setPreferredWidth(150); // Categoría
-    }
+        Tabla1.getColumnModel().getColumn(4).setPreferredWidth(300); // Categoría
+        Tabla1.getColumnModel().getColumn(5).setPreferredWidth(40); // ver
+        Tabla1.getColumnModel().getColumn(6).setPreferredWidth(50); // editar
 
-    public void aplicarTema() {
-        if (TemaManager.getInstance().isOscuro()) {
-            Color fondo = new Color(18, 18, 28);
-            Color primario = new Color(40, 60, 150);
-            Color texto = Color.WHITE;
-
-            jPanel2.setBackground(fondo);
-            jPanel3.setBackground(fondo);
-            txtbuscar.setBackground(fondo);
-            txtbuscar.setForeground(texto);
-            txtbuscar.setColorIcon(texto);
-            txtbuscar.setPhColor(Color.LIGHT_GRAY);
-
-            Tabla1.setBackgoundHead(primario);
-            Tabla1.setForegroundHead(Color.WHITE);
-            Tabla1.setBackgoundHover(new Color(40, 50, 90));
-            Tabla1.setForegroundHover(Color.WHITE);
-            Tabla1.setColorPrimary(fondo);
-            Tabla1.setColorPrimaryText(texto);
-            Tabla1.setColorSecondary(fondo.darker());
-            Tabla1.setColorSecundaryText(texto);
-            Tabla1.setColorBorderHead(primario);
-            Tabla1.setColorBorderRows(fondo.darker());
-            Tabla1.setFontHead(new Font("Segoe UI", Font.BOLD, 12));
-            Tabla1.setFontRowHover(new Font("Segoe UI", Font.PLAIN, 12));
-            Tabla1.setFontRowSelect(new Font("Segoe UI", Font.PLAIN, 12));
-            Tabla1.setEffectHover(true);
-
-            btnNuevo.setBackground(new Color(46, 49, 82));
-            btnGuardar.setBackground(new Color(46, 49, 82));
-            btnEliminar.setBackground(new Color(46, 49, 82));
-        } else {
-            Color fondo = new Color(242, 247, 255);
-            Color texto = Color.BLACK;
-            Color primario = new Color(72, 92, 188);
-
-            jPanel2.setBackground(fondo);
-            jPanel3.setBackground(fondo);
-            txtbuscar.setBackground(fondo);
-            txtbuscar.setForeground(texto);
-            txtbuscar.setColorIcon(texto);
-            txtbuscar.setPhColor(Color.GRAY);
-
-            Tabla1.setBackgoundHead(primario);
-            Tabla1.setForegroundHead(Color.WHITE);
-            Tabla1.setBackgoundHover(new Color(220, 220, 240));
-            Tabla1.setForegroundHover(texto);
-            Tabla1.setColorPrimary(fondo);
-            Tabla1.setColorPrimaryText(texto);
-            Tabla1.setColorSecondary(new Color(245, 245, 245));
-            Tabla1.setColorSecundaryText(texto);
-            Tabla1.setColorBorderHead(primario);
-            Tabla1.setColorBorderRows(new Color(200, 200, 200));
-            Tabla1.setFontHead(new Font("Segoe UI", Font.BOLD, 12));
-            Tabla1.setFontRowHover(new Font("Segoe UI", Font.PLAIN, 12));
-            Tabla1.setFontRowSelect(new Font("Segoe UI", Font.PLAIN, 12));
-            Tabla1.setEffectHover(true);
-
-            btnNuevo.setBackground(new Color(46, 49, 82));
-            btnGuardar.setBackground(new Color(46, 49, 82));
-            btnEliminar.setBackground(new Color(46, 49, 82));
-        }
     }
 
     /**
@@ -155,11 +98,11 @@ public final class Egresos extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         txtbuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
-        btnNuevo = new rojeru_san.RSButtonRiple();
-        btnGuardar = new rojeru_san.RSButtonRiple();
+        btnNuevoProduc = new rojeru_san.RSButtonRiple();
         btnEliminar = new rojeru_san.RSButtonRiple();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        Tabla1 = new RSMaterialComponent.RSTableMetro();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        Tabla1 = new RSMaterialComponent.RSTableMetroCustom();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -170,7 +113,7 @@ public final class Egresos extends javax.swing.JPanel {
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtbuscar.setBackground(new java.awt.Color(245, 245, 245));
-        txtbuscar.setForeground(new java.awt.Color(29, 30, 91));
+        txtbuscar.setForeground(new java.awt.Color(0, 0, 0));
         txtbuscar.setColorIcon(new java.awt.Color(29, 30, 111));
         txtbuscar.setColorMaterial(new java.awt.Color(29, 30, 111));
         txtbuscar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
@@ -182,23 +125,14 @@ public final class Egresos extends javax.swing.JPanel {
         });
         jPanel3.add(txtbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 430, 40));
 
-        btnNuevo.setBackground(new java.awt.Color(46, 49, 82));
-        btnNuevo.setText(" Nuevo");
-        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+        btnNuevoProduc.setBackground(new java.awt.Color(46, 49, 82));
+        btnNuevoProduc.setText(" Nuevo");
+        btnNuevoProduc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoActionPerformed(evt);
+                btnNuevoProducActionPerformed(evt);
             }
         });
-        jPanel3.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 120, 40));
-
-        btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
-        btnGuardar.setText("Editar");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 20, 120, 40));
+        jPanel3.add(btnNuevoProduc, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 20, 120, 40));
 
         btnEliminar.setBackground(new java.awt.Color(46, 49, 82));
         btnEliminar.setText(" Eliminar");
@@ -207,22 +141,60 @@ public final class Egresos extends javax.swing.JPanel {
                 btnEliminarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 20, 120, 40));
+        jPanel3.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 20, 120, 40));
 
-        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
+        jLabel1.setText("Egresos");
+        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 20, -1, -1));
 
-        Tabla1.setForeground(new java.awt.Color(255, 255, 255));
-        Tabla1.setAlignmentX(0.1F);
-        Tabla1.setAlignmentY(0.1F);
+        Tabla1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Id Registro", "Fecha Pago", "Detalle", "Categoria", "Cantidad ingresada"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         Tabla1.setBackgoundHead(new java.awt.Color(46, 49, 82));
-        Tabla1.setBackgoundHover(new java.awt.Color(46, 49, 82));
-        Tabla1.setColorBorderRows(new java.awt.Color(153, 153, 153));
-        Tabla1.setColorPrimaryText(new java.awt.Color(46, 49, 82));
+        Tabla1.setBackgoundHover(new java.awt.Color(109, 160, 221));
+        Tabla1.setBorderHead(null);
+        Tabla1.setBorderRows(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        Tabla1.setColorBorderHead(new java.awt.Color(46, 49, 82));
+        Tabla1.setColorBorderRows(new java.awt.Color(46, 49, 82));
+        Tabla1.setColorPrimaryText(new java.awt.Color(0, 0, 0));
         Tabla1.setColorSecondary(new java.awt.Color(255, 255, 255));
-        Tabla1.setColorSecundaryText(new java.awt.Color(46, 49, 82));
-        jScrollPane2.setViewportView(Tabla1);
+        Tabla1.setColorSecundaryText(new java.awt.Color(0, 0, 0));
+        Tabla1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        Tabla1.setFontHead(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Tabla1.setFontRowHover(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        Tabla1.setFontRowSelect(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Tabla1.setRowHeight(23);
+        Tabla1.setSelectionBackground(new java.awt.Color(109, 160, 221));
+        Tabla1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Tabla1MouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(Tabla1);
+        Tabla1.getColumnModel().getColumn(0).setPreferredWidth(10);
 
-        jPanel3.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 1160, 490));
+        jPanel3.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 1130, 500));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -234,7 +206,7 @@ public final class Egresos extends javax.swing.JPanel {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 673, Short.MAX_VALUE)
+            .addGap(0, 680, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE))
         );
@@ -261,19 +233,12 @@ public final class Egresos extends javax.swing.JPanel {
         filtrarTabla();
     }//GEN-LAST:event_txtbuscarActionPerformed
 
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+    private void btnNuevoProducActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProducActionPerformed
         formuEgresos1 dialog = new formuEgresos1(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
         cargarTablaEgresos();
-    }//GEN-LAST:event_btnNuevoActionPerformed
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        EditEgresos dialog = new EditEgresos(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-        cargarTablaEgresos();
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    }//GEN-LAST:event_btnNuevoProducActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         int[] selectedRows = Tabla1.getSelectedRows();
@@ -318,48 +283,8 @@ public final class Egresos extends javax.swing.JPanel {
                 JOptionPane.INFORMATION_MESSAGE
         );
     }//GEN-LAST:event_btnEliminarActionPerformed
-    private void filtrarTabla() {
-        String textoBusqueda = txtbuscar.getText().trim();
-        DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
-        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(modelo);
-        Tabla1.setRowSorter(tr);
-        List<RowFilter<Object, Object>> filters = new ArrayList<>();
 
-        if (textoBusqueda.isEmpty()) {
-            tr.setRowFilter(null);
-            return;
-        }
-        // Expresión regular para detectar si son solo números (1-2 dígitos)
-        if (textoBusqueda.matches("\\d+")) {
-            // Buscar en ID (columna 0) y fechas (columnas 1 y 2)
-            filters.add(RowFilter.regexFilter(textoBusqueda, 0));// ID (coincidencia exacta)
-            filters.add(RowFilter.regexFilter(textoBusqueda, 1));
-            filters.add(RowFilter.regexFilter(textoBusqueda, 4));
-
-        } // Si contiene letras (aunque sea parcial)
-        else {
-            // Buscar en Detalle (columna 2) y Categoría (columna 3)
-            String regex = "(?i)" + textoBusqueda; // (?i) = ignore case
-            filters.add(RowFilter.regexFilter(regex, 2)); // Detalle
-            filters.add(RowFilter.regexFilter(regex, 3)); // Categoría
-        }
-
-        // Aplicar todos los filtros combinados con OR
-        tr.setRowFilter(RowFilter.orFilter(filters));
-
-    }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private RSMaterialComponent.RSTableMetro Tabla1;
-    private rojeru_san.RSButtonRiple btnEliminar;
-    private rojeru_san.RSButtonRiple btnGuardar;
-    private rojeru_san.RSButtonRiple btnNuevo;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane2;
-    private RSMaterialComponent.RSTextFieldMaterialIcon txtbuscar;
-    // End of variables declaration//GEN-END:variables
-private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {
+    private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseClicked
         try {
             int column = Tabla1.columnAtPoint(evt.getPoint());
             int viewRow = Tabla1.rowAtPoint(evt.getPoint());
@@ -383,12 +308,11 @@ private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {
                     "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
-    }
-
+    }//GEN-LAST:event_Tabla1MouseClicked
     private void abrirEditarEgreso(int idEgreso) {
         try {
             Ctrl_CajaEgresos ctrl = new Ctrl_CajaEgresos();
-            modelo.Caja caja = ctrl.obtenerEgresoPorId(idEgreso); // Obtener datos del egreso
+            Caja caja = ctrl.obtenerEgresoPorId(idEgreso); // Obtener datos del egreso
 
             if (caja != null) {
                 // Crear y mostrar el formulario de edición
@@ -422,10 +346,52 @@ private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {
         }
     }
 
+    private void filtrarTabla() {
+        String textoBusqueda = txtbuscar.getText().trim();
+        DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(modelo);
+        Tabla1.setRowSorter(tr);
+        List<RowFilter<Object, Object>> filters = new ArrayList<>();
+
+        if (textoBusqueda.isEmpty()) {
+            tr.setRowFilter(null);
+            return;
+        }
+        // Expresión regular para detectar si son solo números (1-2 dígitos)
+        if (textoBusqueda.matches("\\d+")) {
+            // Buscar en ID (columna 0) y fechas (columnas 1 y 2)
+            filters.add(RowFilter.regexFilter(textoBusqueda, 0));// ID (coincidencia exacta)
+            filters.add(RowFilter.regexFilter(textoBusqueda, 1));
+            filters.add(RowFilter.regexFilter(textoBusqueda, 4));
+
+        } // Si contiene letras (aunque sea parcial)
+        else {
+            // Buscar en Detalle (columna 2) y Categoría (columna 3)
+            String regex = "(?i)" + textoBusqueda; // (?i) = ignore case
+            filters.add(RowFilter.regexFilter(regex, 2)); // Detalle
+            filters.add(RowFilter.regexFilter(regex, 3)); // Categoría
+        }
+
+        // Aplicar todos los filtros combinados con OR
+        tr.setRowFilter(RowFilter.orFilter(filters));
+
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private RSMaterialComponent.RSTableMetroCustom Tabla1;
+    private rojeru_san.RSButtonRiple btnEliminar;
+    private rojeru_san.RSButtonRiple btnNuevoProduc;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane3;
+    private RSMaterialComponent.RSTextFieldMaterialIcon txtbuscar;
+    // End of variables declaration//GEN-END:variables
+
     private void mostrarDetalleEgreso(DefaultTableModel model, int modelRow, int idEgreso) {
         try {
             Ctrl_CajaEgresos ctrl = new Ctrl_CajaEgresos();
-            modelo.Caja caja = ctrl.obtenerEgresoPorId(idEgreso);
+            Caja caja = ctrl.obtenerEgresoPorId(idEgreso);
 
             if (caja != null) {
                 // Preparar los datos con valores por defecto si son nulos

@@ -13,21 +13,31 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicScrollBarUI;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import modelo.Conexion;
 
 /**
  *
@@ -40,100 +50,53 @@ public class FormularioMH extends javax.swing.JDialog {
     private JPanel panelMateriales;
     private JPanel panelHerramientas;
     private boolean confirmado = false;
+    private Map<String, Integer> inventarioMateriales = new HashMap<>();
+    private Map<String, Integer> inventarioHerramientas = new HashMap<>();
 
     public FormularioMH(Frame parent, boolean modal, List<String> materiales, List<String> herramientasLista) {
         super(parent, modal);
         this.materialesSeleccionados = materiales;
         this.herramientasSeleccionadas = herramientasLista;
+        this.inventarioMateriales = inventarioMateriales;
+        this.inventarioHerramientas = inventarioHerramientas;
         initComponents();
         generarCamposDinamicos();
         // Configurar JScrollPane para ContenedorH
         ContenedorH.setBackground(new java.awt.Color(255, 255, 255));
         JScrollPane scrollPaneH = new JScrollPane(ContenedorH);
         scrollPaneH.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        //scrollPaneH.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        /*scrollPaneH.setBorder(null);
-        scrollPaneH.getVerticalScrollBar().setPreferredSize(new Dimension(8, 1));
-        scrollPaneH.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-            @Override
-            protected void configureScrollBarColors() {
-                this.thumbColor = new Color(153, 153, 153);
-            }
-
-            @Override
-            protected JButton createDecreaseButton(int orientation) {
-                return new JButton() {
-                    @Override
-                    public Dimension getPreferredSize() {
-                        return new Dimension(0, 0);
-                    }
-                };
-            }
-
-            @Override
-            protected JButton createIncreaseButton(int orientation) {
-                return new JButton() {
-                    @Override
-                    public Dimension getPreferredSize() {
-                        return new Dimension(0, 0);
-                    }
-                };
-            }
-
-            @Override
-            protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(thumbColor);
-                g2.fillRoundRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height, 10, 10);
-                g2.dispose();
-            }
-        });*/
         jPanel1.add(scrollPaneH, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 60, 360, 370));
+
 // Configurar JScrollPane para ContenedorM
         ContenedorM.setBackground(new java.awt.Color(255, 255, 255));
         JScrollPane scrollPaneM = new JScrollPane(ContenedorM);
         scrollPaneM.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        //scrollPaneM.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        /*scrollPaneM.setBorder(null);
-        scrollPaneM.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
-        scrollPaneM.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-            @Override
-            protected void configureScrollBarColors() {
-                this.thumbColor = new Color(153, 153, 153);
-            }
-
-            @Override
-            protected JButton createDecreaseButton(int orientation) {
-                return new JButton() {
-                    @Override
-                    public Dimension getPreferredSize() {
-                        return new Dimension(0, 0);
-                    }
-                };
-            }
-
-            @Override
-            protected JButton createIncreaseButton(int orientation) {
-                return new JButton() {
-                    @Override
-                    public Dimension getPreferredSize() {
-                        return new Dimension(0, 0);
-                    }
-                };
-            }
-
-            @Override
-            protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(thumbColor);
-                g2.fillRoundRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height, 10, 10);
-                g2.dispose();
-            }
-        });*/
         jPanel1.add(scrollPaneM, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 360, 370));
+    }
 
+    private void cargarInventario() {
+        try (Connection con = Conexion.getConnection()) {
+            // Load materials
+            String sqlMateriales = "SELECT nombre, cantidad FROM inventario WHERE tipo = 'material' AND estado = 'disponible'";
+            try (PreparedStatement ps = con.prepareStatement(sqlMateriales)) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    inventarioMateriales.put(rs.getString("nombre"), rs.getInt("cantidad"));
+                }
+            }
+
+            // Load tools
+            String sqlHerramientas = "SELECT nombre, cantidad FROM inventario WHERE tipo = 'herramienta' AND estado = 'disponible'";
+            try (PreparedStatement ps = con.prepareStatement(sqlHerramientas)) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    inventarioHerramientas.put(rs.getString("nombre"), rs.getInt("cantidad"));
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FormularioMH.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al cargar inventario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void generarCamposDinamicos() {
@@ -177,68 +140,108 @@ public class FormularioMH extends javax.swing.JDialog {
         this.pack();
     }
 
-    private void agregarCampoHerramienta(String nombreHerramienta) {
-        JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        fila.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        fila.setBackground(Color.WHITE);
-        fila.add(new JLabel(nombreHerramienta + ":"));
-
-        JTextField txtObservacion = new JTextField("Observación");
-        txtObservacion.setForeground(new Color(153, 153, 153)); // Placeholder gris
-        txtObservacion.setPreferredSize(new Dimension(200, 30));
-        // Simular placeholder
-        txtObservacion.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                if (txtObservacion.getText().equals("Observación")) {
-                    txtObservacion.setText("");
-                    txtObservacion.setForeground(Color.BLACK); // Texto negro
-                }
-            }
-            @Override
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                if (txtObservacion.getText().isEmpty()) {
-                    txtObservacion.setText("Observación");
-                    txtObservacion.setForeground(new Color(153, 153, 153)); // Placeholder gris
-                }
-            }
-        });
-        fila.add(txtObservacion);
-
-        panelHerramientas.add(fila);
-        panelHerramientas.add(Box.createVerticalStrut(5)); // 5 píxeles de separación
-    }
-
     private void agregarCampoMaterial(String nombreMaterial) {
         JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
         fila.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         fila.setBackground(Color.WHITE);
-        fila.add(new JLabel(nombreMaterial + ":"));
 
-        JTextField txtCantidad = new JTextField("Cantidad");
-        txtCantidad.setForeground(new Color(153, 153, 153)); // Placeholder gris
+        // Mostrar nombre y cantidad disponible
+        int disponible = inventarioMateriales.getOrDefault(nombreMaterial, 0);
+        JLabel label = new JLabel(nombreMaterial + " (Disponible: " + disponible + "):");
+        fila.add(label);
+
+        JTextField txtCantidad = new JTextField("0");
+        txtCantidad.setForeground(Color.BLACK);
         txtCantidad.setPreferredSize(new Dimension(100, 30));
-        // Simular placeholder
+
+        // Placeholder simulation
         txtCantidad.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
                 if (txtCantidad.getText().equals("Cantidad")) {
                     txtCantidad.setText("");
-                    txtCantidad.setForeground(Color.BLACK); // Texto negro
+                    txtCantidad.setForeground(Color.BLACK);
                 }
             }
+
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (txtCantidad.getText().isEmpty()) {
                     txtCantidad.setText("Cantidad");
-                    txtCantidad.setForeground(new Color(153, 153, 153)); // Placeholder gris
+                    txtCantidad.setForeground(new Color(153, 153, 153));
                 }
             }
         });
-        fila.add(txtCantidad);
 
+        fila.add(txtCantidad);
         panelMateriales.add(fila);
-        panelMateriales.add(Box.createVerticalStrut(5)); // 5 píxeles de separación
+        panelMateriales.add(Box.createVerticalStrut(5));
+    }
+
+    private void agregarCampoHerramienta(String nombreHerramienta) {
+        JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        fila.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        fila.setBackground(Color.WHITE);
+
+        // Mostrar nombre y cantidad disponible
+        int disponible = inventarioHerramientas.getOrDefault(nombreHerramienta, 0);
+        JLabel label = new JLabel(nombreHerramienta + " (Disponible: " + disponible + "):");
+        fila.add(label);
+
+        JTextField txtObservacion = new JTextField("Observación");
+        txtObservacion.setForeground(new Color(153, 153, 153));
+        txtObservacion.setPreferredSize(new Dimension(200, 30));
+
+        // Placeholder simulation
+        txtObservacion.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (txtObservacion.getText().equals("Observación")) {
+                    txtObservacion.setText("");
+                    txtObservacion.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (txtObservacion.getText().isEmpty()) {
+                    txtObservacion.setText("Observación");
+                    txtObservacion.setForeground(new Color(153, 153, 153));
+                }
+            }
+        });
+
+        fila.add(txtObservacion);
+        panelHerramientas.add(fila);
+        panelHerramientas.add(Box.createVerticalStrut(5));
+    }
+// DocumentFilter to restrict input to numbers and max quantity
+
+    private class NumberFilter extends DocumentFilter {
+
+        private final int maxQuantity;
+
+        public NumberFilter(int maxQuantity) {
+            this.maxQuantity = maxQuantity;
+        }
+
+        @Override
+        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+            String newStr = fb.getDocument().getText(0, fb.getDocument().getLength());
+            newStr = newStr.substring(0, offset) + text + newStr.substring(offset + length);
+            if (newStr.matches("\\d*") && (newStr.isEmpty() || Integer.parseInt(newStr) <= maxQuantity)) {
+                super.replace(fb, offset, length, text, attrs);
+            }
+        }
+
+        @Override
+        public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+            String newStr = fb.getDocument().getText(0, fb.getDocument().getLength());
+            newStr = newStr.substring(0, offset) + string + newStr.substring(offset);
+            if (newStr.matches("\\d*") && (newStr.isEmpty() || Integer.parseInt(newStr) <= maxQuantity)) {
+                super.insertString(fb, offset, string, attr);
+            }
+        }
     }
 
     public boolean isConfirmado() {
@@ -251,12 +254,9 @@ public class FormularioMH extends javax.swing.JDialog {
             if (comp instanceof JPanel) {
                 JPanel fila = (JPanel) comp;
                 JLabel label = (JLabel) fila.getComponent(0);
-                RSMaterialComponent.RSTextFieldMaterial txtCantidad = (RSMaterialComponent.RSTextFieldMaterial) fila.getComponent(1);
-                String nombreMaterial = label.getText().replace(":", "");
+                JTextField txtCantidad = (JTextField) fila.getComponent(1);
+                String nombreMaterial = label.getText().split("\\(")[0].trim();
                 String cantidad = txtCantidad.getText().trim();
-                if (cantidad.equals("Cantidad")) {
-                    cantidad = "";
-                }
                 cantidades.put(nombreMaterial, cantidad.isEmpty() ? "0" : cantidad);
             }
         }
@@ -269,8 +269,8 @@ public class FormularioMH extends javax.swing.JDialog {
             if (comp instanceof JPanel) {
                 JPanel fila = (JPanel) comp;
                 JLabel label = (JLabel) fila.getComponent(0);
-                RSMaterialComponent.RSTextFieldMaterial txtObservacion = (RSMaterialComponent.RSTextFieldMaterial) fila.getComponent(1);
-                String nombreHerramienta = label.getText().replace(":", "");
+                JTextField txtObservacion = (JTextField) fila.getComponent(1);
+                String nombreHerramienta = label.getText().split("\\(")[0].trim();
                 String observacion = txtObservacion.getText().trim();
                 if (observacion.equals("Observación")) {
                     observacion = "";
@@ -386,8 +386,36 @@ public class FormularioMH extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
-        confirmado = true;
-        this.dispose();
+        try {
+            // Validar cantidades de materiales
+            for (Component comp : panelMateriales.getComponents()) {
+                if (comp instanceof JPanel) {
+                    JPanel fila = (JPanel) comp;
+                    JLabel label = (JLabel) fila.getComponent(0);
+                    JTextField txtCantidad = (JTextField) fila.getComponent(1);
+
+                    String nombreMaterial = label.getText().split("\\(")[0].trim();
+                    int disponible = inventarioMateriales.getOrDefault(nombreMaterial, 0);
+                    int cantidad = txtCantidad.getText().equals("Cantidad") ? 0
+                            : Integer.parseInt(txtCantidad.getText());
+
+                    if (cantidad > disponible) {
+                        JOptionPane.showMessageDialog(this,
+                                "La cantidad de " + nombreMaterial + " excede el inventario",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
+
+            confirmado = true;
+            this.dispose();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Ingrese valores numéricos válidos",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_btnGuardar1ActionPerformed
 
     private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
@@ -413,14 +441,9 @@ public class FormularioMH extends javax.swing.JDialog {
             List<String> materiales = new ArrayList<>();
             materiales.add("Material1");
             materiales.add("Material2");
-            materiales.add("Material3");
-            materiales.add("Material4");
-            materiales.add("Material5");
             List<String> herramientas = new ArrayList<>();
             herramientas.add("Herramienta1");
             herramientas.add("Herramienta2");
-            herramientas.add("Herramienta3");
-            herramientas.add("Herramienta4");
 
             FormularioMH dialog = new FormularioMH(new javax.swing.JFrame(), true, materiales, herramientas);
             dialog.addWindowListener(new java.awt.event.WindowAdapter() {
