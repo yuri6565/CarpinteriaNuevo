@@ -76,60 +76,74 @@ public class DetalleEgreso extends javax.swing.JDialog {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Codigo:");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
 
         fecha_pago.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        fecha_pago.setForeground(new java.awt.Color(0, 0, 0));
         fecha_pago.setText("fecha_pago");
         jPanel2.add(fecha_pago, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 120, -1, -1));
 
         txtcategoria.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtcategoria.setForeground(new java.awt.Color(0, 0, 0));
         txtcategoria.setText("categoria");
         jPanel2.add(txtcategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 200, -1, -1));
 
         cantidadValor.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        cantidadValor.setForeground(new java.awt.Color(0, 0, 0));
         cantidadValor.setText("cantidad");
-        jPanel2.add(cantidadValor, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 160, -1, -1));
+        jPanel2.add(cantidadValor, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 120, -1, -1));
 
         txtdescripcion.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtdescripcion.setForeground(new java.awt.Color(0, 0, 0));
         txtdescripcion.setText("descripcion");
-        jPanel2.add(txtdescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 240, -1, -1));
+        jPanel2.add(txtdescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 160, -1, -1));
 
         ID.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        ID.setForeground(new java.awt.Color(0, 0, 0));
         ID.setText("ID");
         jPanel2.add(ID, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Categoria:");
         jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Monto:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 120, -1, -1));
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
         jLabel13.setText("Descripcion:");
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, -1, -1));
+        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 160, -1, -1));
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(0, 0, 0));
         jLabel15.setText("Fecha del pago: ");
         jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
 
         txtproductos.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtproductos.setForeground(new java.awt.Color(0, 0, 0));
         txtproductos.setText("productos");
-        jPanel2.add(txtproductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 160, -1, -1));
+        jPanel2.add(txtproductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 160, -1, -1));
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(0, 0, 0));
         jLabel16.setText("Poductos:");
-        jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 160, -1, -1));
+        jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 160, -1, -1));
 
         txtproveedor.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtproveedor.setForeground(new java.awt.Color(0, 0, 0));
         txtproveedor.setText("proveedor");
-        jPanel2.add(txtproveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 120, -1, -1));
+        jPanel2.add(txtproveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 120, -1, -1));
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(0, 0, 0));
         jLabel17.setText("Proveedor:");
-        jPanel2.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 120, -1, -1));
+        jPanel2.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 120, -1, -1));
 
         jPanel4.setBackground(new java.awt.Color(46, 49, 82));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -153,12 +167,14 @@ public class DetalleEgreso extends javax.swing.JDialog {
         jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 750, 50));
 
         txtcaidad.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtcaidad.setForeground(new java.awt.Color(0, 0, 0));
         txtcaidad.setText("cantidad");
-        jPanel2.add(txtcaidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 200, -1, -1));
+        jPanel2.add(txtcaidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, -1, -1));
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
         jLabel12.setText("Cantidad:");
-        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 200, -1, -1));
+        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -168,7 +184,7 @@ public class DetalleEgreso extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
