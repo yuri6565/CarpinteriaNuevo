@@ -27,7 +27,6 @@ import vista.proveedor.proveedornuevo;
  */
 public class formuEgresos1 extends javax.swing.JDialog {
 
-    private Ingresos ingresoPanel;
 
     /**
      * Creates new form formuIngresos
@@ -414,6 +413,7 @@ public class formuEgresos1 extends javax.swing.JDialog {
         comboCategoria.setSelectedIndex(0);
         comboProveedor.setSelectedIndex(0);
         comboProductos.setSelectedIndex(0);
+
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 

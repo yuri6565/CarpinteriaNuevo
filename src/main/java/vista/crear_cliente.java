@@ -39,17 +39,19 @@ public class crear_cliente extends javax.swing.JDialog {
     public boolean isGuardado() {
         return guardado;
     }
-   
- 
-
-
-      
-
     
+    // Interfaz para el callback
+    public interface ClienteGuardadoListener {
 
+        void onClienteGuardado();
+    }
 
+    private ClienteGuardadoListener listener;
 
-    
+    // Método para asignar el listener
+    public void setClienteGuardadoListener(ClienteGuardadoListener listener) {
+        this.listener = listener;
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

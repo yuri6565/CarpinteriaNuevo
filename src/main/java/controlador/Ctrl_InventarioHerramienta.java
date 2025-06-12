@@ -7,11 +7,12 @@ package controlador;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
-import modelo.MaterialDatos;
+import modelo.HerramientaDatos;
 
 /**
  *
@@ -22,12 +23,12 @@ public class Ctrl_InventarioHerramienta {
     // Clase pública y estática para poder acceder desde fuera
     public static class MaterialConDetalles {
 
-        private MaterialDatos material;
+        private HerramientaDatos material;
         private String nombreCategoria;
         private String nombreMarca;
         private String nombreUnidadMedida;
 
-        public MaterialConDetalles(MaterialDatos material, String nombreCategoria,
+        public MaterialConDetalles(HerramientaDatos material, String nombreCategoria,
                 String nombreMarca, String nombreUnidadMedida) {
             this.material = material;
             this.nombreCategoria = nombreCategoria;
@@ -36,7 +37,7 @@ public class Ctrl_InventarioHerramienta {
         }
 
         // Getters
-        public MaterialDatos getMaterial() {
+        public HerramientaDatos getMaterial() {
             return material;
         }
 
@@ -53,26 +54,38 @@ public class Ctrl_InventarioHerramienta {
         }
     }
 
-    public boolean insertar(MaterialDatos material) {
-        String sql = "INSERT INTO inventario (nombre, descripcion, estado, stock, cantidad, tipo, "
+    public int insertar(HerramientaDatos material) {
+        String sql = "INSERT INTO inventario (nombre, descripcion, cantidad, precio_unitario, estado, tipo, "
                 + "categoria_codigo, marca_idmarca, unidad_medida_idunidad_medida, imagen) "
                 + "VALUES (?, ?, ?, ?, ?, 'herramienta', ?, ?, ?, ?)";
-        try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
+
+        try (Connection con = Conexion.getConnection(); // IMPORTANTE: Agregar RETURN_GENERATED_KEYS para obtener el ID
+                 PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, material.getNombre());
             stmt.setString(2, material.getDescripcion());
-            stmt.setString(3, material.getEstado());
-            stmt.setString(4, material.getStock());
-            stmt.setInt(5, material.getCantidad());
+            stmt.setInt(3, material.getCantidad());
+            stmt.setDouble(4, material.getPrecioUnitario());
+            stmt.setString(5, material.getEstado());
             stmt.setInt(6, material.getIdCategoria());
             stmt.setInt(7, material.getIdMarca());
             stmt.setInt(8, material.getIdUnidadMedida());
-            stmt.setBytes(9, material.getImagen()); // imagen como byte[]
+            stmt.setBytes(9, material.getImagen());
 
-            return stmt.executeUpdate() > 0;
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                // Obtener el ID generado
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1); // Retorna el ID generado
+                    }
+                }
+            }
+            return -1; // Retorna -1 si no se pudo obtener el ID
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return -1; // Retorna -1 en caso de error
         }
     }
 
@@ -88,13 +101,13 @@ public class Ctrl_InventarioHerramienta {
         try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                MaterialDatos material = new MaterialDatos(
+                HerramientaDatos material = new HerramientaDatos(
                         rs.getInt("id_inventario"),
                         rs.getString("nombre"),
                         rs.getString("descripcion"),
-                        rs.getString("estado"),
-                        rs.getString("stock"),
                         rs.getInt("cantidad"),
+                        rs.getDouble("precio_unitario"),
+                        rs.getString("estado"),
                         rs.getInt("categoria_codigo"),
                         rs.getInt("marca_idmarca"),
                         rs.getInt("unidad_medida_idunidad_medida"),
@@ -113,8 +126,8 @@ public class Ctrl_InventarioHerramienta {
         return lista;
     }
 
-    public boolean actualizar(MaterialDatos material) {
-        String sql = "UPDATE inventario SET nombre = ?, descripcion = ?, estado = ?, stock = ?, cantidad = ?, "
+    public boolean actualizar(HerramientaDatos material) {
+        String sql = "UPDATE inventario SET nombre = ?, descripcion = ?, cantidad = ?, precio_unitario = ?, estado = ?, "
                 + "categoria_codigo = ?, marca_idmarca = ?, unidad_medida_idunidad_medida = ?, imagen = ? "
                 + "WHERE id_inventario = ? AND tipo = 'herramienta'";
 
@@ -122,9 +135,9 @@ public class Ctrl_InventarioHerramienta {
 
             stmt.setString(1, material.getNombre());
             stmt.setString(2, material.getDescripcion());
-            stmt.setString(3, material.getEstado());
-            stmt.setString(4, material.getStock());
-            stmt.setInt(5, material.getCantidad());
+            stmt.setInt(3, material.getCantidad());
+            stmt.setDouble(4, material.getPrecioUnitario());
+            stmt.setString(5, material.getEstado());
             stmt.setInt(6, material.getIdCategoria());
             stmt.setInt(7, material.getIdMarca());
             stmt.setInt(8, material.getIdUnidadMedida());
@@ -156,3 +169,4 @@ public class Ctrl_InventarioHerramienta {
     }
 
 }
+

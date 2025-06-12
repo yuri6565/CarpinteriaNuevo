@@ -4,6 +4,7 @@
  */
 package vista.Inventario0;
 
+import RSMaterialComponent.RSButtonShape;
 import controlador.Ctrl_CategoriaHerramienta;
 import controlador.Ctrl_InventarioHerramienta;
 import controlador.Ctrl_MarcaHerramienta;
@@ -13,23 +14,33 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.SwingConstants;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import modelo.Categoria;
 import modelo.HerramientaDatos;
 import modelo.Marca;
-import modelo.MaterialDatos;
 import modelo.Unidad;
 
 /**
@@ -39,14 +50,81 @@ import modelo.Unidad;
 public class herramientas extends javax.swing.JPanel {
 
     private Ctrl_InventarioHerramienta ctrlInventario;
+    private JPanel contenedorPrincipal;
 
     /**
      * Creates new form herramientas
      */
     public herramientas() {
         initComponents();
+        contenedorPrincipal = new JPanel();
         ctrlInventario = new Ctrl_InventarioHerramienta();
-        principalPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Layout para las tarjetas
+
+        // Panel contenedor para principalPanel (para agregar márgenes)
+        JPanel contenedorPrincipal = new JPanel(new BorderLayout());
+        contenedorPrincipal.setBackground(new java.awt.Color(245, 246, 250));
+
+        principalPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.insets = new Insets(10, 10, 10, 10); // Márgenes
+        gbc.fill = GridBagConstraints.NONE; // No estirar componentes
+
+        principalPanel.setBackground(new java.awt.Color(245, 246, 250));
+
+        // Agregar márgenes al contenedor (aumentado a 40px en todos los lados)
+        contenedorPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        contenedorPrincipal.add(principalPanel, BorderLayout.CENTER);
+
+// JScrollPane -----------------------------
+        // Configurar el JScrollPane con el contenedor (en lugar de principalPanel directamente)
+        JScrollPane scrollPane = new JScrollPane(contenedorPrincipal);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(null);
+
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
+        scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = new Color(153, 153, 153);
+            }
+
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                return new JButton() {
+                    @Override
+                    public Dimension getPreferredSize() {
+                        return new Dimension(0, 0);
+                    }
+                };
+            }
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                return new JButton() {
+                    @Override
+                    public Dimension getPreferredSize() {
+                        return new Dimension(0, 0);
+                    }
+                };
+            }
+
+            @Override
+            protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(thumbColor);
+                g2.fillRoundRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height, 10, 10);
+                g2.dispose();
+            }
+        });
+
+        // Reemplazar en panelprincipal
+        panelprincipal.remove(principalPanel);
+        panelprincipal.add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 150, 1150, 560));
+// JScrollPane ----------------------------- 
 
         cmbCategoria.removeAllItems(); // Limpia por si acaso
         cmbCategoria.addItem("Seleccione una categoría"); // Primer ítem informativo
@@ -64,6 +142,9 @@ public class herramientas extends javax.swing.JPanel {
     // Método para cargar los materiales desde la base de datos
     private void cargarMateriales() {
         principalPanel.removeAll();
+        // Cambiar a FlowLayout alineado a la izquierda
+        principalPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+
         List<Ctrl_InventarioHerramienta.MaterialConDetalles> materiales = ctrlInventario.obtenerMateriales();
         for (Ctrl_InventarioHerramienta.MaterialConDetalles materialConDetalles : materiales) {
             agregarMaterial(
@@ -75,10 +156,13 @@ public class herramientas extends javax.swing.JPanel {
         }
         principalPanel.revalidate();
         principalPanel.repaint();
+        if (principalPanel.getParent() instanceof JViewport) {
+            ((JViewport) principalPanel.getParent()).setViewPosition(new Point(0, 0));
+        }
     }
 
     // Método para agregar una nueva tarjeta
-    public void agregarMaterial(MaterialDatos material, String nombreCategoria, String nombreMarca, String nombreUnidadMedida) {
+    public void agregarMaterial(HerramientaDatos material, String nombreCategoria, String nombreMarca, String nombreUnidadMedida) {
 
         JPanel tarjeta = new JPanel(new BorderLayout());
         tarjeta.setPreferredSize(new Dimension(210, 300)); // Ancho: 200, Alto: 300
@@ -106,12 +190,6 @@ public class herramientas extends javax.swing.JPanel {
         panelInfo.setBackground(new Color(46, 49, 82)); // Color de fondo azul oscuro
         Font fuenteInfo = new Font("Segoe UI", Font.PLAIN, 15); // Fuente Arial, negrita, tamaño 16
 
-        JLabel lblCodigo = new JLabel("Código: " + material.getIdInventario());
-        lblCodigo.setForeground(Color.WHITE);
-        lblCodigo.setFont(fuenteInfo); // Establece la fuente
-        lblCodigo.setHorizontalAlignment(SwingConstants.CENTER);
-        panelInfo.add(lblCodigo);
-
         JLabel lblNombre = new JLabel("Nombre: " + material.getNombre());
         lblNombre.setForeground(Color.WHITE);
         lblNombre.setFont(fuenteInfo); // Establece la fuente
@@ -123,6 +201,25 @@ public class herramientas extends javax.swing.JPanel {
         lblCategoria.setFont(fuenteInfo); // Establece la fuente
         lblCategoria.setHorizontalAlignment(SwingConstants.CENTER);
         panelInfo.add(lblCategoria);
+
+        JLabel lblEstado = new JLabel("Estado: " + material.getEstado());
+        lblEstado.setFont(fuenteInfo); // Establece la fuente
+        lblEstado.setHorizontalAlignment(SwingConstants.CENTER);
+        // Aplicar color según el estado
+        switch (material.getEstado().toLowerCase()) {
+            case "disponible":
+                lblEstado.setForeground(new Color(0, 128, 0)); // Verde
+                break;
+            case "reparación":
+                lblEstado.setForeground(new Color(255, 165, 0)); // Naranja
+                break;
+            case "dañado":
+                lblEstado.setForeground(Color.RED); // Rojo
+                break;
+            default:
+                lblEstado.setForeground(Color.WHITE); // Blanco por defecto
+        }
+        panelInfo.add(lblEstado);
 
         tarjeta.add(panelInfo, BorderLayout.CENTER);
 
@@ -136,9 +233,13 @@ public class herramientas extends javax.swing.JPanel {
         JPanel panelBotones = new JPanel(new FlowLayout());
         panelBotones.setBackground(new Color(46, 49, 82));
 
-        JButton verBtn = new JButton(new ImageIcon(getClass().getResource("/view (1).png"))); // Reemplaza "ver.png" con la ruta de tu imagen
-        verBtn.setPreferredSize(new Dimension(36, 28)); // Ancho: 30, Alto: 30
-        verBtn.setBackground(new Color(188, 225, 193)); // Establece el fondo en rojo
+        RSButtonShape verBtn = new RSButtonShape(); // Reemplaza "ver.png" con la ruta de tu imagen
+        verBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view (1).png")));
+        verBtn.setPreferredSize(new Dimension(33, 25)); // Ancho: 30, Alto: 30
+        verBtn.setBackground(new Color(216, 246, 221)); // Establece el fondo en rojo
+        verBtn.setBackgroundHover(new java.awt.Color(188, 225, 193));
+        verBtn.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        verBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         //accion del boton de ver
         verBtn.addActionListener(new ActionListener() {
             @Override
@@ -150,15 +251,19 @@ public class herramientas extends javax.swing.JPanel {
             }
         });
 
-        JButton editarBtn = new JButton(new ImageIcon(getClass().getResource("/edit.png")));
-        editarBtn.setPreferredSize(new Dimension(36, 28)); // Ancho: 30, Alto: 30
-        editarBtn.setBackground(new Color(166, 199, 245));
+        RSButtonShape editarBtn = new RSButtonShape();
+        editarBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edit.png")));
+        editarBtn.setPreferredSize(new Dimension(33, 25)); // Ancho: 30, Alto: 30
+        editarBtn.setBackground(new Color(189, 215, 252));
+        editarBtn.setBackgroundHover(new java.awt.Color(166, 199, 245));
+        editarBtn.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        editarBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         //accion del boton de editar
         editarBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Obtener el material asociado a la tarjeta
-                MaterialDatos material = (MaterialDatos) tarjeta.getClientProperty("material");
+                HerramientaDatos material = (HerramientaDatos) tarjeta.getClientProperty("material");
 
                 // Abrir el JDialog para editar
                 herramientaEditar dialog = new herramientaEditar(new javax.swing.JFrame(), true, material);
@@ -176,9 +281,13 @@ public class herramientas extends javax.swing.JPanel {
             }
         });
 
-        JButton eliminarBtn = new JButton(new ImageIcon(getClass().getResource("/delete (6).png")));
-        eliminarBtn.setPreferredSize(new Dimension(36, 28)); // Ancho: 30, Alto: 30
-        eliminarBtn.setBackground(new Color(242, 174, 188));
+        RSButtonShape eliminarBtn = new RSButtonShape();
+        eliminarBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (6).png")));
+        eliminarBtn.setPreferredSize(new Dimension(33, 25)); // Ancho: 30, Alto: 30
+        eliminarBtn.setBackground(new Color(242, 199, 207));
+        eliminarBtn.setBackgroundHover(new java.awt.Color(242, 174, 188));
+        eliminarBtn.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        eliminarBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         eliminarBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -213,22 +322,47 @@ public class herramientas extends javax.swing.JPanel {
         principalPanel.add(tarjeta);
         principalPanel.revalidate();
         principalPanel.repaint();
+        contenedorPrincipal.revalidate(); // Revalidar el contenedor principal también
+        contenedorPrincipal.repaint();   // Repintar el contenedor principal también
+
+        // Calcular la altura dinámicamente según 5 tarjetas por fila
+        int totalTarjetas = principalPanel.getComponentCount();
+        int filas = (int) Math.ceil((double) totalTarjetas / 5); // Número de filas
+        int tarjetaHeight = 310; // Altura de la tarjeta + margen
+        int totalHeight = filas * tarjetaHeight;
+        // Ajustar el ancho y alto considerando el margen (1150 - 80px de márgenes laterales, 560 - 80px de márgenes verticales)
+        principalPanel.setPreferredSize(new Dimension(1150 - 80, Math.max(totalHeight, 560 - 80))); // Mínimo ajustado
     }
 
 //metodo para actualizar tarjeta
-    public void actualizarTarjeta(JPanel tarjeta, MaterialDatos material, String nombreCategoria, String nombreMarca, String nombreUnidadMedida) {
+    public void actualizarTarjeta(JPanel tarjeta, HerramientaDatos material, String nombreCategoria, String nombreMarca, String nombreUnidadMedida) {
         // Obtener el panel de información (panelInfo) de la tarjeta
         JPanel panelInfo = (JPanel) tarjeta.getComponent(1); // El segundo componente es panelInfo
 
         // Actualizar las etiquetas dentro de panelInfo
-        JLabel lblCodigo = (JLabel) panelInfo.getComponent(0);
-        lblCodigo.setText("Código: " + material.getIdInventario());
-
-        JLabel lblNombre = (JLabel) panelInfo.getComponent(1);
+        JLabel lblNombre = (JLabel) panelInfo.getComponent(0);
         lblNombre.setText("Nombre: " + material.getNombre());
 
-        JLabel lblCategoria = (JLabel) panelInfo.getComponent(2);
+        JLabel lblCategoria = (JLabel) panelInfo.getComponent(1);
         lblCategoria.setText("Categoría: " + nombreCategoria);
+
+        JLabel lblEstado = (JLabel) panelInfo.getComponent(2);
+        lblEstado.setText("Estado: " + material.getEstado());
+        // Aplicar color según el estado
+        if (material.getEstado() != null) {
+            String estado = material.getEstado().toLowerCase();
+            if (estado.contains("disponible")) {
+                lblEstado.setForeground(new Color(50, 200, 50));
+            } else if (estado.contains("reparación") || estado.contains("reparacion")) {
+                lblEstado.setForeground(new Color(255, 140, 0));
+            } else if (estado.contains("dañado") || estado.contains("danado")) {
+                lblEstado.setForeground(new Color(255, 50, 50));
+            } else {
+                lblEstado.setForeground(Color.WHITE);
+            }
+        } else {
+            lblEstado.setForeground(Color.WHITE);
+        }
 
         // Actualizar la imagen si es necesario
         JPanel panelImagen = (JPanel) tarjeta.getComponent(0); // El primer componente es panelImagen
@@ -413,8 +547,13 @@ public class herramientas extends javax.swing.JPanel {
         dialog.setVisible(true);
 
         if (dialog.materialGuardado) {
-            MaterialDatos material = dialog.material;
-            if (ctrlInventario.insertar(material)) {
+            HerramientaDatos material = dialog.material;
+            int idGenerado = ctrlInventario.insertar(material); // Obtener el ID generado
+
+            if (idGenerado > 0) { // Si el ID es mayor a 0, la inserción fue exitosa
+                // Actualizar el ID del material con el valor generado
+                material.setIdInventario(idGenerado);
+
                 // Obtener los nombres de categoría, marca y unidad de medida para el nuevo material
                 String[] detalles = obtenerDetalles(material.getIdCategoria(), material.getIdMarca(), material.getIdUnidadMedida());
                 agregarMaterial(material, detalles[0], detalles[1], detalles[2]);

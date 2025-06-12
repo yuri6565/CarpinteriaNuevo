@@ -4,7 +4,6 @@
  */
 package vista.InventarioUsu;
 
-import vista.Inventario0.*;
 import controlador.Ctrl_CategoriaHerramienta;
 import controlador.Ctrl_MarcaHerramienta;
 import controlador.Ctrl_UnidadHerramienta;
@@ -16,6 +15,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import modelo.Categoria;
 import modelo.HerramientaDatos;
@@ -30,8 +30,11 @@ import modelo.Unidad;
 public class herramientasNuevo extends javax.swing.JDialog {
 
     private byte[] imagenBytes; // Para almacenar la imagen en bytes
+    private byte[] previewImageBytes; // Para almacenar la imagen de vista previa
+    private ImageIcon previewImageIcon; // Para mantener la imagen de vista previa escalada
+
     public boolean materialGuardado = false;
-    public MaterialDatos material;
+    public HerramientaDatos material;
     private List<Categoria> categorias;
     private List<Marca> marcas;
     private List<Unidad> unidades;
@@ -43,6 +46,12 @@ public class herramientasNuevo extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setTitle("Nueva herramienta");
+
+        // Cargar la imagen de vista previa
+        cargarImagenVistaPrevia();
+
+        // Cargar la imagen predeterminada para la base de datos
+        cargarImagenPorDefectoParaBaseDatos();
 
         // Cargar datos en los combo boxes
         cargarCategorias();
@@ -80,6 +89,59 @@ public class herramientasNuevo extends javax.swing.JDialog {
         }
     }
 
+    private void cargarImagenVistaPrevia() {
+        try {
+            // Cargar la imagen de vista previa desde los recursos
+            String rutaImagenPrevia = "/subirImagen.png"; // Ajusta la ruta según la ubicación
+            java.net.URL imgURL = getClass().getResource(rutaImagenPrevia);
+
+            if (imgURL == null) {
+                JOptionPane.showMessageDialog(this, "No se encontró la imagen de vista previa.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Leer los bytes de la imagen de vista previa
+            previewImageBytes = Files.readAllBytes(new File(imgURL.toURI()).toPath());
+
+            // Obtener dimensiones del lblImagen
+            int width = lblImagen.getWidth();  // 180
+            int height = lblImagen.getHeight(); // 150
+
+            // Escalar la imagen de vista previa
+            ImageIcon imagen = new ImageIcon(imgURL);
+            Image img = imagen.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            previewImageIcon = new ImageIcon(img);
+            lblImagen.setIcon(previewImageIcon);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar la imagen de vista previa: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
+// Método para cargar la imagen que se guardará en la base de datos
+    private void cargarImagenPorDefectoParaBaseDatos() {
+        try {
+            // Cargar la imagen predeterminada para la base de datos
+            String rutaImagenDefecto = "/imagenSin.png"; // Ajusta la ruta según la ubicación
+            java.net.URL imgURL = getClass().getResource(rutaImagenDefecto);
+
+            if (imgURL == null) {
+                JOptionPane.showMessageDialog(this, "No se encontró la imagen por defecto para la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Leer los bytes de la imagen predeterminada
+            imagenBytes = Files.readAllBytes(new File(imgURL.toURI()).toPath());
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar la imagen por defecto para la base de datos: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -95,25 +157,26 @@ public class herramientasNuevo extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        btnSubirImagen = new rojeru_san.RSButton();
-        cmbMarca = new RSMaterialComponent.RSComboBoxMaterial();
+        cmbEstado = new RSMaterialComponent.RSComboBoxMaterial();
         txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
         txtDescripcion = new RSMaterialComponent.RSTextFieldMaterial();
         cmbCategoria = new RSMaterialComponent.RSComboBoxMaterial();
         txtCantidad = new RSMaterialComponent.RSTextFieldMaterial();
         btnCancelar = new rojeru_san.RSButtonRiple();
         btnGuardar = new rojeru_san.RSButtonRiple();
-        lblImagen = new javax.swing.JLabel();
-        cmbStock = new RSMaterialComponent.RSComboBoxMaterial();
         cmbUnidad = new RSMaterialComponent.RSComboBoxMaterial();
-        cmbEstado = new RSMaterialComponent.RSComboBoxMaterial();
         jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        txtPrecioUnitario = new RSMaterialComponent.RSTextFieldMaterial();
+        lblImagen = new javax.swing.JLabel();
+        btnSubirImagen = new rojeru_san.RSButton();
+        jLabel9 = new javax.swing.JLabel();
+        cmbMarca = new RSMaterialComponent.RSComboBoxMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(520, 570));
 
         panelP.setBackground(new java.awt.Color(255, 255, 255));
         panelP.setPreferredSize(new java.awt.Dimension(500, 500));
@@ -135,30 +198,21 @@ public class herramientasNuevo extends javax.swing.JDialog {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel5.setText("Descripcion:");
-        panelP.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
+        panelP.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel7.setText("Marca:");
-        panelP.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, -1, -1));
+        jLabel7.setText("Estado:");
+        panelP.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 205, -1, -1));
 
-        btnSubirImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/up-arrow (1).png"))); // NOI18N
-        btnSubirImagen.setText(" Subir imagen");
-        btnSubirImagen.addActionListener(new java.awt.event.ActionListener() {
+        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione estado:", "Disponible", "Reparación", "Dañado" }));
+        cmbEstado.setColorMaterial(new java.awt.Color(0, 0, 0));
+        cmbEstado.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        cmbEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSubirImagenActionPerformed(evt);
+                cmbEstadoActionPerformed(evt);
             }
         });
-        panelP.add(btnSubirImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 290, 140, 30));
-
-        cmbMarca.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione marca:" }));
-        cmbMarca.setColorMaterial(new java.awt.Color(0, 0, 0));
-        cmbMarca.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        cmbMarca.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbMarcaActionPerformed(evt);
-            }
-        });
-        panelP.add(cmbMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, -1, 30));
+        panelP.add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 230, -1, 30));
 
         txtNombre.setForeground(new java.awt.Color(0, 0, 0));
         txtNombre.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -184,7 +238,7 @@ public class herramientasNuevo extends javax.swing.JDialog {
                 txtDescripcionActionPerformed(evt);
             }
         });
-        panelP.add(txtDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 200, 30));
+        panelP.add(txtDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 90, 200, 30));
 
         cmbCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione categoría:", "Categoría 1", "Categoría 2", "Categoría 3" }));
         cmbCategoria.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -194,7 +248,7 @@ public class herramientasNuevo extends javax.swing.JDialog {
                 cmbCategoriaActionPerformed(evt);
             }
         });
-        panelP.add(cmbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 200, 30));
+        panelP.add(cmbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 200, 30));
 
         txtCantidad.setForeground(new java.awt.Color(0, 0, 0));
         txtCantidad.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -207,7 +261,7 @@ public class herramientasNuevo extends javax.swing.JDialog {
                 txtCantidadActionPerformed(evt);
             }
         });
-        panelP.add(txtCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 200, 30));
+        panelP.add(txtCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 200, 30));
 
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar.setText("Cancelar");
@@ -218,7 +272,7 @@ public class herramientasNuevo extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        panelP.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 490, 140, -1));
+        panelP.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 510, 140, -1));
 
         btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar.setText("Guardar");
@@ -229,21 +283,7 @@ public class herramientasNuevo extends javax.swing.JDialog {
                 btnGuardarActionPerformed(evt);
             }
         });
-        panelP.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 490, 140, -1));
-
-        lblImagen.setBackground(new java.awt.Color(153, 204, 255));
-        lblImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        panelP.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 330, 180, 120));
-
-        cmbStock.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione stock:", "bajo", "medio", "alto" }));
-        cmbStock.setColorMaterial(new java.awt.Color(0, 0, 0));
-        cmbStock.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        cmbStock.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbStockActionPerformed(evt);
-            }
-        });
-        panelP.add(cmbStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 250, -1, 30));
+        panelP.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 510, 140, -1));
 
         cmbUnidad.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione unidad-medida:", "RSItem 1", "RSItem 2", "RSItem 3", "RSItem 4" }));
         cmbUnidad.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -253,37 +293,63 @@ public class herramientasNuevo extends javax.swing.JDialog {
                 cmbUnidadActionPerformed(evt);
             }
         });
-        panelP.add(cmbUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 90, -1, 30));
-
-        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione estado:", "Disponible", "No disponible" }));
-        cmbEstado.setColorMaterial(new java.awt.Color(0, 0, 0));
-        cmbEstado.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        cmbEstado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbEstadoActionPerformed(evt);
-            }
-        });
-        panelP.add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, -1, 30));
+        panelP.add(cmbUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, 30));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel8.setText("Cantidad:");
-        panelP.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
-
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel9.setText("Stock:");
-        panelP.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 220, -1, -1));
+        panelP.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel10.setText("Categoria:");
-        panelP.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, -1, -1));
+        panelP.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel11.setText("Unidad de medida:");
-        panelP.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, -1, -1));
+        panelP.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
 
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel12.setText("Estado:");
-        panelP.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, -1, -1));
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel6.setText("Precio unitario:");
+        panelP.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, -1, -1));
+
+        txtPrecioUnitario.setForeground(new java.awt.Color(0, 0, 0));
+        txtPrecioUnitario.setColorMaterial(new java.awt.Color(0, 0, 0));
+        txtPrecioUnitario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtPrecioUnitario.setPhColor(new java.awt.Color(0, 0, 0));
+        txtPrecioUnitario.setPlaceholder("Ingrese el precio unitario...");
+        txtPrecioUnitario.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtPrecioUnitario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPrecioUnitarioActionPerformed(evt);
+            }
+        });
+        panelP.add(txtPrecioUnitario, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, 200, 30));
+
+        lblImagen.setBackground(new java.awt.Color(153, 204, 255));
+        lblImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelP.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 320, 180, 150));
+
+        btnSubirImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/up-arrow (1).png"))); // NOI18N
+        btnSubirImagen.setText(" Subir imagen");
+        btnSubirImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubirImagenActionPerformed(evt);
+            }
+        });
+        panelP.add(btnSubirImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 280, 140, 30));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel9.setText("Marca:");
+        panelP.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 130, -1, -1));
+
+        cmbMarca.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione marca:" }));
+        cmbMarca.setColorMaterial(new java.awt.Color(0, 0, 0));
+        cmbMarca.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        cmbMarca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbMarcaActionPerformed(evt);
+            }
+        });
+        panelP.add(cmbMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 160, -1, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -298,46 +364,20 @@ public class herramientasNuevo extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 551, Short.MAX_VALUE)
+            .addGap(0, 570, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(panelP, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelP, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSubirImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirImagenActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "png", "jpeg"));
-
-        int opcion = fileChooser.showOpenDialog(null);
-        if (opcion == JFileChooser.APPROVE_OPTION) {
-            try {
-                File archivo = fileChooser.getSelectedFile();
-                // Convertir la imagen a bytes
-                imagenBytes = Files.readAllBytes(archivo.toPath());
-
-                // Obtener dimensiones del lblImagen
-                int width = lblImagen.getWidth();  // 150
-                int height = lblImagen.getHeight(); // 140
-
-                // Mostrar previsualización
-                ImageIcon imagen = new ImageIcon(archivo.getAbsolutePath());
-                Image img = imagen.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-                lblImagen.setIcon(new ImageIcon(img));
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Error al leer la imagen: " + ex.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_btnSubirImagenActionPerformed
-
-    private void cmbMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMarcaActionPerformed
+    private void cmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstadoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cmbMarcaActionPerformed
+    }//GEN-LAST:event_cmbEstadoActionPerformed
 
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
@@ -364,30 +404,19 @@ public class herramientasNuevo extends javax.swing.JDialog {
         // Obtener los valores de los campos
         String nombre = txtNombre.getText().trim();
         String descripcion = txtDescripcion.getText().trim();
-        String estado = (String) cmbEstado.getSelectedItem();
-        String stock = (String) cmbStock.getSelectedItem();
         String categoriaNombre = (String) cmbCategoria.getSelectedItem();
         String marcaNombre = (String) cmbMarca.getSelectedItem();
         String unidadNombre = (String) cmbUnidad.getSelectedItem();
+        String estado = (String) cmbEstado.getSelectedItem();
 
         // Validar campos obligatorios
         if (nombre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingrese el nombre del material.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese el nombre de la herramienta.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         if (descripcion.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingrese la descripción del material.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if (estado == null || estado.equals("Seleccione estado:")) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione un estado.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if (stock == null || stock.equals("Seleccione stock:")) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione un nivel de stock.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese la descripción de la herramienta.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -406,6 +435,11 @@ public class herramientasNuevo extends javax.swing.JDialog {
             return;
         }
 
+        if (estado == null || estado.equals("Seleccione estado:")) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una estado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         // Validar y obtener la cantidad
         int cantidad;
         try {
@@ -419,9 +453,16 @@ public class herramientasNuevo extends javax.swing.JDialog {
             return;
         }
 
-        // Verificar si hay una imagen seleccionada
-        if (imagenBytes == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, suba una imagen antes de guardar.", "Error", JOptionPane.ERROR_MESSAGE);
+        // Validar y obtener el precio unitario
+        double precioUnitario;
+        try {
+            precioUnitario = Double.parseDouble(txtPrecioUnitario.getText().trim());
+            if (precioUnitario < 0) {
+                JOptionPane.showMessageDialog(this, "El precio unitario no puede ser negativo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Ingrese un valor numérico válido para el precio unitario.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -466,13 +507,18 @@ public class herramientasNuevo extends javax.swing.JDialog {
             return;
         }
 
+        // Usar imagenBytes (que contiene la imagen predeterminada para la base de datos)
+        if (imagenBytes == null) {
+            cargarImagenPorDefectoParaBaseDatos(); // Recargar si no se ha inicializado
+        }
+
         // Crear el objeto MaterialDatos
-        material = new MaterialDatos(
+        material = new HerramientaDatos(
                 nombre,
                 descripcion,
-                estado,
-                stock,
                 cantidad,
+                precioUnitario,
+                estado,
                 idCategoria,
                 idMarca,
                 idUnidadMedida,
@@ -483,17 +529,52 @@ public class herramientasNuevo extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void cmbStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStockActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbStockActionPerformed
-
     private void cmbUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbUnidadActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbUnidadActionPerformed
 
-    private void cmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstadoActionPerformed
+    private void txtPrecioUnitarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioUnitarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cmbEstadoActionPerformed
+    }//GEN-LAST:event_txtPrecioUnitarioActionPerformed
+
+    private void btnSubirImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirImagenActionPerformed
+        try {
+            // Configurar el Look and Feel de Windows (más moderno)
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "png", "jpeg"));
+
+        int opcion = fileChooser.showOpenDialog(null);
+        if (opcion == JFileChooser.APPROVE_OPTION) {
+            try {
+                File archivo = fileChooser.getSelectedFile();
+                // Convertir la imagen a bytes
+                imagenBytes = Files.readAllBytes(archivo.toPath()); // Actualizar imagen para la base de datos
+
+                // Obtener dimensiones del lblImagen
+                int width = lblImagen.getWidth();  // 180
+                int height = lblImagen.getHeight(); // 150
+
+                // Mostrar previsualización
+                ImageIcon imagen = new ImageIcon(archivo.getAbsolutePath());
+                Image img = imagen.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+                previewImageIcon = new ImageIcon(img); // Actualizar la vista previa
+                lblImagen.setIcon(previewImageIcon);
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error al leer la imagen: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnSubirImagenActionPerformed
+
+    private void cmbMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMarcaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbMarcaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -545,14 +626,13 @@ public class herramientasNuevo extends javax.swing.JDialog {
     private RSMaterialComponent.RSComboBoxMaterial cmbCategoria;
     private RSMaterialComponent.RSComboBoxMaterial cmbEstado;
     private RSMaterialComponent.RSComboBoxMaterial cmbMarca;
-    private RSMaterialComponent.RSComboBoxMaterial cmbStock;
     private RSMaterialComponent.RSComboBoxMaterial cmbUnidad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -562,5 +642,6 @@ public class herramientasNuevo extends javax.swing.JDialog {
     private RSMaterialComponent.RSTextFieldMaterial txtCantidad;
     private RSMaterialComponent.RSTextFieldMaterial txtDescripcion;
     private RSMaterialComponent.RSTextFieldMaterial txtNombre;
+    private RSMaterialComponent.RSTextFieldMaterial txtPrecioUnitario;
     // End of variables declaration//GEN-END:variables
 }

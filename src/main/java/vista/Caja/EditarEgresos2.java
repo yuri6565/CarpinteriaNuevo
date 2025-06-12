@@ -31,7 +31,6 @@ import vista.proveedor.proveedornuevo;
  */
 public class EditarEgresos2 extends javax.swing.JDialog {
 
-    private Ingresos ingresoPanel;
     private int id_codigo;
 
     /**

@@ -4,7 +4,6 @@
  */
 package vista.InventarioUsu;
 
-import vista.Inventario0.*;
 import controlador.Ctrl_CategoriaMaterial;
 import controlador.Ctrl_MarcaMaterial;
 import controlador.Ctrl_UnidadMaterial;
@@ -18,6 +17,7 @@ import java.nio.file.Files;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import modelo.Categoria;
 import modelo.Marca;
 import modelo.MaterialDatos;
@@ -73,16 +73,6 @@ public class materialEditar extends javax.swing.JDialog {
             cmbUnidad.addItem(um.getNombre());
         }
 
-        cmbEstado.removeAllItems();
-        cmbEstado.addItem("Seleccione estado:");
-        cmbEstado.addItem("Disponible");
-        cmbEstado.addItem("No disponible");
-
-        cmbStock.removeAllItems();
-        cmbStock.addItem("Seleccione stock:");
-        cmbStock.addItem("Bajo");
-        cmbStock.addItem("Medio");
-        cmbStock.addItem("Alto");
     }
     
 // Método para prellenar los campos con los datos del material
@@ -92,6 +82,7 @@ public class materialEditar extends javax.swing.JDialog {
             txtDescripcion.setText(material.getDescripcion());
             txtCantidad.setText(String.valueOf(material.getCantidad()));
             //txtCodigo.setText(String.valueOf(material.getIdInventario())); // Mostrar el ID como código
+            txtPrecioUnitario.setText(String.valueOf(material.getPrecioUnitario()));
 
             // Seleccionar categoría
             for (Categoria cat : categorias) {
@@ -117,11 +108,6 @@ public class materialEditar extends javax.swing.JDialog {
                 }
             }
 
-            // Seleccionar estado
-            cmbEstado.setSelectedItem(material.getEstado());
-
-            // Seleccionar stock
-            cmbStock.setSelectedItem(material.getStock());
 
             // Cargar imagen si existe
             if (material.getImagen() != null) {
@@ -161,8 +147,6 @@ public class materialEditar extends javax.swing.JDialog {
         lblImagen = new javax.swing.JLabel();
         btnCancelar = new rojeru_san.RSButtonRiple();
         btnGuardar = new rojeru_san.RSButtonRiple();
-        cmbStock = new RSMaterialComponent.RSComboBoxMaterial();
-        cmbEstado = new RSMaterialComponent.RSComboBoxMaterial();
         cmbUnidad = new RSMaterialComponent.RSComboBoxMaterial();
         cmbCategoria = new RSMaterialComponent.RSComboBoxMaterial();
         cmbMarca = new RSMaterialComponent.RSComboBoxMaterial();
@@ -171,12 +155,12 @@ public class materialEditar extends javax.swing.JDialog {
         txtDescripcion = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel5 = new javax.swing.JLabel();
         txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
-        jLabel3 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        txtPrecioUnitario = new RSMaterialComponent.RSTextFieldMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -200,11 +184,11 @@ public class materialEditar extends javax.swing.JDialog {
                 btnSubirImagenActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSubirImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 290, 140, 30));
+        jPanel1.add(btnSubirImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 250, 140, 30));
 
         lblImagen.setBackground(new java.awt.Color(153, 204, 255));
         lblImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 330, 150, 120));
+        jPanel1.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 300, 180, 150));
 
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar.setText("Cancelar");
@@ -228,26 +212,6 @@ public class materialEditar extends javax.swing.JDialog {
         });
         jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 480, 140, -1));
 
-        cmbStock.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione stock:", "Bajo", "Medio", "alto" }));
-        cmbStock.setColorMaterial(new java.awt.Color(0, 0, 0));
-        cmbStock.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        cmbStock.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbStockActionPerformed(evt);
-            }
-        });
-        jPanel1.add(cmbStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 250, -1, 30));
-
-        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione estado:", "Disponible", "No disponible" }));
-        cmbEstado.setColorMaterial(new java.awt.Color(0, 0, 0));
-        cmbEstado.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        cmbEstado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbEstadoActionPerformed(evt);
-            }
-        });
-        jPanel1.add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 170, -1, 30));
-
         cmbUnidad.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione unidad-medida:", "RSItem 1", "RSItem 2", "RSItem 3", "RSItem 4" }));
         cmbUnidad.setColorMaterial(new java.awt.Color(0, 0, 0));
         cmbUnidad.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
@@ -256,7 +220,7 @@ public class materialEditar extends javax.swing.JDialog {
                 cmbUnidadActionPerformed(evt);
             }
         });
-        jPanel1.add(cmbUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 90, -1, 30));
+        jPanel1.add(cmbUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, 30));
 
         cmbCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione categoría:", "Categoría 1", "Categoría 2", "Categoría 3" }));
         cmbCategoria.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -266,7 +230,7 @@ public class materialEditar extends javax.swing.JDialog {
                 cmbCategoriaActionPerformed(evt);
             }
         });
-        jPanel1.add(cmbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 200, 30));
+        jPanel1.add(cmbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 200, 30));
 
         cmbMarca.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione marca:" }));
         cmbMarca.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -276,7 +240,7 @@ public class materialEditar extends javax.swing.JDialog {
                 cmbMarcaActionPerformed(evt);
             }
         });
-        jPanel1.add(cmbMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, -1, 30));
+        jPanel1.add(cmbMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, -1, 30));
 
         txtCantidad.setForeground(new java.awt.Color(0, 0, 0));
         txtCantidad.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -289,11 +253,11 @@ public class materialEditar extends javax.swing.JDialog {
                 txtCantidadActionPerformed(evt);
             }
         });
-        jPanel1.add(txtCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 200, 30));
+        jPanel1.add(txtCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 200, 30));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel7.setText("Marca:");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, -1, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, -1, -1));
 
         txtDescripcion.setForeground(new java.awt.Color(0, 0, 0));
         txtDescripcion.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -306,11 +270,11 @@ public class materialEditar extends javax.swing.JDialog {
                 txtDescripcionActionPerformed(evt);
             }
         });
-        jPanel1.add(txtDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 200, 30));
+        jPanel1.add(txtDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 90, 200, 30));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel5.setText("Descripcion:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, -1, -1));
 
         txtNombre.setForeground(new java.awt.Color(0, 0, 0));
         txtNombre.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -325,17 +289,13 @@ public class materialEditar extends javax.swing.JDialog {
         });
         jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 200, 30));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel3.setText("Stock:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 220, -1, -1));
-
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel8.setText("Cantidad:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setText("Categoria:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, -1, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel4.setText("Nombre:");
@@ -343,11 +303,24 @@ public class materialEditar extends javax.swing.JDialog {
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel6.setText("Unidad de Medida:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 60, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel10.setText("Estado:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 140, -1, -1));
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel11.setText("Precio unitario:");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, -1, -1));
+
+        txtPrecioUnitario.setForeground(new java.awt.Color(0, 0, 0));
+        txtPrecioUnitario.setColorMaterial(new java.awt.Color(0, 0, 0));
+        txtPrecioUnitario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtPrecioUnitario.setPhColor(new java.awt.Color(0, 0, 0));
+        txtPrecioUnitario.setPlaceholder("Ingrese el precio unitario...");
+        txtPrecioUnitario.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtPrecioUnitario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPrecioUnitarioActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtPrecioUnitario, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, 200, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -364,6 +337,13 @@ public class materialEditar extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSubirImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirImagenActionPerformed
+        try {
+            // Configurar el Look and Feel de Windows (más moderno)
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "png", "jpeg"));
 
@@ -397,27 +377,17 @@ public class materialEditar extends javax.swing.JDialog {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         String nombre = txtNombre.getText().trim();
         String descripcion = txtDescripcion.getText().trim();
-        String estado = (String) cmbEstado.getSelectedItem();
-        String stock = (String) cmbStock.getSelectedItem();
         String categoriaNombre = (String) cmbCategoria.getSelectedItem();
         String marcaNombre = (String) cmbMarca.getSelectedItem();
         String unidadNombre = (String) cmbUnidad.getSelectedItem();
 
         // Validar campos obligatorios
-        if (nombre.isEmpty() || descripcion.isEmpty() || estado == null || stock == null ||
-            categoriaNombre == null || marcaNombre == null || unidadNombre == null) {
+        if (nombre.isEmpty() || descripcion.isEmpty() || categoriaNombre == null || marcaNombre == null || unidadNombre == null) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.",
                 "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (estado.equals("Seleccione estado:") || stock.equals("Seleccione stock:") ||
-            categoriaNombre.equals("Seleccione categoría:") || marcaNombre.equals("Seleccione marca:") ||
-            unidadNombre.equals("Seleccione unidad-medida:")) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione valores válidos en los campos.",
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
 
         // Validar y obtener la cantidad
         int cantidad;
@@ -431,6 +401,25 @@ public class materialEditar extends javax.swing.JDialog {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Ingrese un número válido en la cantidad.",
                 "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+                // Validar y obtener el precio unitario
+        double precioUnitario;
+        try {
+            precioUnitario = Double.parseDouble(txtPrecioUnitario.getText().trim());
+            if (precioUnitario < 0) {
+                JOptionPane.showMessageDialog(this, "El precio unitario no puede ser negativo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Ingrese un valor numérico válido para el precio unitario.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Verificar si hay una imagen seleccionada
+        if (imagenBytes == null) {
+            JOptionPane.showMessageDialog(this, "Por favor, suba una imagen antes de guardar.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -476,9 +465,8 @@ public class materialEditar extends javax.swing.JDialog {
         if (material != null) {
             material.setNombre(nombre);
             material.setDescripcion(descripcion);
-            material.setEstado(estado);
-            material.setStock(stock);
             material.setCantidad(cantidad);
+            material.setPrecioUnitario(precioUnitario);
             material.setIdCategoria(idCategoria);
             material.setIdMarca(idMarca);
             material.setIdUnidadMedida(idUnidadMedida);
@@ -492,14 +480,6 @@ public class materialEditar extends javax.swing.JDialog {
         guardado = true; // Marcar que se han guardado los cambios
         dispose(); // Cierra el JDialog
     }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void cmbStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStockActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbStockActionPerformed
-
-    private void cmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstadoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbEstadoActionPerformed
 
     private void cmbUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbUnidadActionPerformed
         // TODO add your handling code here:
@@ -524,6 +504,10 @@ public class materialEditar extends javax.swing.JDialog {
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
+
+    private void txtPrecioUnitarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioUnitarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecioUnitarioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -573,13 +557,10 @@ public class materialEditar extends javax.swing.JDialog {
     private rojeru_san.RSButtonRiple btnGuardar;
     private rojeru_san.RSButton btnSubirImagen;
     private RSMaterialComponent.RSComboBoxMaterial cmbCategoria;
-    private RSMaterialComponent.RSComboBoxMaterial cmbEstado;
     private RSMaterialComponent.RSComboBoxMaterial cmbMarca;
-    private RSMaterialComponent.RSComboBoxMaterial cmbStock;
     private RSMaterialComponent.RSComboBoxMaterial cmbUnidad;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -592,5 +573,6 @@ public class materialEditar extends javax.swing.JDialog {
     private RSMaterialComponent.RSTextFieldMaterial txtCantidad;
     private RSMaterialComponent.RSTextFieldMaterial txtDescripcion;
     private RSMaterialComponent.RSTextFieldMaterial txtNombre;
+    private RSMaterialComponent.RSTextFieldMaterial txtPrecioUnitario;
     // End of variables declaration//GEN-END:variables
 }
