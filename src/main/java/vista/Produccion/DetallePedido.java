@@ -21,6 +21,7 @@ import static javax.swing.SwingConstants.CENTER;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import modelo.Conexion;
+import vista.TemaManager;
 
 /**
  *
@@ -35,6 +36,7 @@ public class DetallePedido extends javax.swing.JPanel {
             String fechaFin, String estado, String cantidad, String dimensiones) {
         this.idProduccion = idProduccion;
         initComponents();
+        
 
         // Asignar valores directamente
         this.nombre.setText(nombre != null ? nombre : "");
@@ -48,6 +50,106 @@ public class DetallePedido extends javax.swing.JPanel {
         configurarTabla();
         cargarTablaEtapa();
         cargarDatosPedido();
+        aplicarTema();
+        TemaManager.getInstance().addThemeChangeListener(() -> {
+            aplicarTema(); // Update theme when it changes
+        });
+    }
+
+    public void aplicarTema() {
+        boolean oscuro = TemaManager.getInstance().isOscuro();
+
+        if (oscuro) {
+            // Colores para tema oscuro
+            Color fondo = new Color(21, 21, 33);
+            Color texto = Color.WHITE;
+            Color primario = new Color(40, 60, 150);
+            Color secundario = new Color(30, 30, 45);
+
+            // Aplicar a componentes principales
+            jPanel2.setBackground(fondo);
+            jPanel3.setBackground(primario);
+
+            // Aplicar a labels
+            aplicarTemaLabels(texto);
+
+            // Configurar tabla para tema oscuro
+            configurarTablaOscuro();
+
+        } else {
+            // Colores para tema claro
+            Color fondo = new Color(242, 247, 255);
+            Color texto = Color.BLACK;
+            Color primario = new Color(72, 92, 188);
+
+            // Aplicar a componentes principales
+            jPanel2.setBackground(fondo);
+            jPanel3.setBackground(Color.BLACK);
+
+            // Aplicar a labels
+            aplicarTemaLabels(texto);
+
+            // Configurar tabla para tema claro
+            configurarTablaClaro();
+        }
+    }
+
+    private void aplicarTemaLabels(Color texto) {
+        // Aplicar color de texto a todos los labels
+        jLabel1.setForeground(texto);
+        jLabel5.setForeground(texto);
+        jLabel9.setForeground(texto);
+        jLabel11.setForeground(texto);
+        jLabel12.setForeground(texto);
+        jLabel13.setForeground(texto);
+        jLabel15.setForeground(texto);
+
+        // Aplicar a labels de datos
+        nombre.setForeground(texto);
+        fecha_ini.setForeground(texto);
+        fecha_fin.setForeground(texto);
+        cantidad.setForeground(texto);
+        dimensiones.setForeground(texto);
+        estado.setForeground(texto);
+    }
+
+    private void configurarTablaOscuro() {
+        Color fondo = new Color(21, 21, 33);
+        Color texto = Color.WHITE;
+        Color primario = new Color(40, 60, 150);
+
+        Tabla1.setBackground(new Color(30, 30, 45));
+        Tabla1.setForeground(texto);
+        Tabla1.setBackgoundHead(new Color(67, 71, 120));
+        Tabla1.setForegroundHead(texto);
+        Tabla1.setBackgoundHover(new Color(40, 50, 90));
+        Tabla1.setColorPrimary(new Color(37, 37, 52));
+        Tabla1.setColorPrimaryText(texto);
+        Tabla1.setColorSecondary(new Color(30, 30, 45));
+        Tabla1.setColorSecundaryText(texto);
+        Tabla1.setColorBorderHead(primario);
+        Tabla1.setColorBorderRows(fondo.darker());
+        Tabla1.setSelectionBackground(new Color(72, 92, 188));
+        Tabla1.setGridColor(new Color(60, 60, 75));
+    }
+
+    private void configurarTablaClaro() {
+        Color texto = Color.BLACK;
+        Color primario = new Color(72, 92, 188);
+
+        Tabla1.setBackground(Color.WHITE);
+        Tabla1.setForeground(texto);
+        Tabla1.setBackgoundHead(new Color(46, 49, 82));
+        Tabla1.setForegroundHead(Color.WHITE);
+        Tabla1.setBackgoundHover(new Color(67, 150, 209));
+        Tabla1.setColorPrimary(new Color(242, 242, 242));
+        Tabla1.setColorPrimaryText(texto);
+        Tabla1.setColorSecondary(Color.WHITE);
+        Tabla1.setColorSecundaryText(texto);
+        Tabla1.setColorBorderHead(primario);
+        Tabla1.setColorBorderRows(Color.BLACK);
+        Tabla1.setSelectionBackground(new Color(109, 160, 221));
+        Tabla1.setGridColor(Color.BLACK);
     }
 
     // Constructor simple que carga los datos
@@ -107,60 +209,48 @@ public class DetallePedido extends javax.swing.JPanel {
     }
 
     private class EstadoTableCellRenderer extends DefaultTableCellRenderer {
-
-        private final Color textColor = new Color(46, 49, 82);
-        private final Font fontNormal = new Font("Tahoma", Font.PLAIN, 14);
-        private final Font fontBold = new Font("Tahoma", Font.BOLD, 14);
-
-        public EstadoTableCellRenderer() {
-            setHorizontalAlignment(JLabel.CENTER); // Centrar el texto
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
-            // Llamar al método padre primero
-            JLabel label = (JLabel) super.getTableCellRendererComponent(
-                    table, value, isSelected, hasFocus, row, column);
-
-            label.setHorizontalAlignment(CENTER);
-            label.setText(value != null ? value.toString() : "");
-
-            if (isSelected) {
-                // Cuando está seleccionado, texto blanco y fondo de selección
-                label.setForeground(Color.WHITE);
-                label.setBackground(table.getSelectionBackground());
-                label.setFont(fontBold);
-            } else {
-                // Cuando no está seleccionado, mantener el color original del texto
-                label.setForeground(textColor);
-                label.setFont(fontNormal);
-
-                // Aplicar colores de fondo según el estado
-                String estado = value != null ? value.toString() : "";
-                switch (estado.toLowerCase()) {
-                    case "pendiente":
-                        label.setBackground(new Color(255, 204, 204)); // Rojo claro
-                        break;
-                    case "proceso":
-                        label.setBackground(new Color(255, 255, 153)); // Amarillo claro
-                        break;
-                    case "completado":
-                        label.setBackground(new Color(204, 255, 204)); // Verde claro
-                        break;
-                    default:
-                        label.setBackground(Color.WHITE);
-                        break;
-                }
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
+            boolean isSelected, boolean hasFocus, int row, int column) {
+        
+        JLabel label = (JLabel) super.getTableCellRendererComponent(
+                table, value, isSelected, hasFocus, row, column);
+        
+        label.setHorizontalAlignment(CENTER);
+        label.setText(value != null ? value.toString() : "");
+        
+        boolean oscuro = TemaManager.getInstance().isOscuro();
+        
+        if (isSelected) {
+            label.setForeground(Color.WHITE);
+            label.setBackground(oscuro ? new Color(72, 92, 188) : new Color(109, 160, 221));
+        } else {
+            label.setForeground(oscuro ? Color.WHITE : Color.BLACK);
+            
+            // Colores de fondo según estado
+            String estado = value != null ? value.toString().toLowerCase() : "";
+            switch (estado) {
+                case "pendiente":
+                    label.setBackground(oscuro ? new Color(80, 40, 40) : new Color(255, 204, 204));
+                    break;
+                case "proceso":
+                    label.setBackground(oscuro ? new Color(80, 80, 40) : new Color(255, 255, 153));
+                    break;
+                case "completado":
+                    label.setBackground(oscuro ? new Color(40, 80, 40) : new Color(204, 255, 204));
+                    break;
+                default:
+                    label.setBackground(oscuro ? new Color(30, 30, 45) : Color.WHITE);
+                    break;
             }
-
-            // Borde igual al resto de la tabla
-            label.setBorder(BorderFactory.createLineBorder(new Color(153, 153, 153), 1));
-            Tabla1.setRowHeight(23); // Altura más delgada para las filas
-            return label;
         }
-
+        
+        label.setBorder(BorderFactory.createLineBorder(
+            oscuro ? new Color(60, 60, 75) : new Color(153, 153, 153), 1));
+        
+        return label;
     }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.

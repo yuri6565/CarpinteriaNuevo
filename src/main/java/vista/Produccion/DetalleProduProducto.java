@@ -4,6 +4,8 @@
  */
 package vista.Produccion;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,25 +15,26 @@ import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import modelo.Conexion;
+import vista.TemaManager;
 
 /**
  *
  * @author pc
  */
 public class DetalleProduProducto extends javax.swing.JPanel {
-
-    private final int idProduccion;
     
+    private final int idProduccion;
 
     /**
      * Creates new form DetallePdroduProducto
      */
     public DetalleProduProducto(int idProduccion, String nombre, String fechaInicio,
             String fechaFin, String estado, String cantidad, String dimensiones) {
-        System.out.println("ID recibido en constructor: " + idProduccion); 
+        System.out.println("ID recibido en constructor: " + idProduccion);
         this.idProduccion = idProduccion;
         initComponents();
-
+        aplicarTema();
+        
         DetallePedido detallePanel = new DetallePedido(
                 idProduccion,
                 nombre,
@@ -42,7 +45,38 @@ public class DetalleProduProducto extends javax.swing.JPanel {
                 dimensiones
         );
         mostrarPanelSecundario(detallePanel);
+        TemaManager.getInstance().addThemeChangeListener(() -> {
+            aplicarTema(); // Update theme when it changes
+        });
+    }
+    
+    public void aplicarTema() {
+        boolean oscuro = TemaManager.getInstance().isOscuro();
         
+        if (oscuro) {
+            Color fondo = new Color(21, 21, 33);
+            Color primario = new Color(40, 60, 150);
+            Color texto = Color.WHITE;
+            
+            jPanel1.setBackground(fondo);
+            jPanel2.setBackground(fondo);
+            btndetalle.setBackground(new Color(67, 71, 120));
+            btndetalle.setBackgroundHover(new Color(118, 142, 240));
+            btnEtapa.setBackground(new Color(67, 71, 120));
+            btnEtapa.setBackgroundHover(new Color(118, 142, 240));
+            
+            btnvolver.setBackground(new Color(67, 71, 120));
+            btnvolver.setBackgroundHover(new Color(118, 142, 240));
+        } else {
+            Color fondo = new Color(242, 247, 255);
+            Color texto = Color.BLACK;
+            Color primario = new Color(72, 92, 188);
+            
+            jPanel1.setBackground(fondo);
+            
+            btnEtapa.setBackground(new Color(46, 49, 82));
+            btnvolver.setBackground(new Color(46, 49, 82));
+        }
     }
 
     /**
@@ -168,14 +202,14 @@ public class DetalleProduProducto extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEtapaActionPerformed
 
     private void btndetalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndetalleActionPerformed
-    DetallePedido pedido = new DetallePedido(this.idProduccion);
-    mostrarPanelSecundario(pedido);
+        DetallePedido pedido = new DetallePedido(this.idProduccion);
+        mostrarPanelSecundario(pedido);
 
     }//GEN-LAST:event_btndetalleActionPerformed
     private void mostrarPanelSecundario(JPanel panel) {
         panel.setSize(1250, 690);
         panel.setLocation(0, 0);
-
+        
         jPanel2.removeAll();
         jPanel2.add(panel);
         jPanel2.revalidate();
@@ -185,14 +219,13 @@ public class DetalleProduProducto extends javax.swing.JPanel {
     private void mostrarPanel(JPanel panel) {
         panel.setSize(1250, 630);
         panel.setLocation(0, 0);
-
+        
         jPanel1.removeAll();
         jPanel1.add(panel);
         jPanel1.revalidate();
         jPanel1.repaint();
     }
-
-
+    
     public void setVolverListener(ActionListener listener) {
     }
 

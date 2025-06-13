@@ -30,6 +30,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import modelo.Conexion;
+import vista.TemaManager;
 
 /**
  *
@@ -45,7 +46,7 @@ public final class Produccion extends javax.swing.JPanel {
      */
     public Produccion(JFrame jFrame) {
         initComponents();
-
+        aplicarTema();
         Tabla1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         // Configura el modelo de tabla correctamente
@@ -53,7 +54,7 @@ public final class Produccion extends javax.swing.JPanel {
                 new Object[][]{},
                 new String[]{"Codigo", "Nombre", "Fecha inicio", "Fecha Final", "Estado", "Detalle", "Editar", "Cantidad", "Dimensiones"}
         ) {
-            
+
             @Override
             public Class<?> getColumnClass(int columnIndex) {
                 return String.class;
@@ -82,7 +83,81 @@ public final class Produccion extends javax.swing.JPanel {
 
         // Carga los datos
         cargarTablaProduccion();
+        TemaManager.getInstance().addThemeChangeListener(() -> {
+            aplicarTema(); // Update theme when it changes
+        });
+    }
 
+    public void aplicarTema() {
+        boolean oscuro = TemaManager.getInstance().isOscuro();
+
+        if (oscuro) {
+            Color fondo = new Color(21, 21, 33);
+            Color primario = new Color(40, 60, 150);
+            Color texto = Color.WHITE;
+
+            jPanel1.setBackground(fondo);
+            txtbuscar.setBackground(fondo);
+            txtbuscar.setForeground(texto);
+            txtbuscar.setColorIcon(texto);
+            txtbuscar.setPhColor(Color.LIGHT_GRAY);
+
+            Tabla1.setBackground(new Color(21, 21, 33));
+            Tabla1.setBackgoundHead(new Color(67, 71, 120));
+            Tabla1.setForegroundHead(new Color(255, 255, 255));
+            Tabla1.setBackgoundHover(new Color(40, 50, 90));
+            Tabla1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            Tabla1.setColorPrimary(new Color(37, 37, 52));
+            Tabla1.setColorPrimaryText(texto);
+            Tabla1.setColorSecondary(new Color(30, 30, 45));
+            Tabla1.setColorSecundaryText(texto);
+            Tabla1.setColorBorderHead(primario);
+            Tabla1.setColorBorderRows(fondo.darker());
+            Tabla1.setFontHead(new Font("Tahoma", Font.BOLD, 15));
+            Tabla1.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
+            Tabla1.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
+            Tabla1.setEffectHover(true);
+            Tabla1.setShowGrid(true);
+            Tabla1.setGridColor(Color.WHITE); // o el color que desees
+
+            btnNuevo.setBackground(new Color(67, 71, 120));
+            btnNuevo.setBackgroundHover(new Color(118, 142, 240));
+
+            btnElimi.setBackground(new Color(67, 71, 120));
+            btnElimi.setBackgroundHover(new Color(118, 142, 240));
+        } else {
+            Color fondo = new Color(242, 247, 255);
+            Color texto = Color.BLACK;
+            Color primario = new Color(72, 92, 188);
+
+            jPanel1.setBackground(fondo);
+            txtbuscar.setBackground(fondo);
+            txtbuscar.setForeground(texto);
+            txtbuscar.setColorIcon(texto);
+            txtbuscar.setPhColor(Color.GRAY);
+
+            Tabla1.setBackground(new Color(255, 255, 255));
+            Tabla1.setBackgoundHead(new Color(46, 49, 82));
+            Tabla1.setForegroundHead(Color.WHITE);
+            Tabla1.setBackgoundHover(new Color(67, 150, 209));
+            Tabla1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            Tabla1.setColorPrimary(new Color(242, 242, 242));
+            Tabla1.setColorPrimaryText(texto);
+            Tabla1.setColorSecondary(new Color(255, 255, 255));
+            Tabla1.setColorSecundaryText(texto);
+            Tabla1.setColorBorderHead(primario);
+            Tabla1.setColorBorderRows(new Color(0, 0, 0));
+            Tabla1.setFontHead(new Font("Tahoma", Font.BOLD, 15));
+            Tabla1.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
+            Tabla1.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
+            Tabla1.setEffectHover(true);
+            Tabla1.setSelectionBackground(new Color(67, 150, 209));
+            Tabla1.setShowGrid(true);
+            Tabla1.setGridColor(Color.BLACK); // o el color que desees
+
+            btnNuevo.setBackground(new Color(46, 49, 82));
+            btnElimi.setBackground(new Color(46, 49, 82));
+        }
     }
 // Clase del renderizador
 
@@ -306,12 +381,17 @@ public final class Produccion extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(520, 520, 520)
-                .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(btnElimi, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1210, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(520, 520, 520)
+                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(btnElimi, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 1211, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -321,8 +401,9 @@ public final class Produccion extends javax.swing.JPanel {
                     .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnElimi, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
