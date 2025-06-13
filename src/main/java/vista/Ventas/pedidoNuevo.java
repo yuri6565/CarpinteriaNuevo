@@ -346,6 +346,7 @@ public class pedidoNuevo extends javax.swing.JDialog {
 
         btnAñadir.setBackground(new java.awt.Color(46, 49, 82));
         btnAñadir.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnAñadir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/anadir (1).png"))); // NOI18N
         btnAñadir.setText(" Añadir");
         btnAñadir.setBackgroundHover(new java.awt.Color(67, 150, 209));
         btnAñadir.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N

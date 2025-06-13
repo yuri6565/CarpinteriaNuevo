@@ -4,34 +4,20 @@
  */
 package vista.Ventas;
 
-import RSMaterialComponent.RSButtonShape;
 import controlador.Ctrl_Pedido;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import rojeru_san.RSButtonRiple;
 import vista.TemaManager;
-import vista.Ventas.DetallesPedido; // Si decides mover DetallesPedido a vista.Ventas
 
 /**
  *
@@ -416,11 +402,11 @@ tablaM.setGridColor(Color.BLACK); // o el color que desees
     }//GEN-LAST:event_txtBuscarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        while (true) {
+    
             pedidoNuevo dialog = new pedidoNuevo(new javax.swing.JFrame(), true, this);
             dialog.setLocationRelativeTo(null);
             dialog.setVisible(true);
-        }
+        
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed

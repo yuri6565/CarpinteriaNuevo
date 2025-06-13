@@ -208,7 +208,7 @@ public class herramientas extends javax.swing.JPanel {
         // Aplicar color según el estado
         switch (material.getEstado().toLowerCase()) {
             case "disponible":
-                lblEstado.setForeground(new Color(0, 128, 0)); // Verde
+                lblEstado.setForeground(new Color(82, 196, 88)); // Verde
                 break;
             case "reparación":
                 lblEstado.setForeground(new Color(255, 165, 0)); // Naranja

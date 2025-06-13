@@ -160,7 +160,7 @@ public class materialInfo extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 450, 140, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 450, 140, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel3.setText("Unidad de medida:");
@@ -239,7 +239,7 @@ public class materialInfo extends javax.swing.JDialog {
         jPanel1.add(lblCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(318, 150, 140, 20));
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 430, 20));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 500));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

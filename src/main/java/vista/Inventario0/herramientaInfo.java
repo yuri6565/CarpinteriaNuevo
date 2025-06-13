@@ -126,6 +126,7 @@ public class herramientaInfo extends javax.swing.JDialog {
         lblEstado = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(520, 497));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(519, 551));
@@ -139,7 +140,7 @@ public class herramientaInfo extends javax.swing.JDialog {
         jLabel1.setText("Información de la herramienta");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 550, 50));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel2.setText("Codigo:");
@@ -220,7 +221,7 @@ public class herramientaInfo extends javax.swing.JDialog {
         lblPrecio.setText("jLabel12");
         lblPrecio.setOpaque(true);
         jPanel1.add(lblPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 150, 130, 20));
-        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 500, 20));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 470, 20));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel4.setText("Imagen:");
@@ -238,7 +239,7 @@ public class herramientaInfo extends javax.swing.JDialog {
                 btnCancelar1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 470, 140, -1));
+        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 470, 140, -1));
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel12.setText("Estado:");
@@ -254,13 +255,11 @@ public class herramientaInfo extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
         );
 
         pack();
