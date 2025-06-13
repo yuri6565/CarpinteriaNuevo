@@ -10,7 +10,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -18,11 +22,15 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.Timer;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import modelo.UsuarioModelo;
 import rojeru_san.RSButton;
 
@@ -92,6 +100,8 @@ getHeight());
 
         // Establece tamaño inicial
         jPanel3.setPreferredSize(new Dimension(MENU_EXPANDED_WIDTH, jPanel3.getHeight()));
+
+
 //submenu inventario------------------
         // Inicializar el submenú
         submenuInventario = new JPanel();
@@ -269,18 +279,18 @@ getHeight());
     }
 
     private void cambiarEstiloBotonRS(RSButton boton, Color fondo, Color texto) {
-    boton.setBackground(fondo);
-    boton.setColorText(texto);
-    
-    // Hover personalizado según modo oscuro/claro
-    if (TemaManager.getInstance().isOscuro()) {
-        boton.setColorHover(new Color(70, 70, 90)); // Hover más oscuro en modo oscuro
-    } else {
-        boton.setColorHover(new Color(118, 142, 240)); // Hover azul en modo claro
+        boton.setBackground(fondo);
+        boton.setColorText(texto);
+
+        // Hover personalizado según modo oscuro/claro
+        if (TemaManager.getInstance().isOscuro()) {
+            boton.setColorHover(new Color(70, 70, 90)); // Hover más oscuro en modo oscuro
+        } else {
+            boton.setColorHover(new Color(118, 142, 240)); // Hover azul en modo claro
+        }
+
+        boton.setColorTextHover(texto);
     }
-    
-    boton.setColorTextHover(texto);
-}
 
     private void aplicarTema() {
         Color fondoPrincipal, fondoPanel, fondoBoton, textoBoton, textoLabel, contenedorc;
@@ -598,7 +608,6 @@ getHeight());
             jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 250, 50));
             jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 550, 250, 50));
             jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 250, 50));
-           
 
             dos.setText(" Inventario           ▼");
             submenuVisible = false;
@@ -621,7 +630,7 @@ getHeight());
             jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 250, 50));
             jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 550, 250, 50));
             jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 250, 50));
-            
+
             cinco.setText(" Ventas                ▼");
             submenuVentasVisible = false;
 
@@ -1339,7 +1348,6 @@ getHeight());
                 jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 250, 50));
                 jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 650, 250, 50));
                 jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 700, 250, 50));
-                            
 
                 cinco.setText(" Ventas                ▲");
                 submenuVentasVisible = true;
@@ -1439,7 +1447,7 @@ getHeight());
             jPanel3.add(siete1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 250, 50));
             jPanel3.add(ocho, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 650, 250, 50));
             jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 700, 250, 50));
-            
+
             /* Mostrar submenú de Ventas
             submenuVentas.setBounds(0, cinco.getY() + cinco.getHeight(),
                     MENU_EXPANDED_WIDTH, submenuVentas.getPreferredSize().height);

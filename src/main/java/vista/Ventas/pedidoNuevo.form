@@ -468,6 +468,9 @@
                 <CompoundBorder/>
               </Border>
             </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/anadir (1).png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value=" A&#xf1;adir"/>
             <Property name="backgroundHover" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="d1" green="96" red="43" type="rgb"/>
