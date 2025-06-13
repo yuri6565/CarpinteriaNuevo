@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
+import static javax.swing.SwingConstants.CENTER;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -46,6 +47,7 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
         System.out.println("ID recibido en constructor: " + idProduccion);
         this.idProduccion = idProduccion;
         initComponents();
+        aplicarTema();
 
         Tabla1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
@@ -72,44 +74,66 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
             aplicarTema(); // Update theme when it changes
         });
     }
+    
     public void aplicarTema() {
         boolean oscuro = TemaManager.getInstance().isOscuro();
 
         if (oscuro) {
-            Color fondo = new Color(21, 21, 33);
-            Color primario = new Color(40, 60, 150);
-            Color texto = Color.WHITE;
+        // Configuración para modo oscuro
+        Color fondo = new Color(21, 21, 33);
+        Color fondoTabla = new Color(30, 30, 45);
+        Color encabezado = new Color(67, 71, 120);
+        Color texto = Color.WHITE;
 
-            jPanel1.setBackground(fondo);
-            txtbuscar.setBackground(fondo);
-            txtbuscar.setForeground(texto);
-            txtbuscar.setColorIcon(texto);
-            txtbuscar.setPhColor(Color.LIGHT_GRAY);
+        // Panel principal
+        jPanel1.setBackground(fondo);
+        
+        // Campo de búsqueda
+        txtbuscar.setBackground(new Color(37, 37, 52));
+        txtbuscar.setForeground(texto);
+        txtbuscar.setColorIcon(texto);
+        txtbuscar.setPhColor(Color.LIGHT_GRAY);
 
-            Tabla1.setBackground(new Color(21, 21, 33));
-            Tabla1.setBackgoundHead(new Color(67, 71, 120));
-            Tabla1.setForegroundHead(new Color(255, 255, 255));
-            Tabla1.setBackgoundHover(new Color(40, 50, 90));
-            Tabla1.setFont(new Font("Tahoma", Font.PLAIN, 15));
-            Tabla1.setColorPrimary(new Color(37, 37, 52));
-            Tabla1.setColorPrimaryText(texto);
-            Tabla1.setColorSecondary(new Color(30, 30, 45));
-            Tabla1.setColorSecundaryText(texto);
-            Tabla1.setColorBorderHead(primario);
-            Tabla1.setColorBorderRows(fondo.darker());
-            Tabla1.setFontHead(new Font("Tahoma", Font.BOLD, 15));
-            Tabla1.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
-            Tabla1.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
-            Tabla1.setEffectHover(true);
-            Tabla1.setShowGrid(true);
-            Tabla1.setGridColor(Color.WHITE); // o el color que desees
+        // Configuración COMPLETA de la tabla
+        Tabla1.setBackground(fondoTabla);
+        Tabla1.setForeground(texto);
+        
+        // Configuración de filas
+        Tabla1.setColorPrimary(new Color(37, 37, 52));  // Filas impares
+        Tabla1.setColorSecondary(new Color(30, 30, 45)); // Filas pares
+        Tabla1.setColorPrimaryText(texto);
+        Tabla1.setColorSecundaryText(texto);
+        
+        // Encabezados
+        Tabla1.setBackgoundHead(encabezado);
+        Tabla1.setForegroundHead(texto);
+        Tabla1.setColorBorderHead(encabezado);
+        
+        // Selección y hover
+        Tabla1.setSelectionBackground(new Color(67, 71, 120));
+        Tabla1.setBackgoundHover(new Color(40, 50, 90));
+        
+        // Bordes y grid
+        Tabla1.setColorBorderRows(new Color(60, 60, 60));
+        Tabla1.setGridColor(new Color(80, 80, 80));
+        Tabla1.setShowGrid(true);
+        
+        // Fuentes
+        Tabla1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        Tabla1.setFontHead(new Font("Tahoma", Font.BOLD, 15));
+        Tabla1.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
+        Tabla1.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
+        
+        // Efectos
+        Tabla1.setEffectHover(true);
 
-            btnNuevo.setBackground(new Color(67, 71, 120));
-            btnNuevo.setBackgroundHover(new Color(118, 142, 240));
-            
-            btnElimi.setBackground(new Color(67, 71, 120));
-            btnElimi.setBackgroundHover(new Color(118, 142, 240));
-        } else {
+        // Botones
+        btnNuevo.setBackground(encabezado);
+        btnNuevo.setBackgroundHover(new Color(118, 142, 240));
+        btnElimi.setBackground(encabezado);
+        btnElimi.setBackgroundHover(new Color(118, 142, 240));
+
+    } else {
             Color fondo = new Color(242, 247, 255);
             Color texto = Color.BLACK;
             Color primario = new Color(72, 92, 188);
@@ -137,33 +161,54 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
             Tabla1.setEffectHover(true);
             Tabla1.setSelectionBackground(new Color(67, 150, 209));
             Tabla1.setShowGrid(true);
-            Tabla1.setGridColor(Color.BLACK); // o el color que desees
-
+            Tabla1.setGridColor(Color.WHITE); // o el color que desees
+            Tabla1.setBackground(Color.WHITE);
+            Tabla1.setColorPrimary(new Color(242, 242, 242)); // Fondo filas impares
+            Tabla1.setColorSecondary(Color.WHITE); // Fondo filas pares
+            Tabla1.setForeground(Color.BLACK);
             btnNuevo.setBackground(new Color(46, 49, 82));
             btnElimi.setBackground(new Color(46, 49, 82));
         }
+        Tabla1.repaint();
+        Tabla1.getTableHeader().repaint();
     }
 
     private class EditarTableCellRenderer extends DefaultTableCellRenderer {
 
-        private final Color textColor = new Color(46, 49, 82);
         private final Font fontNormal = new Font("Tahoma", Font.PLAIN, 14);
         private final Font fontBold = new Font("Tahoma", Font.BOLD, 14);
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
+
+            boolean oscuro = TemaManager.getInstance().isOscuro();
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-            c.setForeground(isSelected ? Color.WHITE : Color.BLACK);
-            c.setBackground(isSelected ? table.getSelectionBackground() : Color.WHITE);
-            c.setFont(isSelected ? fontBold : fontNormal);
-
+            // Configuración basada en el tema
+            if (oscuro) {
+                if (isSelected) {
+                    c.setBackground(new Color(67, 71, 120)); // Seleccionado
+                    c.setForeground(Color.WHITE);
+                } else {
+                    // Alternar colores para filas pares/impares
+                    c.setBackground(row % 2 == 0 ? new Color(37, 37, 52) : new Color(30, 30, 45));
+                    c.setForeground(Color.WHITE);
+                }
+            } else {
+                if (isSelected) {
+                    c.setBackground(table.getSelectionBackground());
+                    c.setForeground(Color.WHITE);
+                } else {
+                    c.setBackground(row % 2 == 0 ? new Color(242, 242, 242) : Color.WHITE);
+                    c.setForeground(Color.BLACK);
+                }
+            }
             setHorizontalAlignment(CENTER);
             setText("Editar");
+            setBorder(BorderFactory.createLineBorder(oscuro ? new Color(153, 153, 153) : new Color(153, 153, 153), 1));
+            setFont(isSelected ? fontBold : fontNormal);
 
-            setBorder(BorderFactory.createLineBorder(new Color(153, 153, 153), 1));
-            Tabla1.setRowHeight(23);
             return c;
         }
     }
@@ -213,84 +258,104 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
     }
 
 
-    private class EstadoTableCellRenderer extends DefaultTableCellRenderer {
-
-        private final Color textColor = new Color(46, 49, 82);
-        private final Font fontNormal = new Font("Tahoma", Font.PLAIN, 14);
-        private final Font fontBold = new Font("Tahoma", Font.BOLD, 14);
+      private class EstadoTableCellRenderer extends DefaultTableCellRenderer {
 
         public EstadoTableCellRenderer() {
-            setHorizontalAlignment(JLabel.CENTER); // Centrar el texto
+            setHorizontalAlignment(JLabel.CENTER);
         }
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
-            // Llamar al método padre primero
-            JLabel label = (JLabel) super.getTableCellRendererComponent(
-                    table, value, isSelected, hasFocus, row, column);
+
+            boolean oscuro = TemaManager.getInstance().isOscuro();
+            JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
             label.setHorizontalAlignment(CENTER);
             label.setText(value != null ? value.toString() : "");
 
             if (isSelected) {
-                // Cuando está seleccionado, texto blanco y fondo de selección
-                label.setForeground(Color.WHITE);
-                label.setBackground(table.getSelectionBackground());
-                label.setFont(fontBold);
+                label.setForeground(oscuro ? Color.WHITE : Color.BLACK);
+                label.setBackground(oscuro ? new Color(67, 71, 120) : table.getSelectionBackground());
             } else {
-                // Cuando no está seleccionado, mantener el color original del texto
-                label.setForeground(textColor);
-                label.setFont(fontNormal);
+                label.setForeground(oscuro ? Color.WHITE : Color.BLACK);
 
-                // Aplicar colores de fondo según el estado
                 String estado = value != null ? value.toString() : "";
-                switch (estado.toLowerCase()) {
-                    case "pendiente":
-                        label.setBackground(new Color(255, 204, 204)); // Rojo claro
-                        break;
-                    case "proceso":
-                        label.setBackground(new Color(255, 255, 153)); // Amarillo claro
-                        break;
-                    case "completado":
-                        label.setBackground(new Color(204, 255, 204)); // Verde claro
-                        break;
-                    default:
-                        label.setBackground(Color.WHITE);
-                        break;
+                if (oscuro) {
+                    switch (estado.toLowerCase()) {
+                        case "pendiente":
+                            label.setBackground(new Color(153, 0, 51)); // Rojo oscuro
+                            break;
+                        case "proceso":
+                            label.setBackground(new Color(251, 139, 36)); // Amarillo oscuro
+                            break;
+                        case "finalizado":
+                            label.setBackground(new Color(31, 123, 21)); // Verde oscuro
+                            break;
+                        default:
+                            label.setBackground(new Color(37, 37, 52));
+                            break;
+                    }
+                } else {
+                    switch (estado.toLowerCase()) {
+                        case "pendiente":
+                            label.setBackground(new Color(255, 204, 204)); // Rojo claro
+                            break;
+                        case "proceso":
+                            label.setBackground(new Color(255, 255, 153)); // Amarillo claro
+                            break;
+                        case "finalizado":
+                            label.setBackground(new Color(204, 255, 204)); // Verde claro
+                            break;
+                        default:
+                            label.setBackground(Color.WHITE);
+                            break;
+                    }
                 }
             }
 
-            // Borde igual al resto de la tabla
-            label.setBorder(BorderFactory.createLineBorder(new Color(153, 153, 153), 1));
-            Tabla1.setRowHeight(23); // Altura más delgada para las filas
+            label.setBorder(BorderFactory.createLineBorder(oscuro ? new Color(153, 153, 153) : new Color(153, 153, 153), 1));
             return label;
         }
-
     }
-// Renderizador para la columna "Ver"
 
+// Renderizador para la columna "Ver"
     private class VerTableCellRenderer extends DefaultTableCellRenderer {
 
-        private final Color textColor = new Color(46, 49, 82); // Color de texto normal
         private final Font fontNormal = new Font("Tahoma", Font.PLAIN, 14);
         private final Font fontBold = new Font("Tahoma", Font.BOLD, 14);
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
-            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-            c.setForeground(isSelected ? Color.WHITE : Color.BLACK);
-            c.setBackground(isSelected ? table.getSelectionBackground() : Color.WHITE);
-            c.setFont(isSelected ? fontBold : fontNormal);
+            boolean oscuro = TemaManager.getInstance().isOscuro();
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+// Configuración basada en el tema
+            if (oscuro) {
+                if (isSelected) {
+                    c.setBackground(new Color(67, 71, 120)); // Seleccionado
+                    c.setForeground(Color.WHITE);
+                } else {
+                    // Alternar colores para filas pares/impares
+                    c.setBackground(row % 2 == 0 ? new Color(37, 37, 52) : new Color(30, 30, 45));
+                    c.setForeground(Color.WHITE);
+                }
+            } else {
+                if (isSelected) {
+                    c.setBackground(table.getSelectionBackground());
+                    c.setForeground(Color.WHITE);
+                } else {
+                    c.setBackground(row % 2 == 0 ? new Color(242, 242, 242) : Color.WHITE);
+                    c.setForeground(Color.BLACK);
+                }
+            }
 
             setHorizontalAlignment(CENTER);
             setText("Ver");
+            setBorder(BorderFactory.createLineBorder(oscuro ? new Color(153, 153, 153) : new Color(153, 153, 153), 1));
+            setFont(isSelected ? fontBold : fontNormal);
 
-            // Bordes iguales al resto
-            setBorder(BorderFactory.createLineBorder(new Color(153, 153, 153), 1));
-            Tabla1.setRowHeight(23); // Altura más delgada para las filas
             return c;
         }
     }

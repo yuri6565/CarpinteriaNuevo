@@ -4,6 +4,7 @@
  */
 package vista.Produccion;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -22,7 +23,7 @@ import vista.TemaManager;
  * @author pc
  */
 public class DetalleProduProducto extends javax.swing.JPanel {
-    
+
     private final int idProduccion;
 
     /**
@@ -34,7 +35,7 @@ public class DetalleProduProducto extends javax.swing.JPanel {
         this.idProduccion = idProduccion;
         initComponents();
         aplicarTema();
-        
+
         DetallePedido detallePanel = new DetallePedido(
                 idProduccion,
                 nombre,
@@ -49,31 +50,31 @@ public class DetalleProduProducto extends javax.swing.JPanel {
             aplicarTema(); // Update theme when it changes
         });
     }
-    
+
     public void aplicarTema() {
         boolean oscuro = TemaManager.getInstance().isOscuro();
-        
+
         if (oscuro) {
             Color fondo = new Color(21, 21, 33);
             Color primario = new Color(40, 60, 150);
             Color texto = Color.WHITE;
-            
+
             jPanel1.setBackground(fondo);
             jPanel2.setBackground(fondo);
             btndetalle.setBackground(new Color(67, 71, 120));
             btndetalle.setBackgroundHover(new Color(118, 142, 240));
             btnEtapa.setBackground(new Color(67, 71, 120));
             btnEtapa.setBackgroundHover(new Color(118, 142, 240));
-            
+
             btnvolver.setBackground(new Color(67, 71, 120));
             btnvolver.setBackgroundHover(new Color(118, 142, 240));
         } else {
             Color fondo = new Color(242, 247, 255);
             Color texto = Color.BLACK;
             Color primario = new Color(72, 92, 188);
-            
+
             jPanel1.setBackground(fondo);
-            
+
             btnEtapa.setBackground(new Color(46, 49, 82));
             btnvolver.setBackground(new Color(46, 49, 82));
         }
@@ -194,7 +195,7 @@ public class DetalleProduProducto extends javax.swing.JPanel {
     }//GEN-LAST:event_btnvolverActionPerformed
 
     private void btnEtapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEtapaActionPerformed
-        
+
         ProduccionContEtapa etapa = new ProduccionContEtapa(
                 this.idProduccion
         );
@@ -209,23 +210,24 @@ public class DetalleProduProducto extends javax.swing.JPanel {
     private void mostrarPanelSecundario(JPanel panel) {
         panel.setSize(1250, 690);
         panel.setLocation(0, 0);
-        
+
         jPanel2.removeAll();
-        jPanel2.add(panel);
+        jPanel2.setLayout(new BorderLayout());
+        jPanel2.add(panel, BorderLayout.CENTER);
         jPanel2.revalidate();
         jPanel2.repaint();
     }
-    
+
     private void mostrarPanel(JPanel panel) {
-        panel.setSize(1250, 630);
+        panel.setSize(1250, 690);
         panel.setLocation(0, 0);
-        
+
         jPanel1.removeAll();
         jPanel1.add(panel);
         jPanel1.revalidate();
         jPanel1.repaint();
     }
-    
+
     public void setVolverListener(ActionListener listener) {
     }
 

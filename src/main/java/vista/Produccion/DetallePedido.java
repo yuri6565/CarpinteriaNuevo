@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import static javax.swing.SwingConstants.CENTER;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import modelo.Conexion;
@@ -36,7 +37,7 @@ public class DetallePedido extends javax.swing.JPanel {
             String fechaFin, String estado, String cantidad, String dimensiones) {
         this.idProduccion = idProduccion;
         initComponents();
-        
+        aplicarTema();
 
         // Asignar valores directamente
         this.nombre.setText(nombre != null ? nombre : "");
@@ -50,106 +51,127 @@ public class DetallePedido extends javax.swing.JPanel {
         configurarTabla();
         cargarTablaEtapa();
         cargarDatosPedido();
-        aplicarTema();
+
         TemaManager.getInstance().addThemeChangeListener(() -> {
-            aplicarTema(); // Update theme when it changes
+            aplicarTema();
         });
     }
 
     public void aplicarTema() {
         boolean oscuro = TemaManager.getInstance().isOscuro();
-
         if (oscuro) {
             // Colores para tema oscuro
             Color fondo = new Color(21, 21, 33);
             Color texto = Color.WHITE;
             Color primario = new Color(40, 60, 150);
-            Color secundario = new Color(30, 30, 45);
 
             // Aplicar a componentes principales
             jPanel2.setBackground(fondo);
-            jPanel3.setBackground(primario);
+            jPanel3.setBackground(texto);
+
+            // Configurar el JScrollPane y su viewport
+            jScrollPane3.setBackground(fondo);
+            jScrollPane3.getViewport().setBackground(new Color(30, 30, 45));
+            jScrollPane3.setBorder(BorderFactory.createLineBorder(new Color(60, 60, 60)));
 
             // Aplicar a labels
-            aplicarTemaLabels(texto);
+            // Aplicar color de texto a todos los labels
+            jLabel1.setForeground(texto);
+            jLabel5.setForeground(texto);
+            jLabel9.setForeground(texto);
+            jLabel11.setForeground(texto);
+            jLabel12.setForeground(texto);
+            jLabel13.setForeground(texto);
+            jLabel15.setForeground(texto);
+
+            // Aplicar a labels de datos
+            nombre.setForeground(texto);
+            fecha_ini.setForeground(texto);
+            fecha_fin.setForeground(texto);
+            cantidad.setForeground(texto);
+            dimensiones.setForeground(texto);
+            estado.setForeground(texto);
 
             // Configurar tabla para tema oscuro
-            configurarTablaOscuro();
+            Tabla1.setBackground(new Color(30, 30, 45));
+            Tabla1.setForeground(texto);
+            Tabla1.setBackgoundHead(new Color(67, 71, 120));
+            Tabla1.setForegroundHead(texto);
+            Tabla1.setBackgoundHover(new Color(40, 50, 90));
+            Tabla1.setColorPrimary(new Color(37, 37, 52));
+            Tabla1.setColorPrimaryText(texto);
+            Tabla1.setColorSecondary(new Color(30, 30, 45));
+            Tabla1.setColorSecundaryText(texto);
+            Tabla1.setColorBorderHead(primario);
+            Tabla1.setColorBorderRows(fondo.darker());
+            Tabla1.setSelectionBackground(new Color(72, 92, 188));
+            Tabla1.setGridColor(new Color(60, 60, 75));
 
         } else {
-            // Colores para tema claro
             Color fondo = new Color(242, 247, 255);
             Color texto = Color.BLACK;
-            Color primario = new Color(72, 92, 188);
 
-            // Aplicar a componentes principales
+            // Panel principal y componentes
             jPanel2.setBackground(fondo);
             jPanel3.setBackground(Color.BLACK);
 
+            // Configurar el JScrollPane y su viewport
+            jScrollPane3.setBackground(fondo);
+            jScrollPane3.getViewport().setBackground(Color.WHITE);
+            jScrollPane3.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+
             // Aplicar a labels
-            aplicarTemaLabels(texto);
+            jLabel1.setForeground(texto);
+            jLabel5.setForeground(texto);
+            jLabel9.setForeground(texto);
+            jLabel11.setForeground(texto);
+            jLabel12.setForeground(texto);
+            jLabel13.setForeground(texto);
+            jLabel15.setForeground(texto);
+
+            // Aplicar a labels de datos
+            nombre.setForeground(texto);
+            fecha_ini.setForeground(texto);
+            fecha_fin.setForeground(texto);
+            cantidad.setForeground(texto);
+            dimensiones.setForeground(texto);
+            estado.setForeground(texto);
 
             // Configurar tabla para tema claro
-            configurarTablaClaro();
+            Color primario = new Color(72, 92, 188);
+
+            Tabla1.setBackground(Color.WHITE);
+            Tabla1.setForeground(texto);
+            Tabla1.setBackgoundHead(new Color(46, 49, 82));
+            Tabla1.setForegroundHead(Color.WHITE);
+            Tabla1.setBackgoundHover(new Color(67, 150, 209));
+            Tabla1.setColorPrimary(new Color(242, 242, 242));
+            Tabla1.setColorPrimaryText(texto);
+            Tabla1.setColorSecondary(Color.WHITE);
+            Tabla1.setColorSecundaryText(texto);
+            Tabla1.setColorBorderHead(primario);
+            Tabla1.setColorBorderRows(Color.BLACK);
+            Tabla1.setSelectionBackground(new Color(109, 160, 221));
+            Tabla1.setGridColor(Color.BLACK);
         }
+        actualizarTabla();
+        // Forzar repintado de todos los componentes
+        revalidate();
+        repaint();
+        Tabla1.repaint();
+        Tabla1.getTableHeader().repaint();
     }
 
-    private void aplicarTemaLabels(Color texto) {
-        // Aplicar color de texto a todos los labels
-        jLabel1.setForeground(texto);
-        jLabel5.setForeground(texto);
-        jLabel9.setForeground(texto);
-        jLabel11.setForeground(texto);
-        jLabel12.setForeground(texto);
-        jLabel13.setForeground(texto);
-        jLabel15.setForeground(texto);
+    private void actualizarTabla() {
+        // Solución especial para RSTableMetroCustom
+        Tabla1.updateUI();
 
-        // Aplicar a labels de datos
-        nombre.setForeground(texto);
-        fecha_ini.setForeground(texto);
-        fecha_fin.setForeground(texto);
-        cantidad.setForeground(texto);
-        dimensiones.setForeground(texto);
-        estado.setForeground(texto);
-    }
+        // Forzar actualización del renderizado
+        Tabla1.repaint();
+        Tabla1.getTableHeader().repaint();
 
-    private void configurarTablaOscuro() {
-        Color fondo = new Color(21, 21, 33);
-        Color texto = Color.WHITE;
-        Color primario = new Color(40, 60, 150);
-
-        Tabla1.setBackground(new Color(30, 30, 45));
-        Tabla1.setForeground(texto);
-        Tabla1.setBackgoundHead(new Color(67, 71, 120));
-        Tabla1.setForegroundHead(texto);
-        Tabla1.setBackgoundHover(new Color(40, 50, 90));
-        Tabla1.setColorPrimary(new Color(37, 37, 52));
-        Tabla1.setColorPrimaryText(texto);
-        Tabla1.setColorSecondary(new Color(30, 30, 45));
-        Tabla1.setColorSecundaryText(texto);
-        Tabla1.setColorBorderHead(primario);
-        Tabla1.setColorBorderRows(fondo.darker());
-        Tabla1.setSelectionBackground(new Color(72, 92, 188));
-        Tabla1.setGridColor(new Color(60, 60, 75));
-    }
-
-    private void configurarTablaClaro() {
-        Color texto = Color.BLACK;
-        Color primario = new Color(72, 92, 188);
-
-        Tabla1.setBackground(Color.WHITE);
-        Tabla1.setForeground(texto);
-        Tabla1.setBackgoundHead(new Color(46, 49, 82));
-        Tabla1.setForegroundHead(Color.WHITE);
-        Tabla1.setBackgoundHover(new Color(67, 150, 209));
-        Tabla1.setColorPrimary(new Color(242, 242, 242));
-        Tabla1.setColorPrimaryText(texto);
-        Tabla1.setColorSecondary(Color.WHITE);
-        Tabla1.setColorSecundaryText(texto);
-        Tabla1.setColorBorderHead(primario);
-        Tabla1.setColorBorderRows(Color.BLACK);
-        Tabla1.setSelectionBackground(new Color(109, 160, 221));
-        Tabla1.setGridColor(Color.BLACK);
+        // Actualizar el modelo de la tabla si es necesario
+        ((DefaultTableModel) Tabla1.getModel()).fireTableDataChanged();
     }
 
     // Constructor simple que carga los datos
@@ -159,6 +181,7 @@ public class DetallePedido extends javax.swing.JPanel {
         configurarTabla();
         cargarDatosPedido();  // Asegúrate que esta línea esté presente
         cargarTablaEtapa();
+        aplicarTema();
     }
 
     private void configurarTabla() {
@@ -209,48 +232,65 @@ public class DetallePedido extends javax.swing.JPanel {
     }
 
     private class EstadoTableCellRenderer extends DefaultTableCellRenderer {
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row, int column) {
-        
-        JLabel label = (JLabel) super.getTableCellRendererComponent(
-                table, value, isSelected, hasFocus, row, column);
-        
-        label.setHorizontalAlignment(CENTER);
-        label.setText(value != null ? value.toString() : "");
-        
-        boolean oscuro = TemaManager.getInstance().isOscuro();
-        
-        if (isSelected) {
-            label.setForeground(Color.WHITE);
-            label.setBackground(oscuro ? new Color(72, 92, 188) : new Color(109, 160, 221));
-        } else {
-            label.setForeground(oscuro ? Color.WHITE : Color.BLACK);
-            
-            // Colores de fondo según estado
-            String estado = value != null ? value.toString().toLowerCase() : "";
-            switch (estado) {
-                case "pendiente":
-                    label.setBackground(oscuro ? new Color(80, 40, 40) : new Color(255, 204, 204));
-                    break;
-                case "proceso":
-                    label.setBackground(oscuro ? new Color(80, 80, 40) : new Color(255, 255, 153));
-                    break;
-                case "completado":
-                    label.setBackground(oscuro ? new Color(40, 80, 40) : new Color(204, 255, 204));
-                    break;
-                default:
-                    label.setBackground(oscuro ? new Color(30, 30, 45) : Color.WHITE);
-                    break;
-            }
+
+        public EstadoTableCellRenderer() {
+            setHorizontalAlignment(JLabel.CENTER);
         }
-        
-        label.setBorder(BorderFactory.createLineBorder(
-            oscuro ? new Color(60, 60, 75) : new Color(153, 153, 153), 1));
-        
-        return label;
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+
+            boolean oscuro = TemaManager.getInstance().isOscuro();
+            JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            label.setHorizontalAlignment(CENTER);
+            label.setText(value != null ? value.toString() : "");
+
+            if (isSelected) {
+                label.setForeground(oscuro ? Color.WHITE : Color.BLACK);
+                label.setBackground(oscuro ? new Color(67, 71, 120) : table.getSelectionBackground());
+            } else {
+                label.setForeground(oscuro ? Color.WHITE : Color.BLACK);
+
+                String estado = value != null ? value.toString() : "";
+                if (oscuro) {
+                    switch (estado.toLowerCase()) {
+                        case "pendiente":
+                            label.setBackground(new Color(153, 0, 51)); // Rojo oscuro
+                            break;
+                        case "proceso":
+                            label.setBackground(new Color(251, 139, 36)); // Amarillo oscuro
+                            break;
+                        case "finalizado":
+                            label.setBackground(new Color(31, 123, 21)); // Verde oscuro
+                            break;
+                        default:
+                            label.setBackground(new Color(37, 37, 52));
+                            break;
+                    }
+                } else {
+                    switch (estado.toLowerCase()) {
+                        case "pendiente":
+                            label.setBackground(new Color(255, 204, 204)); // Rojo claro
+                            break;
+                        case "proceso":
+                            label.setBackground(new Color(255, 255, 153)); // Amarillo claro
+                            break;
+                        case "finalizado":
+                            label.setBackground(new Color(204, 255, 204)); // Verde claro
+                            break;
+                        default:
+                            label.setBackground(Color.WHITE);
+                            break;
+                    }
+                }
+            }
+
+            label.setBorder(BorderFactory.createLineBorder(oscuro ? new Color(153, 153, 153) : new Color(153, 153, 153), 1));
+            return label;
+        }
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -410,11 +450,15 @@ public class DetallePedido extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 1162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
