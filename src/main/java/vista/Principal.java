@@ -55,7 +55,7 @@ public class Principal extends javax.swing.JFrame {
     private rojeru_san.RSButton item4;
     private rojeru_san.RSButton item3;
     private boolean menuExpanded = true; // Inicialmente expandido
-    private final int MENU_COLLAPSED_WIDTH = 0;
+    private final int MENU_COLLAPSED_WIDTH = 1;
     private final int MENU_EXPANDED_WIDTH = 250;
 
     public Principal(int idUsuario) {
@@ -73,9 +73,8 @@ public class Principal extends javax.swing.JFrame {
 
 // Configura el panel de contenido
         contenedor.setBounds(menuExpanded ? MENU_EXPANDED_WIDTH : MENU_COLLAPSED_WIDTH,
-                65,
-                getWidth() - (menuExpanded ? MENU_EXPANDED_WIDTH : MENU_COLLAPSED_WIDTH),
-                getHeight());
+                65,1800,
+getHeight());
 
         setIconImage(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE));
 

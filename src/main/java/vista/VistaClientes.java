@@ -42,12 +42,11 @@ public class VistaClientes extends javax.swing.JPanel {
     }
 
     // ... (keep initComponents, action listeners, and cargartablacliente as they are)
-
     public void aplicarTema() {
         boolean oscuro = TemaManager.getInstance().isOscuro();
 
         if (oscuro) {
-            Color fondo = new Color(21,21,33);
+            Color fondo = new Color(21, 21, 33);
             Color primario = new Color(40, 60, 150);
             Color texto = Color.WHITE;
 
@@ -56,16 +55,15 @@ public class VistaClientes extends javax.swing.JPanel {
             txtBuscar.setForeground(texto);
             txtBuscar.setColorIcon(texto);
             txtBuscar.setPhColor(Color.LIGHT_GRAY);
-            
-            
-          tablaclientes.setBackground(new Color (21,21,33));
-            tablaclientes.setBackgoundHead(new Color (67, 71, 120));
-            tablaclientes.setForegroundHead(new Color (255,255,255));
+
+            tablaclientes.setBackground(new Color(21, 21, 33));
+            tablaclientes.setBackgoundHead(new Color(67, 71, 120));
+            tablaclientes.setForegroundHead(new Color(255, 255, 255));
             tablaclientes.setBackgoundHover(new Color(40, 50, 90));
-         tablaclientes.setFont(new Font("Tahoma", Font.PLAIN, 15));
-            tablaclientes.setColorPrimary(new Color(37,37,52));
+            tablaclientes.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            tablaclientes.setColorPrimary(new Color(37, 37, 52));
             tablaclientes.setColorPrimaryText(texto);
-            tablaclientes.setColorSecondary(new Color(30,30,45));
+            tablaclientes.setColorSecondary(new Color(30, 30, 45));
             tablaclientes.setColorSecundaryText(texto);
             tablaclientes.setColorBorderHead(primario);
             tablaclientes.setColorBorderRows(fondo.darker());
@@ -73,15 +71,15 @@ public class VistaClientes extends javax.swing.JPanel {
             tablaclientes.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
             tablaclientes.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
             tablaclientes.setEffectHover(true);
-              tablaclientes.setShowGrid(true);
-tablaclientes.setGridColor(Color.WHITE); // o el color que desees
+            tablaclientes.setShowGrid(true);
+            tablaclientes.setGridColor(Color.WHITE); // o el color que desees
 
             btnNuevo1.setBackground(new Color(67, 71, 120));
-            btnNuevo1.setBackgroundHover(new Color(118,142,240));
+            btnNuevo1.setBackgroundHover(new Color(118, 142, 240));
             btnEditar1.setBackground(new Color(67, 71, 120));
-           btnEditar1.setBackgroundHover(new Color(118,142,240));
+            btnEditar1.setBackgroundHover(new Color(118, 142, 240));
             btnEliminar1.setBackground(new Color(67, 71, 120));
-            btnEliminar1.setBackgroundHover(new Color(118,142,240));
+            btnEliminar1.setBackgroundHover(new Color(118, 142, 240));
         } else {
             Color fondo = new Color(242, 247, 255);
             Color texto = Color.BLACK;
@@ -92,26 +90,25 @@ tablaclientes.setGridColor(Color.WHITE); // o el color que desees
             txtBuscar.setForeground(texto);
             txtBuscar.setColorIcon(texto);
             txtBuscar.setPhColor(Color.GRAY);
-            
-            
-      tablaclientes.setBackground(new Color (255,255,255));
-            tablaclientes.setBackgoundHead(new Color (46,49,82));
+
+            tablaclientes.setBackground(new Color(255, 255, 255));
+            tablaclientes.setBackgoundHead(new Color(46, 49, 82));
             tablaclientes.setForegroundHead(Color.WHITE);
-            tablaclientes.setBackgoundHover(new Color(67,150,209));
-           tablaclientes.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            tablaclientes.setBackgoundHover(new Color(67, 150, 209));
+            tablaclientes.setFont(new Font("Tahoma", Font.PLAIN, 15));
             tablaclientes.setColorPrimary(new Color(242, 242, 242));
             tablaclientes.setColorPrimaryText(texto);
             tablaclientes.setColorSecondary(new Color(255, 255, 255));
             tablaclientes.setColorSecundaryText(texto);
             tablaclientes.setColorBorderHead(primario);
-            tablaclientes.setColorBorderRows(new Color(0,0,0));
+            tablaclientes.setColorBorderRows(new Color(0, 0, 0));
             tablaclientes.setFontHead(new Font("Tahoma", Font.BOLD, 15));
             tablaclientes.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
             tablaclientes.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
             tablaclientes.setEffectHover(true);
-            tablaclientes.setSelectionBackground(new Color(67,150,209));
+            tablaclientes.setSelectionBackground(new Color(67, 150, 209));
             tablaclientes.setShowGrid(true);
-tablaclientes.setGridColor(Color.BLACK); // o el color que desees
+            tablaclientes.setGridColor(Color.BLACK); // o el color que desees
 
             btnNuevo1.setBackground(new Color(46, 49, 82));
             btnEditar1.setBackground(new Color(46, 49, 82));
@@ -293,9 +290,9 @@ tablaclientes.setGridColor(Color.BLACK); // o el color que desees
         Ctrl_Cliente controlCliente = new Ctrl_Cliente();
 
         int confirmacion = JOptionPane.showConfirmDialog(this,
-            "¿Está seguro de que desea eliminar el cliente con código " + idCliente + "?",
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION);
+                "¿Está seguro de que desea eliminar el cliente con código " + idCliente + "?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION);
 
         if (confirmacion == JOptionPane.YES_OPTION) {
             if (controlCliente.eliminar(idCliente)) {
@@ -361,11 +358,5 @@ tablaclientes.setGridColor(Color.BLACK); // o el color que desees
             }
         });
     }
-    
-    
-
-
-
 
 }
-

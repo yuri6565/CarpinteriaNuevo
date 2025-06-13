@@ -27,6 +27,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import modelo.Conexion;
+import vista.TemaManager;
 
 /**
  *
@@ -67,6 +68,80 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
         Tabla1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         cargarTablaEtapa();    // Carga Tabla1
+        TemaManager.getInstance().addThemeChangeListener(() -> {
+            aplicarTema(); // Update theme when it changes
+        });
+    }
+    public void aplicarTema() {
+        boolean oscuro = TemaManager.getInstance().isOscuro();
+
+        if (oscuro) {
+            Color fondo = new Color(21, 21, 33);
+            Color primario = new Color(40, 60, 150);
+            Color texto = Color.WHITE;
+
+            jPanel1.setBackground(fondo);
+            txtbuscar.setBackground(fondo);
+            txtbuscar.setForeground(texto);
+            txtbuscar.setColorIcon(texto);
+            txtbuscar.setPhColor(Color.LIGHT_GRAY);
+
+            Tabla1.setBackground(new Color(21, 21, 33));
+            Tabla1.setBackgoundHead(new Color(67, 71, 120));
+            Tabla1.setForegroundHead(new Color(255, 255, 255));
+            Tabla1.setBackgoundHover(new Color(40, 50, 90));
+            Tabla1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            Tabla1.setColorPrimary(new Color(37, 37, 52));
+            Tabla1.setColorPrimaryText(texto);
+            Tabla1.setColorSecondary(new Color(30, 30, 45));
+            Tabla1.setColorSecundaryText(texto);
+            Tabla1.setColorBorderHead(primario);
+            Tabla1.setColorBorderRows(fondo.darker());
+            Tabla1.setFontHead(new Font("Tahoma", Font.BOLD, 15));
+            Tabla1.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
+            Tabla1.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
+            Tabla1.setEffectHover(true);
+            Tabla1.setShowGrid(true);
+            Tabla1.setGridColor(Color.WHITE); // o el color que desees
+
+            btnNuevo.setBackground(new Color(67, 71, 120));
+            btnNuevo.setBackgroundHover(new Color(118, 142, 240));
+            
+            btnElimi.setBackground(new Color(67, 71, 120));
+            btnElimi.setBackgroundHover(new Color(118, 142, 240));
+        } else {
+            Color fondo = new Color(242, 247, 255);
+            Color texto = Color.BLACK;
+            Color primario = new Color(72, 92, 188);
+
+            jPanel1.setBackground(fondo);
+            txtbuscar.setBackground(fondo);
+            txtbuscar.setForeground(texto);
+            txtbuscar.setColorIcon(texto);
+            txtbuscar.setPhColor(Color.GRAY);
+
+            Tabla1.setBackground(new Color(255, 255, 255));
+            Tabla1.setBackgoundHead(new Color(46, 49, 82));
+            Tabla1.setForegroundHead(Color.WHITE);
+            Tabla1.setBackgoundHover(new Color(67, 150, 209));
+            Tabla1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            Tabla1.setColorPrimary(new Color(242, 242, 242));
+            Tabla1.setColorPrimaryText(texto);
+            Tabla1.setColorSecondary(new Color(255, 255, 255));
+            Tabla1.setColorSecundaryText(texto);
+            Tabla1.setColorBorderHead(primario);
+            Tabla1.setColorBorderRows(new Color(0, 0, 0));
+            Tabla1.setFontHead(new Font("Tahoma", Font.BOLD, 15));
+            Tabla1.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
+            Tabla1.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
+            Tabla1.setEffectHover(true);
+            Tabla1.setSelectionBackground(new Color(67, 150, 209));
+            Tabla1.setShowGrid(true);
+            Tabla1.setGridColor(Color.BLACK); // o el color que desees
+
+            btnNuevo.setBackground(new Color(46, 49, 82));
+            btnElimi.setBackground(new Color(46, 49, 82));
+        }
     }
 
     private class EditarTableCellRenderer extends DefaultTableCellRenderer {
@@ -229,8 +304,9 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        txtbuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
+        jPanel1 = new javax.swing.JPanel();
         btnNuevo = new RSMaterialComponent.RSButtonShape();
+        txtbuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
         btnElimi = new RSMaterialComponent.RSButtonShape();
         jScrollPane3 = new javax.swing.JScrollPane();
         Tabla1 = new RSMaterialComponent.RSTableMetroCustom();
@@ -241,17 +317,7 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(1150, 510));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        txtbuscar.setForeground(new java.awt.Color(29, 30, 91));
-        txtbuscar.setColorIcon(new java.awt.Color(29, 30, 111));
-        txtbuscar.setColorMaterial(new java.awt.Color(29, 30, 111));
-        txtbuscar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
-        txtbuscar.setPlaceholder("Buscar");
-        txtbuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtbuscarActionPerformed(evt);
-            }
-        });
-        add(txtbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 22, 430, 40));
+        jPanel1.setBackground(new java.awt.Color(242, 247, 255));
 
         btnNuevo.setBackground(new java.awt.Color(46, 49, 82));
         btnNuevo.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -265,7 +331,17 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
                 btnNuevoActionPerformed(evt);
             }
         });
-        add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 20, 120, 40));
+
+        txtbuscar.setForeground(new java.awt.Color(29, 30, 91));
+        txtbuscar.setColorIcon(new java.awt.Color(29, 30, 111));
+        txtbuscar.setColorMaterial(new java.awt.Color(29, 30, 111));
+        txtbuscar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
+        txtbuscar.setPlaceholder("Buscar");
+        txtbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtbuscarActionPerformed(evt);
+            }
+        });
 
         btnElimi.setBackground(new java.awt.Color(46, 49, 82));
         btnElimi.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -279,7 +355,6 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
                 btnElimiActionPerformed(evt);
             }
         });
-        add(btnElimi, new org.netbeans.lib.awtextra.AbsoluteConstraints(1024, 20, 120, 40));
 
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -328,7 +403,39 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
         jScrollPane3.setViewportView(Tabla1);
         Tabla1.getColumnModel().getColumn(0).setPreferredWidth(10);
 
-        add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 1120, 260));
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(436, 436, 436)
+                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)
+                        .addComponent(btnElimi, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(48, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnElimi, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(240, Short.MAX_VALUE))
+        );
+
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1190, 630));
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarActionPerformed
@@ -541,6 +648,7 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
     private RSMaterialComponent.RSTableMetroCustom Tabla1;
     private RSMaterialComponent.RSButtonShape btnElimi;
     private RSMaterialComponent.RSButtonShape btnNuevo;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane3;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtbuscar;
     // End of variables declaration//GEN-END:variables
