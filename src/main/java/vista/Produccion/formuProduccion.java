@@ -130,7 +130,7 @@ public class formuProduccion extends javax.swing.JDialog {
         txtfinal.setBackground(new java.awt.Color(255, 255, 255));
         txtfinal.setForeground(new java.awt.Color(255, 255, 255));
         txtfinal.setDateFormatString("y-MM-d");
-        jPanel1.add(txtfinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 180, 190, 30));
+        jPanel1.add(txtfinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 180, 200, 30));
 
         txtcantidad.setForeground(new java.awt.Color(0, 0, 0));
         txtcantidad.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -324,26 +324,51 @@ public class formuProduccion extends javax.swing.JDialog {
         }
     }
 
-    private void cargarDetallesPedido(int idDetalle) {
-        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(
-                "SELECT dp.cantidad, dp.dimension, p.fecha_fin "
-                + "FROM detalle_pedido dp "
-                + "JOIN pedido p ON dp.pedido_id_pedido = p.id_pedido "
-                + "WHERE dp.iddetalle_pedido = ?")) {
+   private void cargarDetallesPedido(int idDetalle) {
+    // Usar try-with-resources para asegurar el cierre de conexiones
+    try (Connection con = new Conexion().getConnection(); 
+         PreparedStatement ps = con.prepareStatement(
+            "SELECT dp.cantidad, dp.dimension, p.fecha_inicio, p.fecha_fin "
+            + "FROM detalle_pedido dp "
+            + "JOIN pedido p ON dp.pedido_id_pedido = p.id_pedido "
+            + "WHERE dp.iddetalle_pedido = ?")) {
 
-            ps.setInt(1, idDetalle);
-            ResultSet rs = ps.executeQuery();
-
+        ps.setInt(1, idDetalle);
+        
+        try (ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
-                txtcantidad.setText(String.valueOf(rs.getInt("cantidad")));
-                txtdimensiones.setText(rs.getString("dimension"));
-                txtfinal.setDate(rs.getDate("fecha_fin"));
+                // Cargar cantidad (con manejo de nulos)
+                int cantidad = rs.getInt("cantidad");
+                txtcantidad.setText(rs.wasNull() ? "" : String.valueOf(cantidad));
+                
+                // Cargar dimensiones (con manejo de nulos)
+                String dimension = rs.getString("dimension");
+                txtdimensiones.setText(dimension != null ? dimension : "");
+                
+                // Cargar fechas con validación de nulos
+                java.sql.Date fechaInicio = rs.getDate("fecha_inicio");
+                if (fechaInicio != null) {
+                    txtinicio.setDate(fechaInicio);
+                } else {
+                    txtinicio.setDate(null); // Limpiar si es nulo
+                }
+                
+                java.sql.Date fechaFin = rs.getDate("fecha_fin");
+                if (fechaFin != null) {
+                    txtfinal.setDate(fechaFin);
+                } else {
+                    txtfinal.setDate(null); // Limpiar si es nulo
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontraron detalles para el pedido seleccionado",
+                    "Advertencia", JOptionPane.WARNING_MESSAGE);
             }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar detalles: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
         }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al cargar detalles: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
 
     }//GEN-LAST:event_BoxnombrepediActionPerformed
 
