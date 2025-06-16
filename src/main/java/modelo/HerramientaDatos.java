@@ -14,15 +14,15 @@ public class HerramientaDatos {
     private int idInventario;
     private String nombre;
     private String descripcion;
-    private int cantidad;
-    private double precioUnitario;
+    private String cantidad;
+    private int precioUnitario;
     private String estado;
     private int idCategoria;
     private int idMarca;
     private int idUnidadMedida;
     private byte[] imagen; // imagen en formato binario
 
-    public HerramientaDatos(String nombre, String descripcion, int cantidad, double precioUnitario, String estado, int idCategoria, int idMarca, int idUnidadMedida, byte[] imagen) {
+    public HerramientaDatos(String nombre, String descripcion, String cantidad, int precioUnitario, String estado, int idCategoria, int idMarca, int idUnidadMedida, byte[] imagen) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.cantidad = cantidad;
@@ -34,7 +34,7 @@ public class HerramientaDatos {
         this.imagen = imagen;
     }
 
-    public HerramientaDatos(int idInventario, String nombre, String descripcion, int cantidad, double precioUnitario, String estado, int idCategoria, int idMarca, int idUnidadMedida, byte[] imagen) {
+    public HerramientaDatos(int idInventario, String nombre, String descripcion, String cantidad, int precioUnitario, String estado, int idCategoria, int idMarca, int idUnidadMedida, byte[] imagen) {
         this.idInventario = idInventario;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -71,19 +71,19 @@ public class HerramientaDatos {
         this.descripcion = descripcion;
     }
 
-    public int getCantidad() {
+    public String getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(String cantidad) {
         this.cantidad = cantidad;
     }
 
-    public double getPrecioUnitario() {
+    public int getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(double precioUnitario) {
+    public void setPrecioUnitario(int precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 

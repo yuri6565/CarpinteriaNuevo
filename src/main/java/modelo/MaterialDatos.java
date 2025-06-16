@@ -14,30 +14,33 @@ public class MaterialDatos {
     private int idInventario;
     private String nombre;
     private String descripcion;
-    private int cantidad;
-    private double precioUnitario;
+    private String cantidad;
+    private int precioUnitario;
+    private String stockMinimo;
     private int idCategoria;
     private int idMarca;
     private int idUnidadMedida;
     private byte[] imagen; // imagen en formato binario
 
-    public MaterialDatos(String nombre, String descripcion, int cantidad, double precioUnitario, int idCategoria, int idMarca, int idUnidadMedida, byte[] imagen) {
+    public MaterialDatos(String nombre, String descripcion, String cantidad, int precioUnitario, String stockMinimo, int idCategoria, int idMarca, int idUnidadMedida, byte[] imagen) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
+        this.stockMinimo = stockMinimo;
         this.idCategoria = idCategoria;
         this.idMarca = idMarca;
         this.idUnidadMedida = idUnidadMedida;
         this.imagen = imagen;
     }
 
-    public MaterialDatos(int idInventario, String nombre, String descripcion, int cantidad, double precioUnitario, int idCategoria, int idMarca, int idUnidadMedida, byte[] imagen) {
+    public MaterialDatos(int idInventario, String nombre, String descripcion, String cantidad, int precioUnitario, String stockMinimo, int idCategoria, int idMarca, int idUnidadMedida, byte[] imagen) {
         this.idInventario = idInventario;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
+        this.stockMinimo = stockMinimo;
         this.idCategoria = idCategoria;
         this.idMarca = idMarca;
         this.idUnidadMedida = idUnidadMedida;
@@ -68,20 +71,28 @@ public class MaterialDatos {
         this.descripcion = descripcion;
     }
 
-    public int getCantidad() {
+    public String getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(String cantidad) {
         this.cantidad = cantidad;
     }
 
-    public double getPrecioUnitario() {
+    public int getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(double precioUnitario) {
+    public void setPrecioUnitario(int precioUnitario) {
         this.precioUnitario = precioUnitario;
+    }
+
+    public String getStockMinimo() {
+        return stockMinimo;
+    }
+
+    public void setStockMinimo(String stockMinimo) {
+        this.stockMinimo = stockMinimo;
     }
 
     public int getIdCategoria() {
@@ -115,5 +126,7 @@ public class MaterialDatos {
     public void setImagen(byte[] imagen) {
         this.imagen = imagen;
     }
-    
+
+
+ 
 }

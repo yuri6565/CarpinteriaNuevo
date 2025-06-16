@@ -8,15 +8,20 @@ import controlador.Ctrl_CategoriaHerramienta;
 import controlador.Ctrl_MarcaHerramienta;
 import controlador.Ctrl_UnidadHerramienta;
 import java.awt.Image;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.AbstractDocument;
 import modelo.Categoria;
 import modelo.HerramientaDatos;
 import modelo.Marca;
@@ -30,9 +35,12 @@ import vista.TemaManager;
  */
 public class herramientaEditar extends javax.swing.JDialog {
 
+    private byte[] imagenBytes; // Para almacenar la imagen en bytes
+    private byte[] previewImageBytes; // Para almacenar la imagen de vista previa
+    private ImageIcon previewImageIcon; // Para mantener la imagen de vista previa escalada
+    
     public HerramientaDatos material;
     private boolean guardado = false;
-    private byte[] imagenBytes; // Para almacenar la imagen en bytes
     private List<Categoria> categorias;
     private List<Marca> marcas;
     private List<Unidad> unidades;
@@ -46,6 +54,29 @@ public class herramientaEditar extends javax.swing.JDialog {
         this.material = material;
         cargarDatosComboBoxes(); // Cargar datos en los combo boxes
         cargarMaterial(); // Llamar al método para prellenar los campos
+
+        ((AbstractDocument) txtPrecioUnitario.getDocument()).setDocumentFilter(new NumberFormatFilterInventario());
+
+        // Agregar esto en el constructor o método de inicialización de tu clase
+        txtCantidad.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                String currentText = txtCantidad.getText();
+
+                // Permitir: dígitos, coma, backspace y delete
+                if (!(Character.isDigit(c) || c == ',' || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE)) {
+                    e.consume();
+                    JOptionPane.showMessageDialog(null,
+                            "Solo se permiten números enteros y decimales (use coma para decimales)",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+            }
+        });
+
     }
 
     // Método para cargar datos en los combo boxes
@@ -81,8 +112,14 @@ public class herramientaEditar extends javax.swing.JDialog {
         if (material != null) {
             txtNombre.setText(material.getNombre());
             txtDescripcion.setText(material.getDescripcion());
-            txtCantidad.setText(String.valueOf(material.getCantidad()));
-            txtPrecioUnitario.setText(String.valueOf(material.getPrecioUnitario()));
+            txtCantidad.setText(material.getCantidad());
+            // Formatear el precio unitario con puntos como separadores de miles
+
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setGroupingSeparator('.');
+            DecimalFormat formatter = new DecimalFormat("#,###", symbols);
+            formatter.setGroupingSize(3);
+            txtPrecioUnitario.setText(formatter.format(material.getPrecioUnitario()));
             //txtCodigo.setText(String.valueOf(material.getIdInventario())); // Mostrar el ID como código
 
             // Seleccionar categoría
@@ -126,6 +163,81 @@ public class herramientaEditar extends javax.swing.JDialog {
         }
     }
 
+    private void cargarImagenVistaPrevia() {
+        try {
+            // Cargar la imagen de vista previa desde los recursos
+            String rutaImagenPrevia = "/subirImagen.png"; // Ajusta la ruta según la ubicación
+            java.net.URL imgURL = getClass().getResource(rutaImagenPrevia);
+
+            if (imgURL == null) {
+                JOptionPane.showMessageDialog(this, "No se encontró la imagen de vista previa.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Leer los bytes de la imagen de vista previa
+            previewImageBytes = Files.readAllBytes(new File(imgURL.toURI()).toPath());
+
+            // Obtener dimensiones del lblImagen
+            int width = lblImagen.getWidth();  // 180
+            int height = lblImagen.getHeight(); // 150
+
+            // Escalar la imagen de vista previa
+            ImageIcon imagen = new ImageIcon(imgURL);
+            Image img = imagen.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            previewImageIcon = new ImageIcon(img);
+            lblImagen.setIcon(previewImageIcon);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar la imagen de vista previa: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
+// Método para cargar la imagen que se guardará en la base de datos
+    private void cargarImagenPorDefectoParaBaseDatos() {
+        try {
+            // Cargar la imagen predeterminada para la base de datos
+            String rutaImagenDefecto = "/imagenSin.png"; // Ajusta la ruta según la ubicación
+            java.net.URL imgURL = getClass().getResource(rutaImagenDefecto);
+
+            if (imgURL == null) {
+                JOptionPane.showMessageDialog(this, "No se encontró la imagen por defecto para la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Leer los bytes de la imagen predeterminada
+            imagenBytes = Files.readAllBytes(new File(imgURL.toURI()).toPath());
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar la imagen por defecto para la base de datos: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
+    private void formatNumberField() {
+        // Eliminar cualquier carácter que no sea número
+        String text = txtPrecioUnitario.getText().replaceAll("[^0-9]", "");
+
+        if (!text.isEmpty()) {
+            try {
+                long amount = Long.parseLong(text);
+
+                // Formatear el número con puntos como separadores de miles
+                String formatted = String.format("%,d", amount).replace(",", ".");
+
+                // Evitar bucles infinitos al comparar antes de actualizar
+                if (!formatted.equals(txtPrecioUnitario.getText())) {
+                    txtPrecioUnitario.setText(formatted);
+                    txtPrecioUnitario.setCaretPosition(formatted.length());
+                }
+            } catch (NumberFormatException e) {
+                // Ignorar errores de formato
+            }
+        }
+    }
+
     public boolean isGuardado() {
         return guardado;
     }
@@ -133,7 +245,7 @@ public class herramientaEditar extends javax.swing.JDialog {
     public HerramientaDatos getMaterial() {
         return material;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -159,15 +271,19 @@ public class herramientaEditar extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         txtPrecioUnitario = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel5 = new javax.swing.JLabel();
-        txtDescripcion = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel9 = new javax.swing.JLabel();
         cmbMarca = new RSMaterialComponent.RSComboBoxMaterial();
         jLabel7 = new javax.swing.JLabel();
         cmbEstado = new RSMaterialComponent.RSComboBoxMaterial();
-        btnSubirImagen = new rojeru_san.RSButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtDescripcion = new javax.swing.JTextArea();
+        jLabel12 = new javax.swing.JLabel();
         lblImagen = new javax.swing.JLabel();
+        btnSubirImagen = new RSMaterialComponent.RSButtonShape();
+        btnQuitar = new RSMaterialComponent.RSButtonShape();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -185,24 +301,24 @@ public class herramientaEditar extends javax.swing.JDialog {
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar.setText("Cancelar");
         btnCancelar.setColorHover(new java.awt.Color(204, 0, 0));
-        btnCancelar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 500, 140, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 530, 140, -1));
 
         btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar.setText("Actualizar");
         btnGuardar.setColorHover(new java.awt.Color(0, 153, 51));
-        btnGuardar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        btnGuardar.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 500, 140, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 530, 140, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel3.setText("Nombre:");
@@ -223,7 +339,7 @@ public class herramientaEditar extends javax.swing.JDialog {
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel10.setText("Categoria:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, -1, -1));
 
         cmbCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione categoría:", "Categoría 1", "Categoría 2", "Categoría 3" }));
         cmbCategoria.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -233,11 +349,11 @@ public class herramientaEditar extends javax.swing.JDialog {
                 cmbCategoriaActionPerformed(evt);
             }
         });
-        jPanel1.add(cmbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 200, 30));
+        jPanel1.add(cmbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 90, 200, 30));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel11.setText("Unidad de medida:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
 
         cmbUnidad.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione unidad-medida:", "RSItem 1", "RSItem 2", "RSItem 3", "RSItem 4" }));
         cmbUnidad.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -247,11 +363,11 @@ public class herramientaEditar extends javax.swing.JDialog {
                 cmbUnidadActionPerformed(evt);
             }
         });
-        jPanel1.add(cmbUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, 30));
+        jPanel1.add(cmbUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, 30));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel8.setText("Cantidad:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
 
         txtCantidad.setForeground(new java.awt.Color(0, 0, 0));
         txtCantidad.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -264,11 +380,11 @@ public class herramientaEditar extends javax.swing.JDialog {
                 txtCantidadActionPerformed(evt);
             }
         });
-        jPanel1.add(txtCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 200, 30));
+        jPanel1.add(txtCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 200, 30));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel6.setText("Precio unitario:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, -1, -1));
 
         txtPrecioUnitario.setForeground(new java.awt.Color(0, 0, 0));
         txtPrecioUnitario.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -281,24 +397,11 @@ public class herramientaEditar extends javax.swing.JDialog {
                 txtPrecioUnitarioActionPerformed(evt);
             }
         });
-        jPanel1.add(txtPrecioUnitario, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, 200, 30));
+        jPanel1.add(txtPrecioUnitario, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 200, 30));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel5.setText("Descripcion:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, -1, -1));
-
-        txtDescripcion.setForeground(new java.awt.Color(0, 0, 0));
-        txtDescripcion.setColorMaterial(new java.awt.Color(0, 0, 0));
-        txtDescripcion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtDescripcion.setPhColor(new java.awt.Color(0, 0, 0));
-        txtDescripcion.setPlaceholder("Ingrese el descripcion...");
-        txtDescripcion.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtDescripcion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDescripcionActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 90, 200, 30));
+        jLabel5.setText("Descripcion: (opcinal)");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setText("Marca:");
@@ -328,39 +431,51 @@ public class herramientaEditar extends javax.swing.JDialog {
         });
         jPanel1.add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 230, -1, 30));
 
-        btnSubirImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/up-arrow (1).png"))); // NOI18N
-        btnSubirImagen.setText(" Subir imagen");
+        txtDescripcion.setColumns(10);
+        txtDescripcion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtDescripcion.setLineWrap(true);
+        txtDescripcion.setRows(1);
+        txtDescripcion.setTabSize(1);
+        txtDescripcion.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(txtDescripcion);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, 190, 60));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel12.setText("Imagen: (opcional)");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 280, -1, -1));
+
+        lblImagen.setBackground(new java.awt.Color(153, 204, 255));
+        lblImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 310, 180, 150));
+
+        btnSubirImagen.setBackground(new java.awt.Color(28, 135, 212));
+        btnSubirImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/importar.png"))); // NOI18N
+        btnSubirImagen.setText("Subir");
+        btnSubirImagen.setBackgroundHover(new java.awt.Color(35, 112, 210));
+        btnSubirImagen.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnSubirImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnSubirImagen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSubirImagenActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSubirImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 280, 140, 30));
+        jPanel1.add(btnSubirImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 470, 80, 26));
 
-        lblImagen.setBackground(new java.awt.Color(153, 204, 255));
-        lblImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 320, 180, 150));
+        btnQuitar.setBackground(new java.awt.Color(163, 38, 0));
+        btnQuitar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/boton-menos (1).png"))); // NOI18N
+        btnQuitar.setText("Quitar");
+        btnQuitar.setBackgroundHover(new java.awt.Color(147, 0, 0));
+        btnQuitar.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnQuitar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnQuitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuitarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnQuitar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 470, 80, 26));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 520, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 560, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 580));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -373,23 +488,24 @@ public class herramientaEditar extends javax.swing.JDialog {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         String nombre = txtNombre.getText().trim();
         String descripcion = txtDescripcion.getText().trim();
+        String cantidad = txtCantidad.getText().trim();
         String categoriaNombre = (String) cmbCategoria.getSelectedItem();
         String marcaNombre = (String) cmbMarca.getSelectedItem();
         String unidadNombre = (String) cmbUnidad.getSelectedItem();
         String estado = (String) cmbEstado.getSelectedItem();
 
         // Validar campos obligatorios
-        if (nombre.isEmpty() || descripcion.isEmpty() || categoriaNombre == null || marcaNombre == null || unidadNombre == null || estado == null) {
+        if (nombre.isEmpty() || cantidad.isEmpty() ||descripcion.isEmpty() || categoriaNombre == null || marcaNombre == null || unidadNombre == null || estado == null) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         // Validar y obtener la cantidad
-        int cantidad;
+        int precioUnitario;
         try {
-            cantidad = Integer.parseInt(txtCantidad.getText().trim());
-            if (cantidad < 0) {
+            precioUnitario = Integer.parseInt(txtPrecioUnitario.getText().replace(".", "").trim());
+            if (precioUnitario < 0) {
                 JOptionPane.showMessageDialog(this, "La cantidad no puede ser negativa.",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -400,25 +516,6 @@ public class herramientaEditar extends javax.swing.JDialog {
             return;
         }
 
-        // Validar y obtener el precio unitario
-        double precioUnitario;
-        try {
-            precioUnitario = Double.parseDouble(txtPrecioUnitario.getText().trim());
-            if (precioUnitario < 0) {
-                JOptionPane.showMessageDialog(this, "El precio unitario no puede ser negativo.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Ingrese un valor numérico válido para el precio unitario.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Verificar si hay una imagen seleccionada (opcional, puede mantener la imagen original si no se cambia)
-        if (imagenBytes == null && material.getImagen() == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, suba una imagen o conserve la imagen original.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
 
         // Mapear nombres a IDs
         int idCategoria = -1;
@@ -492,10 +589,6 @@ public class herramientaEditar extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPrecioUnitarioActionPerformed
 
-    private void txtDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcionActionPerformed
-
     private void cmbMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMarcaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbMarcaActionPerformed
@@ -523,10 +616,10 @@ public class herramientaEditar extends javax.swing.JDialog {
                 imagenBytes = Files.readAllBytes(archivo.toPath());
 
                 // Obtener dimensiones del lblImagen
-                int width = lblImagen.getWidth();  // 150
+                int width = lblImagen.getWidth();  // 140
                 int height = lblImagen.getHeight(); // 140
 
-                // Mostrar previsualización
+                // Mostrar previsualización ajustada al tamaño de lblImagen
                 ImageIcon imagen = new ImageIcon(archivo.getAbsolutePath());
                 Image img = imagen.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
                 lblImagen.setIcon(new ImageIcon(img));
@@ -536,6 +629,13 @@ public class herramientaEditar extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_btnSubirImagenActionPerformed
+
+    private void btnQuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarActionPerformed
+        // Restaurar la imagen predeterminada y limpiar imagenBytes
+        imagenBytes = null;
+        cargarImagenPorDefectoParaBaseDatos(); // Reestablecer imagen predeterminada para base de datos
+        cargarImagenVistaPrevia(); // Restaurar la vista previa predeterminada
+    }//GEN-LAST:event_btnQuitarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -582,7 +682,8 @@ public class herramientaEditar extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
-    private rojeru_san.RSButton btnSubirImagen;
+    private RSMaterialComponent.RSButtonShape btnQuitar;
+    private RSMaterialComponent.RSButtonShape btnSubirImagen;
     private RSMaterialComponent.RSComboBoxMaterial cmbCategoria;
     private RSMaterialComponent.RSComboBoxMaterial cmbEstado;
     private RSMaterialComponent.RSComboBoxMaterial cmbMarca;
@@ -590,6 +691,7 @@ public class herramientaEditar extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -598,9 +700,10 @@ public class herramientaEditar extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblImagen;
     private RSMaterialComponent.RSTextFieldMaterial txtCantidad;
-    private RSMaterialComponent.RSTextFieldMaterial txtDescripcion;
+    private javax.swing.JTextArea txtDescripcion;
     private RSMaterialComponent.RSTextFieldMaterial txtNombre;
     private RSMaterialComponent.RSTextFieldMaterial txtPrecioUnitario;
     // End of variables declaration//GEN-END:variables

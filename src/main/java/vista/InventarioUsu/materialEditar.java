@@ -35,6 +35,7 @@ public class materialEditar extends javax.swing.JDialog {
     private List<Categoria> categorias;
     private List<Marca> marcas;
     private List<Unidad> unidades;
+
     /**
      * Creates new form materialEditar
      */
@@ -46,7 +47,6 @@ public class materialEditar extends javax.swing.JDialog {
         cargarMaterial(); // Llamar al método para prellenar los campos
     }
 
-    
     // Método para cargar datos en los combo boxes
     private void cargarDatosComboBoxes() {
         Ctrl_CategoriaMaterial ctrlCategoria = new Ctrl_CategoriaMaterial();
@@ -74,7 +74,7 @@ public class materialEditar extends javax.swing.JDialog {
         }
 
     }
-    
+
 // Método para prellenar los campos con los datos del material
     private void cargarMaterial() {
         if (material != null) {
@@ -107,7 +107,6 @@ public class materialEditar extends javax.swing.JDialog {
                     break;
                 }
             }
-
 
             // Cargar imagen si existe
             if (material.getImagen() != null) {
@@ -343,7 +342,7 @@ public class materialEditar extends javax.swing.JDialog {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "png", "jpeg"));
 
@@ -364,7 +363,7 @@ public class materialEditar extends javax.swing.JDialog {
                 lblImagen.setIcon(new ImageIcon(img));
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error al leer la imagen: " + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnSubirImagenActionPerformed
@@ -377,6 +376,7 @@ public class materialEditar extends javax.swing.JDialog {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         String nombre = txtNombre.getText().trim();
         String descripcion = txtDescripcion.getText().trim();
+        String cantidad = txtCantidad.getText().trim();
         String categoriaNombre = (String) cmbCategoria.getSelectedItem();
         String marcaNombre = (String) cmbMarca.getSelectedItem();
         String unidadNombre = (String) cmbUnidad.getSelectedItem();
@@ -384,36 +384,22 @@ public class materialEditar extends javax.swing.JDialog {
         // Validar campos obligatorios
         if (nombre.isEmpty() || descripcion.isEmpty() || categoriaNombre == null || marcaNombre == null || unidadNombre == null) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.",
-                "Error", JOptionPane.ERROR_MESSAGE);
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
 
         // Validar y obtener la cantidad
-        int cantidad;
+        int precioUnitario;
         try {
-            cantidad = Integer.parseInt(txtCantidad.getText().trim());
-            if (cantidad < 0) {
-                JOptionPane.showMessageDialog(this, "La cantidad no puede ser negativa.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Ingrese un número válido en la cantidad.",
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-                // Validar y obtener el precio unitario
-        double precioUnitario;
-        try {
-            precioUnitario = Double.parseDouble(txtPrecioUnitario.getText().trim());
+            precioUnitario = Integer.parseInt(txtPrecioUnitario.getText().trim());
             if (precioUnitario < 0) {
-                JOptionPane.showMessageDialog(this, "El precio unitario no puede ser negativo.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "El precio no puede ser negativo.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Ingrese un valor numérico válido para el precio unitario.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ingrese un número válido en el precio.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -426,7 +412,7 @@ public class materialEditar extends javax.swing.JDialog {
         // Verificar si hay una imagen seleccionada (opcional, puede mantener la imagen original si no se cambia)
         if (imagenBytes == null && material.getImagen() == null) {
             JOptionPane.showMessageDialog(this, "Por favor, suba una imagen o conserve la imagen original.",
-                "Error", JOptionPane.ERROR_MESSAGE);
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -457,7 +443,7 @@ public class materialEditar extends javax.swing.JDialog {
 
         if (idCategoria == -1 || idMarca == -1 || idUnidadMedida == -1) {
             JOptionPane.showMessageDialog(this, "Error al mapear los datos seleccionados.",
-                "Error", JOptionPane.ERROR_MESSAGE);
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -471,14 +457,19 @@ public class materialEditar extends javax.swing.JDialog {
             material.setIdMarca(idMarca);
             material.setIdUnidadMedida(idUnidadMedida);
             material.setImagen(imagenBytes != null ? imagenBytes : material.getImagen()); // Usar nueva imagen o mantener la original
+            
+            // Mostrar mensaje de éxito
+            JOptionPane.showMessageDialog(this,
+                    "Material actualizado exitosamente",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            guardado = true;
+            dispose(); // Cierra el JDialog
         } else {
             JOptionPane.showMessageDialog(this, "Error: material no está inicializado.",
-                "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        guardado = true; // Marcar que se han guardado los cambios
-        dispose(); // Cierra el JDialog
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void cmbUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbUnidadActionPerformed

@@ -373,6 +373,7 @@ public class herramientaEditar extends javax.swing.JDialog {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         String nombre = txtNombre.getText().trim();
         String descripcion = txtDescripcion.getText().trim();
+        String cantidad = txtCantidad.getText().trim();
         String categoriaNombre = (String) cmbCategoria.getSelectedItem();
         String marcaNombre = (String) cmbMarca.getSelectedItem();
         String unidadNombre = (String) cmbUnidad.getSelectedItem();
@@ -386,10 +387,10 @@ public class herramientaEditar extends javax.swing.JDialog {
         }
 
         // Validar y obtener la cantidad
-        int cantidad;
+        int precioUnitario;
         try {
-            cantidad = Integer.parseInt(txtCantidad.getText().trim());
-            if (cantidad < 0) {
+            precioUnitario = Integer.parseInt(txtPrecioUnitario.getText().trim());
+            if (precioUnitario < 0) {
                 JOptionPane.showMessageDialog(this, "La cantidad no puede ser negativa.",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -400,18 +401,6 @@ public class herramientaEditar extends javax.swing.JDialog {
             return;
         }
 
-        // Validar y obtener el precio unitario
-        double precioUnitario;
-        try {
-            precioUnitario = Double.parseDouble(txtPrecioUnitario.getText().trim());
-            if (precioUnitario < 0) {
-                JOptionPane.showMessageDialog(this, "El precio unitario no puede ser negativo.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Ingrese un valor numérico válido para el precio unitario.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
 
         // Verificar si hay una imagen seleccionada (opcional, puede mantener la imagen original si no se cambia)
         if (imagenBytes == null && material.getImagen() == null) {

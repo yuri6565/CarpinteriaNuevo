@@ -166,7 +166,7 @@
                       <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
                       <Component id="rSLabelImage3" min="-2" pref="24" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                      <Component id="rSLabelIcon1" min="-2" pref="41" max="-2" attributes="0"/>
+                      <Component id="btnNotificacion" min="-2" pref="41" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="rSLabelCircleImage1" min="-2" pref="62" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -201,7 +201,7 @@
                                   <Component id="rSSwitch1" alignment="0" min="-2" pref="24" max="-2" attributes="0"/>
                                   <Component id="rSLabelImage3" alignment="0" min="-2" pref="24" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="rSLabelIcon1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnNotificacion" min="-2" max="-2" attributes="0"/>
                                       <Component id="lblTituloPrincipal" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -249,7 +249,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="rojerusan.RSLabelIcon" name="rSLabelIcon1">
+            <Component class="rojerusan.RSLabelIcon" name="btnNotificacion">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -261,6 +261,9 @@
                   <Value id="NOTIFICATIONS"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnNotificacionMouseClicked"/>
+              </Events>
             </Component>
             <Component class="rojerusan.RSLabelCircleImage" name="rSLabelCircleImage1">
               <Properties>
