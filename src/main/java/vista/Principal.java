@@ -8,6 +8,7 @@ import controlador.Ctrl_Perfil;
 import vista.Caja.Caja;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -20,19 +21,24 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.net.URL;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.Timer;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import modelo.UsuarioModelo;
 import rojeru_san.RSButton;
+import rojerusan.RSLabelImage;
 
 import vista.Cotizacion.cotizacion;
 
@@ -90,6 +96,7 @@ getHeight());
 
         cargarUsuarioLogueado();
         cargarrol();
+        configurarPopupMenuNotificacion();
 
         jPanel1.setLayout(new BorderLayout());
         jPanel4.setVisible(true);
@@ -100,6 +107,7 @@ getHeight());
 
         // Establece tamaño inicial
         jPanel3.setPreferredSize(new Dimension(MENU_EXPANDED_WIDTH, jPanel3.getHeight()));
+
 
 
 //submenu inventario------------------
@@ -342,7 +350,7 @@ getHeight());
             ocho1.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service_1.png")));
             nueve1.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogar.png")));
             menu.setIcon(new ImageIcon(getClass().getResource("/imagenes/burger-bar.png")));
-            rSLabelIcon1.setForeground(new Color(255, 255, 255));
+            btnNotificacion.setForeground(new Color(255, 255, 255));
             //rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/logo_blanco.png")));
 
         } else {
@@ -363,7 +371,7 @@ getHeight());
             rolusuario.setForeground(textoLabel);
             lblTituloPrincipal.setForeground(textoLabel);
             item4.setForeground(fondoBoton);
-            rSLabelIcon1.setForeground(new Color(0, 0, 0));
+            btnNotificacion.setForeground(new Color(0, 0, 0));
             uno.setIcon(new ImageIcon(getClass().getResource("/imagenes/home.png")));
             dos.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-blanca.png")));
             tres.setIcon(new ImageIcon(getClass().getResource("/imagenes/proveedor-de-servicio_1.png")));
@@ -640,6 +648,88 @@ getHeight());
         jPanel3.repaint();
     }
 
+    private void configurarPopupMenuNotificacion() {
+        JPopupMenu notificacionPopupMenu = new JPopupMenu();
+        notificacionPopupMenu.setOpaque(false);
+        notificacionPopupMenu.setBackground(new Color(255, 255, 255));
+        notificacionPopupMenu.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+
+        // Panel personalizado para el encabezado
+        JPanel headerPanel = new JPanel(new BorderLayout(10, 0));
+        headerPanel.setOpaque(false);
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 11, 5, 11));
+
+        // Título "Notificaciones"
+        JLabel titleLabel = new JLabel("Notificaciones");
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        titleLabel.setForeground(new Color(0, 0, 0));
+        headerPanel.add(titleLabel, BorderLayout.WEST);
+
+        RSLabelImage settings = new RSLabelImage();
+        URL imageUrl = getClass().getResource("/ajuste (3).png");
+        ImageIcon icono = (imageUrl != null) ? new ImageIcon(imageUrl) : new ImageIcon("default_bell.png");
+        settings.setIcon(icono);
+        settings.setPreferredSize(new Dimension(25, 25));
+
+        // Agregar MouseListener para abrir JDialog al hacer clic
+// Configurar el cursor de mano al pasar el mouse
+        settings.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                settings.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Cambia a cursor de mano
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                settings.setCursor(Cursor.getDefaultCursor()); // Vuelve al cursor normal
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                notificacionPopupMenu.setVisible(false);
+                stock dialog = new stock(new javax.swing.JFrame(), true);
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
+            }
+        });
+
+        headerPanel.add(settings, BorderLayout.EAST);
+
+        // Añadir el panel de encabezado al JPopupMenu
+        notificacionPopupMenu.add(headerPanel);
+
+        // Añadir separador entre header y center
+        JSeparator separator = new JSeparator();
+        separator.setForeground(new Color(200, 200, 200)); // Color gris claro
+        notificacionPopupMenu.add(separator);
+
+        // Panel vacío para el centro (sin texto ni icono de campana)
+        JPanel centerPanel = new JPanel();
+        centerPanel.setOpaque(false);
+        centerPanel.setPreferredSize(new Dimension(350, 400)); // Ajusta el tamaño según necesites
+        notificacionPopupMenu.add(centerPanel);
+
+        // Mostrar el JPopupMenu al hacer clic en btnNotificacion
+        btnNotificacion.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnNotificacion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Mano al pasar
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnNotificacion.setCursor(Cursor.getDefaultCursor()); // Cursor normal al salir
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Mover 50px a la izquierda (valor negativo)
+                notificacionPopupMenu.show(btnNotificacion, -50, btnNotificacion.getHeight() + 15);
+            }
+        });
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -657,7 +747,7 @@ getHeight());
         rSLabelImage1 = new rojerusan.RSLabelImage();
         rSSwitch1 = new rojerusan.RSSwitch();
         rSLabelImage3 = new rojerusan.RSLabelImage();
-        rSLabelIcon1 = new rojerusan.RSLabelIcon();
+        btnNotificacion = new rojerusan.RSLabelIcon();
         rSLabelCircleImage1 = new rojerusan.RSLabelCircleImage();
         rolusuario = new javax.swing.JLabel();
         lblUsuarioLogueado = new javax.swing.JLabel();
@@ -749,9 +839,14 @@ getHeight());
 
         rSLabelImage3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/luna (6).png"))); // NOI18N
 
-        rSLabelIcon1.setBackground(new java.awt.Color(255, 255, 255));
-        rSLabelIcon1.setForeground(new java.awt.Color(255, 255, 255));
-        rSLabelIcon1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.NOTIFICATIONS);
+        btnNotificacion.setBackground(new java.awt.Color(255, 255, 255));
+        btnNotificacion.setForeground(new java.awt.Color(255, 255, 255));
+        btnNotificacion.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.NOTIFICATIONS);
+        btnNotificacion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnNotificacionMouseClicked(evt);
+            }
+        });
 
         rSLabelCircleImage1.setBackground(new java.awt.Color(29, 30, 81));
         rSLabelCircleImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/WhatsApp Image 2025-03-28 at 11.10.17 AM.jpeg"))); // NOI18N
@@ -795,7 +890,7 @@ getHeight());
                 .addGap(12, 12, 12)
                 .addComponent(rSLabelImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
-                .addComponent(rSLabelIcon1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnNotificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rSLabelCircleImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -824,7 +919,7 @@ getHeight());
                             .addComponent(rSSwitch1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(rSLabelImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(rSLabelIcon1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnNotificacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(lblTituloPrincipal)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1667,6 +1762,10 @@ getHeight());
         // TODO add your handling code here:
     }//GEN-LAST:event_rSLabelCircleImage1MouseEntered
 
+    private void btnNotificacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNotificacionMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNotificacionMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1707,6 +1806,7 @@ getHeight());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButton Diez;
+    private rojerusan.RSLabelIcon btnNotificacion;
     private rojeru_san.RSButton cinco;
     private rojeru_san.RSButton cinco1;
     private javax.swing.JPanel contenedor;
@@ -1727,7 +1827,6 @@ getHeight());
     private rojeru_san.RSButton ocho;
     private rojeru_san.RSButton ocho1;
     private rojerusan.RSLabelCircleImage rSLabelCircleImage1;
-    private rojerusan.RSLabelIcon rSLabelIcon1;
     private rojerusan.RSLabelImage rSLabelImage1;
     private rojerusan.RSLabelImage rSLabelImage3;
     private rojerusan.RSPanelImage rSPanelImage3;

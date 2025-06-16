@@ -11,8 +11,11 @@ import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -47,7 +50,7 @@ public class DetallesPedido extends javax.swing.JPanel {
             this.idPedido = -1; // En caso de error, marcamos un ID inválido
         }
         initComponents();
-         aplicarTema(); // Apply initial theme
+        aplicarTema(); // Apply initial theme
 
         // Register for theme changes
         TemaManager.getInstance().addThemeChangeListener(() -> {
@@ -81,8 +84,37 @@ public class DetallesPedido extends javax.swing.JPanel {
 
         deshabilitarEdicion();
 
+        // Agregar listener para actualizar subtotal
+        tablaDetalles.getModel().addTableModelListener(e -> {
+            if (e.getColumn() == 1 || e.getColumn() == 3) { // Si se edita "Cantidad" o "Precio unitario"
+                int row = e.getFirstRow();
+                DefaultTableModel tableModel = (DefaultTableModel) tablaDetalles.getModel();
+
+                try {
+                    Object cantidadObj = tableModel.getValueAt(row, 1);
+                    Object precioUnitarioObj = tableModel.getValueAt(row, 3);
+
+                    int cantidad = (cantidadObj != null) ? Integer.parseInt(cantidadObj.toString().trim().isEmpty() ? "0" : cantidadObj.toString()) : 0;
+                    double precioUnitario = (precioUnitarioObj != null) ? Double.parseDouble(precioUnitarioObj.toString().trim().replace("$", "").replace(".", "")) : 0.0;
+
+                    double subtotal = cantidad * precioUnitario;
+                    // Formatear subtotal con signo de pesos y sin decimales si son .00
+                    DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+                    symbols.setGroupingSeparator('.'); // Usar punto como separador de miles
+                    DecimalFormat df = new DecimalFormat("$#,##0.##", symbols);
+                    tableModel.setValueAt(df.format(subtotal), row, 4);
+
+                    // Actualizar total
+                    actualizarTotal();
+                } catch (NumberFormatException ex) {
+                    tableModel.setValueAt("$0", row, 4);
+                    actualizarTotal();
+                }
+            }
+        });
+
     }
-    
+
     private void cargarDatosPedido() {
         if (idPedido == -1) {
             javax.swing.JOptionPane.showMessageDialog(this, "Código de pedido inválido.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -103,7 +135,6 @@ public class DetallesPedido extends javax.swing.JPanel {
         System.out.println("Estado del pedido: " + pedido.getEstado());
 
         // Llenar las etiquetas con los datos del pedido
-// Llenar los campos con los datos del pedido
         lblNumeroPedido.setText(String.valueOf(pedido.getId_pedido()));
         txtNombrePedido.setText(pedido.getNombre());
 
@@ -162,95 +193,76 @@ public class DetallesPedido extends javax.swing.JPanel {
         List<PedidoDetalle> detalles = controlador.obtenerDetallesPorPedido(idPedido);
         double total = 0.0;
 
+        // Formatear valores sin decimales si son .00
+        // Formatear valores con signo de pesos y sin decimales si son .00
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+        symbols.setGroupingSeparator('.'); // Usar punto como separador de miles
+        DecimalFormat df = new DecimalFormat("$#,##0.##", symbols);
+
         for (PedidoDetalle detalle : detalles) {
             model.addRow(new Object[]{
                 detalle.getDescripcion(),
                 detalle.getCantidad(),
                 detalle.getDimensiones(),
-                detalle.getPrecioUnitario(),
-                detalle.getSubtotal(),
-                "Eliminar" // Mantener la columna de acción, aunque no la usaremos aquí
+                df.format(detalle.getPrecioUnitario()),
+                df.format(detalle.getSubtotal()),
+                "Eliminar" // Mantener la columna de acción
             });
             total += detalle.getSubtotal();
         }
 
         // Mostrar el total
-        lblTotal.setText(String.format("%.2f", total));
-
-        // Agregar listener para actualizar subtotal
-        tablaDetalles.getModel().addTableModelListener(e -> {
-            if (e.getColumn() == 1 || e.getColumn() == 3) { // Si se edita "Cantidad" o "Precio unitario"
-                int row = e.getFirstRow();
-                DefaultTableModel tableModel = (DefaultTableModel) tablaDetalles.getModel();
-
-                try {
-                    Object cantidadObj = tableModel.getValueAt(row, 1);
-                    Object precioUnitarioObj = tableModel.getValueAt(row, 3);
-
-                    int cantidad = (cantidadObj != null) ? Integer.parseInt(cantidadObj.toString().trim().isEmpty() ? "0" : cantidadObj.toString()) : 0;
-                    double precioUnitario = (precioUnitarioObj != null) ? Double.parseDouble(precioUnitarioObj.toString().trim().isEmpty() ? "0.0" : precioUnitarioObj.toString()) : 0.0;
-
-                    double subtotal = cantidad * precioUnitario;
-                    tableModel.setValueAt(subtotal, row, 4);
-
-                    // Actualizar total
-                    actualizarTotal();
-                } catch (NumberFormatException ex) {
-                    tableModel.setValueAt(0.0, row, 4);
-                    actualizarTotal();
-                }
-            }
-        });
+        lblTotal.setText(df.format(total));
     }
-    
-      public void aplicarTema() {
+
+    public void aplicarTema() {
         boolean oscuro = TemaManager.getInstance().isOscuro();
 
         if (oscuro) {
-            Color fondo = new Color(21,21,33);
+            Color fondo = new Color(21, 21, 33);
             Color primario = new Color(40, 60, 150);
             Color texto = Color.WHITE;
-jPanel2.setBackground(fondo);
- jPanel2.setForeground(new Color (255,255,255));
-cmbCliente.setBackground(fondo);
- cmbCliente.setForeground(new Color (255,255,255));
-        txtNombrePedido.setBackground(fondo);
-         txtNombrePedido.setForeground(new Color (255,255,255));
-        dateFechaInicio.setBackground(fondo);
-         dateFechaInicio.setForeground(new Color (255,255,255));
-                dateFechaFin.setBackground(fondo);
-                 dateFechaFin.setForeground(new Color (255,255,255));
-                cmbEstado.setBackground(fondo);
-                 cmbEstado.setForeground(new Color (255,255,255));
-         jPanel1.setBackground(new Color (46,49,82));
+            jPanel2.setBackground(fondo);
+            jPanel2.setForeground(new Color(255, 255, 255));
+            cmbCliente.setBackground(fondo);
+            cmbCliente.setForeground(new Color(255, 255, 255));
+            txtNombrePedido.setBackground(fondo);
+            txtNombrePedido.setForeground(new Color(255, 255, 255));
+            dateFechaInicio.setBackground(fondo);
+            dateFechaInicio.setForeground(new Color(255, 255, 255));
+            dateFechaFin.setBackground(fondo);
+            dateFechaFin.setForeground(new Color(255, 255, 255));
+            cmbEstado.setBackground(fondo);
+            cmbEstado.setForeground(new Color(255, 255, 255));
+            jPanel1.setBackground(new Color(46, 49, 82));
             jLabel11.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel11.setForeground(new Color (255,255,255));
-                jLabel19.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel19.setForeground(new Color (255,255,255));
-                jLabel9.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel9.setForeground(new Color (255,255,255));
-                jLabel5.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel5.setForeground(new Color (255,255,255));
-               jLabel8.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel8.setForeground(new Color (255,255,255));
-               jLabel17.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel17.setForeground(new Color (255,255,255));
-                  jLabel16.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel16.setForeground(new Color (255,255,255));
-              lblTotal.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            lblTotal.setForeground(new Color (255,255,255));
-              jLabel3.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel3.setForeground(new Color (255,255,255));
-              lblNumeroPedido.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            lblNumeroPedido.setForeground(new Color (255,255,255));
-          tablaDetalles.setBackground(new Color (21,21,33));
-            tablaDetalles.setBackgoundHead(new Color (67, 71, 120));
-            tablaDetalles.setForegroundHead(new Color (255,255,255));
-            tablaDetalles.setBackgoundHover(new Color(109,160,221));
-         tablaDetalles.setFont(new Font("Tahoma", Font.PLAIN, 15));
-            tablaDetalles.setColorPrimary(new Color(37,37,52));
+            jLabel11.setForeground(new Color(255, 255, 255));
+            jLabel19.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            jLabel19.setForeground(new Color(255, 255, 255));
+            jLabel9.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            jLabel9.setForeground(new Color(255, 255, 255));
+            jLabel5.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            jLabel5.setForeground(new Color(255, 255, 255));
+            jLabel8.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            jLabel8.setForeground(new Color(255, 255, 255));
+            jLabel17.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            jLabel17.setForeground(new Color(255, 255, 255));
+            jLabel16.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            jLabel16.setForeground(new Color(255, 255, 255));
+            lblTotal.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            lblTotal.setForeground(new Color(255, 255, 255));
+            jLabel3.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            jLabel3.setForeground(new Color(255, 255, 255));
+            lblNumeroPedido.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            lblNumeroPedido.setForeground(new Color(255, 255, 255));
+            tablaDetalles.setBackground(new Color(21, 21, 33));
+            tablaDetalles.setBackgoundHead(new Color(67, 71, 120));
+            tablaDetalles.setForegroundHead(new Color(255, 255, 255));
+            tablaDetalles.setBackgoundHover(new Color(109, 160, 221));
+            tablaDetalles.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            tablaDetalles.setColorPrimary(new Color(37, 37, 52));
             tablaDetalles.setColorPrimaryText(texto);
-            tablaDetalles.setColorSecondary(new Color(30,30,45));
+            tablaDetalles.setColorSecondary(new Color(30, 30, 45));
             tablaDetalles.setColorSecundaryText(texto);
             tablaDetalles.setColorBorderHead(primario);
             tablaDetalles.setColorBorderRows(fondo.darker());
@@ -258,11 +270,10 @@ cmbCliente.setBackground(fondo);
             tablaDetalles.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
             tablaDetalles.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
             tablaDetalles.setEffectHover(true);
-              tablaDetalles.setShowGrid(true);
- btnVolver.setBackground(new Color(67, 71, 120));
-            btnVolver.setBackgroundHover(new Color(118,142,240));
+            tablaDetalles.setShowGrid(true);
+            btnVolver.setBackground(new Color(67, 71, 120));
+            btnVolver.setBackgroundHover(new Color(118, 142, 240));
 
-          
         } else {
             Color fondo = new Color(242, 247, 255);
             Color texto = Color.BLACK;
@@ -270,80 +281,85 @@ cmbCliente.setBackground(fondo);
 
             jPanel1.setBackground(fondo);
             btnVolver.setBackground(fondo);
-            
+
             jPanel2.setBackground(fondo);
- jPanel2.setForeground(fondo);
-cmbCliente.setBackground(fondo);
- cmbCliente.setForeground(new Color (0,0,0));
-        txtNombrePedido.setBackground(fondo);
-         txtNombrePedido.setForeground(new Color (0,0,0));
-        dateFechaInicio.setBackground(fondo);
-         dateFechaInicio.setForeground(new Color (0,0,0));
-                dateFechaFin.setBackground(fondo);
-                 dateFechaFin.setForeground(new Color (0,0,0));
-                cmbEstado.setBackground(fondo);
-                 cmbEstado.setForeground(new Color (0,0,0));
-         jPanel1.setBackground(new Color (240,240,240));
+            jPanel2.setForeground(fondo);
+            cmbCliente.setBackground(fondo);
+            cmbCliente.setForeground(new Color(0, 0, 0));
+            txtNombrePedido.setBackground(fondo);
+            txtNombrePedido.setForeground(new Color(0, 0, 0));
+            dateFechaInicio.setBackground(fondo);
+            dateFechaInicio.setForeground(new Color(0, 0, 0));
+            dateFechaFin.setBackground(fondo);
+            dateFechaFin.setForeground(new Color(0, 0, 0));
+            cmbEstado.setBackground(fondo);
+            cmbEstado.setForeground(new Color(0, 0, 0));
+            jPanel1.setBackground(new Color(240, 240, 240));
             jLabel11.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel11.setForeground(new Color (0,0,0));
-                jLabel19.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel19.setForeground(new Color (0,0,0));
-                jLabel9.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel9.setForeground(new Color (0,0,0));
-                jLabel5.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel5.setForeground(new Color (0,0,0));
-               jLabel8.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel8.setForeground(new Color (0,0,0));
-               jLabel17.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel17.setForeground(new Color (0,0,0));
-                  jLabel16.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel16.setForeground(new Color (0,0,0));
-              lblTotal.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            lblTotal.setForeground(new Color (0,0,0));
-              jLabel3.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            jLabel3.setForeground(new Color (0,0,0));
-              lblNumeroPedido.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            lblNumeroPedido.setForeground(new Color (0,0,0));
-            
-      tablaDetalles.setBackground(new Color (255,255,255));
-            tablaDetalles.setBackgoundHead(new Color (46,49,82));
+            jLabel11.setForeground(new Color(0, 0, 0));
+            jLabel19.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            jLabel19.setForeground(new Color(0, 0, 0));
+            jLabel9.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            jLabel9.setForeground(new Color(0, 0, 0));
+            jLabel5.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            jLabel5.setForeground(new Color(0, 0, 0));
+            jLabel8.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            jLabel8.setForeground(new Color(0, 0, 0));
+            jLabel17.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            jLabel17.setForeground(new Color(0, 0, 0));
+            jLabel16.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            jLabel16.setForeground(new Color(0, 0, 0));
+            lblTotal.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            lblTotal.setForeground(new Color(0, 0, 0));
+            jLabel3.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            jLabel3.setForeground(new Color(0, 0, 0));
+            lblNumeroPedido.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            lblNumeroPedido.setForeground(new Color(0, 0, 0));
+
+            tablaDetalles.setBackground(new Color(255, 255, 255));
+            tablaDetalles.setBackgoundHead(new Color(46, 49, 82));
             tablaDetalles.setForegroundHead(Color.WHITE);
-            tablaDetalles.setBackgoundHover(new Color(67,150,209));
-           tablaDetalles.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            tablaDetalles.setBackgoundHover(new Color(67, 150, 209));
+            tablaDetalles.setFont(new Font("Tahoma", Font.PLAIN, 15));
             tablaDetalles.setColorPrimary(new Color(242, 242, 242));
             tablaDetalles.setColorPrimaryText(texto);
             tablaDetalles.setColorSecondary(new Color(255, 255, 255));
             tablaDetalles.setColorSecundaryText(texto);
             tablaDetalles.setColorBorderHead(primario);
-            tablaDetalles.setColorBorderRows(new Color(0,0,0));
+            tablaDetalles.setColorBorderRows(new Color(0, 0, 0));
             tablaDetalles.setFontHead(new Font("Tahoma", Font.BOLD, 15));
             tablaDetalles.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
             tablaDetalles.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
             tablaDetalles.setEffectHover(true);
-            tablaDetalles.setSelectionBackground(new Color(67,150,209));
+            tablaDetalles.setSelectionBackground(new Color(67, 150, 209));
             tablaDetalles.setShowGrid(true);
-tablaDetalles.setGridColor(Color.BLACK); // o el color que desees
- btnVolver.setBackground(new Color(46, 49, 82));
+            tablaDetalles.setGridColor(Color.BLACK); // o el color que desees
+            btnVolver.setBackground(new Color(46, 49, 82));
         }
-       
-        }
-    
-        private void actualizarTotal() {
+
+    }
+
+    private void actualizarTotal() {
         DefaultTableModel model = (DefaultTableModel) tablaDetalles.getModel();
         double total = 0.0;
 
         for (int i = 0; i < model.getRowCount(); i++) {
             try {
-                double subtotal = Double.parseDouble(model.getValueAt(i, 4).toString());
+                double subtotal = Double.parseDouble(model.getValueAt(i, 4).toString().replace("$", "").replace(".", "")); // Reemplazar signo de pesos y puntos para parsear
                 total += subtotal;
             } catch (NumberFormatException e) {
                 // Ignorar filas con valores inválidos
             }
         }
-        lblTotal.setText(String.format("%.2f", total));
+
+        // Formatear total con signo de pesos y sin decimales si son .00
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+        symbols.setGroupingSeparator('.'); // Usar punto como separador de miles
+        DecimalFormat df = new DecimalFormat("$#,##0.##", symbols);
+        lblTotal.setText(df.format(total));
     }
-        
-        private void deshabilitarEdicion() {
+
+    private void deshabilitarEdicion() {
         txtNombrePedido.setEnabled(false);
         cmbEstado.setEnabled(false);
         cmbCliente.setEnabled(false);
@@ -416,7 +432,6 @@ tablaDetalles.setGridColor(Color.BLACK); // o el color que desees
         }
 
         // Obtener usuario_id_usuario (esto debería venir de la base de datos original si es necesario)
-        // Nota: Si no necesitas actualizar el usuario_id_usuario, puedes omitir esta parte o obtenerlo de otra fuente
         Ctrl_Pedido.MaterialConDetalles materialOriginal = controlador.obtenerPedidoPorId(idPedido);
         if (materialOriginal != null) {
         } else {
@@ -453,7 +468,7 @@ tablaDetalles.setGridColor(Color.BLACK); // o el color que desees
             try {
                 precioUnitario = (precioUnitarioObj != null)
                         ? (precioUnitarioObj instanceof Number ? ((Number) precioUnitarioObj).doubleValue()
-                                : Double.parseDouble(precioUnitarioObj.toString())) : 0.0;
+                                : Double.parseDouble(precioUnitarioObj.toString().replace("$", "").replace(".", ""))) : 0.0;
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Precio unitario inválido en fila " + (i + 1), "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -465,7 +480,7 @@ tablaDetalles.setGridColor(Color.BLACK); // o el color que desees
             try {
                 subtotal = (subtotalObj != null)
                         ? (subtotalObj instanceof Number ? ((Number) subtotalObj).doubleValue()
-                                : Double.parseDouble(subtotalObj.toString())) : 0.0;
+                                : Double.parseDouble(subtotalObj.toString().replace("$", "").replace(".", ""))) : 0.0;
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Subtotal inválido en fila " + (i + 1), "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -551,6 +566,7 @@ tablaDetalles.setGridColor(Color.BLACK); // o el color que desees
         }
     }
 
+
     private void cargarClientes() {
         try {
             Ctrl_Cliente ctrl = new Ctrl_Cliente();
@@ -571,7 +587,6 @@ tablaDetalles.setGridColor(Color.BLACK); // o el color que desees
             cmbCliente.addItem("Error al cargar clientes");
         }
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.

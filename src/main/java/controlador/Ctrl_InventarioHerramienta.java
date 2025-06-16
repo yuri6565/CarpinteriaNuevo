@@ -64,8 +64,8 @@ public class Ctrl_InventarioHerramienta {
 
             stmt.setString(1, material.getNombre());
             stmt.setString(2, material.getDescripcion());
-            stmt.setInt(3, material.getCantidad());
-            stmt.setDouble(4, material.getPrecioUnitario());
+            stmt.setString(3, material.getCantidad());
+            stmt.setInt(4, material.getPrecioUnitario());
             stmt.setString(5, material.getEstado());
             stmt.setInt(6, material.getIdCategoria());
             stmt.setInt(7, material.getIdMarca());
@@ -105,8 +105,8 @@ public class Ctrl_InventarioHerramienta {
                         rs.getInt("id_inventario"),
                         rs.getString("nombre"),
                         rs.getString("descripcion"),
-                        rs.getInt("cantidad"),
-                        rs.getDouble("precio_unitario"),
+                        rs.getString("cantidad"),
+                        rs.getInt("precio_unitario"),
                         rs.getString("estado"),
                         rs.getInt("categoria_codigo"),
                         rs.getInt("marca_idmarca"),
@@ -135,8 +135,8 @@ public class Ctrl_InventarioHerramienta {
 
             stmt.setString(1, material.getNombre());
             stmt.setString(2, material.getDescripcion());
-            stmt.setInt(3, material.getCantidad());
-            stmt.setDouble(4, material.getPrecioUnitario());
+            stmt.setString(3, material.getCantidad());
+            stmt.setInt(4, material.getPrecioUnitario());
             stmt.setString(5, material.getEstado());
             stmt.setInt(6, material.getIdCategoria());
             stmt.setInt(7, material.getIdMarca());

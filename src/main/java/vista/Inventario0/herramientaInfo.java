@@ -8,6 +8,8 @@ import controlador.Ctrl_CategoriaHerramienta;
 import controlador.Ctrl_MarcaHerramienta;
 import controlador.Ctrl_UnidadHerramienta;
 import java.awt.Image;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
 import javax.swing.ImageIcon;
 import modelo.Categoria;
@@ -31,14 +33,19 @@ public class herramientaInfo extends javax.swing.JDialog {
         initComponents();
     }
 
-        public void mostrarMaterial(HerramientaDatos material) {
+    public void mostrarMaterial(HerramientaDatos material) {
+        // Configurar el formateador de números
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        DecimalFormat formatter = new DecimalFormat("#,###", symbols);
+        formatter.setGroupingSize(3);
+
         lblCodigo.setText(String.valueOf(material.getIdInventario())); // Usar idInventario como código
         lblNombre.setText(material.getNombre());
         lblDescripcion.setText(material.getDescripcion());
         lblCantidad.setText(String.valueOf(material.getCantidad()));
-        lblPrecio.setText(String.valueOf(material.getPrecioUnitario()));
+        lblPrecio.setText(formatter.format(material.getPrecioUnitario())); // Formateado con puntos
         lblEstado.setText(material.getEstado());
-
 
         Ctrl_CategoriaHerramienta ctrlCategoria = new Ctrl_CategoriaHerramienta();
         List<Categoria> categorias = ctrlCategoria.obtenerCategoriasHerramienta();
@@ -51,7 +58,7 @@ public class herramientaInfo extends javax.swing.JDialog {
         }
         lblCategoria.setText(nombreCategoria);
 
-            Ctrl_MarcaHerramienta ctrlMarca = new Ctrl_MarcaHerramienta();
+        Ctrl_MarcaHerramienta ctrlMarca = new Ctrl_MarcaHerramienta();
         List<Marca> marcas = ctrlMarca.obtenerMarcasHerramienta();
         String nombreMarca = "Sin marca";
         for (Marca m : marcas) {
@@ -63,7 +70,7 @@ public class herramientaInfo extends javax.swing.JDialog {
         // Asumimos que txtUnidadMedida debería mostrar la marca, ya que no hay un campo directo para unidad en la interfaz
         lblMarca.setText(nombreMarca); // Corregir esto si debe mostrar la unidad de medida
 
-            Ctrl_UnidadHerramienta ctrlUnidad = new Ctrl_UnidadHerramienta();
+        Ctrl_UnidadHerramienta ctrlUnidad = new Ctrl_UnidadHerramienta();
         List<Unidad> unidades = ctrlUnidad.obtenerUnidadesHerramienta();
         String nombreUnidad = "Sin unidad de medida";
         for (Unidad um : unidades) {
@@ -90,6 +97,29 @@ public class herramientaInfo extends javax.swing.JDialog {
             lblImagen.setIcon(null);
         }
     }
+
+    private void formatNumberField() {
+        // Eliminar cualquier carácter que no sea número
+        String text = lblPrecio.getText().replaceAll("[^0-9]", "");
+
+        if (!text.isEmpty()) {
+            try {
+                long amount = Long.parseLong(text);
+
+                // Formatear el número con puntos como separadores de miles
+                String formatted = String.format("%,d", amount).replace(",", ".");
+
+                // Evitar bucles infinitos al comparar antes de actualizar
+                if (!formatted.equals(lblPrecio.getText())) {
+                    lblPrecio.setText(formatted);
+
+                }
+            } catch (NumberFormatException e) {
+                // Ignorar errores de formato
+            }
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -115,7 +145,6 @@ public class herramientaInfo extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         lblCantidad = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        lblDescripcion = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         lblPrecio = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -124,12 +153,15 @@ public class herramientaInfo extends javax.swing.JDialog {
         btnCancelar1 = new rojeru_san.RSButtonRiple();
         jLabel12 = new javax.swing.JLabel();
         lblEstado = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lblDescripcion = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(520, 497));
+        setPreferredSize(new java.awt.Dimension(530, 575));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setPreferredSize(new java.awt.Dimension(519, 551));
+        jPanel1.setPreferredSize(new java.awt.Dimension(520, 540));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(46, 49, 82));
@@ -154,13 +186,13 @@ public class herramientaInfo extends javax.swing.JDialog {
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel7.setText("Marca:");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 150, -1, -1));
 
         lblMarca.setBackground(new java.awt.Color(255, 255, 255));
         lblMarca.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lblMarca.setText("jLabel12");
         lblMarca.setOpaque(true);
-        jPanel1.add(lblMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, 150, 20));
+        jPanel1.add(lblMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 150, 120, 20));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel10.setText("Nombre:");
@@ -174,62 +206,56 @@ public class herramientaInfo extends javax.swing.JDialog {
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel3.setText("Unidad de medida:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
 
         lblUnidad.setBackground(new java.awt.Color(255, 255, 255));
         lblUnidad.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lblUnidad.setText("jLabel12");
         lblUnidad.setOpaque(true);
-        jPanel1.add(lblUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 70, 110, 20));
+        jPanel1.add(lblUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 150, 80, 20));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel9.setText("Categoria:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 70, -1, -1));
 
         lblCategoria.setBackground(new java.awt.Color(255, 255, 255));
         lblCategoria.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lblCategoria.setText("jLabel12");
         lblCategoria.setOpaque(true);
-        jPanel1.add(lblCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, 140, 20));
+        jPanel1.add(lblCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 70, 110, 20));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel8.setText("Cantidad:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
 
         lblCantidad.setBackground(new java.awt.Color(255, 255, 255));
         lblCantidad.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lblCantidad.setText("jLabel12");
         lblCantidad.setOpaque(true);
-        jPanel1.add(lblCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 140, 20));
+        jPanel1.add(lblCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 190, 90, 20));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel5.setText("Descripcion:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
-
-        lblDescripcion.setBackground(new java.awt.Color(255, 255, 255));
-        lblDescripcion.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        lblDescripcion.setText("jLabel12");
-        lblDescripcion.setOpaque(true);
-        jPanel1.add(lblDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 230, 110, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 190, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel11.setText("Precio unitario:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, -1, -1));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
 
         lblPrecio.setBackground(new java.awt.Color(255, 255, 255));
         lblPrecio.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lblPrecio.setText("jLabel12");
         lblPrecio.setOpaque(true);
-        jPanel1.add(lblPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 150, 130, 20));
-        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 470, 20));
+        jPanel1.add(lblPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, 90, 20));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 470, 20));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel4.setText("Imagen:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, 30));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, -1, 30));
 
         lblImagen.setBackground(new java.awt.Color(153, 204, 255));
         lblImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 160, 150));
+        jPanel1.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 160, 150));
 
         btnCancelar1.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar1.setText("Volver");
@@ -239,28 +265,31 @@ public class herramientaInfo extends javax.swing.JDialog {
                 btnCancelar1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 470, 140, -1));
+        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 490, 140, -1));
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel12.setText("Estado:");
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 190, -1, -1));
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 110, -1, -1));
 
         lblEstado.setBackground(new java.awt.Color(255, 255, 255));
         lblEstado.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lblEstado.setText("jLabel12");
         lblEstado.setOpaque(true);
-        jPanel1.add(lblEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 190, 130, 20));
+        jPanel1.add(lblEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 130, 20));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
-        );
+        lblDescripcion.setEditable(false);
+        lblDescripcion.setColumns(10);
+        lblDescripcion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblDescripcion.setLineWrap(true);
+        lblDescripcion.setRows(1);
+        lblDescripcion.setTabSize(1);
+        lblDescripcion.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(lblDescripcion);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 220, 180, 50));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 540));
+        jPanel1.getAccessibleContext().setAccessibleName("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -327,11 +356,12 @@ public class herramientaInfo extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblCantidad;
     private javax.swing.JLabel lblCategoria;
     private javax.swing.JLabel lblCodigo;
-    private javax.swing.JLabel lblDescripcion;
+    private javax.swing.JTextArea lblDescripcion;
     private javax.swing.JLabel lblEstado;
     private javax.swing.JLabel lblImagen;
     private javax.swing.JLabel lblMarca;

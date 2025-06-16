@@ -59,9 +59,8 @@ public class materiales extends javax.swing.JPanel {
     /**
      * Creates new form materiales
      */
-
     public materiales() {
-        
+
         initComponents();
         contenedorPrincipal = new JPanel();
 
@@ -200,12 +199,6 @@ public class materiales extends javax.swing.JPanel {
         panelInfo.setBackground(new Color(46, 49, 82)); // Color de fondo azul oscuro
         Font fuenteInfo = new Font("Segoe UI", Font.PLAIN, 15); // Fuente Arial, negrita, tamaño 16
 
-        JLabel lblCodigo = new JLabel("Código: " + material.getIdInventario());
-        lblCodigo.setForeground(Color.WHITE);
-        lblCodigo.setFont(fuenteInfo); // Establece la fuente
-        lblCodigo.setHorizontalAlignment(SwingConstants.CENTER);
-        panelInfo.add(lblCodigo);
-
         JLabel lblNombre = new JLabel("Nombre: " + material.getNombre());
         lblNombre.setForeground(Color.WHITE);
         lblNombre.setFont(fuenteInfo); // Establece la fuente
@@ -217,6 +210,12 @@ public class materiales extends javax.swing.JPanel {
         lblCategoria.setFont(fuenteInfo); // Establece la fuente
         lblCategoria.setHorizontalAlignment(SwingConstants.CENTER);
         panelInfo.add(lblCategoria);
+
+        JLabel lblCantidad = new JLabel("Cantidad: " + material.getCantidad() + " " + nombreUnidadMedida);
+        lblCantidad.setForeground(Color.WHITE);
+        lblCantidad.setFont(fuenteInfo);
+        lblCantidad.setHorizontalAlignment(SwingConstants.CENTER);
+        panelInfo.add(lblCantidad);
 
         tarjeta.add(panelInfo, BorderLayout.CENTER);
 
@@ -237,6 +236,9 @@ public class materiales extends javax.swing.JPanel {
         verBtn.setBackgroundHover(new java.awt.Color(188, 225, 193));
         verBtn.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
         verBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        // Botón Ver con tooltip mejorado
+        verBtn.setToolTipText("<html><b>Ver detalles del material</html>");
+        
         //accion del boton de ver
         verBtn.addActionListener(new ActionListener() {
             @Override
@@ -255,6 +257,7 @@ public class materiales extends javax.swing.JPanel {
         editarBtn.setBackgroundHover(new java.awt.Color(166, 199, 245));
         editarBtn.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
         editarBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        editarBtn.setToolTipText("<html><b>Editar material</html>");
         //accion del boton de editar
         editarBtn.addActionListener(new ActionListener() {
             @Override
@@ -285,6 +288,7 @@ public class materiales extends javax.swing.JPanel {
         eliminarBtn.setBackgroundHover(new java.awt.Color(242, 174, 188));
         eliminarBtn.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
         eliminarBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        eliminarBtn.setToolTipText("<html><b>Eliminar material</html>");
         eliminarBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -337,14 +341,14 @@ public class materiales extends javax.swing.JPanel {
         JPanel panelInfo = (JPanel) tarjeta.getComponent(1); // El segundo componente es panelInfo
 
         // Actualizar las etiquetas dentro de panelInfo
-        JLabel lblCodigo = (JLabel) panelInfo.getComponent(0);
-        lblCodigo.setText("Código: " + material.getIdInventario());
-
-        JLabel lblNombre = (JLabel) panelInfo.getComponent(1);
+        JLabel lblNombre = (JLabel) panelInfo.getComponent(0);
         lblNombre.setText("Nombre: " + material.getNombre());
 
-        JLabel lblCategoria = (JLabel) panelInfo.getComponent(2);
+        JLabel lblCategoria = (JLabel) panelInfo.getComponent(1);
         lblCategoria.setText("Categoría: " + nombreCategoria);
+
+        JLabel lblCantidad = (JLabel) panelInfo.getComponent(2);
+        lblCantidad.setText("Cantidad: " + material.getCantidad() + " " + nombreUnidadMedida);
 
         // Actualizar la imagen si es necesario
         JPanel panelImagen = (JPanel) tarjeta.getComponent(0); // El primer componente es panelImagen

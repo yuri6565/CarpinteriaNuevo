@@ -240,6 +240,7 @@ public class herramientas extends javax.swing.JPanel {
         verBtn.setBackgroundHover(new java.awt.Color(188, 225, 193));
         verBtn.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
         verBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        verBtn.setToolTipText("<html><b>Ver detalles de la herramienta</html>");
         //accion del boton de ver
         verBtn.addActionListener(new ActionListener() {
             @Override
@@ -258,6 +259,7 @@ public class herramientas extends javax.swing.JPanel {
         editarBtn.setBackgroundHover(new java.awt.Color(166, 199, 245));
         editarBtn.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
         editarBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        editarBtn.setToolTipText("<html><b>Editar herramienta</html>");
         //accion del boton de editar
         editarBtn.addActionListener(new ActionListener() {
             @Override
@@ -288,6 +290,7 @@ public class herramientas extends javax.swing.JPanel {
         eliminarBtn.setBackgroundHover(new java.awt.Color(242, 174, 188));
         eliminarBtn.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
         eliminarBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        eliminarBtn.setToolTipText("<html><b>Eliminar herramienta</html>");
         eliminarBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

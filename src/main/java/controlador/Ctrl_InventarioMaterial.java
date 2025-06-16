@@ -18,7 +18,6 @@ import modelo.MaterialDatos;
  *
  * @author ZenBook
  */
-
 public class Ctrl_InventarioMaterial {
 
     // Clase pública y estática para poder acceder desde fuera
@@ -56,21 +55,22 @@ public class Ctrl_InventarioMaterial {
     }
 
     public int insertar(MaterialDatos material) {
-        String sql = "INSERT INTO inventario (nombre, descripcion, cantidad, precio_unitario, tipo, "
+        String sql = "INSERT INTO inventario (nombre, descripcion, cantidad, precio_unitario, stockMinimo, tipo, "
                 + "categoria_codigo, marca_idmarca, unidad_medida_idunidad_medida, imagen) "
-                + "VALUES (?, ?, ?, ?, 'material', ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?, 'material', ?, ?, ?, ?)";
 
         try (Connection con = Conexion.getConnection(); // IMPORTANTE: Agregar RETURN_GENERATED_KEYS para obtener el ID
                  PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, material.getNombre());
             stmt.setString(2, material.getDescripcion());
-            stmt.setInt(3, material.getCantidad());
-            stmt.setDouble(4, material.getPrecioUnitario());
-            stmt.setInt(5, material.getIdCategoria());
-            stmt.setInt(6, material.getIdMarca());
-            stmt.setInt(7, material.getIdUnidadMedida());
-            stmt.setBytes(8, material.getImagen());
+            stmt.setString(3, material.getCantidad());
+            stmt.setInt(4, material.getPrecioUnitario());
+            stmt.setString(5, material.getStockMinimo());
+            stmt.setInt(6, material.getIdCategoria());
+            stmt.setInt(7, material.getIdMarca());
+            stmt.setInt(8, material.getIdUnidadMedida());
+            stmt.setBytes(9, material.getImagen());
 
             int affectedRows = stmt.executeUpdate();
 
@@ -105,8 +105,9 @@ public class Ctrl_InventarioMaterial {
                         rs.getInt("id_inventario"),
                         rs.getString("nombre"),
                         rs.getString("descripcion"),
-                        rs.getInt("cantidad"),
-                        rs.getDouble("precio_unitario"),
+                        rs.getString("cantidad"),
+                        rs.getInt("precio_unitario"),
+                        rs.getString("stockMinimo"),
                         rs.getInt("categoria_codigo"),
                         rs.getInt("marca_idmarca"),
                         rs.getInt("unidad_medida_idunidad_medida"),
@@ -127,20 +128,21 @@ public class Ctrl_InventarioMaterial {
 
     public boolean actualizar(MaterialDatos material) {
         String sql = "UPDATE inventario SET nombre = ?, descripcion = ?, cantidad = ?, precio_unitario = ?, "
-                + "categoria_codigo = ?, marca_idmarca = ?, unidad_medida_idunidad_medida = ?, imagen = ? "
+                + "stockMinimo = ?, categoria_codigo = ?, marca_idmarca = ?, unidad_medida_idunidad_medida = ?, imagen = ? "
                 + "WHERE id_inventario = ? AND tipo = 'material'";
 
         try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setString(1, material.getNombre());
             stmt.setString(2, material.getDescripcion());
-            stmt.setInt(3, material.getCantidad());
-            stmt.setDouble(4, material.getPrecioUnitario());
-            stmt.setInt(5, material.getIdCategoria());
-            stmt.setInt(6, material.getIdMarca());
-            stmt.setInt(7, material.getIdUnidadMedida());
-            stmt.setBytes(8, material.getImagen());
-            stmt.setInt(9, material.getIdInventario());
+            stmt.setString(3, material.getCantidad());
+            stmt.setInt(4, material.getPrecioUnitario());
+            stmt.setString(5, material.getStockMinimo());
+            stmt.setInt(6, material.getIdCategoria());
+            stmt.setInt(7, material.getIdMarca());
+            stmt.setInt(8, material.getIdUnidadMedida());
+            stmt.setBytes(9, material.getImagen());
+            stmt.setInt(10, material.getIdInventario());
 
             return stmt.executeUpdate() > 0;
 

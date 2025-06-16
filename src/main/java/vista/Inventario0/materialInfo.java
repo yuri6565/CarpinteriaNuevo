@@ -8,8 +8,11 @@ import controlador.Ctrl_CategoriaMaterial;
 import controlador.Ctrl_MarcaMaterial;
 import controlador.Ctrl_UnidadMaterial;
 import java.awt.Image;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.text.AbstractDocument;
 import modelo.Categoria;
 import modelo.Marca;
 import modelo.MaterialDatos;
@@ -27,17 +30,24 @@ public class materialInfo extends javax.swing.JDialog {
     public materialInfo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
     }
-    
-        // Método para establecer los datos
+
+    // Método para establecer los datos
     public void mostrarMaterial(MaterialDatos material) {
-        lblCodigo.setText(String.valueOf(material.getIdInventario())); // Usar idInventario como código
+        // Configurar el formateador de números
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        DecimalFormat formatter = new DecimalFormat("#,###", symbols);
+        formatter.setGroupingSize(3);
+
+        // Establecer los valores en los componentes
+        lblCodigo.setText(String.valueOf(material.getIdInventario()));
         lblNombre.setText(material.getNombre());
         lblDescripcion.setText(material.getDescripcion());
         lblCantidad.setText(String.valueOf(material.getCantidad()));
-        lblPrecio.setText(String.valueOf(material.getPrecioUnitario()));
-
+        lblPrecio.setText(formatter.format(material.getPrecioUnitario())); // Formateado con puntos
+        lblStockMinimo.setText(String.valueOf(material.getStockMinimo()));
 
         Ctrl_CategoriaMaterial ctrlCategoria = new Ctrl_CategoriaMaterial();
         List<Categoria> categorias = ctrlCategoria.obtenerCategoriasMaterial();
@@ -90,6 +100,28 @@ public class materialInfo extends javax.swing.JDialog {
         }
     }
 
+    private void formatNumberField() {
+        // Eliminar cualquier carácter que no sea número
+        String text = lblPrecio.getText().replaceAll("[^0-9]", "");
+
+        if (!text.isEmpty()) {
+            try {
+                long amount = Long.parseLong(text);
+
+                // Formatear el número con puntos como separadores de miles
+                String formatted = String.format("%,d", amount).replace(",", ".");
+
+                // Evitar bucles infinitos al comparar antes de actualizar
+                if (!formatted.equals(lblPrecio.getText())) {
+                    lblPrecio.setText(formatted);
+
+                }
+            } catch (NumberFormatException e) {
+                // Ignorar errores de formato
+            }
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -115,13 +147,16 @@ public class materialInfo extends javax.swing.JDialog {
         lblCodigo = new javax.swing.JLabel();
         lblCategoria = new javax.swing.JLabel();
         lblNombre = new javax.swing.JLabel();
-        lblDescripcion = new javax.swing.JLabel();
         lblPrecio = new javax.swing.JLabel();
         lblMarca = new javax.swing.JLabel();
         lblUnidad = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         lblCantidad = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel6 = new javax.swing.JLabel();
+        lblStockMinimo = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lblDescripcion = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -146,41 +181,41 @@ public class materialInfo extends javax.swing.JDialog {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel4.setText("Imagen:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, -1, 30));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, -1, 30));
 
         lblImagen.setBackground(new java.awt.Color(153, 204, 255));
         lblImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 190, 170));
+        jPanel1.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 190, 170));
 
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar.setText("Volver");
-        btnCancelar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 450, 140, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 510, 140, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel3.setText("Unidad de medida:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 110, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel5.setText("Descripcion:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 190, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel7.setText("Marca:");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 70, -1, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 110, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel8.setText("Cantidad:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 150, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel9.setText("Categoria:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 70, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel10.setText("Nombre:");
@@ -196,7 +231,7 @@ public class materialInfo extends javax.swing.JDialog {
         lblCategoria.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lblCategoria.setText("jLabel12");
         lblCategoria.setOpaque(true);
-        jPanel1.add(lblCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(107, 150, 120, 20));
+        jPanel1.add(lblCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 70, 120, 20));
 
         lblNombre.setBackground(new java.awt.Color(255, 255, 255));
         lblNombre.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
@@ -204,42 +239,62 @@ public class materialInfo extends javax.swing.JDialog {
         lblNombre.setOpaque(true);
         jPanel1.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, 120, -1));
 
-        lblDescripcion.setBackground(new java.awt.Color(255, 255, 255));
-        lblDescripcion.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        lblDescripcion.setText("jLabel12");
-        lblDescripcion.setOpaque(true);
-        jPanel1.add(lblDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, 100, -1));
-
         lblPrecio.setBackground(new java.awt.Color(255, 255, 255));
         lblPrecio.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lblPrecio.setText("jLabel12");
         lblPrecio.setOpaque(true);
-        jPanel1.add(lblPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 190, 130, 20));
+        lblPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                lblPrecioKeyReleased(evt);
+            }
+        });
+        jPanel1.add(lblPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, 80, 20));
 
         lblMarca.setBackground(new java.awt.Color(255, 255, 255));
         lblMarca.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lblMarca.setText("jLabel12");
         lblMarca.setOpaque(true);
-        jPanel1.add(lblMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, 140, 20));
+        jPanel1.add(lblMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 110, 140, 20));
 
         lblUnidad.setBackground(new java.awt.Color(255, 255, 255));
         lblUnidad.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lblUnidad.setText("jLabel12");
         lblUnidad.setOpaque(true);
-        jPanel1.add(lblUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 110, 80, 20));
+        jPanel1.add(lblUnidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 150, 80, 20));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel11.setText("Precio unitario:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 190, -1, -1));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
 
         lblCantidad.setBackground(new java.awt.Color(255, 255, 255));
         lblCantidad.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lblCantidad.setText("jLabel12");
         lblCantidad.setOpaque(true);
-        jPanel1.add(lblCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(318, 150, 140, 20));
-        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 430, 20));
+        jPanel1.add(lblCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 190, 110, 20));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 430, 20));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 500));
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jLabel6.setText("Stock mínimo:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 150, -1, -1));
+
+        lblStockMinimo.setBackground(new java.awt.Color(255, 255, 255));
+        lblStockMinimo.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        lblStockMinimo.setText("jLabel12");
+        lblStockMinimo.setOpaque(true);
+        jPanel1.add(lblStockMinimo, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 150, 100, -1));
+
+        lblDescripcion.setEditable(false);
+        lblDescripcion.setColumns(10);
+        lblDescripcion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblDescripcion.setLineWrap(true);
+        lblDescripcion.setRows(1);
+        lblDescripcion.setTabSize(1);
+        lblDescripcion.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(lblDescripcion);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 220, 180, 50));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 560));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -248,6 +303,10 @@ public class materialInfo extends javax.swing.JDialog {
 
         dispose(); // Cierra la ventana emergente
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void lblPrecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lblPrecioKeyReleased
+
+    }//GEN-LAST:event_lblPrecioKeyReleased
 
     /**
      * @param args the command line arguments
@@ -300,20 +359,23 @@ public class materialInfo extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblCantidad;
     private javax.swing.JLabel lblCategoria;
     private javax.swing.JLabel lblCodigo;
-    private javax.swing.JLabel lblDescripcion;
+    private javax.swing.JTextArea lblDescripcion;
     private javax.swing.JLabel lblImagen;
     private javax.swing.JLabel lblMarca;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblPrecio;
+    private javax.swing.JLabel lblStockMinimo;
     private javax.swing.JLabel lblUnidad;
     // End of variables declaration//GEN-END:variables
 }
