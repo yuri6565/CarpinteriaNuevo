@@ -44,7 +44,7 @@ public final class Produccion extends javax.swing.JPanel {
     /**
      * Creates new form produccionContenido
      */
-    public Produccion(JFrame jFrame) {
+    public Produccion(JFrame jFrame, boolean par) {
         initComponents();
         aplicarTema();
         Tabla1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

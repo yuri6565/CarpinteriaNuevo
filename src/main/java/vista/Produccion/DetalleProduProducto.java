@@ -190,7 +190,7 @@ public class DetalleProduProducto extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnvolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvolverActionPerformed
-        Produccion pr = new Produccion(new javax.swing.JFrame());
+        Produccion pr = new Produccion(new javax.swing.JFrame(), true);
         mostrarPanel(pr);
     }//GEN-LAST:event_btnvolverActionPerformed
 

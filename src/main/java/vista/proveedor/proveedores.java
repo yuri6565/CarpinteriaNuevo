@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
@@ -21,7 +22,7 @@ import vista.TemaManager;
 public class proveedores extends javax.swing.JPanel {
     private DefaultTableModel modeloTabla;
 
-    public proveedores() {
+    public proveedores(JFrame jFrame, boolean par) {
         initComponents();
 
         TablaP.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));

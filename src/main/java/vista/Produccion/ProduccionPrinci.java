@@ -17,7 +17,7 @@ public class ProduccionPrinci extends javax.swing.JPanel {
         initComponents();
         this.Produccion.setSelected(true);
 
-        Produccion pr = new Produccion(new javax.swing.JFrame());
+        Produccion pr = new Produccion(new javax.swing.JFrame(), true);
         pr.setSize(1290, 730);
         pr.setLocation(0, 0);
 
@@ -126,7 +126,7 @@ public class ProduccionPrinci extends javax.swing.JPanel {
             deseleccionar();
             this.Produccion.setSelected(true);
 
-            Produccion pr = new Produccion(new javax.swing.JFrame());
+            Produccion pr = new Produccion(new javax.swing.JFrame(), true);
             pr.setSize(1290, 730);
             pr.setLocation(0, 0);
 
@@ -142,7 +142,7 @@ public class ProduccionPrinci extends javax.swing.JPanel {
         if (!this.Etapa.isSelected()) {
 
             this.Etapa.setSelected(true);
-            Produccion pr = new Produccion(new javax.swing.JFrame());
+            Produccion pr = new Produccion(new javax.swing.JFrame(), true);
             pr.setSize(1290, 730);
             pr.setLocation(0, 0);
 
