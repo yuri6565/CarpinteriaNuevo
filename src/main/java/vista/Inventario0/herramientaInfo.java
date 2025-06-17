@@ -157,6 +157,7 @@ public class herramientaInfo extends javax.swing.JDialog {
         lblDescripcion = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(530, 575));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
