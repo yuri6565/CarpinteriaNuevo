@@ -66,6 +66,10 @@ public class nuevoMateriales extends javax.swing.JDialog {
         cargarMarcas();
         cargarUnidades();
 
+        btnMarca.setToolTipText("<html><b>Agregar marca</html>");
+        btnCategoria.setToolTipText("<html><b>Agregar categoría</html>");
+        btnUM.setToolTipText("<html><b>Agregar U.M</html>");
+
         ((AbstractDocument) txtPrecioUnitario.getDocument()).setDocumentFilter(new NumberFormatFilterInventario());
 
         // Agregar esto en el constructor o método de inicialización de tu clase
@@ -249,8 +253,12 @@ public class nuevoMateriales extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDescripcion = new javax.swing.JTextArea();
         btnQuitar = new RSMaterialComponent.RSButtonShape();
+        btnMarca = new RSMaterialComponent.RSButtonShape();
+        btnUM = new RSMaterialComponent.RSButtonShape();
+        btnCategoria = new RSMaterialComponent.RSButtonShape();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         panelP.setBackground(new java.awt.Color(255, 255, 255));
@@ -393,7 +401,7 @@ public class nuevoMateriales extends javax.swing.JDialog {
         panelP.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel11.setText("Unidad de medida:");
+        jLabel11.setText("U.M:");
         panelP.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
@@ -456,6 +464,48 @@ public class nuevoMateriales extends javax.swing.JDialog {
             }
         });
         panelP.add(btnQuitar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 483, 80, 26));
+
+        btnMarca.setBackground(new java.awt.Color(46, 49, 82));
+        btnMarca.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnMarca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnMarca.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnMarca.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
+        btnMarca.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnMarca.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnMarca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMarcaActionPerformed(evt);
+            }
+        });
+        panelP.add(btnMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 140, 25, 20));
+
+        btnUM.setBackground(new java.awt.Color(46, 49, 82));
+        btnUM.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnUM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnUM.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnUM.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
+        btnUM.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnUM.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnUM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUMActionPerformed(evt);
+            }
+        });
+        panelP.add(btnUM, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 25, 20));
+
+        btnCategoria.setBackground(new java.awt.Color(46, 49, 82));
+        btnCategoria.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnCategoria.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnCategoria.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
+        btnCategoria.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnCategoria.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCategoriaActionPerformed(evt);
+            }
+        });
+        panelP.add(btnCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, 25, 20));
 
         getContentPane().add(panelP, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 610));
 
@@ -663,6 +713,47 @@ public class nuevoMateriales extends javax.swing.JDialog {
         cargarImagenVistaPrevia(); // Restaurar la vista previa predeterminada
     }//GEN-LAST:event_btnQuitarActionPerformed
 
+    private void btnMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcaActionPerformed
+        // Crear el diálogo de cliente
+        nuevaMarcaMaterial dialog = new nuevaMarcaMaterial(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+
+        // Configurar el listener para recargar clientes cuando se guarde uno nuevo
+        dialog.setCategoriaGuardadaListener(() -> {
+            cargarMarcas(); // Recargar la lista de clientes
+        });
+
+        dialog.setVisible(true);
+
+    }//GEN-LAST:event_btnMarcaActionPerformed
+
+    private void btnUMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUMActionPerformed
+        // Crear el diálogo de cliente
+        nuevaUMmaterial dialog = new nuevaUMmaterial(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+
+        // Configurar el listener para recargar clientes cuando se guarde uno nuevo
+        dialog.setCategoriaGuardadaListener(() -> {
+            cargarUnidades(); // Recargar la lista de clientes
+        });
+
+        dialog.setVisible(true);
+
+    }//GEN-LAST:event_btnUMActionPerformed
+
+    private void btnCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCategoriaActionPerformed
+        nuevaCategoriaMaterial dialog = new nuevaCategoriaMaterial(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+
+        // Configurar el listener para recargar categorías cuando se guarde una nueva
+        dialog.setCategoriaGuardadaListener(() -> {
+            // Volver a cargar todas las categorías en el ComboBox
+            cargarCategorias();
+        });
+
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnCategoriaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -707,9 +798,12 @@ public class nuevoMateriales extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
+    private RSMaterialComponent.RSButtonShape btnCategoria;
     private rojeru_san.RSButtonRiple btnGuardar;
+    private RSMaterialComponent.RSButtonShape btnMarca;
     private RSMaterialComponent.RSButtonShape btnQuitar;
     private RSMaterialComponent.RSButtonShape btnSubirImagen;
+    private RSMaterialComponent.RSButtonShape btnUM;
     private RSMaterialComponent.RSComboBoxMaterial cmbCategoria;
     private RSMaterialComponent.RSComboBoxMaterial cmbMarca;
     private RSMaterialComponent.RSComboBoxMaterial cmbUnidad;

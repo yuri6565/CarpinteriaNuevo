@@ -38,7 +38,7 @@ public class herramientaEditar extends javax.swing.JDialog {
     private byte[] imagenBytes; // Para almacenar la imagen en bytes
     private byte[] previewImageBytes; // Para almacenar la imagen de vista previa
     private ImageIcon previewImageIcon; // Para mantener la imagen de vista previa escalada
-    
+
     public HerramientaDatos material;
     private boolean guardado = false;
     private List<Categoria> categorias;
@@ -56,6 +56,10 @@ public class herramientaEditar extends javax.swing.JDialog {
         cargarMaterial(); // Llamar al método para prellenar los campos
 
         ((AbstractDocument) txtPrecioUnitario.getDocument()).setDocumentFilter(new NumberFormatFilterInventario());
+
+        btnMarca.setToolTipText("<html><b>Agregar marca</html>");
+        btnCategoria.setToolTipText("<html><b>Agregar categoría</html>");
+        btnUM.setToolTipText("<html><b>Agregar U.M</html>");
 
         // Agregar esto en el constructor o método de inicialización de tu clase
         txtCantidad.addKeyListener(new KeyAdapter() {
@@ -82,7 +86,7 @@ public class herramientaEditar extends javax.swing.JDialog {
     // Método para cargar datos en los combo boxes
     private void cargarDatosComboBoxes() {
         Ctrl_CategoriaHerramienta ctrlCategoria = new Ctrl_CategoriaHerramienta();
-        categorias = ctrlCategoria.obtenerCategoriasHerramienta();
+        categorias = ctrlCategoria.obtenerCategoriasHerramienta(); // Asignar a la variable de clase
         cmbCategoria.removeAllItems();
         cmbCategoria.addItem("Seleccione categoría:");
         for (Categoria cat : categorias) {
@@ -90,7 +94,7 @@ public class herramientaEditar extends javax.swing.JDialog {
         }
 
         Ctrl_MarcaHerramienta ctrlMarca = new Ctrl_MarcaHerramienta();
-        marcas = ctrlMarca.obtenerMarcasHerramienta();
+        marcas = ctrlMarca.obtenerMarcasHerramienta(); // Asignar a la variable de clase
         cmbMarca.removeAllItems();
         cmbMarca.addItem("Seleccione marca:");
         for (Marca m : marcas) {
@@ -98,13 +102,12 @@ public class herramientaEditar extends javax.swing.JDialog {
         }
 
         Ctrl_UnidadHerramienta ctrlUnidad = new Ctrl_UnidadHerramienta();
-        unidades = ctrlUnidad.obtenerUnidadesHerramienta();
+        unidades = ctrlUnidad.obtenerUnidadesHerramienta(); // Asignar a la variable de clase
         cmbUnidad.removeAllItems();
         cmbUnidad.addItem("Seleccione unidad-medida:");
         for (Unidad um : unidades) {
             cmbUnidad.addItem(um.getNombre());
         }
-
     }
 
 // Método para prellenar los campos con los datos del material
@@ -281,8 +284,12 @@ public class herramientaEditar extends javax.swing.JDialog {
         lblImagen = new javax.swing.JLabel();
         btnSubirImagen = new RSMaterialComponent.RSButtonShape();
         btnQuitar = new RSMaterialComponent.RSButtonShape();
+        btnUM = new RSMaterialComponent.RSButtonShape();
+        btnCategoria = new RSMaterialComponent.RSButtonShape();
+        btnMarca = new RSMaterialComponent.RSButtonShape();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -352,7 +359,7 @@ public class herramientaEditar extends javax.swing.JDialog {
         jPanel1.add(cmbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 90, 200, 30));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel11.setText("Unidad de medida:");
+        jLabel11.setText("U.M:");
         jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
 
         cmbUnidad.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione unidad-medida:", "RSItem 1", "RSItem 2", "RSItem 3", "RSItem 4" }));
@@ -475,6 +482,48 @@ public class herramientaEditar extends javax.swing.JDialog {
         });
         jPanel1.add(btnQuitar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 470, 80, 26));
 
+        btnUM.setBackground(new java.awt.Color(46, 49, 82));
+        btnUM.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnUM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnUM.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnUM.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
+        btnUM.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnUM.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnUM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUMActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnUM, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 25, 20));
+
+        btnCategoria.setBackground(new java.awt.Color(46, 49, 82));
+        btnCategoria.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnCategoria.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnCategoria.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
+        btnCategoria.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnCategoria.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCategoriaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, 25, 20));
+
+        btnMarca.setBackground(new java.awt.Color(46, 49, 82));
+        btnMarca.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnMarca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnMarca.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnMarca.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
+        btnMarca.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnMarca.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnMarca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMarcaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 130, 25, 20));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 580));
 
         pack();
@@ -495,7 +544,7 @@ public class herramientaEditar extends javax.swing.JDialog {
         String estado = (String) cmbEstado.getSelectedItem();
 
         // Validar campos obligatorios
-        if (nombre.isEmpty() || cantidad.isEmpty() ||descripcion.isEmpty() || categoriaNombre == null || marcaNombre == null || unidadNombre == null || estado == null) {
+        if (nombre.isEmpty() || cantidad.isEmpty() || descripcion.isEmpty() || categoriaNombre == null || marcaNombre == null || unidadNombre == null || estado == null) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -515,7 +564,6 @@ public class herramientaEditar extends javax.swing.JDialog {
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
 
         // Mapear nombres a IDs
         int idCategoria = -1;
@@ -637,6 +685,96 @@ public class herramientaEditar extends javax.swing.JDialog {
         cargarImagenVistaPrevia(); // Restaurar la vista previa predeterminada
     }//GEN-LAST:event_btnQuitarActionPerformed
 
+    private void btnUMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUMActionPerformed
+        nuevaUMherramienta dialog = new nuevaUMherramienta(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+
+        dialog.setCategoriaGuardadaListener(() -> {
+            // Recargar unidades y actualizar la lista interna
+            Ctrl_UnidadHerramienta ctrl = new Ctrl_UnidadHerramienta();
+            unidades = ctrl.obtenerUnidadesHerramienta();
+
+            // Actualizar ComboBox
+            cmbUnidad.removeAllItems();
+            cmbUnidad.addItem("Seleccione unidad-medida:");
+            for (Unidad um : unidades) {
+                cmbUnidad.addItem(um.getNombre());
+            }
+
+            // Mantener la selección actual si existe
+            if (material != null) {
+                for (Unidad um : unidades) {
+                    if (um.getCodigo() == material.getIdUnidadMedida()) {
+                        cmbUnidad.setSelectedItem(um.getNombre());
+                        break;
+                    }
+                }
+            }
+        });
+
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnUMActionPerformed
+
+    private void btnCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCategoriaActionPerformed
+        nuevaCategoriaHerramienta dialog = new nuevaCategoriaHerramienta(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+
+        dialog.setCategoriaGuardadaListener(() -> {
+            // Recargar categorías y actualizar la lista interna
+            Ctrl_CategoriaHerramienta ctrl = new Ctrl_CategoriaHerramienta();
+            categorias = ctrl.obtenerCategoriasHerramienta();
+
+            // Actualizar ComboBox
+            cmbCategoria.removeAllItems();
+            cmbCategoria.addItem("Seleccione categoría:");
+            for (Categoria cat : categorias) {
+                cmbCategoria.addItem(cat.getNombre());
+            }
+
+            // Mantener la selección actual si existe
+            if (material != null) {
+                for (Categoria cat : categorias) {
+                    if (cat.getCodigo() == material.getIdCategoria()) {
+                        cmbCategoria.setSelectedItem(cat.getNombre());
+                        break;
+                    }
+                }
+            }
+        });
+
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnCategoriaActionPerformed
+
+    private void btnMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcaActionPerformed
+        nuevaMarcaHerramienta dialog = new nuevaMarcaHerramienta(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+
+        dialog.setCategoriaGuardadaListener(() -> {
+            // Recargar marcas y actualizar la lista interna
+            Ctrl_MarcaHerramienta ctrl = new Ctrl_MarcaHerramienta();
+            marcas = ctrl.obtenerMarcasHerramienta();
+
+            // Actualizar ComboBox
+            cmbMarca.removeAllItems();
+            cmbMarca.addItem("Seleccione marca:");
+            for (Marca m : marcas) {
+                cmbMarca.addItem(m.getNombre());
+            }
+
+            // Mantener la selección actual si existe
+            if (material != null) {
+                for (Marca m : marcas) {
+                    if (m.getCodigo() == material.getIdMarca()) {
+                        cmbMarca.setSelectedItem(m.getNombre());
+                        break;
+                    }
+                }
+            }
+        });
+
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnMarcaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -681,9 +819,12 @@ public class herramientaEditar extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
+    private RSMaterialComponent.RSButtonShape btnCategoria;
     private rojeru_san.RSButtonRiple btnGuardar;
+    private RSMaterialComponent.RSButtonShape btnMarca;
     private RSMaterialComponent.RSButtonShape btnQuitar;
     private RSMaterialComponent.RSButtonShape btnSubirImagen;
+    private RSMaterialComponent.RSButtonShape btnUM;
     private RSMaterialComponent.RSComboBoxMaterial cmbCategoria;
     private RSMaterialComponent.RSComboBoxMaterial cmbEstado;
     private RSMaterialComponent.RSComboBoxMaterial cmbMarca;
