@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package vista.Produccion;
+package vista.ProduccionTrap;
 
+import vista.Produccion.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -130,10 +131,7 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
         Tabla1.setEffectHover(true);
 
         // Botones
-        btnNuevo.setBackground(encabezado);
-        btnNuevo.setBackgroundHover(new Color(118, 142, 240));
-        btnElimi.setBackground(encabezado);
-        btnElimi.setBackgroundHover(new Color(118, 142, 240));
+        
 
     } else {
             Color fondo = new Color(242, 247, 255);
@@ -168,8 +166,7 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
             Tabla1.setColorPrimary(new Color(242, 242, 242)); // Fondo filas impares
             Tabla1.setColorSecondary(Color.WHITE); // Fondo filas pares
             Tabla1.setForeground(Color.BLACK);
-            btnNuevo.setBackground(new Color(46, 49, 82));
-            btnElimi.setBackground(new Color(46, 49, 82));
+
         }
         Tabla1.repaint();
         Tabla1.getTableHeader().repaint();
@@ -417,9 +414,7 @@ private Map<String, String> obtenerCantidadesHerramientas(int idEtapa) {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        btnNuevo = new RSMaterialComponent.RSButtonShape();
         txtbuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
-        btnElimi = new RSMaterialComponent.RSButtonShape();
         jScrollPane3 = new javax.swing.JScrollPane();
         Tabla1 = new RSMaterialComponent.RSTableMetroCustom();
 
@@ -431,19 +426,6 @@ private Map<String, String> obtenerCantidadesHerramientas(int idEtapa) {
 
         jPanel1.setBackground(new java.awt.Color(242, 247, 255));
 
-        btnNuevo.setBackground(new java.awt.Color(46, 49, 82));
-        btnNuevo.setBorder(javax.swing.BorderFactory.createCompoundBorder());
-        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (1).png"))); // NOI18N
-        btnNuevo.setText("  Nuevo");
-        btnNuevo.setBackgroundHover(new java.awt.Color(67, 150, 209));
-        btnNuevo.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
-        btnNuevo.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
-        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoActionPerformed(evt);
-            }
-        });
-
         txtbuscar.setForeground(new java.awt.Color(29, 30, 91));
         txtbuscar.setColorIcon(new java.awt.Color(29, 30, 111));
         txtbuscar.setColorMaterial(new java.awt.Color(29, 30, 111));
@@ -452,19 +434,6 @@ private Map<String, String> obtenerCantidadesHerramientas(int idEtapa) {
         txtbuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtbuscarActionPerformed(evt);
-            }
-        });
-
-        btnElimi.setBackground(new java.awt.Color(46, 49, 82));
-        btnElimi.setBorder(javax.swing.BorderFactory.createCompoundBorder());
-        btnElimi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (1).png"))); // NOI18N
-        btnElimi.setText(" Eliminar");
-        btnElimi.setBackgroundHover(new java.awt.Color(67, 150, 209));
-        btnElimi.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
-        btnElimi.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
-        btnElimi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnElimiActionPerformed(evt);
             }
         });
 
@@ -524,24 +493,15 @@ private Map<String, String> obtenerCantidadesHerramientas(int idEtapa) {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(4, 4, 4)
-                        .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(436, 436, 436)
-                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(14, 14, 14)
-                        .addComponent(btnElimi, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnElimi, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(52, 52, 52)
+                .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(240, Short.MAX_VALUE))
@@ -554,109 +514,6 @@ private Map<String, String> obtenerCantidadesHerramientas(int idEtapa) {
         filtrarTabla();
 
     }//GEN-LAST:event_txtbuscarActionPerformed
-
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        FormuEtapaProduccion dialog = new FormuEtapaProduccion(
-                (JFrame) SwingUtilities.getWindowAncestor(this),
-                true,
-                this.idProduccion
-        );
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-        cargarTablaEtapa(); // Refrescar la tabla después de cerrar el diálogo
-    }//GEN-LAST:event_btnNuevoActionPerformed
-
-    private void btnElimiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimiActionPerformed
-    int selectedRow = Tabla1.getSelectedRow();
-    
-    if (selectedRow < 0) {
-        JOptionPane.showMessageDialog(this,
-                "Seleccione una etapa para eliminar",
-                "Advertencia",
-                JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-    
-    // Convertir índice de vista a modelo (importante si hay filtros)
-    int modelRow = Tabla1.convertRowIndexToModel(selectedRow);
-    int idEtapa = (int) Tabla1.getModel().getValueAt(modelRow, 0);
-    
-    // Verificar estado (opcional: no permitir eliminar etapas completadas)
-    String estado = Tabla1.getModel().getValueAt(modelRow, 5).toString();
-    if ("completado".equalsIgnoreCase(estado)) {
-        JOptionPane.showMessageDialog(this,
-                "No se puede eliminar una etapa completada",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    
-    int confirm = JOptionPane.showConfirmDialog(this,
-            "¿Está seguro de eliminar esta etapa?",
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION);
-    
-    if (confirm != JOptionPane.YES_OPTION) {
-        return;
-    }
-    
-    try (Connection con = Conexion.getConnection()) {
-        con.setAutoCommit(false); // Iniciar transacción
-        
-        try {
-            // 1. Eliminar registros en 'utilizado'
-            String sqlUtilizado = "DELETE FROM utilizado WHERE etapa_produccion_idetapa_produccion = ?";
-            try (PreparedStatement ps = con.prepareStatement(sqlUtilizado)) {
-                ps.setInt(1, idEtapa);
-                ps.executeUpdate();
-            }
-            
-            // 2. Eliminar registros en 'asignada'
-            String sqlAsignada = "DELETE FROM asignada WHERE etapa_produccion_idetapa_produccion = ?";
-            try (PreparedStatement ps = con.prepareStatement(sqlAsignada)) {
-                ps.setInt(1, idEtapa);
-                ps.executeUpdate();
-            }
-            
-            // 3. Finalmente eliminar la etapa
-            String sqlEtapa = "DELETE FROM etapa_produccion WHERE idetapa_produccion = ?";
-            try (PreparedStatement ps = con.prepareStatement(sqlEtapa)) {
-                ps.setInt(1, idEtapa);
-                int filasAfectadas = ps.executeUpdate();
-                
-                if (filasAfectadas > 0) {
-                    con.commit(); // Confirmar cambios
-                    JOptionPane.showMessageDialog(this,
-                            "Etapa eliminada correctamente",
-                            "Éxito",
-                            JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    con.rollback();
-                    JOptionPane.showMessageDialog(this,
-                            "No se encontró la etapa a eliminar",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        } catch (SQLException e) {
-            con.rollback(); // Revertir en caso de error
-            JOptionPane.showMessageDialog(this,
-                    "Error al eliminar etapa: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-        
-        cargarTablaEtapa(); // Refrescar la tabla
-        
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this,
-                "Error de conexión: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-    }
-
-    }//GEN-LAST:event_btnElimiActionPerformed
 
     private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseClicked
             try {
@@ -758,8 +615,6 @@ private Map<String, String> obtenerCantidadesHerramientas(int idEtapa) {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSTableMetroCustom Tabla1;
-    private RSMaterialComponent.RSButtonShape btnElimi;
-    private RSMaterialComponent.RSButtonShape btnNuevo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane3;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtbuscar;

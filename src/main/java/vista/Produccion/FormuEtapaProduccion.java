@@ -20,8 +20,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -83,7 +87,7 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         DefaultComboBoxModel<CheckableItem> model = new DefaultComboBoxModel<>();
         try {
             Connection con = new Conexion().getConnection();
-            String sql = "SELECT nombre FROM inventario WHERE tipo = ? AND estado = 'disponible'";
+            String sql = "SELECT nombre FROM inventario WHERE tipo = ? ";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, tipo);
             ResultSet rs = ps.executeQuery();
@@ -271,12 +275,10 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         txtetapa = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel11 = new javax.swing.JLabel();
-        Boxestado = new RSMaterialComponent.RSComboBoxMaterial();
         txtFechainicio = new com.toedter.calendar.JDateChooser();
         txtfechafin = new com.toedter.calendar.JDateChooser();
         btnGuardar1 = new rojeru_san.RSButtonRiple();
@@ -304,11 +306,6 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Estado:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 70, -1, -1));
-
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Fecha final:");
@@ -316,7 +313,7 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel10.setText("Cantidad");
+        jLabel10.setText("Cantidad:");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
 
         txtetapa.setForeground(new java.awt.Color(0, 0, 0));
@@ -336,16 +333,6 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Fecha inicio:");
         jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
-
-        Boxestado.setForeground(new java.awt.Color(102, 102, 102));
-        Boxestado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", "pendiente", "proceso", "completado" }));
-        Boxestado.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        Boxestado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BoxestadoActionPerformed(evt);
-            }
-        });
-        jPanel1.add(Boxestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, -1, -1));
 
         txtFechainicio.setBackground(new java.awt.Color(255, 255, 255));
         txtFechainicio.setForeground(new java.awt.Color(255, 255, 255));
@@ -413,12 +400,12 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
                 BoxAsignadoActionPerformed(evt);
             }
         });
-        jPanel1.add(BoxAsignado, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 340, -1, -1));
+        jPanel1.add(BoxAsignado, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 100, -1, 30));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Asignado:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 310, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 70, -1, -1));
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(0, 0, 0));
@@ -429,7 +416,7 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -438,10 +425,6 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void BoxestadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxestadoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BoxestadoActionPerformed
 
     private void txtetapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtetapaActionPerformed
         // TODO add your handling code here:
@@ -466,126 +449,155 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
             dialog.setVisible(true);
 
             if (dialog.isConfirmado()) {
-                guardarDatosCompletos(dialog.getCantidadesMateriales(), dialog.getObservacionesHerramientas());
+                guardarDatosCompletos(dialog.getCantidadesMateriales(), dialog.getCantidadesHerramientas());
             }
         } catch (NumberFormatException e) {
             new Error_guardar((Frame) this.getParent(), true, "Error",
                     "La cantidad debe ser un número válido").setVisible(true);
+        } catch (ParseException ex) {
+            Logger.getLogger(FormuEtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.dispose();
+    }//GEN-LAST:event_btnGuardar1ActionPerformed
 
+    private boolean guardarDatosCompletos(Map<String, String> cantidadesMateriales,
+            Map<String, String> cantidadesHerramientas) throws ParseException {
+        Connection con = null;
+        try {
+            con = Conexion.getConnection();
+            con.setAutoCommit(false); // Iniciar transacción
+
+            // 1. Guardar etapa principal
+            int idEtapa = guardarEtapaProduccion(con);
+
+            // 2. Guardar materiales y actualizar inventario
+            guardarMaterialesHerramientas(con, idEtapa, cantidadesMateriales, "material");
+
+            // 3. Guardar herramientas y actualizar inventario
+            guardarMaterialesHerramientas(con, idEtapa, cantidadesHerramientas, "herramienta");
+
+            // 4. Guardar asignación de trabajador
+            guardarAsignado(con, idEtapa, BoxAsignado.getSelectedItem().toString());
+
+            con.commit(); // Confirmar transacción
+            return true;
+
+        } catch (SQLException e) {
+            try {
+                if (con != null) {
+                    con.rollback();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(FormuEtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            mostrarError("Error de base de datos: " + e.getMessage());
+            return false;
+        } finally {
+            try {
+                if (con != null) {
+                    con.setAutoCommit(true);
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(FormuEtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
-    private void guardarDatosCompletos(Map<String, String> cantidadesMateriales, Map<String, String> observacionesHerramientas) {
-        try (Connection con = Conexion.getConnection()) {
-            con.setAutoCommit(false);
-            try {
-                String nombreEtapa = txtetapa.getText().trim();
-                String estado = Boxestado.getSelectedItem().toString();
-                java.sql.Date fechaInicio = new java.sql.Date(txtFechainicio.getDate().getTime());
-                java.sql.Date fechaFin = txtfechafin.getDate() != null ? new java.sql.Date(txtfechafin.getDate().getTime()) : null;
-                int cantidadEtapa = Integer.parseInt(txtcantidad.getText().trim());
-                String trabajador = BoxAsignado.getSelectedItem().toString();
+    private int guardarEtapaProduccion(Connection con) throws SQLException {
+        String sql = "INSERT INTO etapa_produccion (nombre_etapa, fecha_inicio, fecha_fin, produccion_id_produccion, cantidad) VALUES (?,  ?, ?, ?, ?)";
 
-                // Insertar etapa
-                String sqlEtapa = "INSERT INTO etapa_produccion (nombre_etapa, estado, fecha_inicio, fecha_fin, produccion_id_produccion, cantidad) VALUES (?, ?, ?, ?, ?, ?)";
-                int idEtapa;
-                try (PreparedStatement ps = con.prepareStatement(sqlEtapa, Statement.RETURN_GENERATED_KEYS)) {
-                    ps.setString(1, nombreEtapa);
-                    ps.setString(2, estado);
-                    ps.setDate(3, fechaInicio);
-                    ps.setDate(4, fechaFin);
-                    ps.setInt(5, idProduccion);
-                    ps.setInt(6, cantidadEtapa);
-                    ps.executeUpdate();
+        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, txtetapa.getText().trim());
+            ps.setDate(2, new Date(txtFechainicio.getDate().getTime()));
+            ps.setDate(3, txtfechafin.getDate() != null ? new Date(txtfechafin.getDate().getTime()) : null);
+            ps.setInt(4, idProduccion);
+            ps.setInt(5, Integer.parseInt(txtcantidad.getText().trim()));
+            ps.executeUpdate();
 
-                    ResultSet rs = ps.getGeneratedKeys();
-                    if (rs.next()) {
-                        idEtapa = rs.getInt(1);
-                    } else {
-                        throw new SQLException("No se generó ID para la etapa");
-                    }
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
                 }
-
-                // Guardar materiales y actualizar inventario
-                String sqlUtilizado = "INSERT INTO utilizado (etapa_produccion_idetapa_produccion, inventario_id_inventario, cantidad, observacion) VALUES (?, ?, ?, ?)";
-                String sqlUpdateInventario = "UPDATE inventario SET cantidad = cantidad - ? WHERE id_inventario = ?";
-                for (Map.Entry<String, String> entry : cantidadesMateriales.entrySet()) {
-                    if (!entry.getValue().isEmpty() && !entry.getValue().equals("0")) {
-                        int idInventario = obtenerIdInventario(con, entry.getKey(), "material");
-                        int cantidad = Integer.parseInt(entry.getValue());
-                        try (PreparedStatement ps = con.prepareStatement(sqlUtilizado)) {
-                            ps.setInt(1, idEtapa);
-                            ps.setInt(2, idInventario);
-                            ps.setString(3, entry.getValue());
-                            ps.setNull(4, java.sql.Types.VARCHAR);
-                            ps.executeUpdate();
-                        }
-                        // Update inventory
-                        try (PreparedStatement ps = con.prepareStatement(sqlUpdateInventario)) {
-                            ps.setInt(1, cantidad);
-                            ps.setInt(2, idInventario);
-                            ps.executeUpdate();
-                        }
-                    }
-                }
-
-                // Guardar herramientas
-                for (Map.Entry<String, String> entry : observacionesHerramientas.entrySet()) {
-                    int idInventario = obtenerIdInventario(con, entry.getKey(), "herramienta");
-                    try (PreparedStatement ps = con.prepareStatement(sqlUtilizado)) {
-                        ps.setInt(1, idEtapa);
-                        ps.setInt(2, idInventario);
-                        ps.setString(3, "1");
-                        ps.setString(4, entry.getValue());
-                        ps.executeUpdate();
-                    }
-                    // Update inventory for tools (decrease by 1)
-                    try (PreparedStatement ps = con.prepareStatement(sqlUpdateInventario)) {
-                        ps.setInt(1, 1);
-                        ps.setInt(2, idInventario);
-                        ps.executeUpdate();
-                    }
-                }
-
-                // Guardar usuario asignado
-                guardarAsignado(con, idEtapa, trabajador);
-
-                con.commit();
-                Datos_guardados exitoDialog = new Datos_guardados(
-                        (Frame) this.getParent(),
-                        true,
-                        "Éxito",
-                        "Datos guardados correctamente"
-                );
-                exitoDialog.setLocationRelativeTo(null);
-                exitoDialog.setVisible(true);
-                this.dispose();
-            } catch (SQLException | NumberFormatException e) {
-                con.rollback();
-                new Error_guardar((Frame) this.getParent(), true, "Error",
-                        "Error al guardar: " + e.getMessage()).setVisible(true);
-                e.printStackTrace();
+                throw new SQLException("No se generó ID para la etapa");
             }
-        } catch (SQLException e) {
-            new Error_guardar((Frame) this.getParent(), true, "Error",
-                    "No se pudo establecer conexión: " + e.getMessage()).setVisible(true);
-            e.printStackTrace();
+        }
+    }
+
+    private void guardarMaterialesHerramientas(Connection con, int idEtapa,
+            Map<String, String> cantidades, String tipo)
+            throws SQLException, ParseException {
+        String sqlInsert = "INSERT INTO utilizado (etapa_produccion_idetapa_produccion, inventario_id_inventario, cantidad_usada) VALUES (?, ?, ?)";
+        String sqlUpdate = "UPDATE inventario SET cantidad = cantidad - ? WHERE id_inventario = ?";
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES")); // Ajusta el Locale según tu región
+        numberFormat.setMinimumFractionDigits(2); // Asegurar 2 decimales
+        numberFormat.setMaximumFractionDigits(2);
+        for (Map.Entry<String, String> entry : cantidades.entrySet()) {
+            String nombre = entry.getKey();
+            String valor = entry.getValue();
+
+            // Saltar si no hay cantidad (null, vacío o "0")
+            if (valor == null || valor.trim().isEmpty() || valor.trim().equals("0") || valor.trim().equals("0.0") || valor.trim().equals("0.00")) {
+                continue;
+            }
+
+            int idInventario = obtenerIdInventario(con, nombre, tipo);
+            double cantidad;
+
+            try {
+                // Parsear el valor como double
+                Number parsedNumber = numberFormat.parse(valor.trim());
+                cantidad = parsedNumber.doubleValue();
+                // Validar que la cantidad no sea negativa
+                if (cantidad < 0) {
+                    throw new NumberFormatException("La cantidad no puede ser negativa");
+                }
+            } catch (NumberFormatException e) {
+                throw new SQLException("Valor inválido para cantidad: " + valor + " en " + nombre, e);
+            }
+
+            // Insertar en tabla utilizado
+            try (PreparedStatement ps = con.prepareStatement(sqlInsert)) {
+                ps.setInt(1, idEtapa);
+                ps.setInt(2, idInventario);
+                ps.setDouble(3, cantidad); // Usar setDouble para decimales
+                ps.executeUpdate();
+            }
+
+            // Actualizar inventario
+            try (PreparedStatement ps = con.prepareStatement(sqlUpdate)) {
+                ps.setDouble(1, cantidad); // Usar setDouble para decimales
+                ps.setInt(2, idInventario);
+                ps.executeUpdate();
+            }
         }
     }
 
     private int obtenerIdInventario(Connection con, String nombre, String tipo) throws SQLException {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío");
+        }
+        if (!"material".equals(tipo) && !"herramienta".equals(tipo)) {
+            throw new IllegalArgumentException("Tipo inválido: " + tipo);
+        }
+
         String sql = "SELECT id_inventario FROM inventario WHERE nombre = ? AND tipo = ?";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, nombre);
             ps.setString(2, tipo);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("id_inventario");
-            } else {
-                throw new SQLException("No se encontró el item: " + nombre);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_inventario");
+                } else {
+                    throw new SQLException("No se encontró el ítem en inventario: " + nombre + " (tipo: " + tipo + ")");
+                }
             }
         }
+    }
+// Métodos auxiliares para mostrar mensajes
 
+    private void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     private void guardarAsignado(Connection con, int idEtapa, String nombreUsuario) throws SQLException {
@@ -614,13 +626,12 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
             }
         }
     }
-// Métodos auxiliares (actualizados)
+//Métodos auxiliares (actualizados)
 
     private boolean validarCampos() {
         if (txtetapa.getText().trim().isEmpty()
                 || txtFechainicio.getDate() == null
                 || txtfechafin.getDate() == null
-                || Boxestado.getSelectedIndex() == 0
                 || txtcantidad.getText().trim().isEmpty()) {
             espacio_alerta errorDialog = new espacio_alerta(
                     (Frame) this.getParent(),
@@ -646,9 +657,7 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         }
 
         return true;
-    
-    }//GEN-LAST:event_btnGuardar1ActionPerformed
-
+    }
     private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelar1ActionPerformed
@@ -689,7 +698,6 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSComboBoxMaterial BoxAsignado;
-    private RSMaterialComponent.RSComboBoxMaterial Boxestado;
     private rojeru_san.RSButtonRiple btnCancelar1;
     private rojeru_san.RSButtonRiple btnGuardar1;
     private javax.swing.JLabel jLabel1;
@@ -697,7 +705,6 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -729,6 +736,5 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
 
         BoxAsignado.setModel(model);
     }
-
 
 }

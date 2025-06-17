@@ -37,7 +37,7 @@ import vista.catalogo.catalogo22;
  *
  * @author Personal
  */
-public class Principal extends javax.swing.JFrame {
+public class PrincipalTrap extends javax.swing.JFrame {
 
     private JPanel submenuInventario;
     private boolean submenuVisible = false;
@@ -58,7 +58,7 @@ public class Principal extends javax.swing.JFrame {
     private final int MENU_COLLAPSED_WIDTH = 1;
     private final int MENU_EXPANDED_WIDTH = 250;
 
-    public Principal(int idUsuario) {
+    public PrincipalTrap(int idUsuario) {
         this.idUsuario = idUsuario;
         this.controlador = new Ctrl_Perfil();
         this.item1 = new rojeru_san.RSButton(); // ✔️ usa la variable de instancia
@@ -1620,14 +1620,17 @@ getHeight());
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrincipalTrap.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrincipalTrap.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrincipalTrap.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrincipalTrap.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
@@ -1638,7 +1641,7 @@ getHeight());
                 // Inicia desde Login11211.java para pasar el idUsuario real.
                 // Usa un idUsuario de prueba solo para depuración local.
                 int idUsuarioPrueba = Integer.parseInt(args.length > 0 ? args[0] : "0");
-                new Principal(idUsuarioPrueba).setVisible(true);
+                new PrincipalTrap(idUsuarioPrueba).setVisible(true);
             }
         });
 
