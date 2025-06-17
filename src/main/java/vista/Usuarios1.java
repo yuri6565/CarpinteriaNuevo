@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -31,7 +32,7 @@ public class Usuarios1 extends javax.swing.JPanel {
     private Ctrl_Perfil controlador;
     private int idUsuario;
 
-    public Usuarios1() {
+    public Usuarios1(JFrame jFrame, boolean par) {
         controlador = new Ctrl_Perfil();
         this.id_usuario = -1; // Default to no selection
         initComponents();

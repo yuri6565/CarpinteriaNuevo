@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import javax.swing.ListSelectionModel;
@@ -27,7 +28,7 @@ public class Proveedor extends javax.swing.JPanel {
     private int id_proveedor;
     private Ctrl_Proveedor proveedorContro;
 
-    public Proveedor() {
+    public Proveedor(JFrame jFrame, boolean par) {
         proveedorContro = new Ctrl_Proveedor();
         initComponents();
         aplicarTema(); // Apply initial theme

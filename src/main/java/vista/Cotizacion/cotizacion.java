@@ -5,6 +5,12 @@
 package vista.Cotizacion;
 
 import RSMaterialComponent.RSTextFieldMaterial;
+import controlador.GeneradorCotizacionPDF;
+import java.awt.Color;
+import java.awt.Desktop;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import vista.TemaManager;
@@ -13,13 +19,16 @@ import vista.TemaManager;
  *
  * @author ADSO
  */
+
 public class cotizacion extends javax.swing.JPanel {
+
     private String clienteActual = "";
 
     private boolean clienteIngresado = false;
 
     public cotizacion() {
         initComponents();
+        aplicarTema();
         configurarTabla();
         CargarUnidadMed();
 
@@ -58,7 +67,213 @@ public class cotizacion extends javax.swing.JPanel {
         Tabla1.getColumnModel().getColumn(4).setPreferredWidth(100); // Subtotal
         Tabla1.getColumnModel().getColumn(5).setPreferredWidth(60);  // Editar
         Tabla1.getColumnModel().getColumn(6).setPreferredWidth(60);  // Eliminar
+
+        TemaManager.getInstance().addThemeChangeListener(() -> {
+            aplicarTema(); // Update theme when it changes
+        });
+}
+        // Repintar todos los componentes
+
+
+   public void aplicarTema() {
+    boolean oscuro = TemaManager.getInstance().isOscuro();
+    System.out.println("Aplicando tema en Cotizacion: " + (oscuro ? "Oscuro" : "Claro"));
+
+    if (oscuro) {
+        // Configuración para modo oscuro
+        Color fondo = new Color(21, 21, 33);
+        Color fondoTabla = new Color(30, 30, 45);
+        Color encabezado = new Color(67, 71, 120);
+        Color texto = Color.WHITE;
+        Color borde = new Color(60, 60, 80);
+
+        // Panel raíz y panel principal
+        setBackground(fondo);
+        jPanel1.setBackground(fondo);
+
+        // Tabla
+        Tabla1.setBackground(fondoTabla);
+        Tabla1.setForeground(texto);
+        Tabla1.setColorPrimary(new Color(37, 37, 52));  // Filas impares
+        Tabla1.setColorSecondary(new Color(30, 30, 45)); // Filas pares
+        Tabla1.setColorPrimaryText(texto);
+        Tabla1.setColorSecundaryText(texto);
+        Tabla1.setBackgoundHead(encabezado);
+        Tabla1.setForegroundHead(texto);
+        Tabla1.setColorBorderHead(encabezado);
+        Tabla1.setColorBorderRows(borde);
+        Tabla1.setGridColor(borde);
+
+        // ComboBox
+        combox_Unidad.setBackground(new Color(37, 37, 52));
+        combox_Unidad.setForeground(texto);
+        combox_Unidad.setColorMaterial(texto);
+
+        // Campos de texto
+        txt_NombreCliente.setBackground(new Color(37, 37, 52));
+        txt_NombreCliente.setForeground(texto);
+        txt_NombreCliente.setColorMaterial(texto);
+        txt_NombreCliente.setPhColor(Color.LIGHT_GRAY);
+        txt_NombreCliente.setSelectionColor(new Color(118, 142, 240));
+
+        txtNombre4.setBackground(new Color(37, 37, 52));
+        txtNombre4.setForeground(texto);
+        txtNombre4.setColorMaterial(texto);
+        txtNombre4.setPhColor(Color.LIGHT_GRAY);
+        txtNombre4.setSelectionColor(new Color(118, 142, 240));
+
+        txtNombre5.setBackground(new Color(37, 37, 52));
+        txtNombre5.setForeground(texto);
+        txtNombre5.setColorMaterial(texto);
+        txtNombre5.setPhColor(Color.LIGHT_GRAY);
+        txtNombre5.setSelectionColor(new Color(118, 142, 240));
+
+        txtNombre6.setBackground(new Color(37, 37, 52));
+        txtNombre6.setForeground(texto);
+        txtNombre6.setColorMaterial(texto);
+        txtNombre6.setPhColor(Color.LIGHT_GRAY);
+        txtNombre6.setSelectionColor(new Color(118, 142, 240));
+
+        txt_total.setBackground(new Color(37, 37, 52));
+        txt_total.setForeground(texto);
+        txt_total.setColorMaterial(texto);
+        txt_total.setPhColor(Color.LIGHT_GRAY);
+        txt_total.setSelectionColor(new Color(118, 142, 240));
+
+        // Botones
+        btnAñadir.setBackground(encabezado);
+        btnAñadir.setBackgroundHover(new Color(118, 142, 240));
+        btnAñadir.setForeground(texto);
+        btnAñadir.setForegroundHover(Color.BLACK);
+
+        jButton_anadir_producto.setBackground(encabezado);
+        jButton_anadir_producto.setBackgroundHover(new Color(0, 153, 0));
+        jButton_anadir_producto.setForeground(texto);
+        jButton_anadir_producto.setForegroundHover(Color.BLACK);
+
+        // Labels
+        jLabel1.setForeground(texto);
+        jLabel2.setForeground(texto);
+        jLabel3.setForeground(texto);
+        jLabel4.setForeground(texto);
+        jLabel5.setForeground(texto);
+        jLabel6.setForeground(texto);
+        jLabel7.setForeground(texto);
+
+        // Fondo (JLabel, probablemente para una imagen de fondo)
+        /*
+        fondo.setBackground(fondo);
+        fondo.setOpaque(false); // Asegurar que no interfiera con el fondo del panel*/
+
+    } else {
+        // Configuración para modo claro
+        Color fondo = new Color(242, 247, 255);
+        Color texto = Color.BLACK;
+        Color primario = new Color(72, 92, 188);
+        Color borde = new Color(0, 0, 0);
+
+        // Panel raíz y panel principal
+        setBackground(fondo);
+        jPanel1.setBackground(fondo);
+
+        // Tabla
+        Tabla1.setBackground(new Color(255, 255, 255));
+        Tabla1.setBackgoundHead(new Color(46, 49, 82));
+        Tabla1.setForegroundHead(Color.WHITE);
+        Tabla1.setBackgoundHover(new Color(67, 150, 209));
+        Tabla1.setColorPrimary(new Color(242, 242, 242));
+        Tabla1.setColorPrimaryText(texto);
+        Tabla1.setColorSecondary(new Color(255, 255, 255));
+        Tabla1.setColorSecundaryText(texto);
+        Tabla1.setColorBorderHead(primario);
+        Tabla1.setColorBorderRows(borde);
+        Tabla1.setGridColor(Color.WHITE);
+
+        // ComboBox
+        combox_Unidad.setBackground(fondo);
+        combox_Unidad.setForeground(texto);
+        combox_Unidad.setColorMaterial(primario);
+
+        // Campos de texto
+        txt_NombreCliente.setBackground(fondo);
+        txt_NombreCliente.setForeground(texto);
+        txt_NombreCliente.setColorMaterial(primario);
+        txt_NombreCliente.setPhColor(Color.GRAY);
+        txt_NombreCliente.setSelectionColor(new Color(67, 150, 209));
+
+        txtNombre4.setBackground(fondo);
+        txtNombre4.setForeground(texto);
+        txtNombre4.setColorMaterial(primario);
+        txtNombre4.setPhColor(Color.GRAY);
+        txtNombre4.setSelectionColor(new Color(67, 150, 209));
+
+        txtNombre5.setBackground(fondo);
+        txtNombre5.setForeground(texto);
+        txtNombre5.setColorMaterial(primario);
+        txtNombre5.setPhColor(Color.GRAY);
+        txtNombre5.setSelectionColor(new Color(67, 150, 209));
+
+        txtNombre6.setBackground(fondo);
+        txtNombre6.setForeground(texto);
+        txtNombre6.setColorMaterial(primario);
+        txtNombre6.setPhColor(Color.GRAY);
+        txtNombre6.setSelectionColor(new Color(67, 150, 209));
+
+        txt_total.setBackground(fondo);
+        txt_total.setForeground(texto);
+        txt_total.setColorMaterial(primario);
+        txt_total.setPhColor(Color.GRAY);
+        txt_total.setSelectionColor(new Color(67, 150, 209));
+
+        // Botones
+        btnAñadir.setBackground(primario);
+        btnAñadir.setBackgroundHover(new Color(67, 150, 209));
+        btnAñadir.setForeground(texto);
+        btnAñadir.setForegroundHover(Color.BLACK);
+
+        jButton_anadir_producto.setBackground(primario);
+        jButton_anadir_producto.setBackgroundHover(new Color(0, 153, 0));
+        jButton_anadir_producto.setForeground(texto);
+        jButton_anadir_producto.setForegroundHover(Color.BLACK);
+
+        // Labels
+        jLabel1.setForeground(texto);
+        jLabel2.setForeground(texto);
+        jLabel3.setForeground(texto);
+        jLabel4.setForeground(texto);
+        jLabel5.setForeground(texto);
+        jLabel6.setForeground(texto);
+        jLabel7.setForeground(texto);
+
+        // Fondo
+        /*
+        fondo.setBackground(fondo);
+        fondo.setOpaque(false);*/
     }
+
+    // Repintar todos los componentes
+    repaint();
+    jPanel1.repaint();
+    Tabla1.repaint();
+    Tabla1.getTableHeader().repaint();
+    combox_Unidad.repaint();
+    txt_NombreCliente.repaint();
+    txtNombre4.repaint();
+    txtNombre5.repaint();
+    txtNombre6.repaint();
+    txt_total.repaint();
+    btnAñadir.repaint();
+    jButton_anadir_producto.repaint();
+    jLabel1.repaint();
+    jLabel2.repaint();
+    jLabel3.repaint();
+    jLabel4.repaint();
+    jLabel5.repaint();
+    jLabel6.repaint();
+    jLabel7.repaint();
+    fondo.repaint();
+}
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -72,6 +287,7 @@ public class cotizacion extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         Tabla1 = new RSMaterialComponent.RSTableMetro();
+        fondo = new javax.swing.JLabel();
         combox_Unidad = new RSMaterialComponent.RSComboBoxMaterial();
         txt_total = new RSMaterialComponent.RSTextFieldMaterial();
         txtNombre4 = new RSMaterialComponent.RSTextFieldMaterial();
@@ -82,29 +298,23 @@ public class cotizacion extends javax.swing.JPanel {
         jButton_anadir_producto = new RSMaterialComponent.RSButtonShape();
         txtNombre6 = new RSMaterialComponent.RSTextFieldMaterial();
         txt_NombreCliente = new RSMaterialComponent.RSTextFieldMaterial();
-        fondo = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
 
         jToggleButton1.setText("jToggleButton1");
 
         setBackground(new java.awt.Color(255, 255, 255));
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("Cotizacion");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 10, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Cliente:");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 60, 30));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Nombre :");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 70, 30));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("Cantidad:");
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 100, 70, 30));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -127,8 +337,6 @@ public class cotizacion extends javax.swing.JPanel {
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 1180, 320));
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 1220, 370));
-
         combox_Unidad.setColorMaterial(new java.awt.Color(0, 0, 0));
         combox_Unidad.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
         combox_Unidad.addActionListener(new java.awt.event.ActionListener() {
@@ -136,7 +344,6 @@ public class cotizacion extends javax.swing.JPanel {
                 combox_UnidadActionPerformed(evt);
             }
         });
-        add(combox_Unidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 100, -1, 30));
 
         txt_total.setEditable(false);
         txt_total.setBackground(new java.awt.Color(255, 255, 255));
@@ -151,7 +358,6 @@ public class cotizacion extends javax.swing.JPanel {
                 txt_totalActionPerformed(evt);
             }
         });
-        add(txt_total, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 520, 200, 30));
 
         txtNombre4.setForeground(new java.awt.Color(0, 0, 0));
         txtNombre4.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -164,11 +370,9 @@ public class cotizacion extends javax.swing.JPanel {
                 txtNombre4ActionPerformed(evt);
             }
         });
-        add(txtNombre4, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 100, 130, 30));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("Unidad:");
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 100, -1, 30));
 
         txtNombre5.setForeground(new java.awt.Color(0, 0, 0));
         txtNombre5.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -181,11 +385,9 @@ public class cotizacion extends javax.swing.JPanel {
                 txtNombre5ActionPerformed(evt);
             }
         });
-        add(txtNombre5, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 100, 150, 30));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setText("Valor Unitario:");
-        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 100, 110, 30));
 
         btnAñadir.setBackground(new java.awt.Color(46, 49, 82));
         btnAñadir.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -200,7 +402,6 @@ public class cotizacion extends javax.swing.JPanel {
                 btnAñadirActionPerformed(evt);
             }
         });
-        add(btnAñadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 510, 170, 70));
 
         jButton_anadir_producto.setBackground(new java.awt.Color(46, 49, 82));
         jButton_anadir_producto.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -213,7 +414,6 @@ public class cotizacion extends javax.swing.JPanel {
                 jButton_anadir_productoActionPerformed(evt);
             }
         });
-        add(jButton_anadir_producto, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 100, 110, 30));
 
         txtNombre6.setForeground(new java.awt.Color(0, 0, 0));
         txtNombre6.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -226,7 +426,6 @@ public class cotizacion extends javax.swing.JPanel {
                 txtNombre6ActionPerformed(evt);
             }
         });
-        add(txtNombre6, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 200, 30));
 
         txt_NombreCliente.setForeground(new java.awt.Color(0, 0, 0));
         txt_NombreCliente.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -239,12 +438,98 @@ public class cotizacion extends javax.swing.JPanel {
                 txt_NombreClienteActionPerformed(evt);
             }
         });
-        add(txt_NombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 200, 30));
-        add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1300, 640));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel7.setText("Total:");
-        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 520, 70, 30));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(600, 600, 600)
+                .addComponent(jLabel1))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(230, 230, 230)
+                .addComponent(jLabel5)
+                .addGap(8, 8, 8)
+                .addComponent(combox_Unidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(90, 90, 90)
+                .addComponent(txtNombre4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(310, 310, 310)
+                .addComponent(jButton_anadir_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1220, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(txt_total, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(740, 740, 740)
+                .addComponent(btnAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(810, 810, 810)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(590, 590, 590)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addComponent(txtNombre6, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addComponent(txt_NombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(940, 940, 940)
+                .addComponent(txtNombre5, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(fondo, javax.swing.GroupLayout.PREFERRED_SIZE, 1300, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel1)
+                .addGap(15, 15, 15)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(combox_Unidad, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombre4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton_anadir_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAñadir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_total, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addComponent(txtNombre6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(txt_NombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addComponent(txtNombre5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(fondo, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void combox_UnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combox_UnidadActionPerformed
@@ -267,145 +552,154 @@ public class cotizacion extends javax.swing.JPanel {
 
     private void btnAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirActionPerformed
         if (Tabla1.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this,
-                    "No hay productos en la cotización",
-                    "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No hay productos en la cotización", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // Aquí iría el código para generar el PDF
-        // Puedes usar librerías como iText o Apache PDFBox
-        JOptionPane.showMessageDialog(this,
-                "PDF generado exitosamente",
-                "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-        reiniciarCotizacion(); // Limpiar para nueva cotización
+        GeneradorCotizacionPDF generador = new GeneradorCotizacionPDF();
+        DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
+        String total = txt_total.getText().trim();
+        String cliente = txt_NombreCliente.getText().trim();
+        String archivoSalida = "cotizacion_" + cliente.replaceAll("[^a-zA-Z0-9_-]", "_") + "_" + new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date()) + ".pdf";
 
+        try {
+            generador.generarPDF(cliente, modelo, total, archivoSalida);
+            File pdfFile = new File(archivoSalida);
+            if (pdfFile.exists() && Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(pdfFile);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se puede abrir el PDF automáticamente. El archivo se encuentra en: " + archivoSalida, "Información", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al generar o abrir PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_btnAñadirActionPerformed
 
     private void jButton_anadir_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_anadir_productoActionPerformed
-        // Verificar si estamos en modo edición
-        Integer filaEditando = (Integer) Tabla1.getClientProperty("filaEditando");
+    // Verificar si estamos en modo edición
+    Integer filaEditando = (Integer) Tabla1.getClientProperty("filaEditando");
 
-        if (filaEditando != null) {
-            // Modo edición - guardar cambios
-            guardarEdicion(filaEditando);
-        } else {
-            // Modo normal - añadir nuevo producto
-            añadirNuevoProducto();
-        }
+    if (filaEditando != null) {
+        // Modo edición - guardar cambios
+        guardarEdicion(filaEditando);
+    } else {
+        // Modo normal - añadir nuevo producto
+        añadirNuevoProducto();
     }
+}
 
     private void añadirNuevoProducto() {
-        // Validación del cliente permanece igual...
-        if (!clienteIngresado) {
-            clienteActual = txt_NombreCliente.getText().trim();
-            if (clienteActual.isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                        "Por favor ingrese el nombre del cliente primero",
-                        "Advertencia", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            clienteIngresado = true;
-            txt_NombreCliente.setEnabled(false);
-        }
-
-        // Obtener datos permanece igual...
-        String producto = txtNombre6.getText().trim();
-        String unidad = combox_Unidad.getSelectedItem().toString();
-        String cantidadStr = txtNombre4.getText().trim();
-        String valorUnitarioStr = txtNombre5.getText().trim();
-
-        if (producto.isEmpty() || unidad.equals("Seleccione unidad")
-                || cantidadStr.isEmpty() || valorUnitarioStr.isEmpty()) {
+    // Validación del cliente permanece igual...
+    if (!clienteIngresado) {
+        clienteActual = txt_NombreCliente.getText().trim();
+        if (clienteActual.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Por favor complete todos los campos del producto",
+                    "Por favor ingrese el nombre del cliente primero",
                     "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        try {
-            int cantidad = Integer.parseInt(cantidadStr);
-            int valorUnitario = Integer.parseInt(valorUnitarioStr);
-            int subtotal = cantidad * valorUnitario;
-
-            DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
-
-            // Añadir fila con los nuevos índices (sin cliente)
-            modelo.addRow(new Object[]{
-                producto, // Índice 0
-                unidad, // Índice 1
-                cantidad, // Índice 2
-                String.format("$%d", valorUnitario), // Índice 3
-                String.format("$%d", subtotal), // Índice 4
-                "Editar", // Índice 5
-                "Eliminar" // Índice 6
-            });
-
-            limpiarCamposProducto();
-            calcularTotal();
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Por favor ingrese valores numéricos válidos en cantidad y valor unitario",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        clienteIngresado = true;
+        txt_NombreCliente.setEnabled(false);
     }
+
+    // Obtener datos permanece igual...
+    String producto = txtNombre6.getText().trim();
+    String unidad = combox_Unidad.getSelectedItem().toString();
+    String cantidadStr = txtNombre4.getText().trim();
+    String valorUnitarioStr = txtNombre5.getText().trim();
+
+    if (producto.isEmpty() || unidad.equals("Seleccione unidad")
+            || cantidadStr.isEmpty() || valorUnitarioStr.isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Por favor complete todos los campos del producto",
+                "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    try {
+        int cantidad = Integer.parseInt(cantidadStr);
+        int valorUnitario = Integer.parseInt(valorUnitarioStr);
+        int subtotal = cantidad * valorUnitario;
+
+        DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
+
+        // Añadir fila con los nuevos índices (sin cliente)
+        modelo.addRow(new Object[]{
+            producto, // Índice 0
+            unidad, // Índice 1
+            cantidad, // Índice 2
+            String.format("$%d", valorUnitario), // Índice 3
+            String.format("$%d", subtotal), // Índice 4
+            "Editar", // Índice 5
+            "Eliminar" // Índice 6
+        });
+
+        limpiarCamposProducto();
+        calcularTotal();
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "Por favor ingrese valores numéricos válidos en cantidad y valor unitario",
+                "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
 
     private void guardarEdicion(int fila) {
-        // Obtener datos de los campos de edición
-        String producto = txtNombre6.getText().trim();
-        String unidad = combox_Unidad.getSelectedItem().toString();
-        String cantidadStr = txtNombre4.getText().trim();
-        String valorUnitarioStr = txtNombre5.getText().trim();
+    // Obtener datos de los campos de edición
+    String producto = txtNombre6.getText().trim();
+    String unidad = combox_Unidad.getSelectedItem().toString();
+    String cantidadStr = txtNombre4.getText().trim();
+    String valorUnitarioStr = txtNombre5.getText().trim();
 
-        // Validación permanece igual...
-        if (producto.isEmpty() || unidad.equals("Seleccione unidad")
-                || cantidadStr.isEmpty() || valorUnitarioStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Por favor complete todos los campos del producto",
-                    "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        try {
-            int cantidad = Integer.parseInt(cantidadStr);
-            int valorUnitario = Integer.parseInt(valorUnitarioStr);
-            int subtotal = cantidad * valorUnitario;
-
-            DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
-
-            // Actualizar con los nuevos índices
-            modelo.setValueAt(producto, fila, 0);  // Producto
-            modelo.setValueAt(unidad, fila, 1);    // Unidad
-            modelo.setValueAt(cantidad, fila, 2);  // Cantidad
-            modelo.setValueAt(String.format("$%d", valorUnitario), fila, 3); // Valor Unitario
-            modelo.setValueAt(String.format("$%d", subtotal), fila, 4);      // Subtotal
-
-            // Resto del método permanece igual...
-            limpiarCamposProducto();
-            Tabla1.putClientProperty("filaEditando", null);
-            jButton_anadir_producto.setText("  Añadir");
-            calcularTotal();
-
-            JOptionPane.showMessageDialog(this,
-                    "Producto actualizado correctamente",
-                    "Edición exitosa",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Por favor ingrese valores numéricos válidos en cantidad y valor unitario",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
+    // Validación permanece igual...
+    if (producto.isEmpty() || unidad.equals("Seleccione unidad")
+            || cantidadStr.isEmpty() || valorUnitarioStr.isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Por favor complete todos los campos del producto",
+                "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
     }
 
+    try {
+        int cantidad = Integer.parseInt(cantidadStr);
+        int valorUnitario = Integer.parseInt(valorUnitarioStr);
+        int subtotal = cantidad * valorUnitario;
+
+        DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
+
+        // Actualizar con los nuevos índices
+        modelo.setValueAt(producto, fila, 0);  // Producto
+        modelo.setValueAt(unidad, fila, 1);    // Unidad
+        modelo.setValueAt(cantidad, fila, 2);  // Cantidad
+        modelo.setValueAt(String.format("$%d", valorUnitario), fila, 3); // Valor Unitario
+        modelo.setValueAt(String.format("$%d", subtotal), fila, 4);      // Subtotal
+
+        // Resto del método permanece igual...
+        limpiarCamposProducto();
+        Tabla1.putClientProperty("filaEditando", null);
+        jButton_anadir_producto.setText("  Añadir");
+        calcularTotal();
+
+        JOptionPane.showMessageDialog(this,
+                "Producto actualizado correctamente",
+                "Edición exitosa",
+                JOptionPane.INFORMATION_MESSAGE);
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "Por favor ingrese valores numéricos válidos en cantidad y valor unitario",
+                "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
     private void limpiarCamposProducto() {
-        txtNombre6.setText("");
-        combox_Unidad.setSelectedIndex(0);
-        txtNombre4.setText("");
-        txtNombre5.setText("");
-        txtNombre6.requestFocus();
+    txtNombre6.setText("");
+    combox_Unidad.setSelectedIndex(0);
+    txtNombre4.setText("");
+    txtNombre5.setText("");
+    txtNombre6.requestFocus();
 
 
     }//GEN-LAST:event_jButton_anadir_productoActionPerformed
@@ -415,73 +709,73 @@ public class cotizacion extends javax.swing.JPanel {
     }//GEN-LAST:event_txtNombre6ActionPerformed
 
     private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseClicked
-        if (evt.getClickCount() == 1) {
-            int columna = Tabla1.columnAtPoint(evt.getPoint());
-            int fila = Tabla1.rowAtPoint(evt.getPoint());
+    if (evt.getClickCount() == 1) {
+        int columna = Tabla1.columnAtPoint(evt.getPoint());
+        int fila = Tabla1.rowAtPoint(evt.getPoint());
 
-            if (fila >= 0) {
-                if (columna == 6) { // Columna Eliminar (ahora índice 6)
-                    eliminarFila(fila);
-                } else if (columna == 5) { // Columna Editar (ahora índice 5)
-                    editarFila(fila);
-                }
+        if (fila >= 0) {
+            if (columna == 6) { // Columna Eliminar (ahora índice 6)
+                eliminarFila(fila);
+            } else if (columna == 5) { // Columna Editar (ahora índice 5)
+                editarFila(fila);
             }
         }
     }
+}
 
     private void eliminarFila(int fila) {
-        // Obtener datos del producto a eliminar para mostrar en el mensaje
-        String producto = Tabla1.getValueAt(fila, 0).toString(); // Producto ahora en índice 0
-        String cantidad = Tabla1.getValueAt(fila, 2).toString(); // Cantidad ahora en índice 2
+    // Obtener datos del producto a eliminar para mostrar en el mensaje
+    String producto = Tabla1.getValueAt(fila, 0).toString(); // Producto ahora en índice 0
+    String cantidad = Tabla1.getValueAt(fila, 2).toString(); // Cantidad ahora en índice 2
 
-        // Resto del método permanece igual...
-        int confirmacion = JOptionPane.showConfirmDialog(
+    // Resto del método permanece igual...
+    int confirmacion = JOptionPane.showConfirmDialog(
+            this,
+            "<html>¿Está seguro que desea eliminar el producto:<br><br>"
+            + "<b>Producto:</b> " + producto + "<br>"
+            + "<b>Cantidad:</b> " + cantidad + "<br><br>"
+            + "Esta acción no se puede deshacer.</html>",
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+    );
+
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
+        modelo.removeRow(fila);
+        calcularTotal();
+
+        JOptionPane.showMessageDialog(
                 this,
-                "<html>¿Está seguro que desea eliminar el producto:<br><br>"
-                + "<b>Producto:</b> " + producto + "<br>"
-                + "<b>Cantidad:</b> " + cantidad + "<br><br>"
-                + "Esta acción no se puede deshacer.</html>",
-                "Confirmar eliminación",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE
+                "Producto eliminado correctamente",
+                "Eliminación exitosa",
+                JOptionPane.INFORMATION_MESSAGE
         );
+    }
+}
 
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
-            modelo.removeRow(fila);
-            calcularTotal();
+    private void editarFila(int fila) {
+    // Obtener los valores de la fila seleccionada con los nuevos índices
+    String producto = Tabla1.getValueAt(fila, 0).toString(); // Índice 0 para Producto
+    String unidad = Tabla1.getValueAt(fila, 1).toString();   // Índice 1 para Unidad
+    String cantidad = Tabla1.getValueAt(fila, 2).toString(); // Índice 2 para Cantidad
+    String valorUnitario = Tabla1.getValueAt(fila, 3).toString().replace("$", "").replace(",", ""); // Índice 3 para Valor Unitario
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Producto eliminado correctamente",
-                    "Eliminación exitosa",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+    // Resto del método permanece igual...
+    txtNombre6.setText(producto);
+
+    for (int i = 0; i < combox_Unidad.getItemCount(); i++) {
+        if (combox_Unidad.getItemAt(i).equals(unidad)) {
+            combox_Unidad.setSelectedIndex(i);
+            break;
         }
     }
 
-    private void editarFila(int fila) {
-        // Obtener los valores de la fila seleccionada con los nuevos índices
-        String producto = Tabla1.getValueAt(fila, 0).toString(); // Índice 0 para Producto
-        String unidad = Tabla1.getValueAt(fila, 1).toString();   // Índice 1 para Unidad
-        String cantidad = Tabla1.getValueAt(fila, 2).toString(); // Índice 2 para Cantidad
-        String valorUnitario = Tabla1.getValueAt(fila, 3).toString().replace("$", "").replace(",", ""); // Índice 3 para Valor Unitario
+    txtNombre4.setText(cantidad);
+    txtNombre5.setText(valorUnitario);
 
-        // Resto del método permanece igual...
-        txtNombre6.setText(producto);
-
-        for (int i = 0; i < combox_Unidad.getItemCount(); i++) {
-            if (combox_Unidad.getItemAt(i).equals(unidad)) {
-                combox_Unidad.setSelectedIndex(i);
-                break;
-            }
-        }
-
-        txtNombre4.setText(cantidad);
-        txtNombre5.setText(valorUnitario);
-
-        Tabla1.putClientProperty("filaEditando", fila);
-        jButton_anadir_producto.setText("  Guardar");
+    Tabla1.putClientProperty("filaEditando", fila);
+    jButton_anadir_producto.setText("  Guardar");
     }//GEN-LAST:event_Tabla1MouseClicked
 
     private void txt_NombreClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_NombreClienteActionPerformed

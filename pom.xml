@@ -27,10 +27,10 @@
             <type>jar</type>
         </dependency>
         <dependency>
-    <groupId>org.springframework.security</groupId>
-    <artifactId>spring-security-core</artifactId>
-    <version>5.8.4</version> <!-- o la versión más reciente -->
-</dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>5.8.4</version> <!-- o la versión más reciente -->
+        </dependency>
 
         <dependency>
             <groupId>mysql-connector-j-9.2.0</groupId>
@@ -154,10 +154,15 @@
             <scope>test</scope>
             <version>4.11</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.27</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>23</maven.compiler.release>
+        <maven.compiler.release>24</maven.compiler.release>
         <exec.mainClass>com.mycompany.joseabelsistema.JoseabelSistema</exec.mainClass>
     </properties>
     <name>joseabelsistema</name>

@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -30,7 +31,7 @@ public class VistaClientes extends javax.swing.JPanel {
     private int id_cliente;
     private Ctrl_Cliente controlador;
 
-    public VistaClientes() {
+    public VistaClientes(JFrame jFrame, boolean par) {
         controlador = new Ctrl_Cliente();
         initComponents();
         aplicarTema(); // Apply initial theme
