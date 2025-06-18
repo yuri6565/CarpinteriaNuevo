@@ -41,27 +41,26 @@ public class Login1121 extends javax.swing.JFrame {
      * Creates new form Login1
      */
     public Login1121() {
-           initComponents();
-    setExtendedState(JFrame.MAXIMIZED_BOTH); 
-setLocationRelativeTo(null); 
-txt_usuario.addKeyListener(new java.awt.event.KeyAdapter() {
-    @Override
-    public void keyPressed(java.awt.event.KeyEvent evt) {
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-            passtxt.requestFocus();
-        }
-    }
-});
+        initComponents();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setLocationRelativeTo(null);
+        txt_usuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    passtxt.requestFocus();
+                }
+            }
+        });
 
-
-passtxt.addKeyListener(new java.awt.event.KeyAdapter() {
-    @Override
-    public void keyPressed(java.awt.event.KeyEvent evt) {
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-            iniciar.doClick(); 
-        }
-    }
-});
+        passtxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    iniciar.doClick();
+                }
+            }
+        });
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -84,13 +83,12 @@ passtxt.addKeyListener(new java.awt.event.KeyAdapter() {
             btnVer.setIcon(eyeClosedIcon);
 
         } else {
-            passtxt.setEchoChar((char) 0); 
-            btnVer.setIcon(eyeOpenIcon); 
+            passtxt.setEchoChar((char) 0);
+            btnVer.setIcon(eyeOpenIcon);
         }
         isPasswordVisible = !isPasswordVisible;
     }
 
-   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -231,12 +229,12 @@ passtxt.addKeyListener(new java.awt.event.KeyAdapter() {
     }//GEN-LAST:event_txt_usuarioActionPerformed
 
     private void iniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarActionPerformed
-      autenticarUsuario();
+        autenticarUsuario();
     }//GEN-LAST:event_iniciarActionPerformed
 
     private void jLabel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MousePressed
-        
-         cargando11 cargando = new cargando11(new JFrame(), true);
+
+        cargando11 cargando = new cargando11(new JFrame(), true);
 
         new Thread(() -> {
             cargando.setVisible(true);
@@ -249,15 +247,12 @@ passtxt.addKeyListener(new java.awt.event.KeyAdapter() {
 
         timer.setRepeats(false);
         timer.start();
-         this.dispose();
+        this.dispose();
         Correo_electronico dialog = new Correo_electronico();
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-     
 
 
-
-       
     }//GEN-LAST:event_jLabel2MousePressed
 
     /**
@@ -286,7 +281,8 @@ passtxt.addKeyListener(new java.awt.event.KeyAdapter() {
             java.util.logging.Logger.getLogger(Login1121.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-       
+        //</editor-fold>
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -311,80 +307,77 @@ passtxt.addKeyListener(new java.awt.event.KeyAdapter() {
     private RSMaterialComponent.RSTextFieldIconOne txt_usuario;
     // End of variables declaration//GEN-END:variables
 
-   
+    private void autenticarUsuario() {
+        String nombreUsuario = txt_usuario.getText().trim();
+        String contrasena = new String(passtxt.getPassword()).trim();
 
+        if (nombreUsuario.isEmpty() && contrasena.isEmpty()) {
+            LoginAlerta confirmDialog = new LoginAlerta(
+                    (Frame) this.getParent(),
+                    true,
+                    "Confirmar",
+                    "¿Desea guardar los datos?"
+            );
+            confirmDialog.setVisible(true);
+            return;
+        } else if (nombreUsuario.isEmpty()) {
+            LoginAlertaUsuario confirmDialog = new LoginAlertaUsuario(
+                    (Frame) this.getParent(),
+                    true,
+                    "Confirmar",
+                    "¿Desea guardar los datos?"
+            );
+            confirmDialog.setVisible(true);
+            return;
+        } else if (contrasena.isEmpty()) {
+            LoginAlertaContrasena confirmDialog = new LoginAlertaContrasena(
+                    (Frame) this.getParent(),
+                    true,
+                    "Confirmar",
+                    "¿Desea guardar los datos?"
+            );
+            confirmDialog.setVisible(true);
+            return;
+        }
 
-private void autenticarUsuario() {
-    String nombreUsuario = txt_usuario.getText().trim();
-    String contrasena = new String(passtxt.getPassword()).trim();
+        Contrl_login controlUsuario = new Contrl_login();
+        modelo.UsuarioModelo usuario = new modelo.UsuarioModelo();
+        usuario.setUsuario(nombreUsuario);
+        usuario.setContrasena(contrasena);
 
-    if (nombreUsuario.isEmpty() && contrasena.isEmpty()) {
-        LoginAlerta confirmDialog = new LoginAlerta(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
-        confirmDialog.setVisible(true);
-        return;
-    } else if (nombreUsuario.isEmpty()) {
-        LoginAlertaUsuario confirmDialog = new LoginAlertaUsuario(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
-        confirmDialog.setVisible(true);
-        return;
-    } else if (contrasena.isEmpty()) {
-        LoginAlertaContrasena confirmDialog = new LoginAlertaContrasena(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
-        confirmDialog.setVisible(true);
-        return;
+        UsuarioModelo usuarioAutenticado = controlUsuario.loginUser(usuario);
+
+        if (usuarioAutenticado != null) {
+            JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso", "Bienvenido", JOptionPane.INFORMATION_MESSAGE);
+
+            kla cargando = new kla(new JFrame(), true);
+            new Thread(() -> cargando.setVisible(true)).start();
+
+            int idUsuario = usuarioAutenticado.getId_usuario();
+            String rol = usuarioAutenticado.getRol(); // Obtener el rol
+
+            javax.swing.Timer timer = new javax.swing.Timer(2000, e -> {
+                cargando.dispose();
+                this.dispose();
+                if ("trabajador".equalsIgnoreCase(rol)) { // Verificar si es trabajador
+                    PrincipalTrap principalTrab = new PrincipalTrap(idUsuario);
+                    principalTrab.setVisible(true);
+                } else {
+                    Principal principal = new Principal(idUsuario);
+                    principal.setVisible(true);
+                }
+            });
+
+            timer.setRepeats(false);
+            timer.start();
+        } else {
+            LoginAlertaContrasenaIncorrecta confirmDialog = new LoginAlertaContrasenaIncorrecta(
+                    (Frame) this.getParent(),
+                    true,
+                    "Confirmar",
+                    "¿Desea guardar los datos?"
+            );
+            confirmDialog.setVisible(true);
+        }
     }
-
-    Contrl_login controlUsuario = new Contrl_login();
-    modelo.UsuarioModelo usuario = new modelo.UsuarioModelo();
-    usuario.setUsuario(nombreUsuario);
-    usuario.setContrasena(contrasena);
-
-
-    UsuarioModelo usuarioAutenticado = controlUsuario.loginUser(usuario);
-
-    if (usuarioAutenticado != null) {
-        JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso", "Bienvenido", JOptionPane.INFORMATION_MESSAGE);
-    
-     
-        kla cargando = new kla(new JFrame(), true);
-        new Thread(() -> cargando.setVisible(true)).start();
-
-
-        int idUsuario = usuarioAutenticado.getId_usuario();
-
-        javax.swing.Timer timer = new javax.swing.Timer(2000, e -> {
-            cargando.dispose();
-            // Pasar el idUsuario a Principal1
-              this.dispose();
-              cargando.dispose();
-            Principal principal = new Principal(idUsuario);
-            principal.setVisible(true);
-          
-        });
-
-        timer.setRepeats(false);
-        timer.start();
-    } else {
-        LoginAlertaContrasenaIncorrecta confirmDialog = new LoginAlertaContrasenaIncorrecta(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
-        confirmDialog.setVisible(true);
-    }
-}
 }
