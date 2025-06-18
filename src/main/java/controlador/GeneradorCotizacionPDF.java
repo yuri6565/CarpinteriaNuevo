@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -27,9 +28,14 @@ public class GeneradorCotizacionPDF {
 
                 // Agregar imagen fija en la parte superior derecha
                 try {
-                    // Ruta de la imagen (reemplaza con la ruta de tu imagen)
-                    String imagePath = "C:\\Users\\Brashan\\Documents\\NetBeansProjects\\joseabelSistema\\src\\main\\resources\\logo azul.png"; // Cambia esto por la ruta real
-                    PDImageXObject pdImage = PDImageXObject.createFromFile(imagePath, document);
+                    // Obtener la ruta relativa desde los recursos
+                    URL imageUrl = getClass().getResource("/logo_azul.png");
+                    if (imageUrl == null) {
+                        throw new IOException("No se encontró la imagen 'logo_azul.png' en los recursos.");
+                    }
+
+                    // Crear PDImageXObject desde el archivo en los recursos
+                    PDImageXObject pdImage = PDImageXObject.createFromFile(imageUrl.getPath(), document);
                     // Escalar la imagen a 100x100 puntos (ajusta según necesites)
                     float imageWidth = 100;
                     float imageHeight = 100;
@@ -41,6 +47,8 @@ public class GeneradorCotizacionPDF {
                 } catch (IOException e) {
                     System.out.println("Error al cargar la imagen: " + e.getMessage());
                     e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al cargar la imagen: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    return; // Salir del método si falla la carga de la imagen
                 }
 
                 // Título "Cotización"

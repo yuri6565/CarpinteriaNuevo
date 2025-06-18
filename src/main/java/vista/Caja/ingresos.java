@@ -5,10 +5,14 @@
 package vista.Caja;
 
 import controlador.Ctrl_CajaIngresos;
+import controlador.Ctrl_Pedido;
+import controlador.GeneradorIngresosPDF;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
@@ -19,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 import modelo.Caja;
+import modelo.PedidoDetalle;
 
 /**
  *
@@ -27,6 +32,8 @@ import modelo.Caja;
 public final class ingresos extends javax.swing.JPanel {
 
     private Ctrl_CajaIngresos controlador;
+    private GeneradorIngresosPDF generadorPDF;
+    private Ctrl_Pedido ctrlPedido;
 
     /**
      * Creates new form Ingresos
@@ -36,6 +43,8 @@ public final class ingresos extends javax.swing.JPanel {
 
         // Inicializar el controlador
         controlador = new Ctrl_CajaIngresos();
+        generadorPDF = new GeneradorIngresosPDF();
+        ctrlPedido = new Ctrl_Pedido();
 
         // Configurar la columna "Detalle"
         TableColumn detailColumn = Tabla1.getColumnModel().getColumn(6);
@@ -53,6 +62,11 @@ public final class ingresos extends javax.swing.JPanel {
         model.setRowCount(0); // Limpiar la tabla
 
         List<Ctrl_CajaIngresos.IngresoConDetalles> ingresos = controlador.obtenerIngresos();
+        if (ingresos == null || ingresos.isEmpty()) {
+            System.out.println("No se encontraron ingresos para cargar en la tabla.");
+            return;
+        }
+
         for (Ctrl_CajaIngresos.IngresoConDetalles ingreso : ingresos) {
             model.addRow(new Object[]{
                 ingreso.getIngreso().getIdAbono(),
@@ -62,7 +76,7 @@ public final class ingresos extends javax.swing.JPanel {
                 ingreso.getIngreso().getPagado(),
                 ingreso.getIngreso().getDebido(),
                 "Ver", // Columna Detalle
-                "" // Columna Acciones (puedes implementar botones aquí si lo deseas)
+                "Imprimir" // Columna Acciones (puedes implementar botones aquí si lo deseas)
             });
         }
     }
@@ -170,7 +184,7 @@ public final class ingresos extends javax.swing.JPanel {
                 java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, true, true
+                true, true, true, true, true, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -225,6 +239,7 @@ public final class ingresos extends javax.swing.JPanel {
 
     private void txtbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarActionPerformed
         // TODO add your handling code here:
+        filtrarTabla();
     }//GEN-LAST:event_txtbuscarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
@@ -238,16 +253,115 @@ public final class ingresos extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEliminar1ActionPerformed
 
     private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseClicked
+
         int column = Tabla1.columnAtPoint(evt.getPoint());
         int row = Tabla1.rowAtPoint(evt.getPoint());
 
-        if (column == 6) { // Columna "Detalle"
-            int idAbono = (int) Tabla1.getValueAt(row, 0);
-            Ctrl_CajaIngresos.IngresoConDetalles ingreso = controlador.obtenerIngresoPorId(idAbono);
-            if (ingreso != null) {
+        if (row >= 0) {
+            if (column == 6) { // Columna "Detalle" (Ver)
+                int idAbono = (int) Tabla1.getValueAt(row, 0);
+                Ctrl_CajaIngresos.IngresoConDetalles ingreso = controlador.obtenerIngresoPorId(idAbono);
+                if (ingreso != null) {
+                    System.out.println("Ver detalles de la fila " + row + " (ID: " + idAbono + ")");
+                    // Aquí puedes agregar la lógica para mostrar detalles
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se encontraron detalles para este ingreso.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else if (column == 7) { // Columna "Acciones" (Imprimir)
+                // Obtener el idAbono de la fila seleccionada
+                Object idAbonoObj = Tabla1.getValueAt(row, 0);
+                if (idAbonoObj == null) {
+                    JOptionPane.showMessageDialog(this, "ID de abono no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                int idAbono = (int) idAbonoObj;
 
-            } else {
-                JOptionPane.showMessageDialog(this, "No se encontraron detalles para este ingreso.", "Error", JOptionPane.ERROR_MESSAGE);
+                // Obtener datos de Caja
+                Ctrl_CajaIngresos.IngresoConDetalles ingresoCaja = controlador.obtenerIngresoPorId(idAbono);
+                if (ingresoCaja == null) {
+                    JOptionPane.showMessageDialog(this, "No se encontraron datos de ingreso para el ID: " + idAbono, "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Verificar y asignar valores con manejo de tipos
+                Double montoTotalObj = ingresoCaja.getMontoTotalDetalle();
+                double montoTotal = (montoTotalObj != null) ? montoTotalObj.doubleValue() : 0.0;
+
+                Double pagadoObj = ingresoCaja.getIngreso() != null ? ingresoCaja.getIngreso().getPagado() : null;
+                double pagado = (pagadoObj != null) ? pagadoObj.doubleValue() : 0.0;
+
+                Double debidoObj = ingresoCaja.getIngreso() != null ? ingresoCaja.getIngreso().getDebido() : null;
+                double debido = (debidoObj != null) ? debidoObj.doubleValue() : 0.0;
+
+                // Obtener el id_pedido desde Ingreso (ajusta según la estructura real)
+                int idPedido = ingresoCaja.getIngreso() != null ? ingresoCaja.getIngreso().getIdPedido(): idAbono; // Ajusta getPedidoIdPedido()
+                if (idPedido == 0 && idAbono != idPedido) {
+                    JOptionPane.showMessageDialog(this, "No se pudo determinar el ID del pedido para el ID de abono: " + idAbono, "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Obtener datos del pedido
+                Ctrl_Pedido.MaterialConDetalles material = ctrlPedido.obtenerPedidoPorId(idPedido);
+                if (material == null) {
+                    JOptionPane.showMessageDialog(this, "No se encontró el pedido para el ID: " + idPedido, "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                String nombreCliente = material.getNombreCliente();
+                String nombrePedido = material.getPedido().getNombre();
+                String estadoPedido = material.getPedido().getEstado();
+                Date fechaInicio = material.getPedido().getFecha_inicio();
+                Date fechaFin = material.getPedido().getFecha_fin();
+
+                // Obtener detalles del pedido
+                List<PedidoDetalle> detalles = ctrlPedido.obtenerDetallesPorPedido(idPedido);
+                if (detalles == null || detalles.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No se encontraron detalles para el pedido ID: " + idPedido, "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Crear modelo de tabla con detalles
+                DefaultTableModel pdfModel = new DefaultTableModel(
+                        new Object[detalles.size() + 1][], // +1 para incluir el resumen
+                        new String[]{"Pedido", "Descripción", "Cantidad", "Dimensiones", "Precio Unitario", "Subtotal", "Total", "Monto Total", "Pagado", "Debido"}
+                );
+
+                // Llenar con detalles del pedido
+                for (int i = 0; i < detalles.size(); i++) {
+                    PedidoDetalle detalle = detalles.get(i);
+                    pdfModel.setValueAt(nombrePedido, i, 0);
+                    pdfModel.setValueAt(detalle.getDescripcion(), i, 1);
+                    pdfModel.setValueAt(detalle.getCantidad(), i, 2);
+                    pdfModel.setValueAt(detalle.getDimensiones(), i, 3);
+                    pdfModel.setValueAt(detalle.getPrecioUnitario(), i, 4);
+                    pdfModel.setValueAt(detalle.getSubtotal(), i, 5);
+                    pdfModel.setValueAt(detalle.getTotal(), i, 6);
+                }
+
+                // Agregar fila de resumen
+                int lastRow = detalles.size();
+                pdfModel.setValueAt(nombrePedido, lastRow, 0);
+                pdfModel.setValueAt("Resumen", lastRow, 1);
+                pdfModel.setValueAt("", lastRow, 2);
+                pdfModel.setValueAt("", lastRow, 3);
+                pdfModel.setValueAt("", lastRow, 4);
+                pdfModel.setValueAt("", lastRow, 5);
+                pdfModel.setValueAt("", lastRow, 6);
+                pdfModel.setValueAt(montoTotal, lastRow, 7);
+                pdfModel.setValueAt(pagado, lastRow, 8);
+                pdfModel.setValueAt(debido, lastRow, 9);
+
+                // Calcular el total (usando Monto Total como ejemplo)
+                String total = String.format("$%.2f", montoTotal);
+
+                // Generar el PDF con datos adicionales
+                String archivoSalida = "ingreso_" + idAbono + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".pdf";
+                generadorPDF.generarPDF(
+                        nombreCliente,
+                        pdfModel,
+                        total,
+                        archivoSalida,
+                        fechaInicio != null ? new SimpleDateFormat("dd/MM/yyyy").format(fechaInicio) : "Sin fecha"
+                );
             }
         }
     }//GEN-LAST:event_Tabla1MouseClicked
