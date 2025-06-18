@@ -440,10 +440,11 @@ public class Escritorio1 extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(1290, 730));
-        setPreferredSize(new java.awt.Dimension(890, 690));
+        setPreferredSize(new java.awt.Dimension(1306, 640));
 
         jPanel4.setBackground(new java.awt.Color(243, 247, 255));
-        jPanel4.setPreferredSize(new java.awt.Dimension(1290, 730));
+        jPanel4.setPreferredSize(new java.awt.Dimension(1306, 640));
+        jPanel4.setRequestFocusEnabled(false);
 
         rSComboBoxMaterial1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Notificaciones", " " }));
         rSComboBoxMaterial1.setFont(new java.awt.Font("Roboto Bold", 0, 18)); // NOI18N
@@ -644,7 +645,7 @@ public class Escritorio1 extends javax.swing.JPanel {
         Tabla1.setForegroundHead(new java.awt.Color(0, 0, 0));
         Tabla1.setGridColor(new java.awt.Color(255, 255, 255));
         Tabla1.setHighHead(50);
-        Tabla1.setPreferredSize(new java.awt.Dimension(300, 364));
+        Tabla1.setPreferredSize(new java.awt.Dimension(300, 357));
         Tabla1.setRowHeight(35);
         Tabla1.setSelectionBackground(new java.awt.Color(109, 160, 221));
         jScrollPane1.setViewportView(Tabla1);
@@ -718,7 +719,8 @@ public class Escritorio1 extends javax.swing.JPanel {
                         .addGap(60, 60, 60)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(281, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -776,7 +778,8 @@ public class Escritorio1 extends javax.swing.JPanel {
                         .addGap(20, 20, 20)
                         .addComponent(jLabel9)
                         .addGap(5, 5, 5)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(170, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
