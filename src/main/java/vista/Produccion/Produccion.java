@@ -428,6 +428,7 @@ public final class Produccion extends javax.swing.JPanel {
         Tabla1.setFontHead(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Tabla1.setFontRowHover(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         Tabla1.setFontRowSelect(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Tabla1.setPreferredSize(new java.awt.Dimension(450, 499));
         Tabla1.setRowHeight(23);
         Tabla1.setSelectionBackground(new java.awt.Color(109, 160, 221));
         Tabla1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -453,7 +454,7 @@ public final class Produccion extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 1211, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -464,8 +465,8 @@ public final class Produccion extends javax.swing.JPanel {
                     .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnElimi, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(97, 97, 97))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -476,7 +477,7 @@ public final class Produccion extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 646, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 

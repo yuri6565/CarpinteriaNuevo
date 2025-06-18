@@ -525,53 +525,95 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
     }
 
     private void guardarMaterialesHerramientas(Connection con, int idEtapa,
-            Map<String, String> cantidades, String tipo)
-            throws SQLException, ParseException {
-        String sqlInsert = "INSERT INTO utilizado (etapa_produccion_idetapa_produccion, inventario_id_inventario, cantidad_usada) VALUES (?, ?, ?)";
-        String sqlUpdate = "UPDATE inventario SET cantidad = cantidad - ? WHERE id_inventario = ?";
-        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES")); // Ajusta el Locale según tu región
-        numberFormat.setMinimumFractionDigits(2); // Asegurar 2 decimales
-        numberFormat.setMaximumFractionDigits(2);
-        for (Map.Entry<String, String> entry : cantidades.entrySet()) {
-            String nombre = entry.getKey();
-            String valor = entry.getValue();
+        Map<String, String> cantidades, String tipo)
+        throws SQLException, ParseException {
+    String sqlInsert = "INSERT INTO utilizado (etapa_produccion_idetapa_produccion, inventario_id_inventario, cantidad_usada) VALUES (?, ?, ?)";
+    String sqlUpdate = "UPDATE inventario SET cantidad = ? WHERE id_inventario = ?";
+    NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
+    numberFormat.setMinimumFractionDigits(2);
+    numberFormat.setMaximumFractionDigits(2);
 
-            // Saltar si no hay cantidad (null, vacío o "0")
-            if (valor == null || valor.trim().isEmpty() || valor.trim().equals("0") || valor.trim().equals("0.0") || valor.trim().equals("0.00")) {
-                continue;
+    for (Map.Entry<String, String> entry : cantidades.entrySet()) {
+        String nombre = entry.getKey();
+        String valor = entry.getValue();
+
+        // Saltar si no hay cantidad
+        if (valor == null || valor.trim().isEmpty() || valor.trim().equals("0") || valor.trim().equals("0,0") || valor.trim().equals("0,00")) {
+            continue;
+        }
+
+        int idInventario = obtenerIdInventario(con, nombre, tipo);
+        double cantidad;
+
+        try {
+            // Normalizar valor (reemplazar puntos por nada, coma por punto)
+            String normalizedValor = valor.replace(".", "").replace(",", ".");
+            cantidad = Double.parseDouble(normalizedValor);
+            if (cantidad < 0) {
+                throw new NumberFormatException("La cantidad no puede ser negativa");
             }
+        } catch (NumberFormatException e) {
+            throw new SQLException("Valor inválido para cantidad: " + valor + " en " + nombre, e);
+        }
 
-            int idInventario = obtenerIdInventario(con, nombre, tipo);
-            double cantidad;
-
-            try {
-                // Parsear el valor como double
-                Number parsedNumber = numberFormat.parse(valor.trim());
-                cantidad = parsedNumber.doubleValue();
-                // Validar que la cantidad no sea negativa
-                if (cantidad < 0) {
-                    throw new NumberFormatException("La cantidad no puede ser negativa");
+        // Obtener cantidad actual del inventario
+        String sqlSelect = "SELECT cantidad FROM inventario WHERE id_inventario = ?";
+        String cantidadActualStr;
+        try (PreparedStatement ps = con.prepareStatement(sqlSelect)) {
+            ps.setInt(1, idInventario);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    cantidadActualStr = rs.getString("cantidad").trim();
+                } else {
+                    throw new SQLException("No se encontró inventario para id: " + idInventario);
                 }
-            } catch (NumberFormatException e) {
-                throw new SQLException("Valor inválido para cantidad: " + valor + " en " + nombre, e);
-            }
-
-            // Insertar en tabla utilizado
-            try (PreparedStatement ps = con.prepareStatement(sqlInsert)) {
-                ps.setInt(1, idEtapa);
-                ps.setInt(2, idInventario);
-                ps.setDouble(3, cantidad); // Usar setDouble para decimales
-                ps.executeUpdate();
-            }
-
-            // Actualizar inventario
-            try (PreparedStatement ps = con.prepareStatement(sqlUpdate)) {
-                ps.setDouble(1, cantidad); // Usar setDouble para decimales
-                ps.setInt(2, idInventario);
-                ps.executeUpdate();
             }
         }
+
+        // Parsear cantidad actual
+        double cantidadActual = parseCantidad(cantidadActualStr);
+        double nuevaCantidad = cantidadActual - cantidad;
+
+        // Validar que no se consuma más de lo disponible
+        if (nuevaCantidad < 0) {
+            throw new SQLException("Cantidad insuficiente para " + nombre + ": disponible=" + cantidadActual + ", solicitada=" + cantidad);
+        }
+
+        // Formatear nueva cantidad como '12,50'
+        String nuevaCantidadStr = numberFormat.format(nuevaCantidad);
+
+        // Insertar en tabla utilizado
+        try (PreparedStatement ps = con.prepareStatement(sqlInsert)) {
+            ps.setInt(1, idEtapa);
+            ps.setInt(2, idInventario);
+            ps.setDouble(3, cantidad);
+            ps.executeUpdate();
+        }
+
+        // Actualizar inventario
+        try (PreparedStatement ps = con.prepareStatement(sqlUpdate)) {
+            ps.setString(1, nuevaCantidadStr);
+            ps.setInt(2, idInventario);
+            ps.executeUpdate();
+        }
     }
+}
+
+// Reutilizar parseCantidad de FormularioMH
+private double parseCantidad(String cantidadStr) {
+    try {
+        String normalized = cantidadStr.replace(".", "").replace(",", ".");
+        double cantidad = Double.parseDouble(normalized);
+        if (cantidad < 0) {
+            System.err.println("Cantidad negativa detectada: " + cantidadStr + " -> " + cantidad);
+            return 0.0;
+        }
+        return cantidad;
+    } catch (NumberFormatException e) {
+        System.err.println("Error al parsear cantidad: '" + cantidadStr + "' - " + e.getMessage());
+        return 0.0;
+    }
+}
 
     private int obtenerIdInventario(Connection con, String nombre, String tipo) throws SQLException {
         if (nombre == null || nombre.trim().isEmpty()) {

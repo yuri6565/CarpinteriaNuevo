@@ -505,6 +505,7 @@ private Map<String, String> obtenerCantidadesHerramientas(int idEtapa) {
         Tabla1.setFontHead(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Tabla1.setFontRowHover(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         Tabla1.setFontRowSelect(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Tabla1.setPreferredSize(new java.awt.Dimension(600, 223));
         Tabla1.setRowHeight(23);
         Tabla1.setSelectionBackground(new java.awt.Color(109, 160, 221));
         Tabla1.addMouseListener(new java.awt.event.MouseAdapter() {
