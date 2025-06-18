@@ -46,10 +46,8 @@ public class formuProduccion extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         btnGuardar = new rojeru_san.RSButtonRiple();
-        jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         btnCancelar = new rojeru_san.RSButtonRiple();
-        Boxestado = new RSMaterialComponent.RSComboBoxMaterial();
         txtinicio = new com.toedter.calendar.JDateChooser();
         txtfinal = new com.toedter.calendar.JDateChooser();
         txtcantidad = new RSMaterialComponent.RSTextFieldMaterial();
@@ -91,10 +89,6 @@ public class formuProduccion extends javax.swing.JDialog {
         });
         jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 330, 140, -1));
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel9.setText("Estado:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 230, -1, -1));
-
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel10.setText("fecha inicial:");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, -1, -1));
@@ -110,16 +104,6 @@ public class formuProduccion extends javax.swing.JDialog {
             }
         });
         jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 330, 140, -1));
-
-        Boxestado.setForeground(new java.awt.Color(102, 102, 102));
-        Boxestado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", "pendiente", "proceso", "finalizado" }));
-        Boxestado.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
-        Boxestado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BoxestadoActionPerformed(evt);
-            }
-        });
-        jPanel1.add(Boxestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 260, -1, -1));
 
         txtinicio.setBackground(new java.awt.Color(255, 255, 255));
         txtinicio.setForeground(new java.awt.Color(255, 255, 255));
@@ -199,59 +183,59 @@ public class formuProduccion extends javax.swing.JDialog {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // Validar campos
         if (txtinicio.getDate() == null || txtfinal.getDate() == null
-                || Boxestado.getSelectedIndex() == 0
                 || Boxnombrepedi.getSelectedIndex() == 0) {
 
             new espacio_alerta((Frame) this.getParent(), true, "Error",
                     "Todos los campos son obligatorios").setVisible(true);
             return;
+
         }
 
         // Obtener fechas
         Date fechaInicio = new Date(txtinicio.getDate().getTime());
         Date fechaFinProduccion = new Date(txtfinal.getDate().getTime());
-        String estado = Boxestado.getSelectedItem().toString();
 
         // Validar que fecha final no sea anterior a la inicial
         if (fechaFinProduccion.before(fechaInicio)) {
             new Error_fecha((Frame) this.getParent(), true, "Error",
                     "La fecha final no puede ser anterior a la inicial").setVisible(true);
             return;
+
         }
 
         // Obtener la fecha límite del pedido desde la base de datos
-        try (Connection con = new Conexion().getConnection(); 
-         PreparedStatement ps = con.prepareStatement(
-            "SELECT p.fecha_fin FROM pedido p " +
-            "JOIN detalle_pedido dp ON p.id_pedido = dp.pedido_id_pedido " +
-            "WHERE dp.iddetalle_pedido = ?")) {
-        
-        ps.setInt(1, this.idDetallePedido);
-        ResultSet rs = ps.executeQuery();
-        
-        if (rs.next()) {
-            Date fechaFinPedido = rs.getDate("fecha_fin");
-            
-            if (fechaFinProduccion.after(fechaFinPedido)) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String fechaPedidoStr = sdf.format(fechaFinPedido);
-                String fechaProduccionStr = sdf.format(fechaFinProduccion);
-                
-                // Crear el mensaje personalizado
-                String mensajeError = "La fecha final de producción (" + fechaProduccionStr + ") " +
-                                     "sobrepasa la fecha límite del pedido";
-                
-                // Mostrar la alerta personalizada
-                new AlertaFechaPedido(
-                    (Frame) this.getParent(), 
-                    true, 
-                    mensajeError,
-                    fechaPedidoStr
-                ).setVisible(true);
-                return;
+        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(
+                "SELECT p.fecha_fin FROM pedido p "
+                + "JOIN detalle_pedido dp ON p.id_pedido = dp.pedido_id_pedido "
+                + "WHERE dp.iddetalle_pedido = ?")) {
+
+            ps.setInt(1, this.idDetallePedido);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Date fechaFinPedido = rs.getDate("fecha_fin");
+
+                if (fechaFinProduccion.after(fechaFinPedido)) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String fechaPedidoStr = sdf.format(fechaFinPedido);
+                    String fechaProduccionStr = sdf.format(fechaFinProduccion);
+
+                    // Crear el mensaje personalizado
+                    String mensajeError = "La fecha final de producción (" + fechaProduccionStr + ") "
+                            + "sobrepasa la fecha límite del pedido";
+
+                    // Mostrar la alerta personalizada
+                    new AlertaFechaPedido(
+                            (Frame) this.getParent(),
+                            true,
+                            mensajeError,
+                            fechaPedidoStr
+                    ).setVisible(true);
+                    return;
+
+                }
             }
-        }
-    } catch (SQLException e) {
+        } catch (SQLException e) {
             new Error_guardar((Frame) this.getParent(), true, "Error",
                     "Error al verificar fechas: " + e.getMessage()).setVisible(true);
             return;
@@ -268,13 +252,12 @@ public class formuProduccion extends javax.swing.JDialog {
 
         if (confirmDialog.opcionConfirmada) {
             try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO produccion (fecha_inicio, fecha_fin, estado, detalle_pedido_iddetalle_pedido) "
-                    + "VALUES (?, ?, ?, ?)")) {
+                    "INSERT INTO produccion (fecha_inicio, fecha_fin,  detalle_pedido_iddetalle_pedido) "
+                    + "VALUES (?,  ?, ?)")) {
 
                 ps.setDate(1, fechaInicio);
                 ps.setDate(2, fechaFinProduccion);
-                ps.setString(3, estado);
-                ps.setInt(4, this.idDetallePedido);
+                ps.setInt(3, this.idDetallePedido);
                 ps.executeUpdate();
 
                 Datos_guardados exitoDialog = new Datos_guardados(
@@ -304,10 +287,6 @@ public class formuProduccion extends javax.swing.JDialog {
 
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void BoxestadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxestadoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BoxestadoActionPerformed
-
     private void txtcantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcantidadActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtcantidadActionPerformed
@@ -324,51 +303,50 @@ public class formuProduccion extends javax.swing.JDialog {
         }
     }
 
-   private void cargarDetallesPedido(int idDetalle) {
-    // Usar try-with-resources para asegurar el cierre de conexiones
-    try (Connection con = new Conexion().getConnection(); 
-         PreparedStatement ps = con.prepareStatement(
-            "SELECT dp.cantidad, dp.dimension, p.fecha_inicio, p.fecha_fin "
-            + "FROM detalle_pedido dp "
-            + "JOIN pedido p ON dp.pedido_id_pedido = p.id_pedido "
-            + "WHERE dp.iddetalle_pedido = ?")) {
+    private void cargarDetallesPedido(int idDetalle) {
+        // Usar try-with-resources para asegurar el cierre de conexiones
+        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(
+                "SELECT dp.cantidad, dp.dimension, p.fecha_inicio, p.fecha_fin "
+                + "FROM detalle_pedido dp "
+                + "JOIN pedido p ON dp.pedido_id_pedido = p.id_pedido "
+                + "WHERE dp.iddetalle_pedido = ?")) {
 
-        ps.setInt(1, idDetalle);
-        
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                // Cargar cantidad (con manejo de nulos)
-                int cantidad = rs.getInt("cantidad");
-                txtcantidad.setText(rs.wasNull() ? "" : String.valueOf(cantidad));
-                
-                // Cargar dimensiones (con manejo de nulos)
-                String dimension = rs.getString("dimension");
-                txtdimensiones.setText(dimension != null ? dimension : "");
-                
-                // Cargar fechas con validación de nulos
-                java.sql.Date fechaInicio = rs.getDate("fecha_inicio");
-                if (fechaInicio != null) {
-                    txtinicio.setDate(fechaInicio);
+            ps.setInt(1, idDetalle);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // Cargar cantidad (con manejo de nulos)
+                    int cantidad = rs.getInt("cantidad");
+                    txtcantidad.setText(rs.wasNull() ? "" : String.valueOf(cantidad));
+
+                    // Cargar dimensiones (con manejo de nulos)
+                    String dimension = rs.getString("dimension");
+                    txtdimensiones.setText(dimension != null ? dimension : "");
+
+                    // Cargar fechas con validación de nulos
+                    java.sql.Date fechaInicio = rs.getDate("fecha_inicio");
+                    if (fechaInicio != null) {
+                        txtinicio.setDate(fechaInicio);
+                    } else {
+                        txtinicio.setDate(null); // Limpiar si es nulo
+                    }
+
+                    java.sql.Date fechaFin = rs.getDate("fecha_fin");
+                    if (fechaFin != null) {
+                        txtfinal.setDate(fechaFin);
+                    } else {
+                        txtfinal.setDate(null); // Limpiar si es nulo
+                    }
                 } else {
-                    txtinicio.setDate(null); // Limpiar si es nulo
+                    JOptionPane.showMessageDialog(this, "No se encontraron detalles para el pedido seleccionado",
+                            "Advertencia", JOptionPane.WARNING_MESSAGE);
                 }
-                
-                java.sql.Date fechaFin = rs.getDate("fecha_fin");
-                if (fechaFin != null) {
-                    txtfinal.setDate(fechaFin);
-                } else {
-                    txtfinal.setDate(null); // Limpiar si es nulo
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "No se encontraron detalles para el pedido seleccionado",
-                    "Advertencia", JOptionPane.WARNING_MESSAGE);
             }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar detalles: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Error al cargar detalles: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
 
     }//GEN-LAST:event_BoxnombrepediActionPerformed
 
@@ -399,6 +377,8 @@ public class formuProduccion extends javax.swing.JDialog {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -416,7 +396,6 @@ public class formuProduccion extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private RSMaterialComponent.RSComboBoxMaterial Boxestado;
     private RSMaterialComponent.RSComboBoxMaterial Boxnombrepedi;
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
@@ -426,7 +405,6 @@ public class formuProduccion extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private RSMaterialComponent.RSTextFieldMaterial txtcantidad;
