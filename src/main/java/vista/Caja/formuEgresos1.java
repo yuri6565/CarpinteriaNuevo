@@ -27,7 +27,6 @@ import vista.proveedor.proveedornuevo;
  */
 public class formuEgresos1 extends javax.swing.JDialog {
 
-
     /**
      * Creates new form formuIngresos
      */
@@ -39,7 +38,6 @@ public class formuEgresos1 extends javax.swing.JDialog {
         cargarPrductos();
         ohtaniahea();
         setPreferredSize(new java.awt.Dimension(522, 460));
-
 
     }
 
@@ -309,102 +307,210 @@ public class formuEgresos1 extends javax.swing.JDialog {
     }//GEN-LAST:event_txtDetallenuevoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        try {
-            // 1. Validación de campos obligatorios básicos
-            if (txtPago.getDate() == null) {
-                mostrarError("La fecha de pago es requerida");
+    Connection con = null;
+    PreparedStatement ps = null;
+    try {
+        // 1. Validación de campos obligatorios básicos
+        if (txtPago.getDate() == null) {
+            mostrarError("La fecha de pago es requerida");
+            return;
+        }
+
+        if (txtCantidadnuevo.getText().trim().isEmpty()) {
+            mostrarError("El monto es requerido");
+            return;
+        }
+
+        if (txtDetallenuevo.getText().trim().isEmpty()) {
+            mostrarError("La descripción es requerida");
+            return;
+        }
+
+        if (comboCategoria.getSelectedIndex() == 0) {
+            mostrarError("Debe seleccionar una categoría");
+            return;
+        }
+
+        // 2. Obtener valores comunes del formulario
+        java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
+        double monto = Double.parseDouble(txtCantidadnuevo.getText().trim().replace(",", ".")); // Normalizar monto
+        String descripcion = txtDetallenuevo.getText();
+        String categoria = comboCategoria.getSelectedItem().toString();
+
+        // 3. Manejo especial para compra de productos
+        List<Integer> productosSeleccionadosIds = new ArrayList<>();
+        String proveedorSeleccionado = null;
+        double cantidad = 0;
+
+        if (categoria.equals("Compra de Productos e Insumos")) {
+            // Validar proveedor
+            if (comboProveedor.getSelectedIndex() <= 0) {
+                mostrarError("Debe seleccionar un proveedor");
+                return;
+            }
+            proveedorSeleccionado = comboProveedor.getSelectedItem().toString();
+
+            // Validar producto seleccionado
+            Object selectedItem = comboProductos.getSelectedItem();
+            if (!(selectedItem instanceof ProductoItem)) {
+                mostrarError("Error al obtener el producto seleccionado");
                 return;
             }
 
-            if (txtCantidadnuevo.getText().trim().isEmpty()) {
-                mostrarError("El monto es requerido");
+            ProductoItem productoSeleccionado = (ProductoItem) selectedItem;
+            if (productoSeleccionado.getId() == 0) {
+                mostrarError("Debe seleccionar un producto");
                 return;
             }
+            productosSeleccionadosIds.add(productoSeleccionado.getId());
 
-            if (txtDetallenuevo.getText().trim().isEmpty()) {
-                mostrarError("La descripción es requerida");
+            // Validar cantidad
+            if (txtcantidad.getText().trim().isEmpty()) {
+                mostrarError("La cantidad es requerida");
                 return;
             }
+            cantidad = Double.parseDouble(txtcantidad.getText().trim().replace(",", ".")); // Normalizar cantidad
 
-            if (comboCategoria.getSelectedIndex() == 0) {
-                mostrarError("Debe seleccionar una categoría");
+            // Validar que la cantidad sea positiva
+            if (cantidad <= 0) {
+                mostrarError("La cantidad debe ser mayor que cero");
                 return;
             }
+        }
 
-            // 2. Obtener valores comunes del formulario
-            java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
-            double monto = Double.parseDouble(txtCantidadnuevo.getText().trim());
-            String descripcion = txtDetallenuevo.getText();
-            String categoria = comboCategoria.getSelectedItem().toString();
+        // 4. Validar que el monto sea positivo
+        if (monto <= 0) {
+            mostrarError("El monto debe ser mayor que cero");
+            return;
+        }
 
-            // 3. Manejo especial para compra de productos
-            List<Integer> productosSeleccionadosIds = new ArrayList<>();
-            String proveedorSeleccionado = null;
-            double cantidad = 0;
+        // 5. Insertar en la base de datos
+        con = Conexion.getConnection();
+        con.setAutoCommit(false); // Iniciar transacción
 
-            if (categoria.equals("Compra de Productos e Insumos")) {
-                // Validar proveedor
-                if (comboProveedor.getSelectedIndex() <= 0) {
-                    mostrarError("Debe seleccionar un proveedor");
-                    return;
-                }
-                proveedorSeleccionado = comboProveedor.getSelectedItem().toString();
+        // 1. Manejo de suministra solo para compra de productos
+        Integer idSuministra = null;
+        if (categoria.equals("Compra de Productos e Insumos")
+                && productosSeleccionadosIds != null && !productosSeleccionadosIds.isEmpty()
+                && proveedorSeleccionado != null && !proveedorSeleccionado.isEmpty()) {
 
-                // Validar producto seleccionado
-                Object selectedItem = comboProductos.getSelectedItem();
-                if (!(selectedItem instanceof ProductoItem)) {
-                    mostrarError("Error al obtener el producto seleccionado");
-                    return;
-                }
+            int idProveedor = obtenerIdProveedor(con, proveedorSeleccionado);
+            idSuministra = insertarSuministra(con, productosSeleccionadosIds.get(0), idProveedor);
+        }
 
-                ProductoItem productoSeleccionado = (ProductoItem) selectedItem;
-                if (productoSeleccionado.getId() == 0) {
-                    mostrarError("Debe seleccionar un producto");
-                    return;
-                }
-                productosSeleccionadosIds.add(productoSeleccionado.getId());
+        // 2. Insertar en caja
+        String sqlCaja = "INSERT INTO caja (fecha, movimiento, monto, cantidad, descripcion, suministra_idSuministra, categoria) "
+                + "VALUES (?, 'egreso', ?, ?, ?, ?, ?)";
+        ps = con.prepareStatement(sqlCaja);
+        ps.setDate(1, fecha);
+        ps.setDouble(2, monto);
+        ps.setDouble(3, cantidad);
+        ps.setString(4, descripcion);
 
-                // Validar cantidad
-                if (txtcantidad.getText().trim().isEmpty()) {
-                    mostrarError("La cantidad es requerida");
-                    return;
-                }
-                cantidad = Double.parseDouble(txtcantidad.getText().trim());
+        if (idSuministra != null) {
+            ps.setInt(5, idSuministra);
+        } else {
+            ps.setNull(5, java.sql.Types.INTEGER);
+        }
 
-                // Validar que la cantidad sea positiva
-                if (cantidad <= 0) {
-                    mostrarError("La cantidad debe ser mayor que cero");
-                    return;
-                }
+        ps.setString(6, categoria);
+        int resultado = ps.executeUpdate();
+
+        // 3. Actualizar stock en inventario para compra de productos
+        if (categoria.equals("Compra de Productos e Insumos") && resultado > 0) {
+            int idInventario = productosSeleccionadosIds.get(0);
+            actualizarStockInventario(con, idInventario, cantidad);
+        }
+
+        con.commit(); // Confirmar transacción
+        mostrarMensaje("Egreso registrado correctamente");
+        this.dispose();
+        limpiarFormulario();
+
+    } catch (NumberFormatException e) {
+        mostrarError("El monto y la cantidad deben ser números válidos con formato '12,50'");
+    } catch (SQLException e) {
+        if (con != null) {
+            try {
+                con.rollback(); // Revertir transacción en caso de error
+            } catch (SQLException ex) {
+                mostrarError("Error al revertir transacción: " + ex.getMessage());
             }
-
-            // 4. Validar que el monto sea positivo
-            if (monto <= 0) {
-                mostrarError("El monto debe ser mayor que cero");
-                return;
+        }
+        mostrarError("Error al registrar el egreso: " + e.getMessage());
+        e.printStackTrace();
+    } finally {
+        // Cerrar recursos
+        if (ps != null) {
+            try {
+                ps.close();
+            } catch (SQLException e) {
+                mostrarError("Error al cerrar PreparedStatement: " + e.getMessage());
             }
-
-            // 5. Insertar en la base de datos
-            if (insertarEgreso(fecha, descripcion, monto, categoria,
-                    proveedorSeleccionado, productosSeleccionadosIds, cantidad)) {
-                mostrarMensaje("Egreso registrado correctamente");
-                this.dispose();
-
-                // Opcional: Limpiar el formulario después de guardar
-                limpiarFormulario();
-            } else {
-                mostrarError("No se pudo registrar el egreso");
+        }
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                mostrarError("Error al cerrar conexión: " + e.getMessage());
             }
-
-        } catch (NumberFormatException e) {
-            mostrarError("El monto y la cantidad deben ser números válidos");
-        } catch (Exception e) {
-            mostrarError("Error inesperado: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
+    }
+
+    private void actualizarStockInventario(Connection con, int idInventario, double cantidad) throws SQLException {
+    // Obtener la cantidad actual del inventario
+    String sqlSelect = "SELECT cantidad FROM inventario WHERE id_inventario = ?";
+    double cantidadActual = 0.0;
+    try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
+        psSelect.setInt(1, idInventario);
+        try (ResultSet rs = psSelect.executeQuery()) {
+            if (rs.next()) {
+                String cantidadStr = rs.getString("cantidad").trim();
+                cantidadActual = parseCantidad(cantidadStr);
+            } else {
+                throw new SQLException("No se encontró el inventario con ID: " + idInventario);
+            }
+        }
+    }
+
+    // Sumar la nueva cantidad
+    double nuevaCantidad = cantidadActual + cantidad;
+
+    // Formatear la cantidad con coma como separador decimal
+    java.text.NumberFormat numberFormat = java.text.NumberFormat.getNumberInstance(java.util.Locale.forLanguageTag("es-ES"));
+    numberFormat.setMinimumFractionDigits(2);
+    numberFormat.setMaximumFractionDigits(2);
+    String cantidadFormateada = numberFormat.format(nuevaCantidad).replace(".", ",");
+
+    // Actualizar la cantidad en inventario
+    String sqlUpdate = "UPDATE inventario SET cantidad = ? WHERE id_inventario = ?";
+    try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
+        psUpdate.setString(1, cantidadFormateada); // Guardar como VARCHAR con coma
+        psUpdate.setInt(2, idInventario);
+        int affectedRows = psUpdate.executeUpdate();
+
+        if (affectedRows == 0) {
+            throw new SQLException("No se pudo actualizar el stock para el inventario con ID: " + idInventario);
+        }
+        System.out.println("Stock actualizado para id_inventario " + idInventario + ": " + cantidadFormateada);
+    }
+}
+
+    private double parseCantidad(String cantidadStr) {
+        try {
+            // Normalizar el formato: reemplazar coma por punto y eliminar cualquier separador adicional
+            String normalized = cantidadStr.replace(".", "").replace(",", ".");
+            double cantidad = Double.parseDouble(normalized);
+            return cantidad >= 0 ? cantidad : 0.0;
+        } catch (NumberFormatException e) {
+            System.err.println("Error al parsear cantidad: '" + cantidadStr + "' - " + e.getMessage());
+            return 0.0;
+        }
+    }
 // Método auxiliar para limpiar el formulario (opcional)
+
     private void limpiarFormulario() {
         txtPago.setDate(null);
         txtCantidadnuevo.setText("");
