@@ -1201,7 +1201,7 @@ lblTituloPrincipal.setForeground(textoLabel);
             deseleccionar();
             this.ocho.setSelected(true);
 
-              VistaClientes cliente = new VistaClientes();
+              VistaClientes cliente = new VistaClientes(new javax.swing.JFrame(), true);
             cliente.setSize(1290, 730);
             cliente.setLocation(0, 0);
 
@@ -1277,7 +1277,7 @@ lblTituloPrincipal.setForeground(textoLabel);
             deseleccionar();
             this.cuatro.setSelected(true);
 
-           Produccion pr = new Produccion(new javax.swing.JFrame());
+           Produccion pr = new Produccion(new javax.swing.JFrame(), true);
             pr.setSize(1290, 730);
             pr.setLocation(0, 0);
 
@@ -1298,7 +1298,7 @@ lblTituloPrincipal.setForeground(textoLabel);
             deseleccionar();
             this.tres.setSelected(true);
 
-            proveedores pr = new proveedores();
+            proveedores pr = new proveedores(new javax.swing.JFrame(), true);
             pr.setSize(1290, 730);
             pr.setLocation(0, 0);
 
@@ -1376,7 +1376,7 @@ lblTituloPrincipal.setForeground(textoLabel);
             deseleccionar();
             this.siete1.setSelected(true);
             // Crear y mostrar el panel de inventario
- Usuarios1 usu = new Usuarios1();            usu.setSize(1290, 730);
+ Usuarios1 usu = new Usuarios1(new javax.swing.JFrame(), true);            usu.setSize(1290, 730);
             usu.setLocation(0, 0);
 
             contenedor.removeAll();

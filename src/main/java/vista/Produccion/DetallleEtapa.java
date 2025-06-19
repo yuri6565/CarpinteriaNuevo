@@ -4,9 +4,17 @@
  */
 package vista.Produccion;
 
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.image.BufferedImage;
+import java.util.Map;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -19,21 +27,82 @@ public class DetallleEtapa extends javax.swing.JDialog {
      */
     public DetallleEtapa(Frame parent, boolean modal, int idEtapa, String nombre1, String cantidad1,
             String fechaInicio, String fechaFin, String estado1,
-            String materiales1, String herramientas1, String asignado1) {
+            Map<String, String> materiales, Map<String, String> herramientas, String asignado1) {
         super(parent, modal);
         initComponents();
         setIconImage(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE));
-        // Asignar los valores a los componentes
+
+        // Asignar valores a componentes básicos
         nombre.setText(nombre1);
         cantidad.setText(cantidad1);
         fecha_ini.setText(fechaInicio);
         fecha_fin.setText(fechaFin);
         estado.setText(estado1);
-        
         asignado.setText(asignado1);
 
-        // Centrar el diálogo
+        // Configurar paneles DINÁMICAMENTE
+        configurarPaneles(materiales, herramientas);
+
         setLocationRelativeTo(parent);
+    }
+
+    private void configurarPaneles(Map<String, String> materiales, Map<String, String> herramientas) {
+        // Configurar panel de materiales
+        PanMaterialessss.setLayout(new BoxLayout(PanMaterialessss, BoxLayout.Y_AXIS));
+        PanMaterialessss.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.GRAY),
+                "Materiales",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                new Font("Segoe UI", Font.BOLD, 18) // Tamaño 14 y negrita
+        ));
+        PanMaterialessss.setBackground(Color.WHITE);
+        PanMaterialessss.setPreferredSize(new java.awt.Dimension(350, 200)); // Ancho: 350px, Alto: 200px
+
+        for (Map.Entry<String, String> entry : materiales.entrySet()) {
+            JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            fila.setBackground(Color.WHITE);
+
+            JLabel lblNombre = new JLabel(entry.getKey() + ": ");
+            lblNombre.setFont(new Font("Segoe UI", Font.BOLD, 16));
+
+            JLabel lblCantidad = new JLabel(entry.getValue());
+            lblCantidad.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+
+            fila.add(lblNombre);
+            fila.add(lblCantidad);
+            PanMaterialessss.add(fila);
+        }
+
+        // Configurar panel de herramientas
+        PanHerramientas.setLayout(new BoxLayout(PanHerramientas, BoxLayout.Y_AXIS));
+        PanHerramientas.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.GRAY),
+                "Herramientas",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                new Font("Segoe UI", Font.BOLD, 18) // Tamaño 14 y negrita
+        ));
+        PanHerramientas.setBackground(Color.WHITE);
+        PanHerramientas.setPreferredSize(new java.awt.Dimension(350, 200)); // Ancho: 350px, Alto: 200px
+
+        for (Map.Entry<String, String> entry : herramientas.entrySet()) {
+            JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            fila.setBackground(Color.WHITE);
+
+            JLabel lblNombre = new JLabel(entry.getKey() + ": ");
+            lblNombre.setFont(new Font("Segoe UI", Font.BOLD, 16));
+
+            JLabel lblCantidad = new JLabel(entry.getValue());
+            lblCantidad.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+
+            fila.add(lblNombre);
+            fila.add(lblCantidad);
+            PanHerramientas.add(fila);
+        }
+
+        // Ajustar tamaño del diálogo
+        pack();
     }
 
     /**
@@ -61,6 +130,8 @@ public class DetallleEtapa extends javax.swing.JDialog {
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         btnGuardar1 = new rojeru_san.RSButtonRiple();
+        PanHerramientas = new javax.swing.JPanel();
+        PanMaterialessss = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -139,14 +210,47 @@ public class DetallleEtapa extends javax.swing.JDialog {
             .addComponent(btnGuardar1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        PanHerramientas.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout PanHerramientasLayout = new javax.swing.GroupLayout(PanHerramientas);
+        PanHerramientas.setLayout(PanHerramientasLayout);
+        PanHerramientasLayout.setHorizontalGroup(
+            PanHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 377, Short.MAX_VALUE)
+        );
+        PanHerramientasLayout.setVerticalGroup(
+            PanHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 211, Short.MAX_VALUE)
+        );
+
+        PanMaterialessss.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout PanMaterialessssLayout = new javax.swing.GroupLayout(PanMaterialessss);
+        PanMaterialessss.setLayout(PanMaterialessssLayout);
+        PanMaterialessssLayout.setHorizontalGroup(
+            PanMaterialessssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        PanMaterialessssLayout.setVerticalGroup(
+            PanMaterialessssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(PanMaterialessss, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(PanHerramientas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(16, 16, 16)
@@ -194,7 +298,11 @@ public class DetallleEtapa extends javax.swing.JDialog {
                     .addComponent(fecha_fin)
                     .addComponent(jLabel13)
                     .addComponent(estado))
-                .addContainerGap(191, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(PanHerramientas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(PanMaterialessss, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -205,9 +313,7 @@ public class DetallleEtapa extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -220,11 +326,13 @@ public class DetallleEtapa extends javax.swing.JDialog {
 
     /**
      * @param args the command line arguments
-     * 
-     * 
+     *
+     *
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel PanHerramientas;
+    private javax.swing.JPanel PanMaterialessss;
     private javax.swing.JLabel asignado;
     private rojeru_san.RSButtonRiple btnGuardar1;
     private javax.swing.JLabel cantidad;
