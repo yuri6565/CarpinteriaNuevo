@@ -199,21 +199,13 @@ public class Ctrl_InventarioMaterial {
                 double cantidad = cantidadStr.isEmpty() ? 0.0 : Double.parseDouble(cantidadStr);
                 double stockMinimo = stockMinimoStr.isEmpty() ? 0.0 : Double.parseDouble(stockMinimoStr);
 
-                // Depuración
-                System.out.println("Material: " + detalle.getMaterial().getNombre()
-                        + " | Cantidad original: " + cantidadOriginal
-                        + " | StockMinimo original: " + stockMinimoOriginal
-                        + " | Cantidad procesada: " + cantidad
-                        + " | StockMinimo procesado: " + stockMinimo);
+                
 
                 // Comparar y agregar si la cantidad es menor o igual al stock mínimo
                 if (cantidad <= stockMinimo) {
                     materialesBajos.add(detalle);
                 }
             } catch (NumberFormatException e) {
-                System.err.println("Error al parsear para material: " + detalle.getMaterial().getNombre()
-                        + " | Cantidad: " + detalle.getMaterial().getCantidad()
-                        + " | StockMinimo: " + detalle.getMaterial().getStockMinimo());
                 e.printStackTrace();
             }
         }
