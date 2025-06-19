@@ -4,9 +4,7 @@
  */
 package vista;
 
-
 //import controlador.Contrl_login;
-
 import vista.alertas.CodigoIncorrectoAlerta;
 import vista.alertas.ReeenvioCodigoAlerta;
 import vista.alertas.ValidacionCodigoExitoso;
@@ -20,51 +18,57 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-
-
 import javax.swing.Timer;
 import modelo.Consulta_Usuarios;
 
-
-
 public class Contrasena3 extends javax.swing.JFrame {
 
+    Consulta_Usuarios consulta = new Consulta_Usuarios();
+    private String correoIngresado;
+    private javax.swing.JLabel jLabelTimer;
+    private Timer activeTimer = null;// Nuevo JLabel para mostrar el temporizador
 
-   
-Consulta_Usuarios consulta = new Consulta_Usuarios();
- private String correoIngresado;
+    public void setCorreoIngresado(String correo) {
+        this.correoIngresado = correo;
+    }
 
-public void setCorreoIngresado(String correo) {
-    this.correoIngresado = correo;
-}
+    public Contrasena3() {
+        initComponents();
 
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setLocationRelativeTo(null);
 
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(kGradientPanel1, gbc);
 
+        JPanel fondo = new JPanel(new BorderLayout());
+        fondo.add(kGradientPanel1, BorderLayout.CENTER);
+        setContentPane(fondo);
+        jLabel6.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
+        jLabel6.setText("Reenviar codigo");
+        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel6MousePressed(evt);
+            }
+        });
+        jPanel6.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 120, -1));
 
-   public Contrasena3() {
-    initComponents();
-
-       setExtendedState(JFrame.MAXIMIZED_BOTH); 
-setLocationRelativeTo(null); 
-
-
-        
-setLayout(new GridBagLayout());
-GridBagConstraints gbc = new GridBagConstraints();
-gbc.gridx = 0;
-gbc.gridy = 0;
-gbc.anchor = GridBagConstraints.CENTER; 
-add(kGradientPanel1, gbc);
-
-
-JPanel fondo = new JPanel(new BorderLayout());
-fondo.add(kGradientPanel1, BorderLayout.CENTER);
-setContentPane(fondo);
+// Agregar el JLabel para el temporizador
+// Agregar el JLabel para el temporizador
+// In the Contrasena3 constructor
+        jLabelTimer = new javax.swing.JLabel();
+        jLabelTimer.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
+        jLabelTimer.setForeground(new java.awt.Color(255, 0, 0)); // Red color
+        jLabelTimer.setText("30s"); // Valor inicial
+        jLabelTimer.setVisible(false); // Oculto inicialmente
+        jPanel6.add(jLabelTimer, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, 50, -1));
 
     }
-    
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -191,41 +195,38 @@ setContentPane(fondo);
     }// </editor-fold>//GEN-END:initComponents
 
     private void rSMaterialButtonRectangle2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonRectangle2ActionPerformed
-  String codigoIngresado = txtcodigo.getText().trim();
+        String codigoIngresado = txtcodigo.getText().trim();
 
-    if (codigoIngresado.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Por favor completa el campo del código.", "Campo vacío", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-Consulta_Usuarios consulta = new Consulta_Usuarios();
-    boolean esValido = consulta.validarcodigo(correoIngresado, codigoIngresado);
+        if (codigoIngresado.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor completa el campo del código.", "Campo vacío", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        Consulta_Usuarios consulta = new Consulta_Usuarios();
+        boolean esValido = consulta.validarcodigo(correoIngresado, codigoIngresado);
 
+        if (esValido) {
+            ValidacionCodigoExitoso confirmDialog = new ValidacionCodigoExitoso(
+                    (Frame) this.getParent(),
+                    true,
+                    "Confirmar",
+                    "¿Desea guardar los datos?"
+            );
+            confirmDialog.setVisible(true);
+            System.out.println("Abrir ventana de cambio de contraseña");
+            NuevaContrasena cambiar = new NuevaContrasena();
+            cambiar.setCorreoIngresado(correoIngresado);
+            cambiar.setVisible(true);
+            this.dispose();
 
-    if (esValido) {
-   ValidacionCodigoExitoso confirmDialog = new ValidacionCodigoExitoso(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
-        confirmDialog.setVisible(true);
-System.out.println("Abrir ventana de cambio de contraseña");
-NuevaContrasena cambiar = new NuevaContrasena();
-cambiar.setCorreoIngresado(correoIngresado);
-cambiar.setVisible(true);
-this.dispose(); 
-
-
-    } else {
-         CodigoIncorrectoAlerta confirmDialog = new CodigoIncorrectoAlerta(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
-        confirmDialog.setVisible(true);
-    }
-
+        } else {
+            CodigoIncorrectoAlerta confirmDialog = new CodigoIncorrectoAlerta(
+                    (Frame) this.getParent(),
+                    true,
+                    "Confirmar",
+                    "¿Desea guardar los datos?"
+            );
+            confirmDialog.setVisible(true);
+        }
 
     }//GEN-LAST:event_rSMaterialButtonRectangle2ActionPerformed
 
@@ -234,41 +235,77 @@ this.dispose();
     }//GEN-LAST:event_txtcodigoActionPerformed
 
     private void jLabel8MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MousePressed
-Correo_electronico login = new Correo_electronico();
-login.setVisible(true);
-this.dispose(); 
+        Correo_electronico login = new Correo_electronico();
+        login.setVisible(true);
+        this.dispose();
 
 
     }//GEN-LAST:event_jLabel8MousePressed
 
     private void jLabel6MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MousePressed
 
+        if (correoIngresado == null || correoIngresado.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se ha proporcionado un correo electrónico válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-  jLabel6.setEnabled(false);
-    new Timer(30000, e -> jLabel6.setEnabled(true)).start();
+        // Stop any existing timer to prevent overlap
+        if (activeTimer != null && activeTimer.isRunning()) {
+            activeTimer.stop();
+        }
 
-   String codigo = consulta.obtenerCodigoDesdeCorreo(correoIngresado);
-if (codigo != null) {
-  ReeenvioCodigoAlerta confirmDialog = new ReeenvioCodigoAlerta(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
-        confirmDialog.setVisible(true);
-} else {
-    JOptionPane.showMessageDialog(this, "Ocurrió un error al reenviar el código. Intenta nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
-}
+        // Deshabilitar el botón de reenviar y mostrar el temporizador
+        jLabel6.setEnabled(false);
+        jLabelTimer.setVisible(true);
 
+        // Inicializar el contador en 30 segundos
+        final int[] countdown = {30};
+        jLabelTimer.setText(countdown[0] + "s");
 
-  
+        // Crear un Timer que actualice el contador cada segundo
+        activeTimer = new Timer(1000, new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                countdown[0]--;
+                if (countdown[0] >= 0) {
+                    jLabelTimer.setText(countdown[0] + "s"); // Update timer display
+                } else {
+                    ((Timer) e.getSource()).stop(); // Detener el temporizador
+                    jLabel6.setEnabled(true); // Habilitar el botón de reenviar
+                    jLabelTimer.setVisible(false); // Ocultar el temporizador
+                    activeTimer = null; // Reset the timer reference
+                }
+            }
+        });
+        activeTimer.start();
+
+        // Intentar reenviar el código
+        try {
+            String codigo = consulta.obtenerCodigoDesdeCorreo(correoIngresado);
+            System.out.println("Correo ingresado: " + correoIngresado);
+            System.out.println("Código obtenido: " + codigo);
+            if (codigo != null) {
+                ReeenvioCodigoAlerta confirmDialog = new ReeenvioCodigoAlerta(
+                        (Frame) this.getParent(),
+                        true,
+                        "Confirmar",
+                        "El código ha sido reenviado a tu correo electrónico."
+                );
+                confirmDialog.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Ocurrió un error al reenviar el código. Intenta nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al reenviar el código: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
 
     }//GEN-LAST:event_jLabel6MousePressed
 
     /**
      * @param args the command line arguments
      */
- public static void main(String args[]) {
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -316,11 +353,4 @@ if (codigo != null) {
     private javax.swing.JTextField txtcodigo;
     // End of variables declaration//GEN-END:variables
 
-    
-
-    
-  
-
 }
-
-

@@ -22,12 +22,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import modelo.Conexion;
 
-
 /**
  *
  * @author ZenBook
  */
 public class Usuarios1 extends javax.swing.JPanel {
+
     private int id_usuario;
     private Ctrl_Perfil controlador;
     private int idUsuario;
@@ -82,11 +82,11 @@ public class Usuarios1 extends javax.swing.JPanel {
         });
     }
 
- public void aplicarTema() {
+    public void aplicarTema() {
         boolean oscuro = TemaManager.getInstance().isOscuro();
 
         if (oscuro) {
-            Color fondo = new Color(21,21,33);
+            Color fondo = new Color(21, 21, 33);
             Color primario = new Color(40, 60, 150);
             Color texto = Color.WHITE;
 
@@ -95,16 +95,15 @@ public class Usuarios1 extends javax.swing.JPanel {
             txtBuscar.setForeground(texto);
             txtBuscar.setColorIcon(texto);
             txtBuscar.setPhColor(Color.LIGHT_GRAY);
-            
-            
-          tablaUsuarios.setBackground(new Color (21,21,33));
-            tablaUsuarios.setBackgoundHead(new Color (67, 71, 120));
-            tablaUsuarios.setForegroundHead(new Color (255,255,255));
+
+            tablaUsuarios.setBackground(new Color(21, 21, 33));
+            tablaUsuarios.setBackgoundHead(new Color(67, 71, 120));
+            tablaUsuarios.setForegroundHead(new Color(255, 255, 255));
             tablaUsuarios.setBackgoundHover(new Color(40, 50, 90));
-         tablaUsuarios.setFont(new Font("Tahoma", Font.PLAIN, 15));
-            tablaUsuarios.setColorPrimary(new Color(37,37,52));
+            tablaUsuarios.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            tablaUsuarios.setColorPrimary(new Color(37, 37, 52));
             tablaUsuarios.setColorPrimaryText(texto);
-            tablaUsuarios.setColorSecondary(new Color(30,30,45));
+            tablaUsuarios.setColorSecondary(new Color(30, 30, 45));
             tablaUsuarios.setColorSecundaryText(texto);
             tablaUsuarios.setColorBorderHead(primario);
             tablaUsuarios.setColorBorderRows(fondo.darker());
@@ -112,15 +111,15 @@ public class Usuarios1 extends javax.swing.JPanel {
             tablaUsuarios.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
             tablaUsuarios.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
             tablaUsuarios.setEffectHover(true);
-              tablaUsuarios.setShowGrid(true);
-tablaUsuarios.setGridColor(Color.WHITE); // o el color que desees
+            tablaUsuarios.setShowGrid(true);
+            tablaUsuarios.setGridColor(Color.WHITE); // o el color que desees
 
             btnNuevo1.setBackground(new Color(67, 71, 120));
-            btnNuevo1.setBackgroundHover(new Color(118,142,240));
+            btnNuevo1.setBackgroundHover(new Color(118, 142, 240));
             btnEditar1.setBackground(new Color(67, 71, 120));
-           btnEditar1.setBackgroundHover(new Color(118,142,240));
+            btnEditar1.setBackgroundHover(new Color(118, 142, 240));
             btnEliminar1.setBackground(new Color(67, 71, 120));
-            btnEliminar1.setBackgroundHover(new Color(118,142,240));
+            btnEliminar1.setBackgroundHover(new Color(118, 142, 240));
         } else {
             Color fondo = new Color(242, 247, 255);
             Color texto = Color.BLACK;
@@ -131,26 +130,25 @@ tablaUsuarios.setGridColor(Color.WHITE); // o el color que desees
             txtBuscar.setForeground(texto);
             txtBuscar.setColorIcon(texto);
             txtBuscar.setPhColor(Color.GRAY);
-            
-            
-      tablaUsuarios.setBackground(new Color (255,255,255));
-            tablaUsuarios.setBackgoundHead(new Color (46,49,82));
+
+            tablaUsuarios.setBackground(new Color(255, 255, 255));
+            tablaUsuarios.setBackgoundHead(new Color(46, 49, 82));
             tablaUsuarios.setForegroundHead(Color.WHITE);
-            tablaUsuarios.setBackgoundHover(new Color(67,150,209));
-           tablaUsuarios.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            tablaUsuarios.setBackgoundHover(new Color(67, 150, 209));
+            tablaUsuarios.setFont(new Font("Tahoma", Font.PLAIN, 15));
             tablaUsuarios.setColorPrimary(new Color(242, 242, 242));
             tablaUsuarios.setColorPrimaryText(texto);
             tablaUsuarios.setColorSecondary(new Color(255, 255, 255));
             tablaUsuarios.setColorSecundaryText(texto);
             tablaUsuarios.setColorBorderHead(primario);
-            tablaUsuarios.setColorBorderRows(new Color(0,0,0));
+            tablaUsuarios.setColorBorderRows(new Color(0, 0, 0));
             tablaUsuarios.setFontHead(new Font("Tahoma", Font.BOLD, 15));
             tablaUsuarios.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
             tablaUsuarios.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
             tablaUsuarios.setEffectHover(true);
-            tablaUsuarios.setSelectionBackground(new Color(67,150,209));
+            tablaUsuarios.setSelectionBackground(new Color(67, 150, 209));
             tablaUsuarios.setShowGrid(true);
-tablaUsuarios.setGridColor(Color.BLACK); // o el color que desees
+            tablaUsuarios.setGridColor(Color.BLACK); // o el color que desees
 
             btnNuevo1.setBackground(new Color(46, 49, 82));
             btnEditar1.setBackground(new Color(46, 49, 82));
@@ -306,53 +304,53 @@ tablaUsuarios.setGridColor(Color.BLACK); // o el color que desees
     }//GEN-LAST:event_btnNuevo1ActionPerformed
 
     private void btnEditar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditar1ActionPerformed
-  int selectedRow = tablaUsuarios.getSelectedRow(); // Assuming your table is named tablaUsuarios
-    if (selectedRow == -1) {
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione un usuario para editar.");
-        return;
-    }
+        int selectedRow = tablaUsuarios.getSelectedRow(); // Assuming your table is named tablaUsuarios
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un usuario para editar.");
+            return;
+        }
 
-    int idUsuario = Integer.parseInt(tablaUsuarios.getValueAt(selectedRow, 0).toString()); // Assuming ID is in column 0
-    editar_usuario dialog = new editar_usuario(new javax.swing.JFrame(), true, idUsuario, 
-                                              (DefaultTableModel) tablaUsuarios.getModel(), selectedRow);
-    dialog.setLocationRelativeTo(null);
-    dialog.setVisible(true);
-    if (dialog.isGuardado()) {
-        cargarTablaUsuarios(); // Reload the table if needed
-    }
-       
+        int idUsuario = Integer.parseInt(tablaUsuarios.getValueAt(selectedRow, 0).toString()); // Assuming ID is in column 0
+        editar_usuario dialog = new editar_usuario(new javax.swing.JFrame(), true, idUsuario,
+                (DefaultTableModel) tablaUsuarios.getModel(), selectedRow);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+        if (dialog.isGuardado()) {
+            cargarTablaUsuarios(); // Reload the table if needed
+        }
+
     }//GEN-LAST:event_btnEditar1ActionPerformed
 
     private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed
-    
-    // Check if a row is selected
-    int selectedRow = tablaUsuarios.getSelectedRow();
-    if (selectedRow == -1) {
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione un usuario para eliminar.");
-        return;
-    }
 
-    // Get the user ID from the selected row (column 0 contains the ID)
-    int idUsuario = Integer.parseInt(tablaUsuarios.getValueAt(selectedRow, 0).toString());
-
-    // Confirm with the user before deleting
-    int confirm = JOptionPane.showConfirmDialog(this, 
-            "¿Está seguro de que desea eliminar este usuario?", 
-            "Confirmar eliminación", 
-            JOptionPane.YES_NO_OPTION);
-    
-    if (confirm == JOptionPane.YES_OPTION) {
-        // Call the controller to delete the user
-        Ctrl_Perfil controlador = new Ctrl_Perfil();
-        boolean eliminado = controlador.eliminar(idUsuario);
-
-        if (eliminado) {
-            JOptionPane.showMessageDialog(this, "Usuario eliminado correctamente.");
-            cargarTablaUsuarios(); // Reload the table to reflect the deletion
-        } else {
-            JOptionPane.showMessageDialog(this, "Error al eliminar el usuario.");
+        // Check if a row is selected
+        int selectedRow = tablaUsuarios.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un usuario para eliminar.");
+            return;
         }
-    }
+
+        // Get the user ID from the selected row (column 0 contains the ID)
+        int idUsuario = Integer.parseInt(tablaUsuarios.getValueAt(selectedRow, 0).toString());
+
+        // Confirm with the user before deleting
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de que desea eliminar este usuario?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Call the controller to delete the user
+            Ctrl_Perfil controlador = new Ctrl_Perfil();
+            boolean eliminado = controlador.eliminar(idUsuario);
+
+            if (eliminado) {
+                JOptionPane.showMessageDialog(this, "Usuario eliminado correctamente.");
+                cargarTablaUsuarios(); // Reload the table to reflect the deletion
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al eliminar el usuario.");
+            }
+        }
     }//GEN-LAST:event_btnEliminar1ActionPerformed
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
@@ -370,12 +368,5 @@ tablaUsuarios.setGridColor(Color.BLACK); // o el color que desees
     private RSMaterialComponent.RSTableMetroCustom tablaUsuarios;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtBuscar;
     // End of variables declaration//GEN-END:variables
-  
-    
-    
-
-
-
 
 }
-

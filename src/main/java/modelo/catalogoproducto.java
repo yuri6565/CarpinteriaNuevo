@@ -9,15 +9,37 @@ package modelo;
  * @author buitr
  */
 public class catalogoproducto {
+
     private int idproducto;
     private String nombre;
     private String alto;
-     private String ancho;// Ahora puede ser ID o nombre según el contexto
-      private String profundidad;
-       private String material;
-        private String color;
+    private String ancho;
+    private String profundidad;
+    private String material;
+    private String color;
+    private String descripcion;
+
     private byte[] imagen;
-   private int Categoria_idCategoria; 
+    private byte[] imagen2;
+    private byte[] imagen3;
+    private byte[] imagen4;
+private int idCategoria;
+
+    public catalogoproducto(int idproducto, String nombre, String alto, String ancho, String profundidad, String material, String color, String descripcion, byte[] imagen, byte[] imagen2, byte[] imagen3, byte[] imagen4, int idCategoria) {
+        this.idproducto = idproducto;
+        this.nombre = nombre;
+        this.alto = alto;
+        this.ancho = ancho;
+        this.profundidad = profundidad;
+        this.material = material;
+        this.color = color;
+        this.descripcion = descripcion;
+        this.imagen = imagen;
+        this.imagen2 = imagen2;
+        this.imagen3 = imagen3;
+        this.imagen4 = imagen4;
+        this.idCategoria = idCategoria;
+    }
 
     public int getIdproducto() {
         return idproducto;
@@ -75,6 +97,14 @@ public class catalogoproducto {
         this.color = color;
     }
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     public byte[] getImagen() {
         return imagen;
     }
@@ -83,28 +113,40 @@ public class catalogoproducto {
         this.imagen = imagen;
     }
 
-    public int getCategoria_idCategoria() {
-        return Categoria_idCategoria;
+    public byte[] getImagen2() {
+        return imagen2;
     }
 
-    public void setCategoria_idCategoria(int Categoria_idCategoria) {
-        this.Categoria_idCategoria = Categoria_idCategoria;
+    public void setImagen2(byte[] imagen2) {
+        this.imagen2 = imagen2;
+    }
+
+    public byte[] getImagen3() {
+        return imagen3;
+    }
+
+    public void setImagen3(byte[] imagen3) {
+        this.imagen3 = imagen3;
+    }
+
+    public byte[] getImagen4() {
+        return imagen4;
+    }
+
+    public void setImagen4(byte[] imagen4) {
+        this.imagen4 = imagen4;
+    }
+
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
 
     public catalogoproducto() {
     }
-
-    public catalogoproducto(int idproducto, String nombre, String alto, String ancho, String profundidad, String material, String color, byte[] imagen, int Categoria_idCategoria) {
-        this.idproducto = idproducto;
-        this.nombre = nombre;
-        this.alto = alto;
-        this.ancho = ancho;
-        this.profundidad = profundidad;
-        this.material = material;
-        this.color = color;
-        this.imagen = imagen;
-        this.Categoria_idCategoria = Categoria_idCategoria;
-    }
-
+ 
   
 }

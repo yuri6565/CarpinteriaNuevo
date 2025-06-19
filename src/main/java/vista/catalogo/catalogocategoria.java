@@ -4,6 +4,7 @@
  */
 package vista.catalogo;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.io.File;
@@ -11,26 +12,92 @@ import java.io.IOException;
 import java.nio.file.Files;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
+import vista.alertas.productoexito;
 
 public class catalogocategoria extends javax.swing.JDialog {
-private String rutaImagenSeleccionada;
-private byte[] imagenBytes; // Add this to store image bytesto store image bytes
+
+    private String rutaImagenSeleccionada;
+    private byte[] imagenBytes; // Add this to store image bytesto store image bytes
+
     public catalogocategoria(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+        jLabel2.setVisible(false);
+        lblImagen.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                seleccionarImagen();
+            }
+        });
+
     }
-        public String getRutaImagenSeleccionada() {
-    return rutaImagenSeleccionada;
-}
-public String getCategoriaNombre() {
-    return txtNombre.getText().trim();
-}
-        
-   
+
+    public String getRutaImagenSeleccionada() {
+        return rutaImagenSeleccionada;
+    }
+
+    public String getCategoriaNombre() {
+        return txtNombre.getText().trim();
+    }
+
+    public void setCategoriaNombre(String nombre) {
+        txtNombre.setText(nombre);
+    }
+
+    public void setImagenDesdeBytes(byte[] imagen) {
+        if (imagen != null) {
+            ImageIcon icono = new ImageIcon(imagen);
+            lblImagen.setImagen(new ImageIcon(icono.getImage().getScaledInstance(
+                    lblImagen.getWidth(), lblImagen.getHeight(), Image.SCALE_SMOOTH)));
+            this.imagenBytes = imagen;
+            rSLabelIcon6.setVisible(false);
+        }
+    }
+
+    private void agregarOcultadorDeErrores(JTextField campo, JLabel errorLabel) {
+        campo.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                errorLabel.setVisible(false);
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                errorLabel.setVisible(false);
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                errorLabel.setVisible(false);
+            }
+        });
+    }
+
+    private void seleccionarImagen() {
+        ThumbnailFileChooser fileChooser = new ThumbnailFileChooser();
+        fileChooser.setMultiSelectionEnabled(true);
+
+        int resultado = fileChooser.showOpenDialog(this);
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivoImagen = fileChooser.getSelectedFile();
+            rutaImagenSeleccionada = archivoImagen.getAbsolutePath();
+            try {
+                imagenBytes = Files.readAllBytes(archivoImagen.toPath());
+
+                ImageIcon icono = new ImageIcon(imagenBytes);
+                Image imagenEscalada = icono.getImage().getScaledInstance(
+                        lblImagen.getWidth(), lblImagen.getHeight(), Image.SCALE_SMOOTH);
+                lblImagen.setImagen(new ImageIcon(imagenEscalada));
+                rSLabelIcon6.setVisible(false); // Ocultar el icono de "Add Photo"
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error al cargar la imagen: " + ex.getMessage());
+            }
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -47,8 +114,10 @@ public String getCategoriaNombre() {
         txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
         btnCancelar = new rojeru_san.RSButtonRiple();
         btnGuardar = new rojeru_san.RSButtonRiple();
-        lblImagen = new javax.swing.JLabel();
-        btnSubirImagen44 = new rojeru_san.RSButton();
+        lblImagen = new rojeru_san.rspanel.RSPanelImage();
+        rSLabelIcon6 = new rojerusan.RSLabelIcon();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -62,13 +131,13 @@ public String getCategoriaNombre() {
         jLabel1.setFont(new java.awt.Font("Century751 BT", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Agregar Categoria");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
-        panelP.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
+        panelP.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 80));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel3.setText("Nombre:");
-        panelP.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, -1, -1));
+        jLabel3.setText("Imágen:");
+        panelP.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 150, -1, -1));
 
         txtNombre.setForeground(new java.awt.Color(0, 0, 0));
         txtNombre.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -81,7 +150,7 @@ public String getCategoriaNombre() {
                 txtNombreActionPerformed(evt);
             }
         });
-        panelP.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 200, 30));
+        panelP.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 200, 30));
 
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar.setText("Cancelar");
@@ -92,7 +161,7 @@ public String getCategoriaNombre() {
                 btnCancelarActionPerformed(evt);
             }
         });
-        panelP.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 370, 140, -1));
+        panelP.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 460, 140, -1));
 
         btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar.setText("Guardar");
@@ -103,20 +172,25 @@ public String getCategoriaNombre() {
                 btnGuardarActionPerformed(evt);
             }
         });
-        panelP.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 370, 140, -1));
+        panelP.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 460, 140, -1));
 
-        lblImagen.setBackground(new java.awt.Color(153, 204, 255));
         lblImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        panelP.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 180, 120));
+        lblImagen.setImagen(new javax.swing.ImageIcon(getClass().getResource("/ajuste.png"))); // NOI18N
+        lblImagen.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnSubirImagen44.setIcon(new javax.swing.ImageIcon(getClass().getResource("/up-arrow (1).png"))); // NOI18N
-        btnSubirImagen44.setText(" Subir imagen");
-        btnSubirImagen44.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSubirImagen44ActionPerformed(evt);
-            }
-        });
-        panelP.add(btnSubirImagen44, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 190, 140, 30));
+        rSLabelIcon6.setForeground(new java.awt.Color(204, 204, 204));
+        rSLabelIcon6.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ADD_A_PHOTO);
+        lblImagen.add(rSLabelIcon6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 40, -1));
+
+        panelP.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 190, 220, 160));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel4.setText("Nombre:");
+        panelP.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
+
+        jLabel2.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel2.setText("jLabel2");
+        panelP.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 160, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,76 +221,49 @@ public String getCategoriaNombre() {
     }//GEN-LAST:event_txtNombreActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        /*materialGuardado = false;
         dispose(); // Cierra la ventana emergente*/
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-// 1. Validar el nombre
-if (txtNombre.getText().trim().isEmpty()) {
-        JOptionPane.showMessageDialog(this,
-                "El nombre de la categoría es obligatorio",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-        txtNombre.requestFocus();
-        return;
-    }
+        // 1. Validar el nombre
+        agregarOcultadorDeErrores(txtNombre, jLabel2);
 
-    String nombreCategoria = txtNombre.getText().trim();
-
-    // 2. Validar imagen (opcional)
-    byte[] imagenCategoria = this.imagenBytes;
-    if (imagenCategoria == null) {
-        int respuesta = JOptionPane.showConfirmDialog(this,
-                "¿Desea continuar sin imagen?",
-                "Confirmación",
-                JOptionPane.YES_NO_OPTION);
-
-        if (respuesta != JOptionPane.YES_OPTION) {
-            return;
+        boolean hayErrores = false;
+        if (txtNombre.getText().trim().isEmpty()) {
+            jLabel2.setText("Este campo es obligatorio");
+            jLabel2.setForeground(Color.RED);
+            jLabel2.setVisible(true);
+            hayErrores = true;
         }
-        imagenCategoria = new byte[0];
-    }
 
-    // 3. Crear y guardar la categoría
-    modelo.Catalogocategoria nuevaCategoria = new modelo.Catalogocategoria(); // Asegúrate de que el constructor exista
-    nuevaCategoria.setNombre(nombreCategoria);
-    nuevaCategoria.setImagen(imagenCategoria);
+        String nombreCategoria = txtNombre.getText().trim();
 
-    // 4. Aquí deberías guardar la categoría en la base de datos o donde sea necesario
-    // Ejemplo: ctrlCategoria.guardarCategoria(nuevaCategoria);
-    JOptionPane.showMessageDialog(this, "Categoría guardada exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-    dispose(); // Cierra la ventana después de guardar
+        byte[] imagenCategoria = this.imagenBytes;
+        if (imagenCategoria == null) {
+            int respuesta = JOptionPane.showConfirmDialog(this,
+                    "¿Desea continuar sin imagen?",
+                    "Confirmación",
+                    JOptionPane.YES_NO_OPTION);
 
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void btnSubirImagen44ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirImagen44ActionPerformed
-JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "png", "jpeg"));
-
-    int opcion = fileChooser.showOpenDialog(this);
-    if (opcion == JFileChooser.APPROVE_OPTION) {
-        try {
-            File archivo = fileChooser.getSelectedFile();
-            rutaImagenSeleccionada = archivo.getAbsolutePath(); // Almacena la ruta
-            imagenBytes = Files.readAllBytes(archivo.toPath()); // Lee los bytes de la imagen
-
-            // Carga y escala la imagen
-            ImageIcon imagen = new ImageIcon(rutaImagenSeleccionada);
-            if (imagen.getImageLoadStatus() == MediaTracker.COMPLETE) {
-                Image img = imagen.getImage().getScaledInstance(lblImagen.getWidth(), lblImagen.getHeight(), Image.SCALE_SMOOTH);
-                lblImagen.setIcon(new ImageIcon(img));
-            } else {
-                JOptionPane.showMessageDialog(this, "No se pudo cargar la imagen correctamente.", "Error", JOptionPane.ERROR_MESSAGE);
+            if (respuesta != JOptionPane.YES_OPTION) {
                 return;
             }
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "Error al leer la imagen: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            imagenCategoria = new byte[0];
         }
-    }
-    }//GEN-LAST:event_btnSubirImagen44ActionPerformed
+        //
+        // 3. Crear y guardar la categoría
+        modelo.Catalogocategoria nuevaCategoria = new modelo.Catalogocategoria(); // Asegúrate de que el constructor exista
+        nuevaCategoria.setNombre(nombreCategoria);
+        nuevaCategoria.setImagen(imagenCategoria);
+        dispose();
+
+        // 4. Aquí deberías guardar la categoría en la base de datos o donde sea necesario
+        // Ejemplo: ctrlCategoria.guardarCategoria(nuevaCategoria);
+        productoexito exito = new productoexito();
+        exito.setVisible(true); // Mostrar el diálogo
+        dispose();
+
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -263,12 +310,14 @@ JFileChooser fileChooser = new JFileChooser();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
-    private rojeru_san.RSButton btnSubirImagen44;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel lblImagen;
+    private rojeru_san.rspanel.RSPanelImage lblImagen;
     private javax.swing.JPanel panelP;
+    private rojerusan.RSLabelIcon rSLabelIcon6;
     private RSMaterialComponent.RSTextFieldMaterial txtNombre;
     // End of variables declaration//GEN-END:variables
 }
