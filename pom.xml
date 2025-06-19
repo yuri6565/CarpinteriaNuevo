@@ -166,6 +166,7 @@
             <artifactId>LIB_IDETS</artifactId>
             <version>1.0.2</version>
             <type>jar</type>
+            
         </dependency>
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
@@ -173,17 +174,10 @@
             <version>2.0.27</version>
         </dependency>
         
-        <dependency>
-            <groupId>LIB_IDETS</groupId>
-            <artifactId>LIB_IDETS</artifactId>
-            <version>1.0.2</version>
-            <type>jar</type>
-        </dependency>
-        
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>24</maven.compiler.release>
+        <maven.compiler.release>23</maven.compiler.release>
         <exec.mainClass>com.mycompany.joseabelsistema.JoseabelSistema</exec.mainClass>
     </properties>
     <name>joseabelsistema</name>
