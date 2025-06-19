@@ -153,6 +153,73 @@ public class Ctrl_InventarioMaterial {
         }
     }
 
+    // Método para listar todos los materiales (similar a obtenerMateriales, pero solo MaterialDatos)
+    public List<MaterialDatos> listarMateriales() {
+        List<MaterialDatos> lista = new ArrayList<>();
+        String sql = "SELECT i.* FROM inventario i WHERE i.tipo = 'material'";
+
+        try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                MaterialDatos material = new MaterialDatos(
+                        rs.getInt("id_inventario"),
+                        rs.getString("nombre"),
+                        rs.getString("descripcion"),
+                        rs.getString("cantidad"),
+                        rs.getInt("precio_unitario"),
+                        rs.getString("stockMinimo"),
+                        rs.getInt("categoria_codigo"),
+                        rs.getInt("marca_idmarca"),
+                        rs.getInt("unidad_medida_idunidad_medida"),
+                        rs.getBytes("imagen")
+                );
+                lista.add(material);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al listar materiales: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+// Método para obtener materiales con stock bajo
+    public List<MaterialConDetalles> obtenerMaterialesConStockBajo() {
+        List<MaterialConDetalles> materialesBajos = new ArrayList<>();
+        for (MaterialConDetalles detalle : obtenerMateriales()) {
+            try {
+                String cantidadOriginal = detalle.getMaterial().getCantidad();
+                String stockMinimoOriginal = detalle.getMaterial().getStockMinimo();
+
+                // Reemplazar coma por punto y limpiar solo si es necesario
+                String cantidadStr = cantidadOriginal.replace(",", ".").replaceAll("[^0-9.]", "");
+                String stockMinimoStr = stockMinimoOriginal.replace(",", ".").replaceAll("[^0-9.]", "");
+
+                // Convertir a double con manejo de valores vacíos
+                double cantidad = cantidadStr.isEmpty() ? 0.0 : Double.parseDouble(cantidadStr);
+                double stockMinimo = stockMinimoStr.isEmpty() ? 0.0 : Double.parseDouble(stockMinimoStr);
+
+                // Depuración
+                System.out.println("Material: " + detalle.getMaterial().getNombre()
+                        + " | Cantidad original: " + cantidadOriginal
+                        + " | StockMinimo original: " + stockMinimoOriginal
+                        + " | Cantidad procesada: " + cantidad
+                        + " | StockMinimo procesado: " + stockMinimo);
+
+                // Comparar y agregar si la cantidad es menor o igual al stock mínimo
+                if (cantidad <= stockMinimo) {
+                    materialesBajos.add(detalle);
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Error al parsear para material: " + detalle.getMaterial().getNombre()
+                        + " | Cantidad: " + detalle.getMaterial().getCantidad()
+                        + " | StockMinimo: " + detalle.getMaterial().getStockMinimo());
+                e.printStackTrace();
+            }
+        }
+        return materialesBajos;
+    }
+
     public boolean eliminar(int idInventario) {
         String sql = "DELETE FROM inventario WHERE id_inventario = ? AND tipo = 'material'";
 

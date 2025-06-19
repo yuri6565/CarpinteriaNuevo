@@ -199,7 +199,7 @@ public class materiales extends javax.swing.JPanel {
         panelInfo.setBackground(new Color(46, 49, 82)); // Color de fondo azul oscuro
         Font fuenteInfo = new Font("Segoe UI", Font.PLAIN, 15); // Fuente Arial, negrita, tamaño 16
 
-        JLabel lblNombre = new JLabel("Nombre: " + material.getNombre());
+        JLabel lblNombre = new JLabel(material.getNombre());
         lblNombre.setForeground(Color.WHITE);
         lblNombre.setFont(fuenteInfo); // Establece la fuente
         lblNombre.setHorizontalAlignment(SwingConstants.CENTER);
@@ -215,6 +215,27 @@ public class materiales extends javax.swing.JPanel {
         lblCantidad.setForeground(Color.WHITE);
         lblCantidad.setFont(fuenteInfo);
         lblCantidad.setHorizontalAlignment(SwingConstants.CENTER);
+        // Convertir los valores a números para comparar
+        try {
+            double cantidad = Double.parseDouble(material.getCantidad().replace(",", "."));
+            double stockMinimo = Double.parseDouble(material.getStockMinimo().replace(",", "."));
+
+            // Determinar el color basado en la comparación
+            if (cantidad <= stockMinimo) {
+                // Rojo - Stock crítico
+                lblCantidad.setForeground(new Color(255, 50, 50)); // Rojo
+            } else if (cantidad <= stockMinimo * 1.3) { // Si está dentro del 50% del stock mínimo
+                // Naranja - Stock bajo
+                lblCantidad.setForeground(new Color(255, 165, 0)); // Naranja
+            } else {
+                // Verde - Stock suficiente
+                lblCantidad.setForeground(new Color(50, 200, 50)); // Verde
+            }
+        } catch (NumberFormatException e) {
+            // En caso de error en la conversión, usar color blanco por defecto
+            lblCantidad.setForeground(Color.WHITE);
+            System.err.println("Error al convertir valores de stock: " + e.getMessage());
+        }
         panelInfo.add(lblCantidad);
 
         tarjeta.add(panelInfo, BorderLayout.CENTER);
@@ -238,7 +259,7 @@ public class materiales extends javax.swing.JPanel {
         verBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         // Botón Ver con tooltip mejorado
         verBtn.setToolTipText("<html><b>Ver detalles del material</html>");
-        
+
         //accion del boton de ver
         verBtn.addActionListener(new ActionListener() {
             @Override
@@ -342,13 +363,33 @@ public class materiales extends javax.swing.JPanel {
 
         // Actualizar las etiquetas dentro de panelInfo
         JLabel lblNombre = (JLabel) panelInfo.getComponent(0);
-        lblNombre.setText("Nombre: " + material.getNombre());
+        lblNombre.setText(material.getNombre());
 
         JLabel lblCategoria = (JLabel) panelInfo.getComponent(1);
         lblCategoria.setText("Categoría: " + nombreCategoria);
 
         JLabel lblCantidad = (JLabel) panelInfo.getComponent(2);
         lblCantidad.setText("Cantidad: " + material.getCantidad() + " " + nombreUnidadMedida);
+        try {
+            double cantidad = Double.parseDouble(material.getCantidad().replace(",", "."));
+            double stockMinimo = Double.parseDouble(material.getStockMinimo().replace(",", "."));
+
+            // Determinar el color basado en la comparación
+            if (cantidad <= stockMinimo) {
+                // Rojo - Stock crítico
+                lblCantidad.setForeground(new Color(255, 50, 50)); // Rojo
+            } else if (cantidad <= stockMinimo * 1.3) { // Si está dentro del 50% del stock mínimo
+                // Naranja - Stock bajo
+                lblCantidad.setForeground(new Color(255, 165, 0)); // Naranja
+            } else {
+                // Verde - Stock suficiente
+                lblCantidad.setForeground(new Color(50, 200, 50)); // Verde
+            }
+        } catch (NumberFormatException e) {
+            // En caso de error en la conversión, usar color blanco por defecto
+            lblCantidad.setForeground(Color.WHITE);
+            System.err.println("Error al convertir valores de stock: " + e.getMessage());
+        }
 
         // Actualizar la imagen si es necesario
         JPanel panelImagen = (JPanel) tarjeta.getComponent(0); // El primer componente es panelImagen
