@@ -88,7 +88,6 @@ public class Login1121 extends javax.swing.JFrame {
         }
         isPasswordVisible = !isPasswordVisible;
     }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -306,6 +305,7 @@ public class Login1121 extends javax.swing.JFrame {
     private rojerusan.RSPanelImage rSPanelImage3;
     private RSMaterialComponent.RSTextFieldIconOne txt_usuario;
     // End of variables declaration//GEN-END:variables
+
 
     private void autenticarUsuario() {
         String nombreUsuario = txt_usuario.getText().trim();

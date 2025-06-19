@@ -15,10 +15,27 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JMenuItem;
+import javax.swing.text.Document;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
+import java.util.Arrays;
+import java.util.List;
 import modelo.Consulta_Usuarios;
+
+import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.stream.Collectors;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+import javax.swing.border.LineBorder;
 
 
 
@@ -30,31 +47,162 @@ import modelo.Consulta_Usuarios;
 
 public class Correo_electronico extends javax.swing.JFrame {
 
+    // List of common email domains
+    private final List<String> emailDomains = Arrays.asList(
+        "@gmail.com", "@hotmail.com", "@yahoo.com", "@outlook.com", "@icloud.com"
+    );
+    private int currentDomainIndex = -1;
+    private String userPart = "";
+    private List<String> matchingDomains = Arrays.asList();
+    private boolean isUpdating = false; // Flag to prevent re-entry
 
-    
-   
     public Correo_electronico() {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
-setLocationRelativeTo(null); 
+        setLocationRelativeTo(null); 
 
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER; 
+        add(kGradientPanel1, gbc);
 
-        
-setLayout(new GridBagLayout());
-GridBagConstraints gbc = new GridBagConstraints();
-gbc.gridx = 0;
-gbc.gridy = 0;
-gbc.anchor = GridBagConstraints.CENTER; 
-add(kGradientPanel1, gbc);
+        JPanel fondo = new JPanel(new BorderLayout());
+        fondo.add(kGradientPanel1, BorderLayout.CENTER);
+        setContentPane(fondo);
 
+        // Setup autocomplete for txtcorreo
+        setupAutoComplete();
 
-JPanel fondo = new JPanel(new BorderLayout());
-fondo.add(kGradientPanel1, BorderLayout.CENTER);
-setContentPane(fondo);
-
+        // Debug to confirm initialization
+        System.out.println("Correo_electronico initialized");
     }
-    
 
+    private void setupAutoComplete() {
+        // Add DocumentListener to txtcorreo
+        Document doc = txtcorreo.getDocument();
+        doc.addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (!isUpdating) {
+                    SwingUtilities.invokeLater(() -> updateSuggestions());
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (!isUpdating) {
+                    SwingUtilities.invokeLater(() -> updateSuggestions());
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (!isUpdating) {
+                    SwingUtilities.invokeLater(() -> updateSuggestions());
+                }
+            }
+        });
+
+        // Add KeyListener for cycling through domains and deletion
+        txtcorreo.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    cycleDomain(-1); 
+                    System.out.println("Cycled up to: " + (currentDomainIndex >= 0 && !matchingDomains.isEmpty() ? matchingDomains.get(currentDomainIndex) : "none"));
+                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    cycleDomain(1); 
+                    System.out.println("Cycled down to: " + (currentDomainIndex >= 0 && !matchingDomains.isEmpty() ? matchingDomains.get(currentDomainIndex) : "none"));
+                } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    currentDomainIndex = -1; 
+                    System.out.println("Enter pressed, selection finalized");
+                } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE || e.getKeyCode() == KeyEvent.VK_DELETE) {
+                    // Handle deletion
+                    String text = txtcorreo.getText().trim();
+                    if (text.isEmpty() || !text.contains("@")) {
+                        matchingDomains = Arrays.asList();
+                        currentDomainIndex = -1;
+                    } else {
+                        int atIndex = text.lastIndexOf("@");
+                        userPart = text.substring(0, atIndex);
+                        String domainPart = text.substring(atIndex).replaceAll("[^@a-zA-Z0-9.]", "");
+                        if (domainPart.length() <= 1) {
+                            matchingDomains = Arrays.asList();
+                            currentDomainIndex = -1;
+                        }
+                    }
+                    System.out.println("Key pressed: " + KeyEvent.getKeyText(e.getKeyCode()));
+                }
+            }
+        });
+    }
+
+    private void updateSuggestions() {
+        if (isUpdating) return; // Prevent re-entry
+        isUpdating = true;
+
+        try {
+            String text = txtcorreo.getText().trim();
+            System.out.println("Text updated: " + text); // Debug input
+
+            currentDomainIndex = -1; // Reset index on every update
+
+            if (text.contains("@")) {
+                // Remove any trailing non-domain characters after @
+                int atIndex = text.lastIndexOf("@");
+                userPart = text.substring(0, atIndex);
+                String domainPart = text.substring(atIndex).replaceAll("[^@a-zA-Z0-9.]", ""); // Clean non-domain chars
+                System.out.println("Domain part: " + domainPart); // Debug prefix
+
+                // Only proceed with autocomplete if a letter follows @
+                if (domainPart.length() > 1) { // Ensure at least one letter after @
+                    // Filter matching domains based on the letter after @
+                    matchingDomains = emailDomains.stream()
+                        .filter(domain -> domain.toLowerCase().startsWith("@" + domainPart.toLowerCase().replace("@", "").substring(0, 1)))
+                        .collect(Collectors.toList());
+                    System.out.println("Matching domains: " + matchingDomains); // Debug filtered list
+
+                    // Set to first match if available
+                    if (!matchingDomains.isEmpty()) {
+                        currentDomainIndex = 0; // Start with first match
+                        String newText = userPart + matchingDomains.get(currentDomainIndex);
+                        if (!txtcorreo.getText().equals(newText)) {
+                            txtcorreo.setText(newText);
+                            txtcorreo.setCaretPosition(newText.length()); // Move caret to end only when applying suggestion
+                            System.out.println("Suggestion applied: " + matchingDomains.get(currentDomainIndex));
+                        }
+                    } else {
+                        System.out.println("No matching domain found");
+                    }
+                } else {
+                    matchingDomains = Arrays.asList(); // Reset if no letter after @
+                    System.out.println("No letter after @, no suggestion applied");
+                }
+            } else {
+                matchingDomains = Arrays.asList();
+                System.out.println("No @ found, resetting index");
+            }
+        } finally {
+            isUpdating = false; // Ensure flag is reset
+        }
+    }
+
+    private void cycleDomain(int direction) {
+        if (userPart.isEmpty() || matchingDomains.isEmpty()) return;
+
+        currentDomainIndex += direction;
+        if (currentDomainIndex < 0) {
+            currentDomainIndex = matchingDomains.size() - 1; // Loop to last
+        } else if (currentDomainIndex >= matchingDomains.size()) {
+            currentDomainIndex = 0; // Loop to first
+        }
+        String newText = userPart + matchingDomains.get(currentDomainIndex);
+        txtcorreo.setText(newText);
+        txtcorreo.setCaretPosition(newText.length()); // Move caret to end
+        System.out.println("Cycled to: " + matchingDomains.get(currentDomainIndex));
+    }
 
 
     /**
@@ -262,66 +410,61 @@ verificarCorreo();
 
     
 
-    
-    
-  private void verificarCorreo() {
-    String correo = txtcorreo.getText().trim();
+   
+    private void verificarCorreo() {
+        String correo = txtcorreo.getText().trim();
 
-    if (correo.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Error, debe llenar los campos");
-        return;
-    }
-
-
-    Consulta_Usuarios consulta = new Consulta_Usuarios();
-    String usuario = consulta.obtenerCodigoDesdeCorreo(correo); 
-
-    if (usuario != null) {
-        String codigo = consulta.recuperarCuenta(usuario, correo); 
-
-        if (codigo != null) {
-            Ctrl_Usuarios controlador = new Ctrl_Usuarios();
-            controlador.enviarCodigoRecuperacion(usuario, correo); 
-
-         ValidacionCodigoExitoso usu = new ValidacionCodigoExitoso(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
-        usu.setVisible(true);
-        this.dispose();
-            cargando11 cargando = new cargando11(new JFrame(), true);
-            new Thread(() -> cargando.setVisible(true)).start();
-
-            javax.swing.Timer timer = new javax.swing.Timer(2000, e -> {
-                cargando.dispose();
-                       this.dispose();
-                Contrasena3 ventana = new Contrasena3(); 
-                ventana.setCorreoIngresado(correo);
-                ventana.setVisible(true);
-         
-            });
-            timer.setRepeats(false);
-            timer.start();
-
-        } else {
-            
-            CodigoIncorrectoAlerta cod = new CodigoIncorrectoAlerta(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
-        cod.setVisible(true);
-        this.dispose();
-            JOptionPane.showMessageDialog(this, "No se pudo generar el código de recuperación");
+        if (correo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Error, debe llenar los campos");
+            return;
         }
 
-    } else {
-        JOptionPane.showMessageDialog(this, "El correo no está registrado");
+        Consulta_Usuarios consulta = new Consulta_Usuarios();
+        String usuario = consulta.obtenerCodigoDesdeCorreo(correo);
+
+        if (usuario != null) {
+            String codigo = consulta.recuperarCuenta(usuario, correo);
+
+            if (codigo != null) {
+                Ctrl_Usuarios controlador = new Ctrl_Usuarios();
+                controlador.enviarCodigoRecuperacion(usuario, correo);
+
+                ValidacionCodigoExitoso usu = new ValidacionCodigoExitoso(
+                    (Frame) this.getParent(),
+                    true,
+                    "Confirmar",
+                    "¿Desea guardar los datos?"
+                );
+                usu.setVisible(true);
+                this.dispose();
+                cargando11 cargando = new cargando11(new JFrame(), true);
+                new Thread(() -> cargando.setVisible(true)).start();
+
+                javax.swing.Timer timer = new javax.swing.Timer(2000, e -> {
+                    cargando.dispose();
+                    this.dispose();
+                    Contrasena3 ventana = new Contrasena3();
+                    ventana.setCorreoIngresado(correo);
+                    ventana.setVisible(true);
+                });
+                timer.setRepeats(false);
+                timer.start();
+            } else {
+                CodigoIncorrectoAlerta cod = new CodigoIncorrectoAlerta(
+                    (Frame) this.getParent(),
+                    true,
+                    "Confirmar",
+                    "¿Desea guardar los datos?"
+                );
+                cod.setVisible(true);
+                this.dispose();
+                JOptionPane.showMessageDialog(this, "No se pudo generar el código de recuperación");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "El correo no está registrado");
+        }
     }
-}
+     
 
 
 }

@@ -3,24 +3,52 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package vista.alertas;
+import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Toolkit;
+import necesario.FadeEffect;
 
 /**
  *
  * @author EQUIPO
  */
-public class AlertaUsuarioE extends javax.swing.JDialog {
-    
+public class alertaProductos extends javax.swing.JFrame {
+private javax.swing.JPanel panelOscuro;
 
-    /**
-     * Creates new form espacio_alertga
-     */
-    public AlertaUsuarioE(Frame parent, boolean modal, String error, String todos_los_campos_son_obligatorios) {
-        super(parent, modal);
-        initComponents();
-        setLocationRelativeTo(parent);
-        
-    }
+    boolean opcionConfirmada;
+
+ public alertaProductos() {
+    initComponents();
+    setOpacity(0.0f);
+        setBackground(new java.awt.Color(0, 0, 0, 0));
+        // Duración
+        FadeEffect.fadeInFrame(this, (int) 0.5f, 1.0f);
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+      setSize(490, 198); // Tamaño suficiente para el contenido que ya tienes;
+        setLocationRelativeTo(null);
+//SwingUtilities.invokeLater(() -> {
+//    Container contentPane = ((JFrame) this.getOwner()).getContentPane();
+//    if (contentPane.getWidth() > 0 && contentPane.getHeight() > 0) {
+//        BufferedImage fondoOriginal = BlurUtils.captureComponent(contentPane);
+//        BufferedImage fondoDifuminado = BlurUtils.blurImage(fondoOriginal);
+//
+//        JLabel fondoLabel = new JLabel(new ImageIcon(fondoDifuminado));
+//        fondoLabel.setBounds(0, 0, fondoDifuminado.getWidth(), fondoDifuminado.getHeight());
+//        getLayeredPane().add(fondoLabel, JLayeredPane.DEFAULT_LAYER);
+//
+//        // 👉 AÑADE ESTO: panel oscuro transparente
+//        panelOscuro = new JPanel();
+//        panelOscuro.setBackground(new Color(0, 0, 0, 10)); // Ajusta alpha aquí
+//        panelOscuro.setBounds(0, 0, fondoDifuminado.getWidth(), fondoDifuminado.getHeight());
+//        getLayeredPane().add(panelOscuro, JLayeredPane.PALETTE_LAYER);
+//
+//    } else {
+//        System.out.println("⚠ El contentPane aún no tiene tamaño.");
+//    }
+//});
+
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,8 +77,8 @@ public class AlertaUsuarioE extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Century751 BT", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Usuario no encontrado");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, -1, -1));
+        jLabel1.setText("Error de selección");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, -1, -1));
 
         rSLabelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/warning-triangle-sign-free-vector-removebg-preview.png"))); // NOI18N
         jPanel2.add(rSLabelImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 80, 70));
@@ -71,8 +99,8 @@ public class AlertaUsuarioE extends javax.swing.JDialog {
         jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 150, 130, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel2.setText("Error, no se encontro el usuario, intente de nuevo");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, -1, -1));
+        jLabel2.setText("Error, !debe seleccionar un elemento para eliminar!");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -95,7 +123,7 @@ public class AlertaUsuarioE extends javax.swing.JDialog {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+   public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -109,74 +137,14 @@ public class AlertaUsuarioE extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AlertaUsuarioE.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(borradooconexito.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AlertaUsuarioE.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(borradooconexito.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AlertaUsuarioE.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(borradooconexito.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AlertaUsuarioE.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(borradooconexito.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -185,17 +153,11 @@ public class AlertaUsuarioE extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AlertaUsuarioE dialog = new AlertaUsuarioE(new javax.swing.JFrame(), true, "Error", "Todos los campos son obligatorios");
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+new alertaProductos().setVisible((true));
             }
         });
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
@@ -206,3 +168,5 @@ public class AlertaUsuarioE extends javax.swing.JDialog {
     private rojerusan.RSLabelImage rSLabelImage1;
     // End of variables declaration//GEN-END:variables
 }
+
+

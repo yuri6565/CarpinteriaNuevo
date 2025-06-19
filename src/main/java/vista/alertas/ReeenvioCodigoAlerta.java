@@ -26,16 +26,7 @@ public class ReeenvioCodigoAlerta extends javax.swing.JDialog {
     initComponents();
 
     // Tamaño del diálogo
-    setSize(300, 150);
-
-    // Obtener tamaño de la pantalla
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-    // Posicionar más arriba (x centrado, y más arriba)
-    int x = (screenSize.width - getWidth()) / 2;
-    int y = (screenSize.height - getHeight()) / 8; // más arriba (1/4 del alto total)
-
-    setLocation(x, y);
+  
 }
 
     /**
@@ -134,6 +125,14 @@ public class ReeenvioCodigoAlerta extends javax.swing.JDialog {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ReeenvioCodigoAlerta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

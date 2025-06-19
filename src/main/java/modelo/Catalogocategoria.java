@@ -5,7 +5,12 @@ public class Catalogocategoria {
     private int idCategoria;
     private String nombre;
 private byte[] imagen;
-private int id;
+
+    public Catalogocategoria(int idCategoria, String nombre, byte[] imagen) {
+        this.idCategoria = idCategoria;
+        this.nombre = nombre;
+        this.imagen = imagen;
+    }
 
     public int getIdCategoria() {
         return idCategoria;
@@ -31,22 +36,8 @@ private int id;
         this.imagen = imagen;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public Catalogocategoria() {
     }
 
-    public Catalogocategoria(int idCategoria, String nombre, byte[] imagen, int id) {
-        this.idCategoria = idCategoria;
-        this.nombre = nombre;
-        this.imagen = imagen;
-        this.id = id;
-    }
    
 }

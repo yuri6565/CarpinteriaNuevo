@@ -31,6 +31,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -575,7 +576,16 @@ public class Principal extends javax.swing.JFrame {
             contenedor.repaint();
         });
         messagesItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Abriendo mensajes..."));
-        logoutItem.addActionListener(e -> System.exit(0));
+        logoutItem.addActionListener(e -> {
+            // Cerrar la ventana actual
+            JFrame topFrame = (JFrame) javax.swing.SwingUtilities.getWindowAncestor(rSLabelCircleImage1);
+            topFrame.dispose();
+
+            // Mostrar la ventana de login
+            Login1121 login = new Login1121();
+            login.setVisible(true);
+        });
+
     }
 
     private void animacion() {

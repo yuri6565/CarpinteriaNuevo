@@ -4,9 +4,7 @@
  */
 package vista;
 
-
 //import controlador.Contrl_login;
-
 import vista.alertas.AlertaUsuarioE;
 import vista.alertas.AlertaReestablecerContrasena;
 import controlador.Contrl_login;
@@ -26,46 +24,40 @@ import vista.alertas.AlertaCambioContraseña;
 /**
  *
  * @author Personal
-*/
-
+ */
 public class NuevaContrasena extends javax.swing.JFrame {
 
- private String correoIngresado = "";
-private boolean isPasswordVisible = false;
+    private String correoIngresado = "";
+    private boolean isPasswordVisible = false;
+
     public void setCorreoIngresado(String correo) {
         this.correoIngresado = correo;
     }
-      // Rutas de las imágenes
+    // Rutas de las imágenes
     private final String eyeOpenPath = "/vista (1).png";   // Ojo abierto
     private final String eyeClosedPath = "/ojo (2).png"; // Ojo cerrado
-    
+
     private ImageIcon eyeOpenIcon;
     private ImageIcon eyeClosedIcon;
 
-   public NuevaContrasena() {
-    initComponents();
+    public NuevaContrasena() {
+        initComponents();
 
-       setExtendedState(JFrame.MAXIMIZED_BOTH); 
-setLocationRelativeTo(null); 
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setLocationRelativeTo(null);
 
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(kGradientPanel1, gbc);
 
-        
-setLayout(new GridBagLayout());
-GridBagConstraints gbc = new GridBagConstraints();
-gbc.gridx = 0;
-gbc.gridy = 0;
-gbc.anchor = GridBagConstraints.CENTER; 
-add(kGradientPanel1, gbc);
-
-
-JPanel fondo = new JPanel(new BorderLayout());
-fondo.add(kGradientPanel1, BorderLayout.CENTER);
-setContentPane(fondo);
+        JPanel fondo = new JPanel(new BorderLayout());
+        fondo.add(kGradientPanel1, BorderLayout.CENTER);
+        setContentPane(fondo);
 
     }
-    
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -195,55 +187,49 @@ setContentPane(fondo);
     }//GEN-LAST:event_jLabel8MousePressed
 
     private void iniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarActionPerformed
- String nuevaContrasena = txtcontrasenanueva.getText().trim();
+        String nuevaContrasena = txtcontrasenanueva.getText().trim();
 
-   
-    if (nuevaContrasena.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Por favor ingrese una nueva contraseña.");
-        return;
-    }
+        if (nuevaContrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese una nueva contraseña.");
+            return;
+        }
 
-    String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{8,}$";
-    if (!nuevaContrasena.matches(regex)) {
-         AlertaReestablecerContrasena confirmDialog = new AlertaReestablecerContrasena(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
-        confirmDialog.setVisible(true);
-        return;
-    }
+        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{8,}$";
+        if (!nuevaContrasena.matches(regex)) {
+            AlertaReestablecerContrasena confirmDialog = new AlertaReestablecerContrasena(
+                    (Frame) this.getParent(),
+                    true,
+                    "Confirmar",
+                    "¿Desea guardar los datos?"
+            );
+            confirmDialog.setVisible(true);
+            return;
+        }
 
-     Consulta_Usuarios controlador = new Consulta_Usuarios();
-boolean cambioExitoso = controlador.actualizarContrasena(correoIngresado, nuevaContrasena);
-    if (cambioExitoso) {
-         AlertaCambioContraseña confirmDialog = new AlertaCambioContraseña(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
-        confirmDialog.setVisible(true);
-        this.dispose();
-        Login11211 login = new Login11211();
-        login.setVisible(true);
-    } else {
-        JOptionPane.showMessageDialog(this, "No se encontró el usuario. Intenta de nuevo.");
-        AlertaUsuarioE usu = new AlertaUsuarioE(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
-        usu.setVisible(true);
-        this.dispose();
-    }
-
-
-  
-  
- 
+        Consulta_Usuarios controlador = new Consulta_Usuarios();
+        boolean cambioExitoso = controlador.actualizarContrasena(correoIngresado, nuevaContrasena);
+        if (cambioExitoso) {
+            AlertaCambioContraseña confirmDialog = new AlertaCambioContraseña(
+                    (Frame) this.getParent(),
+                    true,
+                    "Confirmar",
+                    "¿Desea guardar los datos?"
+            );
+            confirmDialog.setVisible(true);
+            this.dispose();
+            Login1121 login = new Login1121();
+            login.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró el usuario. Intenta de nuevo.");
+            AlertaUsuarioE usu = new AlertaUsuarioE(
+                    (Frame) this.getParent(),
+                    true,
+                    "Confirmar",
+                    "¿Desea guardar los datos?"
+            );
+            usu.setVisible(true);
+            this.dispose();
+        }
 
     }//GEN-LAST:event_iniciarActionPerformed
 
@@ -259,8 +245,7 @@ boolean cambioExitoso = controlador.actualizarContrasena(correoIngresado, nuevaC
      * @param context
      * @param args the command line arguments
      */
- 
- public static void main(String args[]) {
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -306,8 +291,6 @@ boolean cambioExitoso = controlador.actualizarContrasena(correoIngresado, nuevaC
     private RSMaterialComponent.RSPasswordIconOne txtcontrasenanueva;
     // End of variables declaration//GEN-END:variables
 
-    
-
       private void togglePasswordVisibility() {
         if (isPasswordVisible) {
             txtcontrasenanueva.setEchoChar('•'); // Ocultar contraseña
@@ -322,5 +305,3 @@ boolean cambioExitoso = controlador.actualizarContrasena(correoIngresado, nuevaC
   
 
 }
-
-
