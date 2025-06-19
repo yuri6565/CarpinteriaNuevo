@@ -190,7 +190,7 @@ public class herramientas extends javax.swing.JPanel {
         panelInfo.setBackground(new Color(46, 49, 82)); // Color de fondo azul oscuro
         Font fuenteInfo = new Font("Segoe UI", Font.PLAIN, 15); // Fuente Arial, negrita, tamaño 16
 
-        JLabel lblNombre = new JLabel("Nombre: " + material.getNombre());
+        JLabel lblNombre = new JLabel(material.getNombre());
         lblNombre.setForeground(Color.WHITE);
         lblNombre.setFont(fuenteInfo); // Establece la fuente
         lblNombre.setHorizontalAlignment(SwingConstants.CENTER);
@@ -344,7 +344,7 @@ public class herramientas extends javax.swing.JPanel {
 
         // Actualizar las etiquetas dentro de panelInfo
         JLabel lblNombre = (JLabel) panelInfo.getComponent(0);
-        lblNombre.setText("Nombre: " + material.getNombre());
+        lblNombre.setText(material.getNombre());
 
         JLabel lblCategoria = (JLabel) panelInfo.getComponent(1);
         lblCategoria.setText("Categoría: " + nombreCategoria);
