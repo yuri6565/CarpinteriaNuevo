@@ -222,18 +222,25 @@ public class DetallesPedido extends javax.swing.JPanel {
             Color fondo = new Color(21, 21, 33);
             Color primario = new Color(40, 60, 150);
             Color texto = Color.WHITE;
+            Color fechas = new Color(37, 37, 52);
+            
             jPanel2.setBackground(fondo);
             jPanel2.setForeground(new Color(255, 255, 255));
+            
             cmbCliente.setBackground(fondo);
             cmbCliente.setForeground(new Color(255, 255, 255));
+            
             txtNombrePedido.setBackground(fondo);
             txtNombrePedido.setForeground(new Color(255, 255, 255));
-            dateFechaInicio.setBackground(fondo);
+            
+            dateFechaInicio.setBackground(fechas);
             dateFechaInicio.setForeground(new Color(255, 255, 255));
-            dateFechaFin.setBackground(fondo);
+            dateFechaFin.setBackground(fechas);
             dateFechaFin.setForeground(new Color(255, 255, 255));
+            
             cmbEstado.setBackground(fondo);
             cmbEstado.setForeground(new Color(255, 255, 255));
+            
             jPanel1.setBackground(new Color(46, 49, 82));
             jLabel11.setFont(new Font("Segoe UI", Font.BOLD, 18));
             jLabel11.setForeground(new Color(255, 255, 255));
@@ -253,8 +260,10 @@ public class DetallesPedido extends javax.swing.JPanel {
             lblTotal.setForeground(new Color(255, 255, 255));
             jLabel3.setFont(new Font("Segoe UI", Font.BOLD, 18));
             jLabel3.setForeground(new Color(255, 255, 255));
+            
             lblNumeroPedido.setFont(new Font("Segoe UI", Font.BOLD, 18));
             lblNumeroPedido.setForeground(new Color(255, 255, 255));
+            
             tablaDetalles.setBackground(new Color(21, 21, 33));
             tablaDetalles.setBackgoundHead(new Color(67, 71, 120));
             tablaDetalles.setForegroundHead(new Color(255, 255, 255));
@@ -271,6 +280,7 @@ public class DetallesPedido extends javax.swing.JPanel {
             tablaDetalles.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
             tablaDetalles.setEffectHover(true);
             tablaDetalles.setShowGrid(true);
+            
             btnVolver.setBackground(new Color(67, 71, 120));
             btnVolver.setBackgroundHover(new Color(118, 142, 240));
 
@@ -704,6 +714,7 @@ public class DetallesPedido extends javax.swing.JPanel {
         tablaDetalles.setFontHead(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         tablaDetalles.setFontRowHover(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         tablaDetalles.setFontRowSelect(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        tablaDetalles.setPreferredSize(new java.awt.Dimension(450, 213));
         tablaDetalles.setSelectionBackground(new java.awt.Color(109, 160, 221));
         tablaDetalles.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

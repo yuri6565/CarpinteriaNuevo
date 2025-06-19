@@ -5,6 +5,7 @@
 package vista.Caja;
 
 import controlador.Ctrl_CajaEgresos;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -15,6 +16,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import modelo.Caja;
+import vista.TemaManager;
 
 /**
  *
@@ -27,6 +29,8 @@ public final class Egresos extends javax.swing.JPanel {
      */
     public Egresos() {
         initComponents();
+        aplicarTema();
+        
 
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
@@ -44,9 +48,122 @@ public final class Egresos extends javax.swing.JPanel {
         Tabla1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         Tabla1.setRowSelectionAllowed(true);
         Tabla1.setFocusable(false);
+        
+        TemaManager.getInstance().addThemeChangeListener(() -> {
+            aplicarTema(); // Update theme when it changes
+        });
+
+        
         cargarTablaEgresos();
     }
 
+    
+    
+    public void aplicarTema() {
+        boolean oscuro = TemaManager.getInstance().isOscuro();
+        System.out.println("Aplicando tema en Cotizacion: " + (oscuro ? "Oscuro" : "Claro"));
+
+        if (oscuro) {
+            // Configuración para modo oscuro
+            Color fondo = new Color(21, 21, 33);
+            Color fondoTabla = new Color(30, 30, 45);
+            Color encabezado = new Color(67, 71, 120);
+            Color texto = Color.WHITE;
+            Color borde = new Color(60, 60, 80);
+
+            // Panel raíz y panel principal
+            setBackground(fondo);
+            jPanel2.setBackground(fondo);
+            jPanel3.setBackground(fondo);
+
+            // Tabla
+            Tabla1.setBackground(fondoTabla);
+            Tabla1.setForeground(texto);
+            Tabla1.setColorPrimary(new Color(37, 37, 52));  // Filas impares
+            Tabla1.setColorSecondary(new Color(30, 30, 45)); // Filas pares
+            Tabla1.setColorPrimaryText(texto);
+            Tabla1.setColorSecundaryText(texto);
+            Tabla1.setBackgoundHead(encabezado);
+            Tabla1.setForegroundHead(texto);
+            Tabla1.setColorBorderHead(encabezado);
+            Tabla1.setColorBorderRows(borde);
+            Tabla1.setGridColor(borde);
+
+           
+           jLabel1.setForeground(Color.white);
+
+            txtbuscar.setBackground(new Color(37, 37, 52));
+            txtbuscar.setForeground(texto);
+            txtbuscar.setColorMaterial(texto);
+            txtbuscar.setPhColor(Color.LIGHT_GRAY);
+            txtbuscar.setSelectionColor(new Color(118, 142, 240));
+
+            // Botones
+            btnNuevoProduc.setBackground(encabezado);
+            btnNuevoProduc.setForeground(texto);
+
+            btnEliminar.setBackground(encabezado);
+            btnEliminar.setForeground(texto);
+
+        
+
+            // Fondo (JLabel, probablemente para una imagen de fondo)
+            /*
+        fondo.setBackground(fondo);
+        fondo.setOpaque(false); // Asegurar que no interfiera con el fondo del panel*/
+        } else {
+            // Configuración para modo claro
+            Color fondo = new Color(242, 247, 255);
+            Color texto = Color.BLACK;
+            Color primario = new Color(72, 92, 188);
+            Color borde = new Color(0, 0, 0);
+
+            // Panel raíz y panel principal
+            setBackground(fondo);
+            jPanel2.setBackground(fondo);
+
+            // Tabla
+            Tabla1.setBackground(new Color(255, 255, 255));
+            Tabla1.setBackgoundHead(new Color(46, 49, 82));
+            Tabla1.setForegroundHead(Color.WHITE);
+            Tabla1.setBackgoundHover(new Color(67, 150, 209));
+            Tabla1.setColorPrimary(new Color(242, 242, 242));
+            Tabla1.setColorPrimaryText(texto);
+            Tabla1.setColorSecondary(new Color(255, 255, 255));
+            Tabla1.setColorSecundaryText(texto);
+            Tabla1.setColorBorderHead(primario);
+            Tabla1.setColorBorderRows(borde);
+            Tabla1.setGridColor(Color.WHITE);
+
+         
+            // Campos de texto
+            txtbuscar.setBackground(fondo);
+            txtbuscar.setForeground(texto);
+            txtbuscar.setColorMaterial(primario);
+            txtbuscar.setPhColor(Color.GRAY);
+            txtbuscar.setSelectionColor(new Color(67, 150, 209));
+
+            
+            // Fondo
+            /*
+        fondo.setBackground(fondo);
+        fondo.setOpaque(false);*/
+        }
+
+        // Repintar todos los componentes
+        repaint();
+        jPanel2.repaint();
+        Tabla1.repaint();
+        Tabla1.getTableHeader().repaint();
+     
+    }
+    
+    
+    
+    
+    
+    
+   
     public void cargarTablaEgresos() {
         DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
         model.setRowCount(0); // Limpiar tabla
@@ -184,6 +301,7 @@ public final class Egresos extends javax.swing.JPanel {
         Tabla1.setFontHead(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Tabla1.setFontRowHover(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         Tabla1.setFontRowSelect(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Tabla1.setPreferredSize(new java.awt.Dimension(375, 433));
         Tabla1.setRowHeight(23);
         Tabla1.setSelectionBackground(new java.awt.Color(109, 160, 221));
         Tabla1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -194,7 +312,7 @@ public final class Egresos extends javax.swing.JPanel {
         jScrollPane3.setViewportView(Tabla1);
         Tabla1.getColumnModel().getColumn(0).setPreferredWidth(10);
 
-        jPanel3.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 1130, 500));
+        jPanel3.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 1130, 470));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

@@ -36,7 +36,7 @@ public class pedido extends javax.swing.JPanel {
         this.contenedor = contenedor;
         this.controlador = new Ctrl_Pedido();
         initComponents();
-           aplicarTema(); // Apply initial theme
+        aplicarTema(); // Apply initial theme
 
         // Register for theme changes
         TemaManager.getInstance().addThemeChangeListener(() -> {
@@ -181,6 +181,9 @@ public class pedido extends javax.swing.JPanel {
             return label;
         }
     }
+    
+
+
 
     private void mostrarDetallesPedido(String id) {
         DetallesPedido detalles = new DetallesPedido(id, contenedor);
@@ -192,16 +195,17 @@ public class pedido extends javax.swing.JPanel {
         contenedor.repaint();
     }
 
-    
-    
-    
-      public void aplicarTema() {
+    public void aplicarTema() {
         boolean oscuro = TemaManager.getInstance().isOscuro();
 
         if (oscuro) {
-            Color fondo = new Color(21,21,33);
+            Color fondo = new Color(21, 21, 33);
             Color primario = new Color(40, 60, 150);
             Color texto = Color.WHITE;
+            Color fondoTabla = new Color(30, 30, 45);
+            Color encabezado = new Color(67, 71, 120);
+
+            
 
             jPanel1.setBackground(fondo);
             txtBuscar.setBackground(fondo);
@@ -209,31 +213,30 @@ public class pedido extends javax.swing.JPanel {
             txtBuscar.setColorIcon(texto);
             txtBuscar.setPhColor(Color.LIGHT_GRAY);
             
+            cmbCategoria.setBackground(fondo);
+            cmbCategoria.setForeground(texto);
             
-          tablaM.setBackground(new Color (21,21,33));
-            tablaM.setBackgoundHead(new Color (67, 71, 120));
-            tablaM.setForegroundHead(new Color (255,255,255));
-            tablaM.setBackgoundHover(new Color(40, 50, 90));
-         tablaM.setFont(new Font("Tahoma", Font.PLAIN, 15));
-            tablaM.setColorPrimary(new Color(37,37,52));
+            
+            
+            tablaM.setBackground(fondoTabla);
+            tablaM.setForeground(texto);
+            tablaM.setColorPrimary(new Color(37, 37, 52));  // Filas impares
+            tablaM.setColorSecondary(new Color(30, 30, 45)); // Filas pares
             tablaM.setColorPrimaryText(texto);
-            tablaM.setColorSecondary(new Color(30,30,45));
             tablaM.setColorSecundaryText(texto);
-            tablaM.setColorBorderHead(primario);
-            tablaM.setColorBorderRows(fondo.darker());
-            tablaM.setFontHead(new Font("Tahoma", Font.BOLD, 15));
-            tablaM.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
-            tablaM.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
-            tablaM.setEffectHover(true);
-              tablaM.setShowGrid(true);
-tablaM.setGridColor(Color.WHITE); // o el color que desees
+            tablaM.setBackgoundHead(encabezado);
+            tablaM.setForegroundHead(texto);
+            tablaM.setColorBorderHead(encabezado);
+            tablaM.setColorBorderRows(new Color(60, 60, 60));
+            tablaM.setGridColor(new Color(80, 80, 80));
 
             btnEliminar1.setBackground(new Color(67, 71, 120));
-            btnNuevo.setBackgroundHover(new Color(118,142,240));
+            btnNuevo.setBackgroundHover(new Color(118, 142, 240));
             btnNuevo.setBackground(new Color(67, 71, 120));
-           btnEliminar1.setBackgroundHover(new Color(118,142,240));
+            btnEliminar1.setBackgroundHover(new Color(118, 142, 240));
             btnEliminar1.setBackground(new Color(67, 71, 120));
-            btnEliminar1.setBackgroundHover(new Color(118,142,240));
+            btnEliminar1.setBackgroundHover(new Color(118, 142, 240));
+            
         } else {
             Color fondo = new Color(242, 247, 255);
             Color texto = Color.BLACK;
@@ -244,31 +247,31 @@ tablaM.setGridColor(Color.WHITE); // o el color que desees
             txtBuscar.setForeground(texto);
             txtBuscar.setColorIcon(texto);
             txtBuscar.setPhColor(Color.GRAY);
-            
-            
-      tablaM.setBackground(new Color (255,255,255));
-            tablaM.setBackgoundHead(new Color (46,49,82));
+
+            tablaM.setBackground(new Color(37, 37, 52)); // Cambiado de blanco (255,255,255) a un gris oscuro
+            tablaM.setBackgoundHead(new Color(46, 49, 82));
             tablaM.setForegroundHead(Color.WHITE);
-            tablaM.setBackgoundHover(new Color(67,150,209));
-           tablaM.setFont(new Font("Tahoma", Font.PLAIN, 15));
-            tablaM.setColorPrimary(new Color(242, 242, 242));
+            tablaM.setBackgoundHover(new Color(67, 150, 209));
+            tablaM.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            tablaM.setColorPrimary(new Color(30, 30, 45)); // Ajustado para un fondo más oscuro
             tablaM.setColorPrimaryText(texto);
-            tablaM.setColorSecondary(new Color(255, 255, 255));
-            tablaM.setColorSecundaryText(texto);
+            tablaM.setColorSecondary(new Color(21, 21, 33)); // Ajustado para un fondo más oscuro
+            tablaM.setColorSecundaryText(Color.WHITE); // Texto blanco para contraste
             tablaM.setColorBorderHead(primario);
-            tablaM.setColorBorderRows(new Color(0,0,0));
+            tablaM.setColorBorderRows(new Color(0, 0, 0));
             tablaM.setFontHead(new Font("Tahoma", Font.BOLD, 15));
             tablaM.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
             tablaM.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
             tablaM.setEffectHover(true);
-            tablaM.setSelectionBackground(new Color(67,150,209));
+            tablaM.setSelectionBackground(new Color(67, 150, 209));
             tablaM.setShowGrid(true);
-tablaM.setGridColor(Color.BLACK); // o el color que desees
+            tablaM.setGridColor(Color.WHITE); // Cambiado a blanco para contraste con fondo oscuro
 
             btnNuevo.setBackground(new Color(46, 49, 82));
             btnEliminar1.setBackground(new Color(46, 49, 82));
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -381,6 +384,7 @@ tablaM.setGridColor(Color.BLACK); // o el color que desees
         tablaM.setFontHead(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         tablaM.setFontRowHover(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tablaM.setFontRowSelect(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        tablaM.setPreferredSize(new java.awt.Dimension(525, 463));
         tablaM.setRowHeight(23);
         tablaM.setSelectionBackground(new java.awt.Color(109, 160, 221));
         tablaM.setShowGrid(false);
@@ -392,7 +396,7 @@ tablaM.setGridColor(Color.BLACK); // o el color que desees
         jScrollPane3.setViewportView(tablaM);
         tablaM.getColumnModel().getColumn(0).setPreferredWidth(10);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 1200, 500));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 1200, 500));
 
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1304, 742));
     }// </editor-fold>//GEN-END:initComponents
@@ -402,11 +406,11 @@ tablaM.setGridColor(Color.BLACK); // o el color que desees
     }//GEN-LAST:event_txtBuscarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-    
-            pedidoNuevo dialog = new pedidoNuevo(new javax.swing.JFrame(), true, this);
-            dialog.setLocationRelativeTo(null);
-            dialog.setVisible(true);
-        
+
+        pedidoNuevo dialog = new pedidoNuevo(new javax.swing.JFrame(), true, this);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed

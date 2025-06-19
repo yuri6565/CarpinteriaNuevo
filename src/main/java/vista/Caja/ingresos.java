@@ -24,6 +24,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 import modelo.Caja;
 import modelo.PedidoDetalle;
+import vista.TemaManager;
 
 /**
  *
@@ -40,7 +41,7 @@ public final class ingresos extends javax.swing.JPanel {
      */
     public ingresos() {
         initComponents();
-
+        aplicarTema();
         // Inicializar el controlador
         controlador = new Ctrl_CajaIngresos();
         generadorPDF = new GeneradorIngresosPDF();
@@ -52,8 +53,115 @@ public final class ingresos extends javax.swing.JPanel {
         detailColumn.setPreferredWidth(35); // Ajustar el ancho de la columna
         Tabla1.setRowHeight(30); // Ajustar la altura de las filas
 
+        TemaManager.getInstance().addThemeChangeListener(() -> {
+            aplicarTema(); // Update theme when it changes
+        });
+
         // Cargar datos iniciales
         cargarDatosIniciales();
+    }
+
+    public void aplicarTema() {
+        boolean oscuro = TemaManager.getInstance().isOscuro();
+        System.out.println("Aplicando tema en Cotizacion: " + (oscuro ? "Oscuro" : "Claro"));
+
+        if (oscuro) {
+            // Configuración para modo oscuro
+            Color fondo = new Color(21, 21, 33);
+            Color fondoTabla = new Color(30, 30, 45);
+            Color encabezado = new Color(67, 71, 120);
+            Color texto = Color.WHITE;
+            Color borde = new Color(60, 60, 80);
+
+            // Panel raíz y panel principal
+            setBackground(fondo);
+            jPanel1.setBackground(fondo);
+            jPanel1.setBackground(fondo);
+
+            // Tabla
+            Tabla1.setBackground(fondoTabla);
+            Tabla1.setForeground(texto);
+            Tabla1.setColorPrimary(new Color(37, 37, 52));  // Filas impares
+            Tabla1.setColorSecondary(new Color(30, 30, 45)); // Filas pares
+            Tabla1.setColorPrimaryText(texto);
+            Tabla1.setColorSecundaryText(texto);
+            Tabla1.setBackgoundHead(encabezado);
+            Tabla1.setForegroundHead(texto);
+            Tabla1.setColorBorderHead(encabezado);
+            Tabla1.setColorBorderRows(borde);
+            Tabla1.setGridColor(borde);
+
+           
+           
+
+            txtbuscar.setBackground(new Color(37, 37, 52));
+            txtbuscar.setForeground(texto);
+            txtbuscar.setColorMaterial(texto);
+            txtbuscar.setPhColor(Color.LIGHT_GRAY);
+            txtbuscar.setSelectionColor(new Color(118, 142, 240));
+
+            // Botones
+            btnNuevo.setBackground(encabezado);
+            btnNuevo.setBackgroundHover(new Color(118, 142, 240));
+            btnNuevo.setForeground(texto);
+            btnNuevo.setForegroundHover(Color.BLACK);
+
+            btnEliminar1.setBackground(encabezado);
+            btnEliminar1.setBackgroundHover(new Color(0, 153, 0));
+            btnEliminar1.setForeground(texto);
+            btnEliminar1.setForegroundHover(Color.BLACK);
+
+        
+
+            // Fondo (JLabel, probablemente para una imagen de fondo)
+            /*
+        fondo.setBackground(fondo);
+        fondo.setOpaque(false); // Asegurar que no interfiera con el fondo del panel*/
+        } else {
+            // Configuración para modo claro
+            Color fondo = new Color(242, 247, 255);
+            Color texto = Color.BLACK;
+            Color primario = new Color(72, 92, 188);
+            Color borde = new Color(0, 0, 0);
+
+            // Panel raíz y panel principal
+            setBackground(fondo);
+            jPanel1.setBackground(fondo);
+
+            // Tabla
+            Tabla1.setBackground(new Color(255, 255, 255));
+            Tabla1.setBackgoundHead(new Color(46, 49, 82));
+            Tabla1.setForegroundHead(Color.WHITE);
+            Tabla1.setBackgoundHover(new Color(67, 150, 209));
+            Tabla1.setColorPrimary(new Color(242, 242, 242));
+            Tabla1.setColorPrimaryText(texto);
+            Tabla1.setColorSecondary(new Color(255, 255, 255));
+            Tabla1.setColorSecundaryText(texto);
+            Tabla1.setColorBorderHead(primario);
+            Tabla1.setColorBorderRows(borde);
+            Tabla1.setGridColor(Color.WHITE);
+
+         
+            // Campos de texto
+            txtbuscar.setBackground(fondo);
+            txtbuscar.setForeground(texto);
+            txtbuscar.setColorMaterial(primario);
+            txtbuscar.setPhColor(Color.GRAY);
+            txtbuscar.setSelectionColor(new Color(67, 150, 209));
+
+            
+            // Fondo
+            /*
+        fondo.setBackground(fondo);
+        fondo.setOpaque(false);*/
+        }
+
+        // Repintar todos los componentes
+        repaint();
+        jPanel1.repaint();
+        Tabla1.repaint();
+        Tabla1.getTableHeader().repaint();
+     
     }
 
     // Método para cargar datos iniciales en la tabla
@@ -208,6 +316,7 @@ public final class ingresos extends javax.swing.JPanel {
         Tabla1.setFontHead(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Tabla1.setFontRowHover(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         Tabla1.setFontRowSelect(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Tabla1.setPreferredSize(new java.awt.Dimension(600, 453));
         Tabla1.setRowHeight(23);
         Tabla1.setSelectionBackground(new java.awt.Color(67, 150, 209));
         Tabla1.setShowGrid(false);
@@ -219,7 +328,7 @@ public final class ingresos extends javax.swing.JPanel {
         jScrollPane3.setViewportView(Tabla1);
         Tabla1.getColumnModel().getColumn(0).setPreferredWidth(10);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 1210, 500));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 1190, 490));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -294,7 +403,7 @@ public final class ingresos extends javax.swing.JPanel {
                 double debido = (debidoObj != null) ? debidoObj.doubleValue() : 0.0;
 
                 // Obtener el id_pedido desde Ingreso (ajusta según la estructura real)
-                int idPedido = ingresoCaja.getIngreso() != null ? ingresoCaja.getIngreso().getIdPedido(): idAbono; // Ajusta getPedidoIdPedido()
+                int idPedido = ingresoCaja.getIngreso() != null ? ingresoCaja.getIngreso().getIdPedido() : idAbono; // Ajusta getPedidoIdPedido()
                 if (idPedido == 0 && idAbono != idPedido) {
                     JOptionPane.showMessageDialog(this, "No se pudo determinar el ID del pedido para el ID de abono: " + idAbono, "Error", JOptionPane.ERROR_MESSAGE);
                     return;

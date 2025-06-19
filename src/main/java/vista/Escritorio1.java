@@ -80,6 +80,8 @@ public class Escritorio1 extends javax.swing.JPanel {
         cargarDatosIniciales();
 
     }
+    
+    
 
     public void aplicarTema() {
         boolean oscuro = TemaManager.getInstance().isOscuro();
@@ -266,6 +268,8 @@ public class Escritorio1 extends javax.swing.JPanel {
         }
     }
 
+    
+    
     private class EstadoTableCellRenderer extends DefaultTableCellRenderer {
 
         private final Color textColor = new Color(46, 49, 82);

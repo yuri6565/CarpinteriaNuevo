@@ -311,7 +311,7 @@ public class cotizacion extends javax.swing.JPanel {
         jLabel2.setText("Cliente:");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setText("Nombre :");
+        jLabel3.setText("Producto:");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("Cantidad:");
@@ -328,6 +328,7 @@ public class cotizacion extends javax.swing.JPanel {
         Tabla1.setColorPrimaryText(new java.awt.Color(46, 49, 82));
         Tabla1.setColorSecondary(new java.awt.Color(255, 255, 255));
         Tabla1.setColorSecundaryText(new java.awt.Color(46, 49, 82));
+        Tabla1.setPreferredSize(new java.awt.Dimension(450, 283));
         Tabla1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla1MouseClicked(evt);
@@ -335,7 +336,7 @@ public class cotizacion extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(Tabla1);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 1180, 320));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 1180, 320));
 
         combox_Unidad.setColorMaterial(new java.awt.Color(0, 0, 0));
         combox_Unidad.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N

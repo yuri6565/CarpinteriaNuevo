@@ -4,6 +4,7 @@
  */
 package vista.Caja;
 
+import java.awt.Color;
 import vista.TemaManager;
 
 
@@ -17,7 +18,7 @@ public class Caja extends javax.swing.JPanel {
      */
     public Caja() {
         initComponents();
-        
+        aplicarTema();
         
             ingresos es = new ingresos();
             es.setSize(1260, 730);
@@ -27,6 +28,11 @@ public class Caja extends javax.swing.JPanel {
             panelP1.add(es);
             panelP1.revalidate();
             panelP1.repaint();
+            
+            TemaManager.getInstance().addThemeChangeListener(() -> {
+            aplicarTema(); // Update theme when it changes
+        });
+
       
     }
 
@@ -125,6 +131,77 @@ public class Caja extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnEgresos2ActionPerformed
 
+    public void aplicarTema() {
+        boolean oscuro = TemaManager.getInstance().isOscuro();
+        System.out.println("Aplicando tema en Cotizacion: " + (oscuro ? "Oscuro" : "Claro"));
+
+        if (oscuro) {
+            // Configuración para modo oscuro
+            Color fondo = new Color(21, 21, 33);
+            Color fondoTabla = new Color(30, 30, 45);
+            Color encabezado = new Color(67, 71, 120);
+            Color texto = Color.WHITE;
+            Color borde = new Color(60, 60, 80);
+
+            // Panel raíz y panel principal
+            setBackground(fondo);
+            panelP1.setBackground(fondo);
+            panelP1.setBackground(fondoTabla);
+
+            // Botones
+            btnIngresos.setBackground(encabezado);
+            btnIngresos.setBackgroundHover(new Color(118, 142, 240));
+            btnIngresos.setForeground(texto);
+            btnIngresos.setForegroundHover(Color.BLACK);
+
+            btnEgresos2.setBackground(encabezado);
+            btnEgresos2.setBackgroundHover(new Color(0, 153, 0));
+            btnEgresos2.setForeground(texto);
+            btnEgresos2.setForegroundHover(Color.BLACK);
+
+        
+
+            // Fondo (JLabel, probablemente para una imagen de fondo)
+            /*
+        fondo.setBackground(fondo);
+        fondo.setOpaque(false); // Asegurar que no interfiera con el fondo del panel*/
+        } else {
+            // Configuración para modo claro
+            Color fondo = new Color(242, 247, 255);
+            Color texto = Color.BLACK;
+            Color primario = new Color(72, 92, 188);
+            Color borde = new Color(0, 0, 0);
+            Color encabezado = new Color(67, 71, 120);
+
+
+            // Panel raíz y panel principal
+            setBackground(fondo);
+            panelP1.setBackground(fondo);
+
+            // Campos de texto
+            btnIngresos.setBackground(encabezado);
+            btnIngresos.setBackgroundHover(new Color(118, 142, 240));
+            btnIngresos.setForeground(texto);
+            btnIngresos.setForegroundHover(Color.BLACK);
+
+            btnEgresos2.setBackground(encabezado);
+            btnEgresos2.setBackgroundHover(new Color(0, 153, 0));
+            btnEgresos2.setForeground(texto);
+            btnEgresos2.setForegroundHover(Color.BLACK);
+            
+            // Fondo
+            /*
+        fondo.setBackground(fondo);
+        fondo.setOpaque(false);*/
+        }
+
+        // Repintar todos los componentes
+        repaint();
+        panelP1.repaint();
+        btnEgresos2.repaint();
+        btnIngresos.repaint();
+     
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonShapeIcon btnEgresos2;
