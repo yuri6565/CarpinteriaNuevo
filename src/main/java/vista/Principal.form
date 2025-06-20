@@ -379,12 +379,12 @@
                   </Group>
                   <Component id="uno" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="dos" min="-2" pref="250" max="-2" attributes="0"/>
-                  <Component id="cinco" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="tres" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="cinco" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="seis" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="siete1" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="ocho" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="cuatro" min="-2" pref="250" max="-2" attributes="0"/>
-                  <Component id="siete1" min="-2" pref="250" max="-2" attributes="0"/>
-                  <Component id="seis" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="nueve" min="-2" pref="250" max="-2" attributes="0"/>
                   <Component id="Diez" min="-2" pref="250" max="-2" attributes="0"/>
               </Group>
@@ -400,11 +400,19 @@
                       <Component id="dos" min="-2" pref="50" max="-2" attributes="0"/>
                       <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="tres" min="-2" pref="52" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
                               <EmptySpace min="97" pref="97" max="-2" attributes="0"/>
                               <Component id="cinco" min="-2" pref="52" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="tres" min="-2" pref="52" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="147" pref="147" max="-2" attributes="0"/>
+                              <Component id="seis" min="-2" pref="52" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="197" pref="197" max="-2" attributes="0"/>
+                              <Component id="siete1" min="-2" pref="52" max="-2" attributes="0"/>
+                          </Group>
                           <Group type="102" attributes="0">
                               <EmptySpace min="247" pref="247" max="-2" attributes="0"/>
                               <Component id="ocho" min="-2" pref="53" max="-2" attributes="0"/>
@@ -413,16 +421,8 @@
                               <EmptySpace min="47" pref="47" max="-2" attributes="0"/>
                               <Component id="cuatro" min="-2" pref="52" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="197" pref="197" max="-2" attributes="0"/>
-                              <Component id="siete1" min="-2" pref="52" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="147" pref="147" max="-2" attributes="0"/>
-                              <Component id="seis" min="-2" pref="52" max="-2" attributes="0"/>
-                          </Group>
                       </Group>
-                      <EmptySpace min="51" pref="51" max="-2" attributes="0"/>
+                      <EmptySpace min="4" pref="4" max="-2" attributes="0"/>
                       <Component id="nueve" min="-2" pref="53" max="-2" attributes="0"/>
                       <EmptySpace min="7" pref="7" max="-2" attributes="0"/>
                       <Component id="Diez" min="-2" pref="53" max="-2" attributes="0"/>
