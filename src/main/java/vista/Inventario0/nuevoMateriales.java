@@ -777,6 +777,16 @@ public class nuevoMateriales extends javax.swing.JDialog {
     }//GEN-LAST:event_btnUMActionPerformed
 
     private void btnCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCategoriaActionPerformed
+        String nombre = txtNombre.getText().trim();
+        String descripcion = txtDescripcion.getText().trim();
+        String cantidad = txtCantidad.getText().trim();
+        String stockMinimo = txtStockMinimo.getText().trim();
+        String categoriaNombre = (String) cmbCategoria.getSelectedItem();
+        String marcaNombre = (String) cmbMarca.getSelectedItem();
+        String unidadNombre = (String) cmbUnidad.getSelectedItem();
+
+        this.dispose();
+
         nuevaCategoriaMaterial dialog = new nuevaCategoriaMaterial(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
 
@@ -787,6 +797,20 @@ public class nuevoMateriales extends javax.swing.JDialog {
         });
 
         dialog.setVisible(true);
+
+        // Después de cerrar el diálogo de nueva categoría, volver a abrir nuevoMateriales
+        nuevoMateriales nuevoDialog = new nuevoMateriales((javax.swing.JFrame) this.getParent(), true);
+
+        nuevoDialog.txtNombre.setText(nombre);
+        nuevoDialog.txtDescripcion.setText(descripcion);
+        nuevoDialog.txtCantidad.getText().trim();
+        nuevoDialog.txtStockMinimo.getText().trim();
+        nuevoDialog.cmbCategoria.getSelectedItem();
+        nuevoDialog.cmbMarca.getSelectedItem();
+        nuevoDialog.cmbUnidad.getSelectedItem();
+
+        nuevoDialog.setLocationRelativeTo(null);
+        nuevoDialog.setVisible(true);
     }//GEN-LAST:event_btnCategoriaActionPerformed
 
     /**
