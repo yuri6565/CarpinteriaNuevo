@@ -117,38 +117,38 @@ public class Escritorio1 extends javax.swing.JPanel {
             // Botones
             btnproveedores.setBackground(encabezado);
             btnproveedores.setBackgroundHover(new Color(118, 142, 240));
-            btnproveedores1.setBackground(fondo);
+            btnproveedores1.setBackground(new Color(37, 37, 52));
             btnproveedores1.setBackgroundHover(new Color(118, 142, 240));
             btnCliente.setBackground(encabezado);
             btnCliente.setBackgroundHover(new Color(118, 142, 240));
-            btnCliente1.setBackground(fondo);
+            btnCliente1.setBackground(new Color(37, 37, 52));
             btnCliente1.setBackgroundHover(new Color(118, 142, 240));
             btnUsuario.setBackground(encabezado);
             btnUsuario.setBackgroundHover(new Color(118, 142, 240));
-            btnUsuario1.setBackground(fondo);
+            btnUsuario1.setBackground(new Color(37, 37, 52));
             btnUsuario1.setBackgroundHover(new Color(118, 142, 240));
             btnproduccion.setBackground(encabezado);
             btnproduccion.setBackgroundHover(new Color(118, 142, 240));
-            btnproduccion1.setBackground(fondo);
+            btnproduccion1.setBackground(new Color(37, 37, 52));
             btnproduccion1.setBackgroundHover(new Color(118, 142, 240));
             btnprodu.setBackground(encabezado);
             btnprodu.setBackgroundHover(new Color(118, 142, 240));
-            btnprodu1.setBackground(fondo);
+            btnprodu1.setBackground(new Color(37, 37, 52));
             btnprodu1.setBackgroundHover(new Color(118, 142, 240));
 
             // Labels de imágenes (pueden no necesitar fondo, pero verifica)
-            rSLabelImage1.setBackground(fondo);
-            rSLabelImage3.setBackground(fondo);
-            rSLabelImage4.setBackground(fondo);
-            rSPanelImage1.setBackground(fondo);
-            rSPanelImage2.setBackground(fondo);
+            imageCliente.setBackground(fondo);
+            imageProduccion.setBackground(fondo);
+            imageProveedor.setBackground(fondo);
+            ImagePedidos.setBackground(fondo);
+            ImageUsu.setBackground(fondo);
 
             // Labels de texto
-            jLabel1.setForeground(texto);
-            jLabel2.setForeground(texto);
-            jLabel3.setForeground(texto);
-            jLabel4.setForeground(texto);
-            jLabel5.setForeground(texto);
+            lblProvedores.setForeground(texto);
+            lblClientes.setForeground(texto);
+            lblUsuario.setForeground(texto);
+            lblPedidos.setForeground(texto);
+            lblProduccion.setForeground(texto);
             jLabel9.setForeground(texto);
 
         } else {
@@ -156,18 +156,19 @@ public class Escritorio1 extends javax.swing.JPanel {
             Color fondo = new Color(242, 247, 255);
             Color texto = Color.BLACK;
             Color primario = new Color(72, 92, 188);
+            Color targetas = Color.WHITE;
 
             // Panel principal
             jPanel4.setBackground(fondo);
 
             // Tabla
-            Tabla1.setBackground(new Color(255, 255, 255));
-            Tabla1.setBackgoundHead(new Color(46, 49, 82));
+            Tabla1.setBackground(fondo);
+            Tabla1.setBackgoundHead(primario);
             Tabla1.setForegroundHead(Color.WHITE);
             Tabla1.setBackgoundHover(new Color(67, 150, 209));
-            Tabla1.setColorPrimary(new Color(242, 242, 242));
+            Tabla1.setColorPrimary(new Color(255, 255, 255));
             Tabla1.setColorPrimaryText(texto);
-            Tabla1.setColorSecondary(new Color(255, 255, 255));
+            Tabla1.setColorSecondary(new Color(243, 246, 253));
             Tabla1.setColorSecundaryText(texto);
             Tabla1.setColorBorderHead(primario);
             Tabla1.setColorBorderRows(new Color(0, 0, 0));
@@ -182,38 +183,38 @@ public class Escritorio1 extends javax.swing.JPanel {
             // Botones
             btnproveedores.setBackground(primario);
             btnproveedores.setBackgroundHover(new Color(67, 150, 209));
-            btnproveedores1.setBackground(fondo);
-            btnproveedores1.setBackgroundHover(new Color(204, 204, 204));
+            btnproveedores1.setBackground(targetas);
+            btnproveedores1.setBackgroundHover(new Color(201, 201, 201));
             btnCliente.setBackground(primario);
             btnCliente.setBackgroundHover(new Color(67, 150, 209));
-            btnCliente1.setBackground(fondo);
-            btnCliente1.setBackgroundHover(new Color(204, 204, 204));
+            btnCliente1.setBackground(targetas);
+            btnCliente1.setBackgroundHover(new Color(201, 201, 201));
             btnUsuario.setBackground(primario);
             btnUsuario.setBackgroundHover(new Color(67, 150, 209));
-            btnUsuario1.setBackground(fondo);
-            btnUsuario1.setBackgroundHover(new Color(204, 204, 204));
+            btnUsuario1.setBackground(targetas);
+            btnUsuario1.setBackgroundHover(new Color(201, 201, 201));
             btnproduccion.setBackground(primario);
             btnproduccion.setBackgroundHover(new Color(67, 150, 209));
-            btnproduccion1.setBackground(fondo);
-            btnproduccion1.setBackgroundHover(new Color(204, 204, 204));
+            btnproduccion1.setBackground(targetas);
+            btnproduccion1.setBackgroundHover(new Color(201, 201, 201));
             btnprodu.setBackground(primario);
             btnprodu.setBackgroundHover(new Color(67, 150, 209));
-            btnprodu1.setBackground(fondo);
-            btnprodu1.setBackgroundHover(new Color(204, 204, 204));
+            btnprodu1.setBackground(targetas);
+            btnprodu1.setBackgroundHover(new Color(201, 201, 201));
 
             // Labels de imágenes
-            rSLabelImage1.setBackground(fondo);
-            rSLabelImage3.setBackground(fondo);
-            rSLabelImage4.setBackground(fondo);
-            rSPanelImage1.setBackground(fondo);
-            rSPanelImage2.setBackground(fondo);
+            imageCliente.setBackground(fondo);
+            ImageUsu.setBackground(fondo);
+            imageProduccion.setBackground(fondo);
+            ImagePedidos.setBackground(fondo);
+            imageProveedor.setBackground(fondo);
 
             // Labels de texto
-            jLabel1.setForeground(texto);
-            jLabel2.setForeground(texto);
-            jLabel3.setForeground(texto);
-            jLabel4.setForeground(texto);
-            jLabel5.setForeground(texto);
+            lblProvedores.setForeground(texto);
+            lblClientes.setForeground(texto);
+            lblUsuario.setForeground(texto);
+            lblPedidos.setForeground(texto);
+            lblProduccion.setForeground(texto);
             jLabel9.setForeground(texto);
         }
 
@@ -232,16 +233,16 @@ public class Escritorio1 extends javax.swing.JPanel {
         btnproduccion1.repaint();
         btnprodu.repaint();
         btnprodu1.repaint();
-        rSLabelImage1.repaint();
-        rSLabelImage3.repaint();
-        rSLabelImage4.repaint();
-        rSPanelImage1.repaint();
-        rSPanelImage2.repaint();
-        jLabel1.repaint();
-        jLabel2.repaint();
-        jLabel3.repaint();
-        jLabel4.repaint();
-        jLabel5.repaint();
+        imageCliente.repaint();
+        ImageUsu.repaint();
+        imageProveedor.repaint();
+        ImagePedidos.repaint();
+        imageProduccion.repaint();
+        lblProvedores.repaint();
+        lblClientes.repaint();
+        lblUsuario.repaint();
+        lblPedidos.repaint();
+        lblProduccion.repaint();
         jLabel9.repaint();
     }
 
@@ -321,13 +322,13 @@ public class Escritorio1 extends javax.swing.JPanel {
     }
 
     private void actualizarIdMaximoProveedor() {
-        if (jLabel1 == null) {
+        if (lblProvedores == null) {
             return;
         }
         try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS total FROM proveedor"); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 int maxId = rs.getInt("total");
-                jLabel1.setText(String.valueOf(maxId));
+                lblProvedores.setText(String.valueOf(maxId));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
@@ -338,13 +339,13 @@ public class Escritorio1 extends javax.swing.JPanel {
     }
 
     private void actualizarIdMaximocliente() {
-        if (jLabel2 == null) {
+        if (lblClientes == null) {
             return;
         }
         try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS total FROM cliente"); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 int maxId = rs.getInt("total");
-                jLabel2.setText(String.valueOf(maxId));
+                lblClientes.setText(String.valueOf(maxId));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
@@ -355,13 +356,13 @@ public class Escritorio1 extends javax.swing.JPanel {
     }
 
     private void actualizarIdMaximousuario() {
-        if (jLabel3 == null) {
+        if (lblUsuario == null) {
             return;
         }
         try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS total FROM usuario"); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 int maxId = rs.getInt("total");
-                jLabel3.setText(String.valueOf(maxId));
+                lblUsuario.setText(String.valueOf(maxId));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
@@ -372,13 +373,13 @@ public class Escritorio1 extends javax.swing.JPanel {
     }
 
     private void actualizarIdMaximoproduccion() {
-        if (jLabel5 == null) {
+        if (lblProduccion == null) {
             return;
         }
         try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS total FROM produccion"); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 int maxId = rs.getInt("total");
-                jLabel5.setText(String.valueOf(maxId));
+                lblProduccion.setText(String.valueOf(maxId));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
@@ -389,13 +390,13 @@ public class Escritorio1 extends javax.swing.JPanel {
     }
 
     private void actualizarIdMaximopedido() {
-        if (jLabel4 == null) {
+        if (lblPedidos == null) {
             return;
         }
         try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS total FROM pedido"); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 int maxId = rs.getInt("total");
-                jLabel4.setText(String.valueOf(maxId));
+                lblPedidos.setText(String.valueOf(maxId));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
@@ -412,25 +413,25 @@ public class Escritorio1 extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         rSComboBoxMaterial1 = new RSMaterialComponent.RSComboBoxMaterial();
         btnproveedores = new RSMaterialComponent.RSButtonShape();
-        rSLabelImage1 = new rojeru_san.rslabel.RSLabelImage();
-        rSLabelImage3 = new rojeru_san.rslabel.RSLabelImage();
-        rSLabelImage4 = new rojeru_san.rslabel.RSLabelImage();
         jLabel6 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        imageProveedor = new rojerusan.RSPanelImage();
+        lblProvedores = new javax.swing.JLabel();
         btnproveedores1 = new RSMaterialComponent.RSButtonShape();
         jLabel7 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblClientes = new javax.swing.JLabel();
+        imageCliente = new rojerusan.RSPanelImage();
         btnCliente = new RSMaterialComponent.RSButtonShape();
         btnCliente1 = new RSMaterialComponent.RSButtonShape();
         btnUsuario = new RSMaterialComponent.RSButtonShape();
         jLabel8 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblUsuario = new javax.swing.JLabel();
+        ImageUsu = new rojerusan.RSPanelImage();
         btnUsuario1 = new RSMaterialComponent.RSButtonShape();
         btnproduccion = new RSMaterialComponent.RSButtonShape();
-        jLabel4 = new javax.swing.JLabel();
-        rSPanelImage1 = new rojerusan.RSPanelImage();
-        jLabel5 = new javax.swing.JLabel();
-        rSPanelImage2 = new rojerusan.RSPanelImage();
+        lblPedidos = new javax.swing.JLabel();
+        ImagePedidos = new rojerusan.RSPanelImage();
+        lblProduccion = new javax.swing.JLabel();
+        imageProduccion = new rojerusan.RSPanelImage();
         btnproduccion1 = new RSMaterialComponent.RSButtonShape();
         btnprodu = new RSMaterialComponent.RSButtonShape();
         btnprodu1 = new RSMaterialComponent.RSButtonShape();
@@ -445,9 +446,11 @@ public class Escritorio1 extends javax.swing.JPanel {
         jPanel4.setBackground(new java.awt.Color(243, 247, 255));
         jPanel4.setPreferredSize(new java.awt.Dimension(1306, 640));
         jPanel4.setRequestFocusEnabled(false);
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         rSComboBoxMaterial1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Notificaciones", " " }));
         rSComboBoxMaterial1.setFont(new java.awt.Font("Roboto Bold", 0, 18)); // NOI18N
+        jPanel4.add(rSComboBoxMaterial1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, 430, 60));
 
         btnproveedores.setBackground(new java.awt.Color(46, 49, 82));
         btnproveedores.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
@@ -461,22 +464,34 @@ public class Escritorio1 extends javax.swing.JPanel {
                 btnproveedoresActionPerformed(evt);
             }
         });
+        jPanel4.add(btnproveedores, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, -1, 40));
+        jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 80, -1, 80));
 
-        rSLabelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cliente (1).png"))); // NOI18N
+        imageProveedor.setImagen(new javax.swing.ImageIcon(getClass().getResource("/provedorIcono.png"))); // NOI18N
 
-        rSLabelImage3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/proveedor (6).png"))); // NOI18N
+        javax.swing.GroupLayout imageProveedorLayout = new javax.swing.GroupLayout(imageProveedor);
+        imageProveedor.setLayout(imageProveedorLayout);
+        imageProveedorLayout.setHorizontalGroup(
+            imageProveedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 70, Short.MAX_VALUE)
+        );
+        imageProveedorLayout.setVerticalGroup(
+            imageProveedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
+        );
 
-        rSLabelImage4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/usu (1).png"))); // NOI18N
+        jPanel4.add(imageProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 90, 70, 60));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jLabel1.addFocusListener(new java.awt.event.FocusAdapter() {
+        lblProvedores.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lblProvedores.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblProvedores.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                jLabel1FocusLost(evt);
+                lblProvedoresFocusLost(evt);
             }
         });
+        jPanel4.add(lblProvedores, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 90, 60, 60));
 
-        btnproveedores1.setBackground(new java.awt.Color(242, 242, 242));
+        btnproveedores1.setBackground(new java.awt.Color(255, 255, 255));
         btnproveedores1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnproveedores1.setBackgroundHover(new java.awt.Color(204, 204, 204));
         btnproveedores1.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
@@ -486,9 +501,27 @@ public class Escritorio1 extends javax.swing.JPanel {
                 btnproveedores1ActionPerformed(evt);
             }
         });
+        jPanel4.add(btnproveedores1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, -1, 120));
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 90, -1, 60));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblClientes.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lblClientes.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel4.add(lblClientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 90, 60, 60));
+
+        imageCliente.setImagen(new javax.swing.ImageIcon(getClass().getResource("/clientesicono.png"))); // NOI18N
+
+        javax.swing.GroupLayout imageClienteLayout = new javax.swing.GroupLayout(imageCliente);
+        imageCliente.setLayout(imageClienteLayout);
+        imageClienteLayout.setHorizontalGroup(
+            imageClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 70, Short.MAX_VALUE)
+        );
+        imageClienteLayout.setVerticalGroup(
+            imageClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 70, Short.MAX_VALUE)
+        );
+
+        jPanel4.add(imageCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 80, 70, 70));
 
         btnCliente.setBackground(new java.awt.Color(46, 49, 82));
         btnCliente.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -501,8 +534,9 @@ public class Escritorio1 extends javax.swing.JPanel {
                 btnClienteActionPerformed(evt);
             }
         });
+        jPanel4.add(btnCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 40, 210, 40));
 
-        btnCliente1.setBackground(new java.awt.Color(242, 242, 242));
+        btnCliente1.setBackground(new java.awt.Color(255, 255, 255));
         btnCliente1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnCliente1.setBackgroundHover(new java.awt.Color(204, 204, 204));
         btnCliente1.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
@@ -512,6 +546,7 @@ public class Escritorio1 extends javax.swing.JPanel {
                 btnCliente1ActionPerformed(evt);
             }
         });
+        jPanel4.add(btnCliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 40, 210, 120));
 
         btnUsuario.setBackground(new java.awt.Color(46, 49, 82));
         btnUsuario.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -524,11 +559,29 @@ public class Escritorio1 extends javax.swing.JPanel {
                 btnUsuarioActionPerformed(evt);
             }
         });
+        jPanel4.add(btnUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 40, -1, 40));
+        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 80, -1, 80));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblUsuario.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lblUsuario.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel4.add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 90, 60, 60));
 
-        btnUsuario1.setBackground(new java.awt.Color(242, 242, 242));
+        ImageUsu.setImagen(new javax.swing.ImageIcon(getClass().getResource("/usuariosIcono.png"))); // NOI18N
+
+        javax.swing.GroupLayout ImageUsuLayout = new javax.swing.GroupLayout(ImageUsu);
+        ImageUsu.setLayout(ImageUsuLayout);
+        ImageUsuLayout.setHorizontalGroup(
+            ImageUsuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 65, Short.MAX_VALUE)
+        );
+        ImageUsuLayout.setVerticalGroup(
+            ImageUsuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 55, Short.MAX_VALUE)
+        );
+
+        jPanel4.add(ImageUsu, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 90, 65, 55));
+
+        btnUsuario1.setBackground(new java.awt.Color(255, 255, 255));
         btnUsuario1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnUsuario1.setBackgroundHover(new java.awt.Color(204, 204, 204));
         btnUsuario1.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
@@ -538,6 +591,7 @@ public class Escritorio1 extends javax.swing.JPanel {
                 btnUsuario1ActionPerformed(evt);
             }
         });
+        jPanel4.add(btnUsuario1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 40, -1, 120));
 
         btnproduccion.setBackground(new java.awt.Color(46, 49, 82));
         btnproduccion.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -550,40 +604,47 @@ public class Escritorio1 extends javax.swing.JPanel {
                 btnproduccionActionPerformed(evt);
             }
         });
+        jPanel4.add(btnproduccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 40, -1, 40));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblPedidos.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lblPedidos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel4.add(lblPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 90, 60, 60));
 
-        rSPanelImage1.setImagen(new javax.swing.ImageIcon(getClass().getResource("/carrito-removebg-preview.png"))); // NOI18N
+        ImagePedidos.setImagen(new javax.swing.ImageIcon(getClass().getResource("/carrito-removebg-preview.png"))); // NOI18N
 
-        javax.swing.GroupLayout rSPanelImage1Layout = new javax.swing.GroupLayout(rSPanelImage1);
-        rSPanelImage1.setLayout(rSPanelImage1Layout);
-        rSPanelImage1Layout.setHorizontalGroup(
-            rSPanelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout ImagePedidosLayout = new javax.swing.GroupLayout(ImagePedidos);
+        ImagePedidos.setLayout(ImagePedidosLayout);
+        ImagePedidosLayout.setHorizontalGroup(
+            ImagePedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 120, Short.MAX_VALUE)
         );
-        rSPanelImage1Layout.setVerticalGroup(
-            rSPanelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        ImagePedidosLayout.setVerticalGroup(
+            ImagePedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel4.add(ImagePedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 70, -1, -1));
 
-        rSPanelImage2.setImagen(new javax.swing.ImageIcon(getClass().getResource("/proceso (1).png"))); // NOI18N
+        lblProduccion.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lblProduccion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel4.add(lblProduccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 90, 60, 60));
 
-        javax.swing.GroupLayout rSPanelImage2Layout = new javax.swing.GroupLayout(rSPanelImage2);
-        rSPanelImage2.setLayout(rSPanelImage2Layout);
-        rSPanelImage2Layout.setHorizontalGroup(
-            rSPanelImage2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        imageProduccion.setImagen(new javax.swing.ImageIcon(getClass().getResource("/produccionIcono.png"))); // NOI18N
+
+        javax.swing.GroupLayout imageProduccionLayout = new javax.swing.GroupLayout(imageProduccion);
+        imageProduccion.setLayout(imageProduccionLayout);
+        imageProduccionLayout.setHorizontalGroup(
+            imageProduccionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 70, Short.MAX_VALUE)
+        );
+        imageProduccionLayout.setVerticalGroup(
+            imageProduccionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 60, Short.MAX_VALUE)
         );
-        rSPanelImage2Layout.setVerticalGroup(
-            rSPanelImage2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
-        );
 
-        btnproduccion1.setBackground(new java.awt.Color(242, 242, 242));
+        jPanel4.add(imageProduccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 90, 70, 60));
+
+        btnproduccion1.setBackground(new java.awt.Color(255, 255, 255));
         btnproduccion1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnproduccion1.setBackgroundHover(new java.awt.Color(204, 204, 204));
         btnproduccion1.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
@@ -593,6 +654,7 @@ public class Escritorio1 extends javax.swing.JPanel {
                 btnproduccion1ActionPerformed(evt);
             }
         });
+        jPanel4.add(btnproduccion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 40, -1, 120));
 
         btnprodu.setBackground(new java.awt.Color(46, 49, 82));
         btnprodu.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -605,8 +667,9 @@ public class Escritorio1 extends javax.swing.JPanel {
                 btnproduActionPerformed(evt);
             }
         });
+        jPanel4.add(btnprodu, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 40, -1, 40));
 
-        btnprodu1.setBackground(new java.awt.Color(242, 242, 242));
+        btnprodu1.setBackground(new java.awt.Color(255, 255, 255));
         btnprodu1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnprodu1.setBackgroundHover(new java.awt.Color(204, 204, 204));
         btnprodu1.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
@@ -616,6 +679,7 @@ public class Escritorio1 extends javax.swing.JPanel {
                 btnprodu1ActionPerformed(evt);
             }
         });
+        jPanel4.add(btnprodu1, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 40, -1, 120));
 
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -650,137 +714,11 @@ public class Escritorio1 extends javax.swing.JPanel {
         Tabla1.setSelectionBackground(new java.awt.Color(109, 160, 221));
         jScrollPane1.setViewportView(Tabla1);
 
+        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 260, 565, 410));
+
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel9.setText("Pedidos Proximos");
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(100, 100, 100)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnproveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(130, 130, 130)
-                                .addComponent(jLabel6))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(50, 50, 50)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(130, 130, 130)
-                                .addComponent(rSLabelImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnproveedores1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(50, 50, 50)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(rSLabelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(btnCliente1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(50, 50, 50)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel8)
-                                .addGap(10, 10, 10)
-                                .addComponent(rSLabelImage4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnUsuario1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(100, 100, 100)
-                                .addComponent(rSPanelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnproduccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnproduccion1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(50, 50, 50)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnprodu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(50, 50, 50)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20)
-                                .addComponent(rSPanelImage2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnprodu1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(rSComboBoxMaterial1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(60, 60, 60)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(281, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(btnproveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(rSLabelImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnproveedores1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rSLabelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(btnCliente1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(btnUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(rSLabelImage4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addComponent(btnUsuario1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(rSPanelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnproduccion, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnproduccion1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(btnprodu, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rSPanelImage2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(btnprodu1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rSComboBoxMaterial1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel9)
-                        .addGap(5, 5, 5)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(170, Short.MAX_VALUE))
-        );
+        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 230, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -808,9 +746,9 @@ public class Escritorio1 extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnproveedoresActionPerformed
 
-    private void jLabel1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jLabel1FocusLost
+    private void lblProvedoresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_lblProvedoresFocusLost
         // TODO add your handling code here:
-    }//GEN-LAST:event_jLabel1FocusLost
+    }//GEN-LAST:event_lblProvedoresFocusLost
 
     private void btnproveedores1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnproveedores1ActionPerformed
 
@@ -921,6 +859,8 @@ public class Escritorio1 extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private rojerusan.RSPanelImage ImagePedidos;
+    private rojerusan.RSPanelImage ImageUsu;
     private rojerusan.RSTableMetro1 Tabla1;
     private RSMaterialComponent.RSButtonShape btnCliente;
     private RSMaterialComponent.RSButtonShape btnCliente1;
@@ -932,22 +872,20 @@ public class Escritorio1 extends javax.swing.JPanel {
     private RSMaterialComponent.RSButtonShape btnproduccion1;
     private RSMaterialComponent.RSButtonShape btnproveedores;
     private RSMaterialComponent.RSButtonShape btnproveedores1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private rojerusan.RSPanelImage imageCliente;
+    private rojerusan.RSPanelImage imageProduccion;
+    private rojerusan.RSPanelImage imageProveedor;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblClientes;
+    private javax.swing.JLabel lblPedidos;
+    private javax.swing.JLabel lblProduccion;
+    private javax.swing.JLabel lblProvedores;
+    private javax.swing.JLabel lblUsuario;
     private RSMaterialComponent.RSComboBoxMaterial rSComboBoxMaterial1;
-    private rojeru_san.rslabel.RSLabelImage rSLabelImage1;
-    private rojeru_san.rslabel.RSLabelImage rSLabelImage3;
-    private rojeru_san.rslabel.RSLabelImage rSLabelImage4;
-    private rojerusan.RSPanelImage rSPanelImage1;
-    private rojerusan.RSPanelImage rSPanelImage2;
     // End of variables declaration//GEN-END:variables
 }

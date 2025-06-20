@@ -146,6 +146,7 @@ public class materiales extends javax.swing.JPanel {
         cargarMateriales();
 
     }
+    
 
     // Método para cargar los materiales desde la base de datos
     private void cargarMateriales() {
