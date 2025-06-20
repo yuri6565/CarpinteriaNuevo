@@ -6,16 +6,8 @@ package vista.Produccion;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import modelo.Conexion;
 import vista.TemaManager;
 
 /**
