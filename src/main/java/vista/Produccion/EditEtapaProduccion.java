@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,28 +69,29 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
      * @param produccionPanel
      */
     public EditEtapaProduccion(Frame parent, boolean modal, int idEtapa) {
-        super(parent, modal);
-        this.idEtapa = idEtapa;
-        initComponents();
-        setLocationRelativeTo(parent);
+    super(parent, modal);
+    this.idEtapa = idEtapa;
+    
+    // Configurar undecorated antes de initComponents
+    setUndecorated(true);
+    initComponents(); // Llamada única a initComponents
+    
+    setLocationRelativeTo(parent); // Configurar ubicación después de initComponents
+    
+    // Inicializar CheckedComboBox
+    cmbMateriales = new CheckedComboBox<>(makeProductModel("material"));
+    cmbMateriales.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+    jPanel1.add(cmbMateriales, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, 200, 30));
 
-        // Inicializar CheckedComboBox antes de cargar datos
-        cmbMateriales = new CheckedComboBox<>(makeProductModel("material"));
-        cmbMateriales.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        jPanel1.add(cmbMateriales, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, 200, 30));
+    cmbHerramientas = new CheckedComboBox<>(makeProductModel("herramienta"));
+    cmbHerramientas.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+    jPanel1.add(cmbHerramientas, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 260, 200, 30));
 
-        cmbHerramientas = new CheckedComboBox<>(makeProductModel("herramienta"));
-        cmbHerramientas.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        jPanel1.add(cmbHerramientas, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 250, 200, 30));
-
-        initComponents();
-        setLocationRelativeTo(parent);
-
-        // Configuración inicial
-        if (idEtapa > 0) {
-            cargarDatosEtapa(idEtapa);
-        }
+    // Configuración inicial
+    if (idEtapa > 0) {
+        cargarDatosEtapa(idEtapa);
     }
+}
 
     private DefaultComboBoxModel<CheckableItem> makeProductModel(String tipo) {
         DefaultComboBoxModel<CheckableItem> model = new DefaultComboBoxModel<>();
@@ -120,17 +122,6 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         return model;
     }
 // Clases internas para el CheckedComboBox
-
-    private List<String> obtenerSeleccionados(CheckedComboBox<CheckableItem> combo) {
-        List<String> seleccionados = new ArrayList<>();
-        for (int i = 0; i < combo.getModel().getSize(); i++) {
-            CheckableItem item = combo.getModel().getElementAt(i);
-            if (item.isSelected()) {
-                seleccionados.add(item.toString());
-            }
-        }
-        return seleccionados;
-    }
 
     class CheckableItem {
 
@@ -293,6 +284,8 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         txtfechafin = new com.toedter.calendar.JDateChooser();
         btnCancelar1 = new rojeru_san.RSButtonRiple();
         btnGuardar1 = new rojeru_san.RSButtonRiple();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -311,17 +304,14 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Estado:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 70, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Fecha final:");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Nombre etapa:");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
 
@@ -339,9 +329,8 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         jPanel1.add(txtetapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 200, 30));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel11.setText("Fecha inicio:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
+        jLabel11.setText("Materiales:");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 150, -1, -1));
 
         Boxestado.setForeground(new java.awt.Color(102, 102, 102));
         Boxestado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", "pendiente", "proceso", "completado" }));
@@ -388,6 +377,14 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         });
         jPanel1.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 310, 140, -1));
 
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel12.setText("Fecha inicio:");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel13.setText("Herramientas:");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 230, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -411,44 +408,64 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelar1ActionPerformed
 
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
-// 1. Validación de campos
-        if (txtetapa.getText().trim().isEmpty()
-                || txtFechainicio.getDate() == null
-                || Boxestado.getSelectedIndex() <= 0) {
+    // 1. Validación de campos
+    if (txtetapa.getText().trim().isEmpty()
+            || txtFechainicio.getDate() == null
+            || Boxestado.getSelectedIndex() <= 0) {
+        new espacio_alerta((Frame) this.getParent(), true,
+                "Error", "Todos los campos son obligatorios").setVisible(true);
+        return;
+    }
+    // 2. Mostrar diálogo de confirmación
+    alertaa confirmDialog = new alertaa(
+            (Frame) this.getParent(),
+            true,
+            "Confirmar",
+            "¿Desea guardar los datos?"
+    );
+    confirmDialog.setVisible(true);
 
-            new espacio_alerta((Frame) this.getParent(), true,
-                    "Error", "Todos los campos son obligatorios").setVisible(true);
+    if (!confirmDialog.opcionConfirmada) {
+        return;
+    }
+
+    try {
+        // 3. Obtener valores del formulario
+        String nombreEtapa = txtetapa.getText().trim();
+        Date fechaInicio = new Date(txtFechainicio.getDate().getTime());
+        Date fechaFin = txtfechafin.getDate() != null
+                ? new Date(txtfechafin.getDate().getTime()) : null;
+        String estado = Boxestado.getSelectedItem().toString();
+
+        // 4. Validar fechas
+        if (fechaFin != null && fechaFin.before(fechaInicio)) {
+            new Error_fecha((Frame) this.getParent(), true,
+                    "Error", "La fecha final no puede ser anterior a la inicial").setVisible(true);
             return;
         }
-// 2. Mostrar diálogo de confirmación
-        alertaa confirmDialog = new alertaa(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
-        confirmDialog.setVisible(true);
 
-        if (!confirmDialog.opcionConfirmada) {
-            return;
-        }
-
-        try {
-            // 3. Obtener valores del formulario
-            String nombreEtapa = txtetapa.getText().trim();
-            Date fechaInicio = new Date(txtFechainicio.getDate().getTime());
-            Date fechaFin = txtfechafin.getDate() != null
-                    ? new Date(txtfechafin.getDate().getTime()) : null;
-            String estado = Boxestado.getSelectedItem().toString();
-
-            // 4. Validar fechas
-            if (fechaFin != null && fechaFin.before(fechaInicio)) {
-                new Error_fecha((Frame) this.getParent(), true,
-                        "Error", "La fecha final no puede ser anterior a la inicial").setVisible(true);
-                return;
+        // 5. Obtener materiales y herramientas seleccionados
+        List<String> materialesSeleccionados = new ArrayList<>();
+        List<String> herramientasSeleccionadas = new ArrayList<>();
+        for (int i = 0; i < cmbMateriales.getModel().getSize(); i++) {
+            CheckableItem item = cmbMateriales.getModel().getElementAt(i);
+            if (item.isSelected()) {
+                materialesSeleccionados.add(item.toString());
             }
+        }
+        for (int i = 0; i < cmbHerramientas.getModel().getSize(); i++) {
+            CheckableItem item = cmbHerramientas.getModel().getElementAt(i);
+            if (item.isSelected()) {
+                herramientasSeleccionadas.add(item.toString());
+            }
+        }
 
-            // 5. Operación en base de datos
+        // 6. Abrir FormularioMH para editar cantidades
+        FormularioMH formMH = new FormularioMH((Frame) this.getParent(), true, materialesSeleccionados, herramientasSeleccionadas);
+        formMH.setVisible(true);
+
+        if (formMH.isConfirmado()) {
+            // 7. Actualizar etapa en la base de datos
             try (Connection con = Conexion.getConnection()) {
                 String sql;
                 if (idEtapa == 0) {
@@ -474,30 +491,44 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
                     int affectedRows = ps.executeUpdate();
                     if (affectedRows > 0) {
                         this.datosModificados = true;
-                        if (idEtapa == 0) {
-                            new Datos_guardados(
-                                    (Frame) this.getParent(),
-                                    true,
-                                    "Éxito",
-                                    "Datos guardados correctamente"
-                            ).setVisible(true);
-                        } else {
-                            new DatosActualizados(
-                                    (Frame) this.getParent(),
-                                    true,
-                                    "Éxito",
-                                    "Datos actualizados correctamente"
-                            ).setVisible(true);
+                        // 8. Actualizar cantidades de materiales y herramientas en la tabla utilizado
+                        Map<String, String> cantidadesMateriales = formMH.getCantidadesMateriales();
+                        Map<String, String> cantidadesHerramientas = formMH.getCantidadesHerramientas();
+
+                        // Actualizar o insertar en la tabla utilizado
+                        String updateUtilizado = "INSERT INTO utilizado (etapa_produccion_idetapa_produccion, inventario_id_inventario, cantidad_usada) "
+                                + "VALUES (?, (SELECT id_inventario FROM inventario WHERE nombre = ?), ?) "
+                                + "ON DUPLICATE KEY UPDATE cantidad_usada = ?";
+                        try (PreparedStatement psUtilizado = con.prepareStatement(updateUtilizado)) {
+                            if (idEtapa > 0) {
+                                for (Map.Entry<String, String> entry : cantidadesMateriales.entrySet()) {
+                                    psUtilizado.setInt(1, idEtapa);
+                                    psUtilizado.setString(2, entry.getKey());
+                                    psUtilizado.setDouble(3, Double.parseDouble(entry.getValue().replace(",", ".")));
+                                    psUtilizado.setDouble(4, Double.parseDouble(entry.getValue().replace(",", ".")));
+                                    psUtilizado.executeUpdate();
+                                }
+                                for (Map.Entry<String, String> entry : cantidadesHerramientas.entrySet()) {
+                                    psUtilizado.setInt(1, idEtapa);
+                                    psUtilizado.setString(2, entry.getKey());
+                                    psUtilizado.setDouble(3, Double.parseDouble(entry.getValue().replace(",", ".")));
+                                    psUtilizado.setDouble(4, Double.parseDouble(entry.getValue().replace(",", ".")));
+                                    psUtilizado.executeUpdate();
+                                }
+                            }
                         }
+
+                        
                         this.dispose();
                     }
                 }
             }
-        } catch (SQLException e) {
-            new Error_guardar((Frame) this.getParent(), true,
-                    "Error", "Error al guardar: " + e.getMessage()).setVisible(true);
-            e.printStackTrace();
         }
+    } catch (SQLException e) {
+        new Error_guardar((Frame) this.getParent(), true,
+                "Error", "Error al guardar: " + e.getMessage()).setVisible(true);
+        e.printStackTrace();
+    }
 
     }//GEN-LAST:event_btnGuardar1ActionPerformed
 
@@ -547,6 +578,8 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
