@@ -57,7 +57,7 @@
                   <EmptySpace min="0" pref="6" max="32767" attributes="0"/>
               </Group>
               <Group type="102" attributes="0">
-                  <Component id="jPanel3" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jPanel5" pref="1316" max="32767" attributes="0"/>
               </Group>
@@ -374,64 +374,58 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="49" pref="49" max="-2" attributes="0"/>
-                              <Component id="rSPanelImage3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="uno" pref="250" max="32767" attributes="0"/>
-                          <Component id="dos" max="32767" attributes="0"/>
-                          <Component id="siete1" max="32767" attributes="0"/>
-                          <Component id="tres" max="32767" attributes="0"/>
-                          <Component id="seis" max="32767" attributes="0"/>
-                          <Component id="cuatro" max="32767" attributes="0"/>
-                          <Component id="cinco" max="32767" attributes="0"/>
-                          <Component id="ocho" max="32767" attributes="0"/>
-                          <Component id="Diez" alignment="0" max="32767" attributes="0"/>
-                          <Component id="nueve" alignment="0" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="49" pref="49" max="-2" attributes="0"/>
+                      <Component id="rSPanelImage3" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="uno" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="dos" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="cinco" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="tres" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="ocho" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="cuatro" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="siete1" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="seis" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="nueve" min="-2" pref="250" max="-2" attributes="0"/>
+                  <Component id="Diez" min="-2" pref="250" max="-2" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
-                      <Component id="rSPanelImage3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="63" pref="63" max="-2" attributes="0"/>
+                      <Component id="rSPanelImage3" min="-2" pref="130" max="-2" attributes="0"/>
+                      <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
                       <Component id="uno" min="-2" pref="50" max="-2" attributes="0"/>
                       <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
                       <Component id="dos" min="-2" pref="50" max="-2" attributes="0"/>
                       <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace min="197" pref="197" max="-2" attributes="0"/>
-                              <Component id="siete1" min="-2" pref="52" max="-2" attributes="0"/>
+                              <EmptySpace min="97" pref="97" max="-2" attributes="0"/>
+                              <Component id="cinco" min="-2" pref="52" max="-2" attributes="0"/>
                           </Group>
                           <Component id="tres" min="-2" pref="52" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <EmptySpace min="147" pref="147" max="-2" attributes="0"/>
-                              <Component id="seis" min="-2" pref="52" max="-2" attributes="0"/>
+                              <EmptySpace min="247" pref="247" max="-2" attributes="0"/>
+                              <Component id="ocho" min="-2" pref="53" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <EmptySpace min="47" pref="47" max="-2" attributes="0"/>
                               <Component id="cuatro" min="-2" pref="52" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
-                              <EmptySpace min="97" pref="97" max="-2" attributes="0"/>
-                              <Component id="cinco" min="-2" pref="52" max="-2" attributes="0"/>
+                              <EmptySpace min="197" pref="197" max="-2" attributes="0"/>
+                              <Component id="siete1" min="-2" pref="52" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
-                              <EmptySpace min="247" pref="247" max="-2" attributes="0"/>
-                              <Component id="ocho" min="-2" pref="53" max="-2" attributes="0"/>
+                              <EmptySpace min="147" pref="147" max="-2" attributes="0"/>
+                              <Component id="seis" min="-2" pref="52" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="51" pref="51" max="-2" attributes="0"/>
                       <Component id="nueve" min="-2" pref="53" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="7" pref="7" max="-2" attributes="0"/>
                       <Component id="Diez" min="-2" pref="53" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="208" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -683,7 +677,7 @@
             <Container class="rojerusan.RSPanelImage" name="rSPanelImage3">
               <Properties>
                 <Property name="imagen" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/logo_blanco.png"/>
+                  <Image iconType="3" name="/imagenes/logo blancoooo.png"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[158, 109]"/>
@@ -698,7 +692,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="109" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="130" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>

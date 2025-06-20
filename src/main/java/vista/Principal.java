@@ -70,7 +70,7 @@ public class Principal extends javax.swing.JFrame {
     private final Ctrl_Perfil controlador;
 
     // Nuevas variables para el submenú de Ventas
-    private final JPanel submenuVentas;
+    private JPanel submenuVentas;
     private boolean submenuVentasVisible = false; // Para controlar si el submenú de Ventas está visible
 
     private JPanel centerPanel;
@@ -79,6 +79,7 @@ public class Principal extends javax.swing.JFrame {
     private Timer updateTimer;
 
     private rojeru_san.RSButton item1;
+    private rojeru_san.RSButton item2;
     private rojeru_san.RSButton item4;
     private rojeru_san.RSButton item3;
     private boolean menuExpanded = true; // Inicialmente expandido
@@ -90,59 +91,33 @@ public class Principal extends javax.swing.JFrame {
 
         this.idUsuario = idUsuario;
         this.controlador = new Ctrl_Perfil();
+
         this.item1 = new rojeru_san.RSButton(); // ✔️ usa la variable de instancia
+        this.item2 = new rojeru_san.RSButton(); // ✔️
+        this.item3 = new rojeru_san.RSButton();
         this.item4 = new rojeru_san.RSButton();
-        this.item3 = new rojeru_san.RSButton(); // ✔️
 
         boolean oscuro = TemaManager.getInstance().isOscuro();
 
         initComponents();
 
-        // Oculta el panel lateral derecho (jPanel5)
-        jPanel5.setVisible(false);
-
-// Configura el panel de contenido
-        contenedor.setBounds(menuExpanded ? MENU_EXPANDED_WIDTH : MENU_COLLAPSED_WIDTH,
-                65, 1800,
-                getHeight());
-
-
-        setIconImage(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE));
-
-        aplicarTema();
-
-        cargarUsuarioLogueado();
-        cargarrol();
-        configurarPopupMenuNotificacion();
-
-        jPanel1.setLayout(new BorderLayout());
-        jPanel4.setVisible(true);
-        jPanel5.setVisible(false);
-        jPanel3.setVisible(false);
-// Cambia el layout del panel del menú a null (después de initComponents())
-        jPanel3.setLayout(null);
-
-        // Establece tamaño inicial
-        jPanel3.setPreferredSize(new Dimension(MENU_EXPANDED_WIDTH, jPanel3.getHeight()));
-
-
 //submenu inventario------------------
         // Inicializar el submenú
         submenuInventario = new JPanel();
-        submenuInventario.setBackground(new Color(29, 30, 81)); // Mismo color que el menú
+        submenuInventario.setBackground(new Color(255, 255, 255)); // Mismo color que el menú
         submenuInventario.setLayout(new GridLayout(2, 1, 0, 0)); // 3 filas, 1 columna, espacio entre ítems
         submenuInventario.setPreferredSize(new Dimension(250, 80)); // Reducir altura total para reflejar menos espacio
 
         // Añadir ítems al submenú (como botones RSButton)
         //boton para materiales
-        rojeru_san.RSButton item1 = new rojeru_san.RSButton();
-        item1.setBackground(new Color(29, 30, 81)); // Fondo igual que el menú
+        item1 = new rojeru_san.RSButton();
+        item1.setBackground(new Color(0, 0, 0)); // Fondo igual que el menú
         item1.setForeground(Color.WHITE);
         item1.setFont(new Font("Tahoma", Font.BOLD, 15));
         item1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 60, 1, 1)); // Margen izquierdo para alinear con el texto del menú
         item1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         item1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        item1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tratar-con-cuidado.png")));
+        item1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tratar-con-cuidado.png")));
         item1.setIconTextGap(10);
         item1.setText("Materiales");
         item1.setColorHover(new Color(150, 150, 150)); // Mismo color de hover que los botones del menú
@@ -150,14 +125,14 @@ public class Principal extends javax.swing.JFrame {
         aplicarTema();
 
         //boton para herramientas
-        rojeru_san.RSButton item2 = new rojeru_san.RSButton();
-        item2.setBackground(new Color(29, 30, 81)); // Fondo igual que el menú
+        item2 = new rojeru_san.RSButton();
+        item2.setBackground(new Color(0, 0, 0)); // Fondo igual que el menú
         item2.setForeground(Color.WHITE);
         item2.setFont(new Font("Tahoma", Font.BOLD, 15));
         item2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 60, 1, 1)); // Margen izquierdo para alinear con el texto del menú
         item2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         item2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        item2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/llave-inglesa.png")));
+        item2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/llave-inglesa.png")));
         item2.setIconTextGap(10);
         item2.setText("Herramientas");
         item2.setColorHover(new Color(150, 150, 150)); // Mismo color de hover que los botones del menú
@@ -211,19 +186,19 @@ public class Principal extends javax.swing.JFrame {
 //submenu ventas------------------
 // Inicializar el submenú de Ventas
         submenuVentas = new JPanel();
-        submenuVentas.setBackground(new Color(29, 30, 81)); // Mismo color que el menú
+        submenuVentas.setBackground(new Color(255, 255, 255)); // Mismo color que el menú
         submenuVentas.setLayout(new java.awt.GridLayout(2, 1, 0, 0)); // 2 filas, 1 columna
         submenuVentas.setPreferredSize(new Dimension(250, 80)); // Alto de 100 (50 por cada botón)
 
         // Botón "Pedidos"
         item3 = new rojeru_san.RSButton();
-        item3.setBackground(new Color(29, 30, 81));
+        item3.setBackground(new Color(0, 0, 0));
         item3.setForeground(Color.WHITE);
         item3.setFont(new Font("Tahoma", Font.BOLD, 15));
         item3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 60, 1, 1));
         item3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         item3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        item3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bolsa-de-la-compra.png"))); // Puedes cambiar el icono
+        item3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/bolsa-de-la-compra.png"))); // Puedes cambiar el icono
         item3.setIconTextGap(10);
         item3.setText("Pedidos");
         item3.setColorHover(new Color(150, 150, 150));
@@ -231,13 +206,13 @@ public class Principal extends javax.swing.JFrame {
 
         // Botón "Cotización"
         item4 = new rojeru_san.RSButton();
-        item4.setBackground(new Color(29, 30, 81));
+        item4.setBackground(new Color(0, 0, 0));
         item4.setForeground(Color.WHITE);
         item4.setFont(new Font("Tahoma", Font.BOLD, 15));
         item4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 60, 1, 1));
         item4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         item4.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        item4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/solicitud-de-cotizacion.png"))); // Puedes cambiar el icono
+        item4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/solicitud-de-cotizacion.png"))); // Puedes cambiar el icono
         item4.setIconTextGap(10);
         item4.setText("Cotización");
         item4.setColorHover(new Color(150, 150, 150));
@@ -289,6 +264,32 @@ public class Principal extends javax.swing.JFrame {
         submenuVentas.add(item4);
 //submenu ventas------------------
 
+        // Oculta el panel lateral derecho (jPanel5)
+        jPanel5.setVisible(false);
+
+// Configura el panel de contenido
+        contenedor.setBounds(menuExpanded ? MENU_EXPANDED_WIDTH : MENU_COLLAPSED_WIDTH,
+                65, 1800,
+                getHeight());
+
+        setIconImage(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE));
+
+        aplicarTema();
+
+        cargarUsuarioLogueado();
+        cargarrol();
+        configurarPopupMenuNotificacion();
+
+        jPanel1.setLayout(new BorderLayout());
+        jPanel4.setVisible(true);
+        jPanel5.setVisible(false);
+        jPanel3.setVisible(false);
+// Cambia el layout del panel del menú a null (después de initComponents())
+        jPanel3.setLayout(null);
+
+        // Establece tamaño inicial
+        jPanel3.setPreferredSize(new Dimension(MENU_EXPANDED_WIDTH, jPanel3.getHeight()));
+
         // Seleccionar el botón "uno" por defecto y cargar el panel Escritorio1
         this.uno.setSelected(true);
         Escritorio1 es = new Escritorio1();
@@ -336,6 +337,13 @@ public class Principal extends javax.swing.JFrame {
             jPanel4.setBackground(new Color(30, 30, 45));
             contenedor.setBackground(new Color(21, 21, 33));
             jPanel5.setBackground(new Color(30, 30, 45));
+
+            // Ajustar foreground de los botones del submenú
+            item1.setForeground(textoBoton);
+            item2.setForeground(textoBoton);
+            item3.setForeground(textoBoton);
+            item4.setForeground(textoBoton);
+
             lblUsuarioLogueado.setForeground(Color.WHITE);
             rolusuario.setForeground(Color.WHITE);
             lblTituloPrincipal.setForeground(Color.WHITE);
@@ -352,6 +360,11 @@ public class Principal extends javax.swing.JFrame {
             nueve.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogar.png")));
             Diez.setIcon(new ImageIcon(getClass().getResource("/imagenes/ajustesblanco.png")));
 
+            item1.setIcon(new ImageIcon(getClass().getResource("/imagenes/tratar-con-cuidado.png")));
+            item2.setIcon(new ImageIcon(getClass().getResource("/imagenes/llave-inglesa.png")));
+            item3.setIcon(new ImageIcon(getClass().getResource("/imagenes/bolsa-de-la-compra.png")));
+            item4.setIcon(new ImageIcon(getClass().getResource("/imagenes/solicitud-de-cotizacion.png")));
+
             rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/WhatsApp Image 2025-03-20 at 3.58.18 PM (1).png")));
             rSLabelImage3.setIcon(new ImageIcon(getClass().getResource("/imagenes/luna (6).png")));
             rSLabelImage1.setIcon(new ImageIcon(getClass().getResource("/imagenes/feliz-sol-negro.png")));
@@ -367,7 +380,7 @@ public class Principal extends javax.swing.JFrame {
             nueve1.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogar.png")));
             menu.setIcon(new ImageIcon(getClass().getResource("/imagenes/burger-bar.png")));
             btnNotificacion1.setForeground(new Color(255, 255, 255));
-            //rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/logo_blanco.png")));
+            rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/logo blancoooo.png")));
 
         } else {
             fondoPrincipal = new Color(255, 255, 255);
@@ -381,12 +394,18 @@ public class Principal extends javax.swing.JFrame {
             jPanel2.setBackground(new Color(255, 255, 255));
             jPanel3.setBackground(new Color(255, 255, 255));
             jPanel4.setBackground(new Color(255, 255, 255));
+
+            // Ajustar foreground de los botones del submenú
+            item1.setForeground(textoBoton);
+            item2.setForeground(textoBoton);
+            item3.setForeground(textoBoton);
+            item4.setForeground(textoBoton);
+
             contenedor.setBackground(new Color(242, 247, 255));
             jPanel5.setBackground(new Color(242, 247, 255));
             lblUsuarioLogueado.setForeground(textoLabel);
             rolusuario.setForeground(textoLabel);
             lblTituloPrincipal.setForeground(textoLabel);
-            item4.setForeground(fondoBoton);
             btnNotificacion1.setForeground(new Color(0, 0, 0));
             uno.setIcon(new ImageIcon(getClass().getResource("/imagenes/home.png")));
             dos.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-blanca.png")));
@@ -402,6 +421,11 @@ public class Principal extends javax.swing.JFrame {
             rSLabelImage1.setIcon(new ImageIcon(getClass().getResource("/imagenes/feliz-sol (6).png")));
             rSLabelImage3.setIcon(new ImageIcon(getClass().getResource("/imagenes/luna (7).png")));
 
+            item1.setIcon(new ImageIcon(getClass().getResource("/imagenes/tratar-con-cuidadoNegro.png")));
+            item2.setIcon(new ImageIcon(getClass().getResource("/imagenes/llave-inglesaNegro.png")));
+            item3.setIcon(new ImageIcon(getClass().getResource("/imagenes/bolsa-de-la-compraNegro.png")));
+            item4.setIcon(new ImageIcon(getClass().getResource("/imagenes/solicitud-de-cotizacionNegro.png")));
+
             uno1.setIcon(new ImageIcon(getClass().getResource("/imagenes/home.png")));
             dos1.setIcon(new ImageIcon(getClass().getResource("/imagenes/caja-blanca.png")));
             tres1.setIcon(new ImageIcon(getClass().getResource("/imagenes/proveedor-de-servicio_1.png")));
@@ -411,8 +435,8 @@ public class Principal extends javax.swing.JFrame {
             siete2.setIcon(new ImageIcon(getClass().getResource("/imagenes/gestion-de-usuarios.png")));
             ocho1.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service.png")));
             nueve1.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogarnegro.png")));
-            rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/logo_azul.png")));
-            rSPanelImage3.setPreferredSize(new Dimension(160, 109));
+            rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/logo_azul_sin_letras.png")));
+
 
         }
 
@@ -429,7 +453,10 @@ public class Principal extends javax.swing.JFrame {
         cambiarEstiloBotonRS(Diez, fondoBoton, textoBoton);
         cambiarEstiloBotonRS(menu, fondoBoton, textoBoton);
 
-        cambiarEstiloBotonRS(item1, new Color(30, 30, 45), Color.WHITE);
+        cambiarEstiloBotonRS(item1, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(item2, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(item3, fondoBoton, textoBoton);
+        cambiarEstiloBotonRS(item4, fondoBoton, textoBoton);
 
         cambiarEstiloBotonRS(uno1, fondoBoton, textoBoton);
         cambiarEstiloBotonRS(dos1, fondoBoton, textoBoton);
@@ -631,7 +658,7 @@ public class Principal extends javax.swing.JFrame {
             jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
             // Restaurar posiciones originales de los botones con un alto de 50 píxeles
-            jPanel3.add(rSPanelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 41, 158, 153));
+            jPanel3.add(rSPanelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 63, 158, 130));
             jPanel3.add(uno, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 250, 50));
             jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 250, 50));
             jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 250, 50));
@@ -653,7 +680,7 @@ public class Principal extends javax.swing.JFrame {
             jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
             // Restaurar posiciones originales de los botones con un alto de 50 píxeles
-            jPanel3.add(rSPanelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 41, 158, 153));
+            jPanel3.add(rSPanelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 63, 158, 130));
             jPanel3.add(uno, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 250, 50));
             jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 250, 50));
             jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 250, 50));
@@ -1264,7 +1291,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        rSPanelImage3.setImagen(new javax.swing.ImageIcon(getClass().getResource("/logo_blanco.png"))); // NOI18N
+        rSPanelImage3.setImagen(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logo blancoooo.png"))); // NOI18N
         rSPanelImage3.setPreferredSize(new java.awt.Dimension(158, 109));
 
         javax.swing.GroupLayout rSPanelImage3Layout = new javax.swing.GroupLayout(rSPanelImage3);
@@ -1275,7 +1302,7 @@ public class Principal extends javax.swing.JFrame {
         );
         rSPanelImage3Layout.setVerticalGroup(
             rSPanelImage3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 109, Short.MAX_VALUE)
+            .addGap(0, 130, Short.MAX_VALUE)
         );
 
         Diez.setBackground(new java.awt.Color(29, 30, 81));
@@ -1297,54 +1324,50 @@ public class Principal extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(rSPanelImage3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(uno, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                    .addComponent(dos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(siete1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tres, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(seis, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cuatro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cinco, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ocho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Diez, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(nueve, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(49, 49, 49)
+                .addComponent(rSPanelImage3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(uno, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(dos, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(cinco, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(tres, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(ocho, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(cuatro, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(siete1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(seis, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(nueve, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(Diez, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(78, 78, 78)
-                .addComponent(rSPanelImage3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(63, 63, 63)
+                .addComponent(rSPanelImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
                 .addComponent(uno, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(dos, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(197, 197, 197)
-                        .addComponent(siete1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(97, 97, 97)
+                        .addComponent(cinco, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(tres, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(seis, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(247, 247, 247)
+                        .addComponent(ocho, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(47, 47, 47)
                         .addComponent(cuatro, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(97, 97, 97)
-                        .addComponent(cinco, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(197, 197, 197)
+                        .addComponent(siete1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(247, 247, 247)
-                        .addComponent(ocho, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(147, 147, 147)
+                        .addComponent(seis, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(51, 51, 51)
                 .addComponent(nueve, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Diez, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(208, 208, 208))
+                .addGap(7, 7, 7)
+                .addComponent(Diez, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel4.setBackground(new java.awt.Color(29, 30, 81));
@@ -1552,7 +1575,7 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 1491, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 6, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1316, Short.MAX_VALUE))
         );
@@ -1642,7 +1665,7 @@ public class Principal extends javax.swing.JFrame {
                 jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
                 // Reubicar los botones con el submenú de Ventas visible
-                jPanel3.add(rSPanelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 41, 158, 153));
+                jPanel3.add(rSPanelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 63, 158, 130));
                 jPanel3.add(uno, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 250, 50));
                 jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 250, 50));
                 jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 250, 50));
@@ -1716,7 +1739,7 @@ public class Principal extends javax.swing.JFrame {
             this.uno.setSelected(true);
 
             Escritorio1 es = new Escritorio1();
-            es.setSize(1090, 690);
+            es.setSize(1290, 730);
             es.setLocation(0, 0);
 
             contenedor.removeAll();
@@ -1741,7 +1764,7 @@ public class Principal extends javax.swing.JFrame {
             jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
             // Reubicar los botones con el submenú visible
-            jPanel3.add(rSPanelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 41, 158, 153));
+            jPanel3.add(rSPanelImage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 63, 158, 130));
             jPanel3.add(uno, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 250, 50));
             jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 250, 50));
             jPanel3.add(submenuInventario, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 250, 100)); // Submenú (Materiales + Herramientas)
