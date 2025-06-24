@@ -4,28 +4,51 @@
  */
 package vista;
 
+import controlador.Ctrl_InventarioHerramienta;
+import controlador.Ctrl_InventarioMaterial;
 import controlador.Ctrl_Pedido;
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import modelo.Conexion;
+import modelo.HerramientaDatos;
+import modelo.MaterialDatos;
+import rojerusan.RSLabelImage;
 import vista.Produccion.Produccion;
-import vista.Usuarios1;
-import vista.VistaClientes;
-import vista.proveedor.proveedorProducto;
-import vista.proveedor.proveedores;
 
 ;
 
@@ -37,26 +60,100 @@ public class Escritorio1 extends javax.swing.JPanel {
 
     private Ctrl_Pedido controlador;
 
-    public Escritorio1() {
+    private JPanel panelSeguimiento; // Añade esta línea
+    private JScrollPane scrollSeguimiento; // Nuevo JScrollPane
+    private JPanel panelTarjetasStock; // Panel que contendrá las tarjetas
+    private Timer updateTimer;
 
+    private rojeru_san.RSButton btnVerMas;
+    private int tarjetasMostradas = 0;
+    private List<ItemSeguimiento> todosItems = new ArrayList<>();
+
+    public Escritorio1() {
         initComponents();
 
-        this.controlador = new Ctrl_Pedido();
+        // Inicializar paneles y componentes antes de aplicarTema
+        panelSeguimiento = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.setColor(new Color(0, 0, 0, 0));
+                g.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        panelSeguimiento.setOpaque(false);
+        panelSeguimiento.setLayout(new BorderLayout());
+        panelSeguimiento.setPreferredSize(new Dimension(450, 410));
+
+        panelTarjetasStock = new JPanel();
+        panelTarjetasStock.setOpaque(false);
+        panelTarjetasStock.setLayout(new BoxLayout(panelTarjetasStock, BoxLayout.Y_AXIS));
+        panelTarjetasStock.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        scrollSeguimiento = new JScrollPane(panelTarjetasStock) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.setColor(new Color(0, 0, 0, 0));
+                g.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        scrollSeguimiento.setBorder(null);
+        scrollSeguimiento.getViewport().setOpaque(false);
+        scrollSeguimiento.setOpaque(false);
+        scrollSeguimiento.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollSeguimiento.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        // Configurar el botón "Ver más"
+        btnVerMas = new rojeru_san.RSButton();
+        btnVerMas.setText("Ver más");
+        btnVerMas.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        btnVerMas.setBackground(new Color(72, 92, 188));
+        btnVerMas.setForeground(Color.WHITE);
+        btnVerMas.setPreferredSize(new Dimension(110, 25));
+        btnVerMas.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
+        btnVerMas.setFocusPainted(false);
+        btnVerMas.addActionListener(e -> cargarMasTarjetas());
+        btnVerMas.setVisible(false);
+
+        JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 5));
+        panelBoton.setOpaque(false);
+        panelBoton.add(btnVerMas);
+
+        panelSeguimiento.add(panelBoton, BorderLayout.SOUTH);
+        panelSeguimiento.add(scrollSeguimiento, BorderLayout.CENTER);
+
+        // Aplicar tema después de inicializar los componentes
         aplicarTema();
+
+        this.controlador = new Ctrl_Pedido();
         actualizarIdMaximoProveedor();
         actualizarIdMaximocliente();
         actualizarIdMaximousuario();
         actualizarIdMaximoproduccion();
         actualizarIdMaximopedido();
 
+        int altoPanel = Math.min(450, 0 * 80 + 40); // Inicialmente 0 materiales
+        jPanel4.add(panelSeguimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, 450, 410));
+
+        // Cargar datos iniciales
+        actualizarPanelSeguimiento();
+        todosItems = obtenerItemsSeguimiento();
+        cargarPrimerasTarjetas();
+
+        // Configurar temporizador
+        updateTimer = new Timer(10000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                actualizarPanelSeguimiento();
+            }
+        });
+        updateTimer.start();
+
         Tabla1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-        // Configura el modelo de tabla correctamente
         DefaultTableModel model = new DefaultTableModel(
                 new Object[][]{},
                 new String[]{"Nombre", "Fecha inicio", "Fecha Final", "Estado"}
         ) {
-
             @Override
             public Class<?> getColumnClass(int columnIndex) {
                 return String.class;
@@ -69,15 +166,10 @@ public class Escritorio1 extends javax.swing.JPanel {
         };
 
         Tabla1.setModel(model);
-
-        // Oculta las columnas adicionales después de establecer el modelo
-        // Oculta Cantidad
-        Tabla1.getColumnModel().getColumn(3).setCellRenderer((TableCellRenderer) new EstadoTableCellRenderer());
-        TemaManager.getInstance().addThemeChangeListener(() -> {
-            aplicarTema(); // Update theme when it changes
-        });
-        // Cargar datos desde la base de datos
+        Tabla1.getColumnModel().getColumn(3).setCellRenderer(new EstadoTableCellRenderer());
+        TemaManager.getInstance().addThemeChangeListener(() -> aplicarTema());
         cargarDatosIniciales();
+        actualizarPanelSeguimiento();
 
     }
 
@@ -85,6 +177,11 @@ public class Escritorio1 extends javax.swing.JPanel {
         boolean oscuro = TemaManager.getInstance().isOscuro();
 
         if (oscuro) {
+
+            // Actualizar color del texto en las tarjetas de seguimiento
+            Color colorTexto = Color.WHITE;
+            actualizarColorTextoTarjetas(colorTexto);
+
             // Configuración para modo oscuro
             Color fondo = new Color(21, 21, 33);
             Color fondoTabla = new Color(30, 30, 45);
@@ -108,12 +205,9 @@ public class Escritorio1 extends javax.swing.JPanel {
             Tabla1.setGridColor(new Color(80, 80, 80));
 
             // ComboBox
-            rSComboBoxMaterial1.setBackground(new Color(37, 37, 52));
-            rSComboBoxMaterial1.setForeground(texto);
             // Nota: Verifica si RSComboBoxMaterial tiene métodos como setColorIcon o setPhColor
             // rSComboBoxMaterial1.setColorIcon(texto);
             // rSComboBoxMaterial1.setPhColor(Color.LIGHT_GRAY);
-
             // Botones
             btnproveedores.setBackground(encabezado);
             btnproveedores.setBackgroundHover(new Color(118, 142, 240));
@@ -151,7 +245,14 @@ public class Escritorio1 extends javax.swing.JPanel {
             lblProduccion.setForeground(texto);
             jLabel9.setForeground(texto);
 
+            lblSeguimiento.setForeground(texto);
+
         } else {
+
+            // Actualizar color del texto en las tarjetas de seguimiento
+            Color colorTexto = Color.BLACK;
+            actualizarColorTextoTarjetas(colorTexto);
+
             // Configuración para modo claro
             Color fondo = new Color(242, 247, 255);
             Color texto = Color.BLACK;
@@ -175,11 +276,8 @@ public class Escritorio1 extends javax.swing.JPanel {
             Tabla1.setGridColor(Color.WHITE);
 
             // ComboBox
-            rSComboBoxMaterial1.setBackground(fondo);
-            rSComboBoxMaterial1.setForeground(texto);
             // rSComboBoxMaterial1.setColorIcon(texto);
             // rSComboBoxMaterial1.setPhColor(Color.GRAY);
-
             // Botones
             btnproveedores.setBackground(primario);
             btnproveedores.setBackgroundHover(new Color(67, 150, 209));
@@ -216,13 +314,13 @@ public class Escritorio1 extends javax.swing.JPanel {
             lblPedidos.setForeground(texto);
             lblProduccion.setForeground(texto);
             jLabel9.setForeground(texto);
+            lblSeguimiento.setForeground(texto);
         }
 
         // Repintar todos los componentes
         jPanel4.repaint();
         Tabla1.repaint();
         Tabla1.getTableHeader().repaint();
-        rSComboBoxMaterial1.repaint();
         btnproveedores.repaint();
         btnproveedores1.repaint();
         btnCliente.repaint();
@@ -406,12 +504,315 @@ public class Escritorio1 extends javax.swing.JPanel {
         }
     }
 
+    private List<ItemSeguimiento> obtenerItemsSeguimiento() {
+        List<ItemSeguimiento> items = new ArrayList<>();
+
+        // Obtener materiales con stock bajo
+        Ctrl_InventarioMaterial ctrlMaterial = new Ctrl_InventarioMaterial();
+        for (Ctrl_InventarioMaterial.MaterialConDetalles mat : ctrlMaterial.obtenerMaterialesConStockBajo()) {
+            items.add(new ItemSeguimiento(mat));
+        }
+
+        // Obtener herramientas con problemas
+        Ctrl_InventarioHerramienta ctrlHerramienta = new Ctrl_InventarioHerramienta();
+        for (Ctrl_InventarioHerramienta.MaterialConDetalles herr : ctrlHerramienta.obtenerHerramientasProblema()) {
+            items.add(new ItemSeguimiento(herr));
+        }
+
+        // Ordenar por prioridad (ALTA primero)
+        items.sort((a, b) -> {
+            if (a.getPrioridad().equals(b.getPrioridad())) {
+                return a.getTipo().compareTo(b.getTipo()); // Misma prioridad: ordenar por tipo
+            }
+            return b.getPrioridad().compareTo(a.getPrioridad()); // Prioridad descendente
+        });
+
+        return items;
+    }
+
+    private void actualizarPanelSeguimiento() {
+        // Limpiar el panel primero
+        panelTarjetasStock.removeAll();
+
+        // Obtener todos los items actualizados
+        todosItems = obtenerItemsSeguimiento();
+        tarjetasMostradas = 0; // Reiniciar contador
+
+        if (todosItems.isEmpty()) {
+            // Mostrar mensaje cuando no hay items
+            JLabel lblSinProblemas = new JLabel("<html><div style='text-align:center;'>No hay problemas actualmente<br>"
+                    + "<small style='color:#888;'>Stock bajo o herramientas dañadas/en reparación</small></div></html>");
+            lblSinProblemas.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            panelTarjetasStock.add(lblSinProblemas);
+            btnVerMas.setVisible(false); // Ocultar botón si no hay items
+        } else {
+            // Cargar las primeras tarjetas (máximo 4)
+            int cantidadAMostrar = Math.min(4, todosItems.size());
+            for (int i = 0; i < cantidadAMostrar; i++) {
+                agregarTarjeta(todosItems.get(i));
+                tarjetasMostradas++;
+            }
+
+            // Actualizar visibilidad del botón
+            btnVerMas.setVisible(tarjetasMostradas < todosItems.size());
+        }
+
+        panelTarjetasStock.revalidate();
+        panelTarjetasStock.repaint();
+        scrollSeguimiento.getVerticalScrollBar().setValue(0);
+    }
+
+    private JPanel crearTarjetaMaterial(Ctrl_InventarioMaterial.MaterialConDetalles detalle) {
+        boolean oscuro = TemaManager.getInstance().isOscuro();
+        Color colorTexto = oscuro ? Color.WHITE : Color.BLACK;
+
+        JPanel tarjeta = new JPanel(new BorderLayout(8, 8)) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Fondo
+                g2.setColor(TemaManager.getInstance().isOscuro()
+                        ? new Color(50, 50, 65)
+                        : Color.WHITE);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+
+                // Borde según prioridad
+                g2.setColor(new Color(255, 165, 0)); // Naranja por defecto (MEDIA)
+                if (new ItemSeguimiento(detalle).getPrioridad().equals("ALTA")) {
+                    g2.setColor(new Color(255, 80, 80)); // Rojo para ALTA
+                }
+                g2.setStroke(new BasicStroke(2f));
+                g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
+                g2.dispose();
+            }
+        };
+
+        tarjeta.setOpaque(false);
+        tarjeta.setBorder(BorderFactory.createEmptyBorder(12, 15, 12, 15));
+        tarjeta.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
+
+        // 1. Panel para la imagen (izquierda)
+        JPanel panelImagen = new JPanel(new BorderLayout());
+        panelImagen.setOpaque(false);
+        panelImagen.setPreferredSize(new Dimension(60, 60)); // Ancho fijo, alto se ajusta
+
+        RSLabelImage lblImagen = new RSLabelImage();
+        URL imageUrl = getClass().getResource("/cajaIcono.png");
+        ImageIcon icono = (imageUrl != null) ? new ImageIcon(imageUrl) : new ImageIcon("default_bell.png");
+        lblImagen.setIcon(icono);
+
+        lblImagen.setHorizontalAlignment(JLabel.CENTER);
+        lblImagen.setVerticalAlignment(JLabel.CENTER);
+        panelImagen.add(lblImagen, BorderLayout.CENTER);
+
+        // Panel central (texto vertical)
+        JPanel panelTexto = new JPanel();
+        panelTexto.setLayout(new BoxLayout(panelTexto, BoxLayout.Y_AXIS));
+        panelTexto.setOpaque(false);
+
+        JLabel lblTipo = new JLabel("MATERIAL");
+        lblTipo.setFont(new Font("Tahoma", Font.BOLD, 13));
+        lblTipo.setForeground(colorTexto);
+
+        JLabel lblNombre = new JLabel(detalle.getMaterial().getNombre());
+        lblNombre.setFont(new Font("Tahoma", Font.BOLD, 13));
+        lblNombre.setForeground(colorTexto); // Usar color del tema
+
+        panelTexto.add(lblTipo);
+        panelTexto.add(Box.createVerticalStrut(5));
+        panelTexto.add(lblNombre);
+
+        // Panel derecho (detalles)
+        MaterialDatos material = detalle.getMaterial();
+        // Determinar color según prioridad
+        String prioridad = new ItemSeguimiento(detalle).getPrioridad();
+        Color colorPrioridad = prioridad.equals("ALTA") ? new Color(255, 80, 80) : new Color(255, 165, 0);
+
+        JLabel lblDetalles = new JLabel(
+                "<html><div style='text-align:right; color:"
+                + (colorTexto) + ";'>"
+                + "<b>Stock:</b> <span style='color:" + String.format("#%02x%02x%02x",
+                        colorPrioridad.getRed(),
+                        colorPrioridad.getGreen(),
+                        colorPrioridad.getBlue()) + ";'>"
+                + material.getCantidad() + "/" + material.getStockMinimo() + " " + detalle.getNombreUnidadMedida() + "</span><br><br>"
+                + "<b>Categoría:</b> " + detalle.getNombreCategoria()
+                + "</div></html>"
+        );
+        lblDetalles.setFont(new Font("Tahoma", Font.PLAIN, 13));
+
+        // Agregar componentes
+        JPanel panelContenido = new JPanel(new BorderLayout(10, 0));
+        panelContenido.setOpaque(false);
+        panelContenido.add(panelImagen, BorderLayout.WEST);
+        panelContenido.add(panelTexto, BorderLayout.CENTER);
+        panelContenido.add(lblDetalles, BorderLayout.EAST);
+
+        tarjeta.add(panelContenido, BorderLayout.CENTER);
+        return tarjeta;
+    }
+
+    private JPanel crearTarjetaHerramienta(Ctrl_InventarioHerramienta.MaterialConDetalles detalle) {
+        boolean oscuro = TemaManager.getInstance().isOscuro();
+        Color colorTexto = oscuro ? Color.WHITE : Color.BLACK;
+
+        JPanel tarjeta = new JPanel(new BorderLayout(8, 8)) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Fondo
+                g2.setColor(TemaManager.getInstance().isOscuro()
+                        ? new Color(50, 50, 65)
+                        : Color.WHITE);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+
+                // Borde según prioridad
+                g2.setColor(new Color(255, 165, 0)); // Naranja por defecto (MEDIA)
+                if (new ItemSeguimiento(detalle).getPrioridad().equals("ALTA")) {
+                    g2.setColor(new Color(255, 80, 80)); // Rojo para ALTA
+                }
+                g2.setStroke(new BasicStroke(2f));
+                g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
+                g2.dispose();
+            }
+        };
+
+        tarjeta.setOpaque(false);
+        tarjeta.setBorder(BorderFactory.createEmptyBorder(12, 15, 12, 15));
+        tarjeta.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
+
+        // 1. Panel para la imagen (izquierda)
+        JPanel panelImagen = new JPanel(new BorderLayout());
+        panelImagen.setOpaque(false);
+        panelImagen.setPreferredSize(new Dimension(60, 60)); // Ancho fijo, alto se ajusta
+
+        RSLabelImage lblImagen = new RSLabelImage();
+        URL imageUrl = getClass().getResource("/herramientaIcono.png");
+        ImageIcon icono = (imageUrl != null) ? new ImageIcon(imageUrl) : new ImageIcon("default_bell.png");
+        lblImagen.setIcon(icono);
+
+        lblImagen.setHorizontalAlignment(JLabel.CENTER);
+        lblImagen.setVerticalAlignment(JLabel.CENTER);
+        panelImagen.add(lblImagen, BorderLayout.CENTER);
+
+        // Panel central (texto vertical)
+        JPanel panelTexto = new JPanel();
+        panelTexto.setLayout(new BoxLayout(panelTexto, BoxLayout.Y_AXIS));
+        panelTexto.setOpaque(false);
+
+        JLabel lblTipo = new JLabel("HERRAMIENTA");
+        lblTipo.setFont(new Font("Tahoma", Font.BOLD, 13));
+        lblTipo.setForeground(colorTexto);
+
+        JLabel lblNombre = new JLabel(detalle.getMaterial().getNombre());
+        lblNombre.setFont(new Font("Tahoma", Font.BOLD, 13));
+        lblNombre.setForeground(colorTexto); // Usar color del tema
+
+        panelTexto.add(lblTipo);
+        panelTexto.add(Box.createVerticalStrut(5));
+        panelTexto.add(lblNombre);
+
+        // Panel derecho (detalles)
+        HerramientaDatos herramienta = detalle.getMaterial();
+        String estado = herramienta.getEstado();
+
+        // Color solo para el estado
+        String colorEstado = estado.equals("Dañado") ? "#FF5555"
+                : estado.equals("Reparación") ? "#FFAA00"
+                : "#000000"; // Negro por defecto
+
+        JLabel lblDetalles = new JLabel(
+                "<html><div style='text-align:right; color:"
+                + (colorTexto) + ";'>"
+                + "<b>Estado:</b> <span style='color:" + colorEstado + ";'>" + estado + "</span><br><br>"
+                + "<b>Disponibles:</b> " + herramienta.getCantidad() + " " + detalle.getNombreUnidadMedida()
+                + "</div></html>"
+        );
+        lblDetalles.setFont(new Font("Tahoma", Font.PLAIN, 13));
+
+        // Agregar componentes
+        JPanel panelContenido = new JPanel(new BorderLayout(10, 0));
+        panelContenido.setOpaque(false);
+        panelContenido.add(panelImagen, BorderLayout.WEST);
+        panelContenido.add(panelTexto, BorderLayout.CENTER);
+        panelContenido.add(lblDetalles, BorderLayout.EAST);
+
+        tarjeta.add(panelContenido, BorderLayout.CENTER);
+        return tarjeta;
+    }
+
+    private void cargarPrimerasTarjetas() {
+        panelTarjetasStock.removeAll();
+        tarjetasMostradas = Math.min(4, todosItems.size());
+
+        for (int i = 0; i < tarjetasMostradas; i++) {
+            agregarTarjeta(todosItems.get(i));
+        }
+
+        actualizarVisibilidadBoton();
+        panelTarjetasStock.revalidate();
+        panelTarjetasStock.repaint();
+    }
+
+    private void cargarMasTarjetas() {
+        int nuevasTarjetas = Math.min(4, todosItems.size() - tarjetasMostradas);
+
+        for (int i = tarjetasMostradas; i < tarjetasMostradas + nuevasTarjetas; i++) {
+            agregarTarjeta(todosItems.get(i));
+        }
+
+        tarjetasMostradas += nuevasTarjetas;
+        actualizarVisibilidadBoton();
+        panelTarjetasStock.revalidate();
+        panelTarjetasStock.repaint();
+
+        // Desplazar scroll hacia abajo
+        SwingUtilities.invokeLater(() -> {
+            JScrollBar vertical = scrollSeguimiento.getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+        });
+    }
+
+    private void agregarTarjeta(ItemSeguimiento item) {
+        JPanel tarjeta = (item.getTipo() == ItemSeguimiento.Tipo.MATERIAL)
+                ? crearTarjetaMaterial((Ctrl_InventarioMaterial.MaterialConDetalles) item.getItem())
+                : crearTarjetaHerramienta((Ctrl_InventarioHerramienta.MaterialConDetalles) item.getItem());
+
+        panelTarjetasStock.add(tarjeta);
+        panelTarjetasStock.add(Box.createRigidArea(new Dimension(0, 12)));
+    }
+
+    private void actualizarVisibilidadBoton() {
+        btnVerMas.setVisible(tarjetasMostradas < todosItems.size());
+    }
+
+    private void actualizarColorTextoTarjetas(Color colorTexto) {
+        for (Component comp : panelTarjetasStock.getComponents()) {
+            if (comp instanceof JPanel) {
+                actualizarColorTextoEnComponentes((JPanel) comp, colorTexto);
+            }
+        }
+    }
+
+    private void actualizarColorTextoEnComponentes(JPanel panel, Color colorTexto) {
+        for (Component comp : panel.getComponents()) {
+            if (comp instanceof JLabel) {
+                ((JLabel) comp).setForeground(colorTexto);
+            } else if (comp instanceof JPanel) {
+                actualizarColorTextoEnComponentes((JPanel) comp, colorTexto);
+            }
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel4 = new javax.swing.JPanel();
-        rSComboBoxMaterial1 = new RSMaterialComponent.RSComboBoxMaterial();
         btnproveedores = new RSMaterialComponent.RSButtonShape();
         jLabel6 = new javax.swing.JLabel();
         imageProveedor = new rojerusan.RSPanelImage();
@@ -438,6 +839,7 @@ public class Escritorio1 extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla1 = new rojerusan.RSTableMetro1();
         jLabel9 = new javax.swing.JLabel();
+        lblSeguimiento = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(1290, 730));
@@ -447,10 +849,6 @@ public class Escritorio1 extends javax.swing.JPanel {
         jPanel4.setPreferredSize(new java.awt.Dimension(1306, 640));
         jPanel4.setRequestFocusEnabled(false);
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        rSComboBoxMaterial1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Notificaciones", " " }));
-        rSComboBoxMaterial1.setFont(new java.awt.Font("Roboto Bold", 0, 18)); // NOI18N
-        jPanel4.add(rSComboBoxMaterial1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, 430, 60));
 
         btnproveedores.setBackground(new java.awt.Color(46, 49, 82));
         btnproveedores.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
@@ -714,11 +1112,15 @@ public class Escritorio1 extends javax.swing.JPanel {
         Tabla1.setSelectionBackground(new java.awt.Color(109, 160, 221));
         jScrollPane1.setViewportView(Tabla1);
 
-        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 260, 565, 410));
+        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 260, 565, 410));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel9.setText("Pedidos Proximos");
-        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 230, -1, -1));
+        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 220, -1, -1));
+
+        lblSeguimiento.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblSeguimiento.setText("Seguimiento de inventario");
+        jPanel4.add(lblSeguimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, 250, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -734,7 +1136,7 @@ public class Escritorio1 extends javax.swing.JPanel {
 
     private void btnproveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnproveedoresActionPerformed
 
-        Proveedor pr = new  Proveedor(new javax.swing.JFrame(), true);
+        Proveedor pr = new Proveedor(new javax.swing.JFrame(), true);
         pr.setSize(1290, 730);
         pr.setLocation(0, 0);
 
@@ -752,7 +1154,7 @@ public class Escritorio1 extends javax.swing.JPanel {
 
     private void btnproveedores1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnproveedores1ActionPerformed
 
-         Proveedor pr = new  Proveedor(new javax.swing.JFrame(), true);
+        Proveedor pr = new Proveedor(new javax.swing.JFrame(), true);
         pr.setSize(1260, 730);
         pr.setLocation(0, 0);
 
@@ -885,7 +1287,7 @@ public class Escritorio1 extends javax.swing.JPanel {
     private javax.swing.JLabel lblPedidos;
     private javax.swing.JLabel lblProduccion;
     private javax.swing.JLabel lblProvedores;
+    private javax.swing.JLabel lblSeguimiento;
     private javax.swing.JLabel lblUsuario;
-    private RSMaterialComponent.RSComboBoxMaterial rSComboBoxMaterial1;
     // End of variables declaration//GEN-END:variables
 }

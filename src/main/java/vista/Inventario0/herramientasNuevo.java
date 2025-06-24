@@ -10,10 +10,13 @@ import controlador.Ctrl_UnidadHerramienta;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -633,36 +636,68 @@ public class herramientasNuevo extends javax.swing.JDialog {
 
     private void btnSubirImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirImagenActionPerformed
         try {
-            // Configurar el Look and Feel de Windows (más moderno)
+            // Configurar el Look and Feel del sistema
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "png", "jpeg"));
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Seleccionar imagen del material");
 
-        int opcion = fileChooser.showOpenDialog(null);
-        if (opcion == JFileChooser.APPROVE_OPTION) {
-            try {
+            // Filtro actualizado que incluye WEBP
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                    "Archivos de imagen (JPG, PNG, JPEG, GIF, BMP, WEBP)",
+                    "jpg", "png", "jpeg", "gif", "bmp", "webp");
+            fileChooser.setFileFilter(filter);
+            fileChooser.setAcceptAllFileFilterUsed(true);
+
+            // Configuración adicional
+            fileChooser.setFileHidingEnabled(false);
+            fileChooser.rescanCurrentDirectory();
+
+            int opcion = fileChooser.showOpenDialog(this);
+            if (opcion == JFileChooser.APPROVE_OPTION) {
                 File archivo = fileChooser.getSelectedFile();
-                // Convertir la imagen a bytes
-                imagenBytes = Files.readAllBytes(archivo.toPath()); // Actualizar imagen para la base de datos
+                try {
+                    // Verificar extensión WEBP
+                    if (archivo.getName().toLowerCase().endsWith(".webp")) {
+                        // Usar ImageIO para leer WEBP (requiere dependencia adicional)
+                        BufferedImage originalImage = ImageIO.read(archivo);
+                        if (originalImage == null) {
+                            throw new IOException("No se pudo leer el archivo WEBP");
+                        }
 
-                // Obtener dimensiones del lblImagen
-                int width = lblImagen.getWidth();  // 180
-                int height = lblImagen.getHeight(); // 150
+                        // Convertir a byte array
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ImageIO.write(originalImage, "png", baos);
+                        imagenBytes = baos.toByteArray();
 
-                // Mostrar previsualización
-                ImageIcon imagen = new ImageIcon(archivo.getAbsolutePath());
-                Image img = imagen.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-                previewImageIcon = new ImageIcon(img); // Actualizar la vista previa
-                lblImagen.setIcon(previewImageIcon);
+                        // Mostrar previsualización
+                        Image scaledImage = originalImage.getScaledInstance(
+                                lblImagen.getWidth(), lblImagen.getHeight(), Image.SCALE_SMOOTH);
+                        previewImageIcon = new ImageIcon(scaledImage);
+                    } else {
+                        // Procesamiento normal para otros formatos
+                        imagenBytes = Files.readAllBytes(archivo.toPath());
+                        ImageIcon imagen = new ImageIcon(archivo.getAbsolutePath());
+                        Image img = imagen.getImage().getScaledInstance(
+                                lblImagen.getWidth(), lblImagen.getHeight(), Image.SCALE_SMOOTH);
+                        previewImageIcon = new ImageIcon(img);
+                    }
 
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Error al leer la imagen: " + ex.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
+                    lblImagen.setIcon(previewImageIcon);
+                    lblImagen.setText("");
+
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(this,
+                            "Error al procesar la imagen:\n" + ex.getMessage(),
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    cargarImagenVistaPrevia();
+                }
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error en el selector de archivos:\n" + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }//GEN-LAST:event_btnSubirImagenActionPerformed
 
