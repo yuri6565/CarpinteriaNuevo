@@ -6,6 +6,7 @@ package vista;
 
 import controlador.Ctrl_InventarioMaterial;
 import controlador.Ctrl_Perfil;
+import java.awt.BasicStroke;
 import vista.Caja.Caja;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -77,6 +78,8 @@ public class Principal extends javax.swing.JFrame {
     private JPopupMenu notificacionPopupMenu; // Declarar como variable de clase
     private boolean popupVisible = false; // Estado del popup
     private Timer updateTimer;
+    private rojerusan.RSLabelImage circulo;
+    private JLabel textoCirculo;
 
     private rojeru_san.RSButton item1;
     private rojeru_san.RSButton item2;
@@ -100,6 +103,30 @@ public class Principal extends javax.swing.JFrame {
         boolean oscuro = TemaManager.getInstance().isOscuro();
 
         initComponents();
+
+        //circulo rojo para notificaciones
+        circulo = new RSLabelImage();
+        URL imageUrl = getClass().getResource("/circulo.png");
+        ImageIcon icono = (imageUrl != null) ? new ImageIcon(imageUrl) : new ImageIcon("default_bell.png");
+        circulo.setIcon(icono);
+        circulo.setPreferredSize(new Dimension(23, 22));
+        circulo.setBounds(1182, 11, 23, 22); // Mismo tamaño o ligeramente mayor
+
+        textoCirculo = new JLabel();
+        textoCirculo.setForeground(Color.WHITE); // Texto blanco para contraste
+        textoCirculo.setFont(new Font("Arial", Font.BOLD, 12)); // Fuente pequeña y negrita
+        textoCirculo.setHorizontalAlignment(JLabel.CENTER); // Centrar texto
+        textoCirculo.setVerticalAlignment(JLabel.CENTER); // Centrar texto
+        textoCirculo.setPreferredSize(new Dimension(20, 20));
+        textoCirculo.setBounds(1182, 12, 20, 20); // Mismo tamaño o ligeramente mayor
+
+        jPanel2.add(circulo);  // Primero agrega el círculo
+        jPanel2.add(textoCirculo);
+
+        // Importante: colocar el JLabel DESPUÉS del botón para que quede al frente
+        jPanel2.setComponentZOrder(textoCirculo, 0); // 0 = al frente
+        jPanel2.setComponentZOrder(circulo, 1); // círculo detrás
+        jPanel2.setComponentZOrder(btnNotificacion1, 2); // botón más atrás
 
 //submenu inventario------------------
         // Inicializar el submenú
@@ -263,6 +290,7 @@ public class Principal extends javax.swing.JFrame {
         submenuVentas.add(item3);
         submenuVentas.add(item4);
 //submenu ventas------------------
+
 
         // Oculta el panel lateral derecho (jPanel5)
         jPanel5.setVisible(false);
@@ -436,7 +464,6 @@ public class Principal extends javax.swing.JFrame {
             ocho1.setIcon(new ImageIcon(getClass().getResource("/imagenes/public-service.png")));
             nueve1.setIcon(new ImageIcon(getClass().getResource("/imagenes/catalogarnegro.png")));
             rSPanelImage3.setImagen(new ImageIcon(getClass().getResource("/imagenes/logo_azul_sin_letras.png")));
-
 
         }
 
@@ -617,7 +644,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void animacion() {
         int posicion = jPanel3.getX();
-        System.out.println("Posición actual: " + posicion); // Debug
+        //System.out.println("Posición actual: " + posicion); // Debug
         if (posicion >= -1) {  // Cambiar a >= para mayor seguridad
             Animacion.Animacion.mover_izquierda(0, -258, 2, 2, jPanel3);
             Animacion.Animacion.mover_izquierda(258, +111, 2, 2, contenedor);
@@ -630,7 +657,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void animation_salir() {
         int posicion = jPanel3.getX();
-        System.out.println("Posición actual: " + posicion); // Debug
+        //System.out.println("Posición actual: " + posicion); // Debug
         if (posicion >= -1) {
             Animacion.Animacion.mover_derecha(-258, 0, 2, 2, jPanel3);
             Animacion.Animacion.mover_derecha(-2, +258, 2, 2, contenedor);
@@ -766,11 +793,6 @@ public class Principal extends javax.swing.JFrame {
         Ctrl_InventarioMaterial ctrl = new Ctrl_InventarioMaterial();
         List<Ctrl_InventarioMaterial.MaterialConDetalles> materialesBajos = ctrl.obtenerMaterialesConStockBajo();
 
-        // Actualizar el contador de notificaciones en lblNumeroNoti
-        int numeroNotificaciones = materialesBajos.size();
-        lblNumeroNoti.setText(String.valueOf(numeroNotificaciones));
-        lblNumeroNoti.setVisible(numeroNotificaciones > 0); // Ocultar si no hay notificaciones
-
         if (materialesBajos.isEmpty()) {
             JLabel lblSinNotificaciones = new JLabel("No hay materiales con stock bajo");
             lblSinNotificaciones.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -849,10 +871,14 @@ public class Principal extends javax.swing.JFrame {
         Ctrl_InventarioMaterial ctrl = new Ctrl_InventarioMaterial();
         List<Ctrl_InventarioMaterial.MaterialConDetalles> materialesBajos = ctrl.obtenerMaterialesConStockBajo();
 
-        // Actualizar el contador de notificaciones en lblNumeroNoti
-        int numeroNotificaciones = materialesBajos.size();
-        lblNumeroNoti.setText(String.valueOf(numeroNotificaciones));
-        lblNumeroNoti.setVisible(numeroNotificaciones > 0); // Ocultar si no hay notificaciones
+        // Actualizar el contador de notificaciones
+        int totalNotificaciones = materialesBajos.size();
+        String textoContador = totalNotificaciones > 99 ? "99+" : String.valueOf(totalNotificaciones);
+        textoCirculo.setText(textoContador);
+
+        // Mostrar u ocultar el círculo según haya notificaciones
+        circulo.setVisible(totalNotificaciones > 0);
+        textoCirculo.setVisible(totalNotificaciones > 0);
 
         if (materialesBajos.isEmpty()) {
             JLabel lblSinNotificaciones = new JLabel("No hay materiales con stock bajo");
@@ -874,11 +900,29 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private JPanel crearTarjetaMaterial(Ctrl_InventarioMaterial.MaterialConDetalles detalle) {
-        JPanel tarjeta = new JPanel(new BorderLayout(10, 5));
-        tarjeta.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 200, 200)),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
+        JPanel tarjeta = new JPanel(new BorderLayout(10, 5)) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Fondo
+                g2.setColor(TemaManager.getInstance().isOscuro()
+                        ? new Color(50, 50, 65)
+                        : Color.WHITE);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+
+                // Borde gris
+                g2.setStroke(new BasicStroke(1f));
+                g2.setColor(new Color(200, 200, 200)); // Color gris claro
+                g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
+                g2.dispose();
+            }
+        };
+
+        tarjeta.setOpaque(false);
+        tarjeta.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
         tarjeta.setBackground(Color.WHITE);
         tarjeta.setMaximumSize(new Dimension(330, 80));
 
@@ -926,18 +970,6 @@ public class Principal extends javax.swing.JFrame {
         lblStock.setForeground(colorStock);
         panelInferior.add(lblStock, BorderLayout.WEST);
 
-        // Botón para reponer (opcional)
-        JButton btnReponer = new JButton("Reponer");
-        btnReponer.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        btnReponer.setBackground(new Color(46, 49, 82));
-        btnReponer.setForeground(Color.WHITE);
-        btnReponer.setFocusPainted(false);
-        btnReponer.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        btnReponer.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, "Función de reposición para: " + material.getNombre());
-        });
-        panelInferior.add(btnReponer, BorderLayout.EAST);
-
         tarjeta.add(panelInferior, BorderLayout.SOUTH);
 
         return tarjeta;
@@ -963,8 +995,6 @@ public class Principal extends javax.swing.JFrame {
         rolusuario = new javax.swing.JLabel();
         lblUsuarioLogueado = new javax.swing.JLabel();
         lblTituloPrincipal = new javax.swing.JLabel();
-        lblNumeroNoti = new javax.swing.JLabel();
-        lblRojo = new rojerusan.RSLabelImage();
         btnNotificacion1 = new rojerusan.RSLabelIcon();
         rSLabelImage3 = new rojerusan.RSLabelImage();
         jPanel3 = new javax.swing.JPanel();
@@ -1078,15 +1108,6 @@ public class Principal extends javax.swing.JFrame {
         lblTituloPrincipal.setForeground(new java.awt.Color(255, 255, 255));
         lblTituloPrincipal.setText("Escritorio");
 
-        lblNumeroNoti.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblNumeroNoti.setForeground(new java.awt.Color(255, 255, 255));
-        lblNumeroNoti.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblNumeroNoti.setText("1");
-        lblNumeroNoti.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        lblNumeroNoti.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        lblRojo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/circulo.png"))); // NOI18N
-
         btnNotificacion1.setBackground(new java.awt.Color(255, 255, 255));
         btnNotificacion1.setForeground(new java.awt.Color(255, 255, 255));
         btnNotificacion1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.NOTIFICATIONS);
@@ -1105,24 +1126,17 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(260, 260, 260)
                 .addComponent(menu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addComponent(lblTituloPrincipal)
-                .addGap(606, 606, 606)
+                .addGap(0, 0, 0)
+                .addComponent(lblTituloPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(354, 354, 354)
                 .addComponent(rSLabelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addComponent(rSSwitch1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addComponent(rSLabelImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnNotificacion1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(lblRojo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(lblNumeroNoti, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(11, 11, 11)
+                .addComponent(btnNotificacion1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
                 .addComponent(rSLabelCircleImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1135,7 +1149,7 @@ public class Principal extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(menu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(15, 15, 15)
                 .addComponent(lblTituloPrincipal))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(13, 13, 13)
@@ -1148,12 +1162,7 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(rSLabelImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnNotificacion1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblRojo, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(lblNumeroNoti))))
+                .addComponent(btnNotificacion1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(rSLabelCircleImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(lblUsuarioLogueado)
@@ -2052,8 +2061,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JLabel lblNumeroNoti;
-    private rojerusan.RSLabelImage lblRojo;
     private javax.swing.JLabel lblTituloPrincipal;
     private javax.swing.JLabel lblUsuarioLogueado;
     private rojeru_san.RSButton menu;

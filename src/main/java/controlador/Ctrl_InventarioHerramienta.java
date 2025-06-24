@@ -153,6 +153,46 @@ public class Ctrl_InventarioHerramienta {
         }
     }
 
+    public List<MaterialConDetalles> obtenerHerramientasProblema() {
+        List<MaterialConDetalles> lista = new ArrayList<>();
+        String sql = "SELECT i.*, c.nombre AS nombre_categoria, m.nombre AS nombre_marca, um.nombre AS nombre_unidad_medida "
+                + "FROM inventario i "
+                + "LEFT JOIN categoria c ON i.categoria_codigo = c.codigo "
+                + "LEFT JOIN marca m ON i.marca_idmarca = m.idmarca "
+                + "LEFT JOIN unidad_medida um ON i.unidad_medida_idunidad_medida = um.idunidad_medida "
+                + "WHERE i.tipo = 'herramienta' AND (i.estado = 'Reparación' OR i.estado = 'Dañado')";
+
+        try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                HerramientaDatos herramienta = new HerramientaDatos(
+                        rs.getInt("id_inventario"),
+                        rs.getString("nombre"),
+                        rs.getString("descripcion"),
+                        rs.getString("cantidad"),
+                        rs.getInt("precio_unitario"),
+                        rs.getString("estado"),
+                        rs.getInt("categoria_codigo"),
+                        rs.getInt("marca_idmarca"),
+                        rs.getInt("unidad_medida_idunidad_medida"),
+                        rs.getBytes("imagen")
+                );
+                lista.add(new MaterialConDetalles(
+                        herramienta,
+                        rs.getString("nombre_categoria"),
+                        rs.getString("nombre_marca"),
+                        rs.getString("nombre_unidad_medida")
+                ));
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener herramientas: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return lista;
+    }
+    
+    
+
     public boolean eliminar(int idInventario) {
         String sql = "DELETE FROM inventario WHERE id_inventario = ? AND tipo = 'herramienta'";
 
@@ -169,4 +209,3 @@ public class Ctrl_InventarioHerramienta {
     }
 
 }
-
