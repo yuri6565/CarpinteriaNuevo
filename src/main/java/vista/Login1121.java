@@ -312,32 +312,17 @@ public class Login1121 extends javax.swing.JFrame {
         String contrasena = new String(passtxt.getPassword()).trim();
 
         if (nombreUsuario.isEmpty() && contrasena.isEmpty()) {
-            LoginAlerta confirmDialog = new LoginAlerta(
-                    (Frame) this.getParent(),
-                    true,
-                    "Confirmar",
-                    "¿Desea guardar los datos?"
-            );
-            confirmDialog.setVisible(true);
-            return;
+            LoginAlertaUsuario confirmDialog = new LoginAlertaUsuario((Frame) this.getParent(), true);
+        confirmDialog.setVisible(true);
+        return;
         } else if (nombreUsuario.isEmpty()) {
-            LoginAlertaUsuario confirmDialog = new LoginAlertaUsuario(
-                    (Frame) this.getParent(),
-                    true,
-                    "Confirmar",
-                    "¿Desea guardar los datos?"
-            );
-            confirmDialog.setVisible(true);
-            return;
+              LoginAlertaUsuario confirmDialog = new LoginAlertaUsuario((Frame) this.getParent(), true);
+        confirmDialog.setVisible(true);
+        return;
         } else if (contrasena.isEmpty()) {
-            LoginAlertaContrasena confirmDialog = new LoginAlertaContrasena(
-                    (Frame) this.getParent(),
-                    true,
-                    "Confirmar",
-                    "¿Desea guardar los datos?"
-            );
-            confirmDialog.setVisible(true);
-            return;
+              LoginAlertaUsuario confirmDialog = new LoginAlertaUsuario((Frame) this.getParent(), true);
+        confirmDialog.setVisible(true);
+        return;
         }
 
         Contrl_login controlUsuario = new Contrl_login();
@@ -371,13 +356,8 @@ public class Login1121 extends javax.swing.JFrame {
             timer.setRepeats(false);
             timer.start();
         } else {
-            LoginAlertaContrasenaIncorrecta confirmDialog = new LoginAlertaContrasenaIncorrecta(
-                    (Frame) this.getParent(),
-                    true,
-                    "Confirmar",
-                    "¿Desea guardar los datos?"
-            );
-            confirmDialog.setVisible(true);
+            LoginAlertaContrasenaIncorrecta confirmDialog = new LoginAlertaContrasenaIncorrecta((Frame) this.getParent(), true);
+        confirmDialog.setVisible(true);
         }
     }
 }

@@ -263,23 +263,20 @@ String nuevaContrasena = txtcontrasenanueva.getText().trim();
         String confirmarContrasena = txtcontrasenanueva1.getText().trim();
 
         if (nuevaContrasena.isEmpty() || confirmarContrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingrese ambas contraseñas.");
+            AlertaUsuarioE confirmDialog = new AlertaUsuarioE((Frame) this, true);
+            confirmDialog.setVisible(true);
             return;
         }
 
         if (!nuevaContrasena.equals(confirmarContrasena)) {
-            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden.");
+            AlertaUsuarioE confirmDialog = new AlertaUsuarioE((Frame) this, true);
+            confirmDialog.setVisible(true);
             return;
         }
 
         String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
         if (!nuevaContrasena.matches(regex)) {
-            AlertaReestablecerContrasena confirmDialog = new AlertaReestablecerContrasena(
-                    (Frame) this.getParent(),
-                    true,
-                    "Confirmar",
-                    "¿Desea guardar los datos?"
-            );
+            AlertaReestablecerContrasena confirmDialog = new AlertaReestablecerContrasena((Frame) this, true);
             confirmDialog.setVisible(true);
             return;
         }
@@ -287,25 +284,14 @@ String nuevaContrasena = txtcontrasenanueva.getText().trim();
         Consulta_Usuarios controlador = new Consulta_Usuarios();
         boolean cambioExitoso = controlador.actualizarContrasena(correoIngresado, nuevaContrasena);
         if (cambioExitoso) {
-            AlertaCambioContraseña confirmDialog = new AlertaCambioContraseña(
-                    (Frame) this.getParent(),
-                    true,
-                    "Confirmar",
-                    "¿Desea guardar los datos?"
-            );
+            AlertaCambioContraseña confirmDialog = new AlertaCambioContraseña((Frame) this, true);
             confirmDialog.setVisible(true);
             this.dispose();
-            Login11211 login = new Login11211();
+            Login1121 login = new Login1121();
             login.setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(this, "No se encontró el usuario. Intenta de nuevo.");
-            AlertaUsuarioE usu = new AlertaUsuarioE(
-                    (Frame) this.getParent(),
-                    true,
-                    "Confirmar",
-                    "¿Desea guardar los datos?"
-            );
-            usu.setVisible(true);
+            AlertaUsuarioE confirmDialog = new AlertaUsuarioE((Frame) this, true);
+            confirmDialog.setVisible(true);
             this.dispose();
         }
 

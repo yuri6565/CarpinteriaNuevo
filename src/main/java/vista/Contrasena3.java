@@ -195,38 +195,29 @@ public class Contrasena3 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void rSMaterialButtonRectangle2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonRectangle2ActionPerformed
-        String codigoIngresado = txtcodigo.getText().trim();
+      String codigoIngresado = txtcodigo.getText().trim();
 
         if (codigoIngresado.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor completa el campo del código.", "Campo vacío", JOptionPane.WARNING_MESSAGE);
+            CodigoIncorrectoAlerta confirmDialog = new CodigoIncorrectoAlerta((Frame) this, true);
+            confirmDialog.setVisible(true);
             return;
         }
         Consulta_Usuarios consulta = new Consulta_Usuarios();
         boolean esValido = consulta.validarcodigo(correoIngresado, codigoIngresado);
 
         if (esValido) {
-            ValidacionCodigoExitoso confirmDialog = new ValidacionCodigoExitoso(
-                    (Frame) this.getParent(),
-                    true,
-                    "Confirmar",
-                    "¿Desea guardar los datos?"
-            );
+            ValidacionCodigoExitoso confirmDialog = new ValidacionCodigoExitoso((Frame) this, true);
             confirmDialog.setVisible(true);
             System.out.println("Abrir ventana de cambio de contraseña");
             NuevaContrasena cambiar = new NuevaContrasena();
             cambiar.setCorreoIngresado(correoIngresado);
             cambiar.setVisible(true);
             this.dispose();
-
         } else {
-            CodigoIncorrectoAlerta confirmDialog = new CodigoIncorrectoAlerta(
-                    (Frame) this.getParent(),
-                    true,
-                    "Confirmar",
-                    "¿Desea guardar los datos?"
-            );
+            CodigoIncorrectoAlerta confirmDialog = new CodigoIncorrectoAlerta((Frame) this, true);
             confirmDialog.setVisible(true);
         }
+
 
     }//GEN-LAST:event_rSMaterialButtonRectangle2ActionPerformed
 
@@ -244,12 +235,13 @@ public class Contrasena3 extends javax.swing.JFrame {
 
     private void jLabel6MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MousePressed
 
-        if (correoIngresado == null || correoIngresado.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No se ha proporcionado un correo electrónico válido.", "Error", JOptionPane.ERROR_MESSAGE);
+    if (correoIngresado == null || correoIngresado.isEmpty()) {
+            CodigoIncorrectoAlerta confirmDialog = new CodigoIncorrectoAlerta((Frame) this, true);
+            confirmDialog.setVisible(true);
             return;
         }
 
-        // Stop any existing timer to prevent overlap
+        // Detener cualquier temporizador existente para evitar superposición
         if (activeTimer != null && activeTimer.isRunning()) {
             activeTimer.stop();
         }
@@ -263,18 +255,15 @@ public class Contrasena3 extends javax.swing.JFrame {
         jLabelTimer.setText(countdown[0] + "s");
 
         // Crear un Timer que actualice el contador cada segundo
-        activeTimer = new Timer(1000, new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                countdown[0]--;
-                if (countdown[0] >= 0) {
-                    jLabelTimer.setText(countdown[0] + "s"); // Update timer display
-                } else {
-                    ((Timer) e.getSource()).stop(); // Detener el temporizador
-                    jLabel6.setEnabled(true); // Habilitar el botón de reenviar
-                    jLabelTimer.setVisible(false); // Ocultar el temporizador
-                    activeTimer = null; // Reset the timer reference
-                }
+        activeTimer = new Timer(1000, e -> {
+            countdown[0]--;
+            if (countdown[0] >= 0) {
+                jLabelTimer.setText(countdown[0] + "s"); // Actualizar la visualización del temporizador
+            } else {
+                ((Timer) e.getSource()).stop(); // Detener el temporizador
+                jLabel6.setEnabled(true); // Habilitar el botón de reenviar
+                jLabelTimer.setVisible(false); // Ocultar el temporizador
+                activeTimer = null; // Reiniciar la referencia del temporizador
             }
         });
         activeTimer.start();
@@ -285,21 +274,17 @@ public class Contrasena3 extends javax.swing.JFrame {
             System.out.println("Correo ingresado: " + correoIngresado);
             System.out.println("Código obtenido: " + codigo);
             if (codigo != null) {
-                ReeenvioCodigoAlerta confirmDialog = new ReeenvioCodigoAlerta(
-                        (Frame) this.getParent(),
-                        true,
-                        "Confirmar",
-                        "El código ha sido reenviado a tu correo electrónico."
-                );
+                ReeenvioCodigoAlerta confirmDialog = new ReeenvioCodigoAlerta((Frame) this, true);
                 confirmDialog.setVisible(true);
             } else {
-                JOptionPane.showMessageDialog(this, "Ocurrió un error al reenviar el código. Intenta nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
+                CodigoIncorrectoAlerta confirmDialog = new CodigoIncorrectoAlerta((Frame) this, true);
+                confirmDialog.setVisible(true);
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error al reenviar el código: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            CodigoIncorrectoAlerta confirmDialog = new CodigoIncorrectoAlerta((Frame) this, true);
+            confirmDialog.setVisible(true);
             ex.printStackTrace();
         }
-
     }//GEN-LAST:event_jLabel6MousePressed
 
     /**
