@@ -3,26 +3,65 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package vista.alertas;
-
+import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.JDialog;
+
 
 /**
  *
  * @author EQUIPO
  */
-public class AlertaExitoso extends javax.swing.JDialog {
 
-    boolean opcionConfirmada;
 
-    /**
-     * Creates new form Datos_guardados
-     * @param parent
-     */
-    public AlertaExitoso(Frame parent, boolean modal, String éxito, String datos_guardados_correctamente) {
-        super(parent, modal);
-        initComponents();
+
+/**
+ *
+ * @author EQUIPO
+ */
+public class AlertaExitoso extends JDialog {
+
+    public AlertaExitoso() {
+   
+        if (!isVisible()) { // Prevent multiple instances
+            initComponents();
+            setOpacity(0.0f);
+            setBackground(new java.awt.Color(0, 0, 0, 0));
+            Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+            setSize(pantalla);
+
+  // Agregar KeyListener para detectar la tecla Enter
+            addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        btnCancelarActionPerformed(null); // Simula el clic en el botón OK
+                    }
+                }
+            });
+            setFocusable(true); // Asegura que el diálogo pueda recibir el foco
+            // Manual fade-in effect
+            new Thread(() -> {
+                for (float i = 0.0f; i <= 1.0f; i += 0.1f) {
+                    setOpacity(i);
+                    try { Thread.sleep(50); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+                }
+                setOpacity(1.0f);
+                setVisible(true); // Show after fade-in
+            }).start();
+        }
     }
-
+    public AlertaExitoso(Frame parent, boolean isEmpty) {
+        this(); // Llama al constructor por defecto
+        this.setLocationRelativeTo(parent); // Centra respecto al padre
+        // No sobrescribimos jLabel1 ni jLabel2, usamos el texto del diseñador
+        if (!isVisible()) {
+            setVisible(true); // Muestra el diálogo
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,6 +71,7 @@ public class AlertaExitoso extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jEImagePanel1 = new LIB.JEImagePanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -44,7 +84,13 @@ public class AlertaExitoso extends javax.swing.JDialog {
         setUndecorated(true);
         setResizable(false);
 
+        jEImagePanel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/fondotransparente.png"))); // NOI18N
+        jEImagePanel1.setPreferredSize(new java.awt.Dimension(500, 192));
+        jEImagePanel1.setLayout(new java.awt.GridBagLayout());
+
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setName(""); // NOI18N
+        jPanel1.setPreferredSize(new java.awt.Dimension(530, 260));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(46, 49, 82));
@@ -58,10 +104,9 @@ public class AlertaExitoso extends javax.swing.JDialog {
         rSLabelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Success-PNG-Image.png"))); // NOI18N
         jPanel2.add(rSLabelImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 60, 60));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 80));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 530, 80));
 
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
         btnCancelar.setText("OK");
         btnCancelar.setColorHover(new java.awt.Color(0, 102, 0));
         btnCancelar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
@@ -71,25 +116,27 @@ public class AlertaExitoso extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 130, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 200, 130, -1));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel2.setText("Jose Abel");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, 90, 20));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel2.setText("Carpinteria Jose Abel");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, 240, 30));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel3.setText("Inicio de sesión exitoso, Bienvenido a la Carpinteria");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 470, -1));
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel3.setText("Inicio de sesión exitoso, Bienvenido a la");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 470, -1));
+
+        jEImagePanel1.add(jPanel1, new java.awt.GridBagConstraints());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jEImagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jEImagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
         );
 
         pack();
@@ -102,12 +149,7 @@ public class AlertaExitoso extends javax.swing.JDialog {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -115,37 +157,18 @@ public class AlertaExitoso extends javax.swing.JDialog {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AlertaExitoso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AlertaExitoso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AlertaExitoso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (Exception ex) {
             java.util.logging.Logger.getLogger(AlertaExitoso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                AlertaExitoso dialog = new AlertaExitoso(new javax.swing.JFrame(), true, "\u00c9xito", "Datos guardados correctamente");
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            AlertaExitoso dialog = new AlertaExitoso();
+            dialog.setVisible(true);
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
+    private LIB.JEImagePanel jEImagePanel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -153,4 +176,7 @@ public class AlertaExitoso extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private rojerusan.RSLabelImage rSLabelImage1;
     // End of variables declaration//GEN-END:variables
+
+
+
 }

@@ -59,15 +59,15 @@ txtNombre.addActionListener(e -> txttelefono.requestFocus());
 
 txttelefono.addActionListener(e -> txtcorreo.requestFocus());
 
-txtcorreo.addActionListener(e -> txtdireccion1.requestFocus());
+txtcorreo.addActionListener(e -> txtdireccion.requestFocus());
     
         ctrlProveedor = new Ctrl_Proveedor();
         cmbProducto = new CheckedComboBox<>(makeProductModel());
         cmbProducto.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Fuente moderna
 
 
-        jPanel1.add(cmbProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 190, 200, 30));
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 480));
+//        jPanel1.add(cmbProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 190, 200, 30));
+//        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 480));
 
     }
     // Método para verificar si se presionó "Guardar"
@@ -96,71 +96,88 @@ txtcorreo.addActionListener(e -> txtdireccion1.requestFocus());
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        lblProducto = new javax.swing.JLabel();
-        btnCancelar = new rojeru_san.RSButtonRiple();
-        btnGuardar = new rojeru_san.RSButtonRiple();
-        jLabel9 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        btnGuardar2 = new rojeru_san.RSButtonRiple();
+        jLabel6 = new javax.swing.JLabel();
+        lblProducto1 = new javax.swing.JLabel();
+        btnCancelar1 = new rojeru_san.RSButtonRiple();
+        btnGuardar1 = new rojeru_san.RSButtonRiple();
+        jLabel12 = new javax.swing.JLabel();
         txttelefono = new RSMaterialComponent.RSTextFieldMaterial();
         txtcorreo = new RSMaterialComponent.RSTextFieldMaterial();
-        jLabel8 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
         txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
-        txtdireccion1 = new RSMaterialComponent.RSTextFieldMaterial();
-        jLabel10 = new javax.swing.JLabel();
+        txtdireccion = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel14 = new javax.swing.JLabel();
+        tipoidentificacion4 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        tipoidentificacion5 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        txtNombre3 = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        tipoidentificacion6 = new javax.swing.JLabel();
+        tipoidentificacion1 = new javax.swing.JLabel();
+        tipoidentificacion7 = new javax.swing.JLabel();
+        tipoidentificacion8 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setPreferredSize(new java.awt.Dimension(490, 480));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setPreferredSize(new java.awt.Dimension(490, 480));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(46, 49, 82));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel4.setBackground(new java.awt.Color(46, 49, 82));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Century751 BT", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Crear Proveedor");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, -1, -1));
+        jLabel2.setFont(new java.awt.Font("Century751 BT", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Crear Proveedor");
+        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 50));
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel5.setText("Correo");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
-
-        lblProducto.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        lblProducto.setText("Producto");
-        jPanel1.add(lblProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, -1, -1));
-
-        btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
-        btnCancelar.setText("Cancelar");
-        btnCancelar.setColorHover(new java.awt.Color(204, 0, 0));
-        btnCancelar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar2.setBackground(new java.awt.Color(46, 49, 82));
+        btnGuardar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/x.png"))); // NOI18N
+        btnGuardar2.setColorHover(new java.awt.Color(204, 0, 0));
+        btnGuardar2.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        btnGuardar2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnGuardar2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
+                btnGuardar2ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 420, 140, -1));
+        jPanel4.add(btnGuardar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 0, 40, 30));
 
-        btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
-        btnGuardar.setText("Guardar");
-        btnGuardar.setColorHover(new java.awt.Color(0, 153, 51));
-        btnGuardar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 420, 140, -1));
+        jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 70));
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel9.setText("Telefono:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, -1, -1));
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel6.setText("Correo:");
+        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
+
+        lblProducto1.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        lblProducto1.setText("Producto: ");
+        jPanel3.add(lblProducto1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 280, -1, -1));
+
+        btnCancelar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnCancelar1.setText("Cancelar");
+        btnCancelar1.setColorHover(new java.awt.Color(204, 0, 0));
+        btnCancelar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        jPanel3.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 420, 140, -1));
+
+        btnGuardar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnGuardar1.setText("Guardar");
+        btnGuardar1.setColorHover(new java.awt.Color(0, 153, 51));
+        btnGuardar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        jPanel3.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 420, 140, -1));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel12.setText("Telefono:");
+        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 190, -1, -1));
 
         txttelefono.setForeground(new java.awt.Color(0, 0, 0));
         txttelefono.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -168,12 +185,7 @@ txtcorreo.addActionListener(e -> txtdireccion1.requestFocus());
         txttelefono.setPhColor(new java.awt.Color(0, 0, 0));
         txttelefono.setPlaceholder("Ingrese telefono");
         txttelefono.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txttelefono.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txttelefonoActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txttelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 100, 200, 30));
+        jPanel3.add(txttelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 220, 200, 30));
 
         txtcorreo.setForeground(new java.awt.Color(0, 0, 0));
         txtcorreo.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -181,16 +193,11 @@ txtcorreo.addActionListener(e -> txtdireccion1.requestFocus());
         txtcorreo.setPhColor(new java.awt.Color(0, 0, 0));
         txtcorreo.setPlaceholder("Ingrese la cantidad...");
         txtcorreo.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtcorreo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtcorreoActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtcorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 200, 30));
+        jPanel3.add(txtcorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 200, 30));
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel8.setText("Nombre:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, 20));
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel13.setText("Nombre:");
+        jPanel3.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 110, -1, 20));
 
         txtNombre.setForeground(new java.awt.Color(0, 0, 0));
         txtNombre.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -198,110 +205,94 @@ txtcorreo.addActionListener(e -> txtdireccion1.requestFocus());
         txtNombre.setPhColor(new java.awt.Color(0, 0, 0));
         txtNombre.setPlaceholder("Ingrese el nombre...");
         txtNombre.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtNombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 200, 30));
+        jPanel3.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 130, 200, 30));
 
-        txtdireccion1.setForeground(new java.awt.Color(0, 0, 0));
-        txtdireccion1.setColorMaterial(new java.awt.Color(0, 0, 0));
-        txtdireccion1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtdireccion1.setPhColor(new java.awt.Color(0, 0, 0));
-        txtdireccion1.setPlaceholder("Ingrese la cantidad...");
-        txtdireccion1.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtdireccion1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtdireccion1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtdireccion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 200, 30));
+        txtdireccion.setForeground(new java.awt.Color(0, 0, 0));
+        txtdireccion.setColorMaterial(new java.awt.Color(0, 0, 0));
+        txtdireccion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtdireccion.setPhColor(new java.awt.Color(0, 0, 0));
+        txtdireccion.setPlaceholder("Ingrese la cantidad...");
+        txtdireccion.setSelectionColor(new java.awt.Color(0, 0, 0));
+        jPanel3.add(txtdireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 200, 30));
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel10.setText("Direccion");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, -1, -1));
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel14.setText("Direccion");
+        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 480));
+        tipoidentificacion4.setForeground(new java.awt.Color(255, 51, 51));
+        tipoidentificacion4.setText("TIPO");
+        jPanel3.add(tipoidentificacion4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 350, 60, -1));
+
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel19.setText("*");
+        jPanel3.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 20, -1));
+
+        tipoidentificacion5.setForeground(new java.awt.Color(255, 51, 51));
+        tipoidentificacion5.setText("TIPO");
+        jPanel3.add(tipoidentificacion5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, 60, -1));
+
+        jLabel20.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel20.setText("*");
+        jPanel3.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 290, 10, 10));
+
+        jLabel21.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel21.setText("Nit:");
+        jPanel3.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, 20));
+
+        txtNombre3.setForeground(new java.awt.Color(0, 0, 0));
+        txtNombre3.setColorMaterial(new java.awt.Color(0, 0, 0));
+        txtNombre3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNombre3.setPhColor(new java.awt.Color(0, 0, 0));
+        txtNombre3.setPlaceholder("Ingrese el nombre...");
+        txtNombre3.setSelectionColor(new java.awt.Color(0, 0, 0));
+        jPanel3.add(txtNombre3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 200, 30));
+
+        jLabel22.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel22.setText("*");
+        jPanel3.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, 20, -1));
+
+        jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel23.setText("*");
+        jPanel3.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 190, 20, -1));
+
+        tipoidentificacion6.setForeground(new java.awt.Color(255, 51, 51));
+        tipoidentificacion6.setText("TIPO");
+        jPanel3.add(tipoidentificacion6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 60, -1));
+
+        tipoidentificacion1.setForeground(new java.awt.Color(255, 51, 51));
+        tipoidentificacion1.setText("TIPO");
+        jPanel3.add(tipoidentificacion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 250, 60, -1));
+
+        tipoidentificacion7.setForeground(new java.awt.Color(255, 51, 51));
+        tipoidentificacion7.setText("TIPO");
+        jPanel3.add(tipoidentificacion7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 60, -1));
+
+        tipoidentificacion8.setForeground(new java.awt.Color(255, 51, 51));
+        tipoidentificacion8.setText("TIPO");
+        jPanel3.add(tipoidentificacion8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 60, -1));
+
+        jLabel24.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel24.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel24.setText("*");
+        jPanel3.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, 10, 10));
+
+        jLabel25.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel25.setText("*");
+        jPanel3.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 290, 10, 10));
+
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 480));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-dispose();   
-    }//GEN-LAST:event_btnCancelarActionPerformed
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-String nombre = txtNombre.getText().trim();
-    String correo = txtcorreo.getText().trim();
-    String telefono = txttelefono.getText().trim();
-    String direccion = txtdireccion1.getText().trim();
-
-    if (nombre.isEmpty() || correo.isEmpty() || telefono.isEmpty() || direccion.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    
-    if (!telefono.matches("\\d+")) {
-        JOptionPane.showMessageDialog(this, "El teléfono debe contener solo números", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    ProveedorDatos proveedor = new ProveedorDatos();
-    proveedor.setNombre(nombre);
-    proveedor.setCorreo_electronico(correo);
-    proveedor.setTelefono(telefono);
-    proveedor.setDireccion(direccion);
-
-    int idGenerado = ctrlProveedor.guardar(proveedor);
-    if (idGenerado != -1) {
-        List<String> productosSeleccionados = new ArrayList<>();
-        for (int i = 0; i < cmbProducto.getItemCount(); i++) {
-            CheckableItem item = cmbProducto.getItemAt(i);
-            if (item.isSelected()) {
-                productosSeleccionados.add(item.toString());
-            }
-        }
-
-        if (!productosSeleccionados.isEmpty()) {
-            for (String producto : productosSeleccionados) {
-                int idInventario = ctrlProveedor.obtenerIdInventarioPorNombre(producto.trim());
-                if (idInventario != -1) {
-                    if (!ctrlProveedor.guardarSuministra(idGenerado, idInventario)) {
-                        JOptionPane.showMessageDialog(this, "Error al asociar el producto '" + producto + "' al proveedor.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(this, "El producto '" + producto + "' no existe en el inventario.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                }
-            }
-        }
-
-        List<String> productosGuardados = ctrlProveedor.obtenerProductosDeProveedor(idGenerado);
-        String textoProductos = productosGuardados.isEmpty() ? "Sin productos" : String.join(", ", productosGuardados);
-
-        JOptionPane.showMessageDialog(this, "Proveedor guardado exitosamente. Productos: " + textoProductos, "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        guardado = true;
-        dispose();
-    } else {
-        JOptionPane.showMessageDialog(this, "No se pudo guardar el proveedor", "Error", JOptionPane.ERROR_MESSAGE);
-    }
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void txttelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttelefonoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txttelefonoActionPerformed
-
-    private void txtcorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcorreoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtcorreoActionPerformed
-
-    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreActionPerformed
-
-    private void txtdireccion1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdireccion1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtdireccion1ActionPerformed
+    private void btnGuardar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar2ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnGuardar2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -347,19 +338,34 @@ String nombre = txtNombre.getText().trim();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private rojeru_san.RSButtonRiple btnCancelar;
-    private rojeru_san.RSButtonRiple btnGuardar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel lblProducto;
+    private rojeru_san.RSButtonRiple btnCancelar1;
+    private rojeru_san.RSButtonRiple btnGuardar1;
+    private rojeru_san.RSButtonRiple btnGuardar2;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JLabel lblProducto1;
+    private javax.swing.JLabel tipoidentificacion1;
+    private javax.swing.JLabel tipoidentificacion4;
+    private javax.swing.JLabel tipoidentificacion5;
+    private javax.swing.JLabel tipoidentificacion6;
+    private javax.swing.JLabel tipoidentificacion7;
+    private javax.swing.JLabel tipoidentificacion8;
     private RSMaterialComponent.RSTextFieldMaterial txtNombre;
+    private RSMaterialComponent.RSTextFieldMaterial txtNombre3;
     private RSMaterialComponent.RSTextFieldMaterial txtcorreo;
-    private RSMaterialComponent.RSTextFieldMaterial txtdireccion1;
+    private RSMaterialComponent.RSTextFieldMaterial txtdireccion;
     private RSMaterialComponent.RSTextFieldMaterial txttelefono;
     // End of variables declaration//GEN-END:variables
 // Clases internas para el CheckedComboBox

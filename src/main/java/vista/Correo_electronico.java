@@ -30,12 +30,17 @@ import java.util.List;
 import modelo.Consulta_Usuarios;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.stream.Collectors;
+import javax.swing.BorderFactory;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.ButtonUI;
 
 
 
@@ -44,28 +49,27 @@ import javax.swing.border.LineBorder;
  *
  * @author Personal
 */
-
 public class Correo_electronico extends javax.swing.JFrame {
 
-    // List of common email domains
     private final List<String> emailDomains = Arrays.asList(
-        "@gmail.com", "@hotmail.com", "@yahoo.com", "@outlook.com", "@icloud.com"
+        "@gmail.com", "@hotmail.com", "@yahoo.com", "@outlook.com"
     );
     private int currentDomainIndex = -1;
     private String userPart = "";
     private List<String> matchingDomains = Arrays.asList();
-    private boolean isUpdating = false; // Flag to prevent re-entry
+    private boolean isUpdating = false;
+    private JPopupMenu suggestionPopup;
 
     public Correo_electronico() {
         initComponents();
-        setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        setLocationRelativeTo(null); 
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setLocationRelativeTo(null);
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.CENTER; 
+        gbc.anchor = GridBagConstraints.CENTER;
         add(kGradientPanel1, gbc);
 
         JPanel fondo = new JPanel(new BorderLayout());
@@ -75,135 +79,170 @@ public class Correo_electronico extends javax.swing.JFrame {
         // Setup autocomplete for txtcorreo
         setupAutoComplete();
 
-        // Debug to confirm initialization
         System.out.println("Correo_electronico initialized");
     }
+private void setupAutoComplete() {
+    suggestionPopup = new JPopupMenu();
+    suggestionPopup.setBackground(Color.WHITE); // Set white background
+    suggestionPopup.setOpaque(true); // Ensure the background is fully opaque
+    suggestionPopup.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1)); // White border to match background
+    UIManager.put("PopupMenu.background", Color.WHITE); // Override default look and feel
 
-    private void setupAutoComplete() {
-        // Add DocumentListener to txtcorreo
-        Document doc = txtcorreo.getDocument();
-        doc.addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                if (!isUpdating) {
-                    SwingUtilities.invokeLater(() -> updateSuggestions());
-                }
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                if (!isUpdating) {
-                    SwingUtilities.invokeLater(() -> updateSuggestions());
-                }
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                if (!isUpdating) {
-                    SwingUtilities.invokeLater(() -> updateSuggestions());
-                }
-            }
-        });
-
-        // Add KeyListener for cycling through domains and deletion
-        txtcorreo.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    cycleDomain(-1); 
-                    System.out.println("Cycled up to: " + (currentDomainIndex >= 0 && !matchingDomains.isEmpty() ? matchingDomains.get(currentDomainIndex) : "none"));
-                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    cycleDomain(1); 
-                    System.out.println("Cycled down to: " + (currentDomainIndex >= 0 && !matchingDomains.isEmpty() ? matchingDomains.get(currentDomainIndex) : "none"));
-                } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    currentDomainIndex = -1; 
-                    System.out.println("Enter pressed, selection finalized");
-                } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE || e.getKeyCode() == KeyEvent.VK_DELETE) {
-                    // Handle deletion
-                    String text = txtcorreo.getText().trim();
-                    if (text.isEmpty() || !text.contains("@")) {
-                        matchingDomains = Arrays.asList();
-                        currentDomainIndex = -1;
-                    } else {
-                        int atIndex = text.lastIndexOf("@");
-                        userPart = text.substring(0, atIndex);
-                        String domainPart = text.substring(atIndex).replaceAll("[^@a-zA-Z0-9.]", "");
-                        if (domainPart.length() <= 1) {
-                            matchingDomains = Arrays.asList();
-                            currentDomainIndex = -1;
-                        }
-                    }
-                    System.out.println("Key pressed: " + KeyEvent.getKeyText(e.getKeyCode()));
-                }
-            }
-        });
+    // Add DocumentListener to txtcorreo
+  Document doc = txtcorreo.getDocument();
+doc.addDocumentListener(new DocumentListener() {
+    @Override
+    public void insertUpdate(DocumentEvent e) {
+        SwingUtilities.invokeLater(() -> updateSuggestions());
     }
 
-    private void updateSuggestions() {
-        if (isUpdating) return; // Prevent re-entry
-        isUpdating = true;
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        SwingUtilities.invokeLater(() -> updateSuggestions());
+    }
 
-        try {
-            String text = txtcorreo.getText().trim();
-            System.out.println("Text updated: " + text); // Debug input
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+        SwingUtilities.invokeLater(() -> updateSuggestions());
+    }
+});
 
-            currentDomainIndex = -1; // Reset index on every update
 
-            if (text.contains("@")) {
-                // Remove any trailing non-domain characters after @
-                int atIndex = text.lastIndexOf("@");
-                userPart = text.substring(0, atIndex);
-                String domainPart = text.substring(atIndex).replaceAll("[^@a-zA-Z0-9.]", ""); // Clean non-domain chars
-                System.out.println("Domain part: " + domainPart); // Debug prefix
-
-                // Only proceed with autocomplete if a letter follows @
-                if (domainPart.length() > 1) { // Ensure at least one letter after @
-                    // Filter matching domains based on the letter after @
-                    matchingDomains = emailDomains.stream()
-                        .filter(domain -> domain.toLowerCase().startsWith("@" + domainPart.toLowerCase().replace("@", "").substring(0, 1)))
-                        .collect(Collectors.toList());
-                    System.out.println("Matching domains: " + matchingDomains); // Debug filtered list
-
-                    // Set to first match if available
-                    if (!matchingDomains.isEmpty()) {
-                        currentDomainIndex = 0; // Start with first match
-                        String newText = userPart + matchingDomains.get(currentDomainIndex);
-                        if (!txtcorreo.getText().equals(newText)) {
-                            txtcorreo.setText(newText);
-                            txtcorreo.setCaretPosition(newText.length()); // Move caret to end only when applying suggestion
-                            System.out.println("Suggestion applied: " + matchingDomains.get(currentDomainIndex));
-                        }
-                    } else {
-                        System.out.println("No matching domain found");
-                    }
-                } else {
-                    matchingDomains = Arrays.asList(); // Reset if no letter after @
-                    System.out.println("No letter after @, no suggestion applied");
-                }
-            } else {
-                matchingDomains = Arrays.asList();
-                System.out.println("No @ found, resetting index");
+    // Add KeyListener for cycling through domains
+    txtcorreo.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_UP && !matchingDomains.isEmpty()) {
+                cycleDomain(-1);
+                System.out.println("Cycled up to: " + (currentDomainIndex >= 0 ? matchingDomains.get(currentDomainIndex) : "none"));
+            } else if (e.getKeyCode() == KeyEvent.VK_DOWN && !matchingDomains.isEmpty()) {
+                cycleDomain(1);
+                System.out.println("Cycled down to: " + (currentDomainIndex >= 0 ? matchingDomains.get(currentDomainIndex) : "none"));
+            } else if (e.getKeyCode() == KeyEvent.VK_ENTER && currentDomainIndex >= 0) {
+                applySelectedDomain();
+                System.out.println("Enter pressed, selection finalized");
+            } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE || e.getKeyCode() == KeyEvent.VK_DELETE) {
+                handleDeletion();
+                System.out.println("Key pressed: " + KeyEvent.getKeyText(e.getKeyCode()));
             }
-        } finally {
-            isUpdating = false; // Ensure flag is reset
         }
+    });
+}
+private void updateSuggestions() {
+    if (isUpdating) return;
+    isUpdating = true;
+
+    try {
+        String text = txtcorreo.getText().trim();
+
+        currentDomainIndex = -1;
+        suggestionPopup.removeAll();
+
+        if (!text.contains("@")) {
+            matchingDomains = Arrays.asList();
+            suggestionPopup.setVisible(false);
+            return;
+        }
+
+        int atIndex = text.lastIndexOf("@");
+        userPart = text.substring(0, atIndex + 1); // Incluye la "@"
+        String domainPart = text.substring(atIndex + 1).trim();
+
+        // Mostrar todas si el dominio está vacío
+        if (domainPart.isEmpty()) {
+            matchingDomains = emailDomains;
+        } else {
+            matchingDomains = emailDomains.stream()
+                .filter(domain -> domain.toLowerCase().startsWith("@" + domainPart.toLowerCase()))
+                .collect(Collectors.toList());
+        }
+
+        if (!matchingDomains.isEmpty()) {
+            for (String domain : matchingDomains) {
+                JMenuItem item = new JMenuItem(domain);
+                item.setUI((ButtonUI) WhiteMenuItemUI.createUI(item)); // Elimina hover azul
+
+                item.setPreferredSize(new Dimension(400, 50));
+                item.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                item.setBackground(Color.WHITE);
+                item.setOpaque(true);
+                item.setForeground(new Color(30, 30, 30));
+                item.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+                item.setFocusPainted(false);
+                item.setRolloverEnabled(false);
+
+                item.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        item.setBackground(new Color(240, 240, 240)); // Gris claro
+                        item.repaint();
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        item.setBackground(Color.WHITE);
+                        item.repaint();
+                    }
+                });
+
+                item.addActionListener(e -> {
+                    txtcorreo.setText(userPart + domain.substring(1));
+                    txtcorreo.setCaretPosition(txtcorreo.getText().length());
+                    suggestionPopup.setVisible(false);
+                });
+//
+                suggestionPopup.add(item);
+            }
+
+            suggestionPopup.show(txtcorreo, 0, txtcorreo.getHeight());
+        } else {
+            suggestionPopup.setVisible(false);
+        }
+    } finally {
+        isUpdating = false;
     }
+}
+
+
+
 
     private void cycleDomain(int direction) {
-        if (userPart.isEmpty() || matchingDomains.isEmpty()) return;
+        if (matchingDomains.isEmpty()) return;
 
         currentDomainIndex += direction;
-        if (currentDomainIndex < 0) {
-            currentDomainIndex = matchingDomains.size() - 1; // Loop to last
-        } else if (currentDomainIndex >= matchingDomains.size()) {
-            currentDomainIndex = 0; // Loop to first
-        }
-        String newText = userPart + matchingDomains.get(currentDomainIndex);
-        txtcorreo.setText(newText);
-        txtcorreo.setCaretPosition(newText.length()); // Move caret to end
-        System.out.println("Cycled to: " + matchingDomains.get(currentDomainIndex));
+        if (currentDomainIndex < 0) currentDomainIndex = matchingDomains.size() - 1;
+        else if (currentDomainIndex >= matchingDomains.size()) currentDomainIndex = 0;
+
+        String selectedDomain = matchingDomains.get(currentDomainIndex);
+        txtcorreo.setText(userPart + selectedDomain.substring(1)); // Append only the domain part
+        txtcorreo.setCaretPosition(txtcorreo.getText().length());
+        updateSuggestions(); // Refresh popup
     }
 
+    private void applySelectedDomain() {
+        if (currentDomainIndex >= 0 && !matchingDomains.isEmpty()) {
+            txtcorreo.setText(userPart + matchingDomains.get(currentDomainIndex).substring(1));
+            txtcorreo.setCaretPosition(txtcorreo.getText().length());
+            suggestionPopup.setVisible(false);
+        }
+    }
+
+    private void handleDeletion() {
+        String text = txtcorreo.getText().trim();
+        if (text.isEmpty() || !text.contains("@")) {
+            matchingDomains = Arrays.asList();
+            currentDomainIndex = -1;
+            suggestionPopup.setVisible(false);
+        } else {
+            int atIndex = text.lastIndexOf("@");
+            userPart = text.substring(0, atIndex + 1);
+            String domainPart = text.substring(atIndex + 1).trim();
+            if (domainPart.isEmpty()) {
+                matchingDomains = emailDomains; // Reset to all domains when "@" is alone
+                updateSuggestions();
+            }
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -219,11 +258,11 @@ public class Correo_electronico extends javax.swing.JFrame {
         rSPanelImage1 = new rojerusan.RSPanelImage();
         jLabel11 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        txtcorreo = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         rSButtonRound1 = new rojerusan.RSButtonRound();
+        txtcorreo = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -254,16 +293,8 @@ public class Correo_electronico extends javax.swing.JFrame {
         jPanel6.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
-        jLabel7.setText("Email");
+        jLabel7.setText("Dirección de correo electrónico:");
         jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, 20));
-
-        txtcorreo.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        txtcorreo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtcorreoActionPerformed(evt);
-            }
-        });
-        jPanel6.add(txtcorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 410, 40));
 
         jLabel8.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
         jLabel8.setText("volver al inicio de sesion");
@@ -297,6 +328,9 @@ public class Correo_electronico extends javax.swing.JFrame {
         });
         jPanel6.add(rSButtonRound1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, 410, -1));
 
+        txtcorreo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel6.add(txtcorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 400, 40));
+
         kGradientPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 150, 480, 550));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -313,13 +347,9 @@ public class Correo_electronico extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtcorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcorreoActionPerformed
-verificarCorreo();
-    }//GEN-LAST:event_txtcorreoActionPerformed
-
     private void jLabel8MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MousePressed
-      Login11211 login = new Login11211();
-      
+      Login1121 login = new Login1121();
+     
     }//GEN-LAST:event_jLabel8MousePressed
 
     private void rSButtonRound1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonRound1ActionPerformed
@@ -337,7 +367,7 @@ verificarCorreo();
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
          
-         cargando11 cargando = new cargando11(new JFrame(), true);
+            cargando11 cargando = new cargando11(new JFrame(), true);
 
         new Thread(() -> {
             cargando.setVisible(true);
@@ -410,62 +440,81 @@ verificarCorreo();
 
     
 
-   
     private void verificarCorreo() {
         String correo = txtcorreo.getText().trim();
 
         if (correo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Error, debe llenar los campos");
+            CodigoIncorrectoAlerta alerta = new CodigoIncorrectoAlerta((Frame) this, true);
+            alerta.setVisible(true);
             return;
         }
 
-        Consulta_Usuarios consulta = new Consulta_Usuarios();
-        String usuario = consulta.obtenerCodigoDesdeCorreo(correo);
+        // Show first loading screen
+        cargando11 cargando = new cargando11(new JFrame(), true);
+        new Thread(() -> {
+            cargando.setVisible(true);
+        }).start();
 
-        if (usuario != null) {
-            String codigo = consulta.recuperarCuenta(usuario, correo);
+        javax.swing.Timer timer = new javax.swing.Timer(2000, e -> {
+            cargando.dispose();
 
-            if (codigo != null) {
-                Ctrl_Usuarios controlador = new Ctrl_Usuarios();
-                controlador.enviarCodigoRecuperacion(usuario, correo);
+            Consulta_Usuarios consulta = new Consulta_Usuarios();
+            String usuario = consulta.obtenerCodigoDesdeCorreo(correo);
 
-                ValidacionCodigoExitoso usu = new ValidacionCodigoExitoso(
-                    (Frame) this.getParent(),
-                    true,
-                    "Confirmar",
-                    "¿Desea guardar los datos?"
-                );
-                usu.setVisible(true);
-                this.dispose();
-                cargando11 cargando = new cargando11(new JFrame(), true);
-                new Thread(() -> cargando.setVisible(true)).start();
+            if (usuario != null) {
+                // Show "Correo electrónico encontrado con éxito"
+                JOptionPane.showMessageDialog(this, "Correo electrónico encontrado con éxito", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
 
-                javax.swing.Timer timer = new javax.swing.Timer(2000, e -> {
-                    cargando.dispose();
-                    this.dispose();
-                    Contrasena3 ventana = new Contrasena3();
-                    ventana.setCorreoIngresado(correo);
-                    ventana.setVisible(true);
+                // Show second loading screen
+                cargando11 secondLoading = new cargando11(new JFrame(), true);
+                new Thread(() -> {
+                    secondLoading.setVisible(true);
+                }).start();
+
+                javax.swing.Timer secondTimer = new javax.swing.Timer(2000, secondE -> {
+                    secondLoading.dispose();
+
+                    String codigo = consulta.recuperarCuenta(usuario, correo);
+
+                    if (codigo != null) {
+                        Ctrl_Usuarios controlador = new Ctrl_Usuarios();
+                        controlador.enviarCodigoRecuperacion(usuario, correo);
+
+                        // Show "Código enviado con éxito al correo"
+                        JOptionPane.showMessageDialog(this, "Código enviado con éxito al correo " + correo, "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+
+                        // Show final loading screen
+                        cargando11 finalLoading = new cargando11(new JFrame(), true);
+                        new Thread(() -> {
+                            finalLoading.setVisible(true);
+                        }).start();
+
+                        javax.swing.Timer finalTimer = new javax.swing.Timer(2000, finalE -> {
+                            finalLoading.dispose();
+
+                            // Transition to Contrasena3
+                            Contrasena3 ventana = new Contrasena3();
+                            ventana.setCorreoIngresado(correo);
+                            ventana.setVisible(true);
+                            dispose();
+                        });
+                        finalTimer.setRepeats(false);
+                        finalTimer.start();
+                    } else {
+                        CodigoIncorrectoAlerta alerta = new CodigoIncorrectoAlerta((Frame) this, true);
+                        alerta.setVisible(true);
+                    }
                 });
-                timer.setRepeats(false);
-                timer.start();
+                secondTimer.setRepeats(false);
+                secondTimer.start();
             } else {
-                CodigoIncorrectoAlerta cod = new CodigoIncorrectoAlerta(
-                    (Frame) this.getParent(),
-                    true,
-                    "Confirmar",
-                    "¿Desea guardar los datos?"
-                );
-                cod.setVisible(true);
-                this.dispose();
-                JOptionPane.showMessageDialog(this, "No se pudo generar el código de recuperación");
+                CodigoIncorrectoAlerta alerta = new CodigoIncorrectoAlerta((Frame) this, true);
+                alerta.setVisible(true);
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "El correo no está registrado");
-        }
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
-     
-
 
 }
         
