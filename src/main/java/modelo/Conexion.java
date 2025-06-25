@@ -18,8 +18,8 @@ public class Conexion {
    public static Connection getConnection() {
       Connection con = null; 
         try {
-        String myBD = "jdbc:mysql://localhost:3306/carpinteriasistema?serverTimezone=UTC";
-         con = DriverManager.getConnection(myBD, "root", ""); 
+      String myBD = "jdbc:mysql://192.168.137.170:3306/carpinteriasistema?serverTimezone=UTC";
+         con = DriverManager.getConnection(myBD, "grupojoseabel", "grupojoseabel1"); 
          
         } catch (SQLException e) {
             System.out.println("Error al conectar: " + e.getMessage());
