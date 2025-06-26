@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.HeadlessException;
@@ -22,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -31,6 +33,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.accessibility.Accessible;
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
@@ -57,9 +61,7 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
     private int idProduccionActual;
     private int idEtapa;
     private boolean datosModificados;
-    private CheckedComboBox<CheckableItem> cmbMateriales;
-    private CheckedComboBox<CheckableItem> cmbHerramientas;
-
+    
     /**
      * Creates new form EtapaProduccion
      *
@@ -69,196 +71,18 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
      * @param produccionPanel
      */
     public EditEtapaProduccion(Frame parent, boolean modal, int idEtapa) {
-    super(parent, modal);
-    this.idEtapa = idEtapa;
-    
-    // Configurar undecorated antes de initComponents
-    setUndecorated(true);
-    initComponents(); // Llamada única a initComponents
-    
-    setLocationRelativeTo(parent); // Configurar ubicación después de initComponents
-    
-    // Inicializar CheckedComboBox
-    cmbMateriales = new CheckedComboBox<>(makeProductModel("material"));
-    cmbMateriales.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-    jPanel1.add(cmbMateriales, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, 200, 30));
+        super(parent, modal);
+        this.idEtapa = idEtapa;
 
-    cmbHerramientas = new CheckedComboBox<>(makeProductModel("herramienta"));
-    cmbHerramientas.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-    jPanel1.add(cmbHerramientas, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 260, 200, 30));
+        // Configurar undecorated antes de initComponents
+        setUndecorated(true);
+        initComponents(); // Llamada única a initComponents
 
-    // Configuración inicial
-    if (idEtapa > 0) {
-        cargarDatosEtapa(idEtapa);
-    }
-}
+        setLocationRelativeTo(parent); // Configurar ubicación después de initComponents
 
-    private DefaultComboBoxModel<CheckableItem> makeProductModel(String tipo) {
-        DefaultComboBoxModel<CheckableItem> model = new DefaultComboBoxModel<>();
-        try {
-            Connection con = new Conexion().getConnection();
-            String sql = "SELECT nombre FROM inventario WHERE tipo = ? ";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, tipo);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                model.addElement(new CheckableItem(rs.getString("nombre"), false));
-            }
-            con.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(FormuEtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
-
-            // Mostrar mensaje de error al usuario
-            Error_guardar errorDialog = new Error_guardar(
-                    (Frame) this.getParent(),
-                    true,
-                    "Error",
-                    "No se pudieron cargar los " + tipo + ": " + ex.getMessage()
-            );
-            errorDialog.setLocationRelativeTo(null);
-            errorDialog.setVisible(true);
-        }
-        return model;
-    }
-// Clases internas para el CheckedComboBox
-
-    class CheckableItem {
-
-        private final String text;
-        private boolean selected;
-
-        protected CheckableItem(String text, boolean selected) {
-            this.text = text;
-            this.selected = selected;
-        }
-
-        public boolean isSelected() {
-            return selected;
-        }
-
-        public void setSelected(boolean selected) {
-            this.selected = selected;
-        }
-
-        @Override
-        public String toString() {
-            return text;
-        }
-    }
-
-    class CheckedComboBox<E extends CheckableItem> extends JComboBox<E> {
-
-        protected boolean keepOpen;
-        private final JPanel panel = new JPanel(new BorderLayout());
-
-        protected CheckedComboBox(ComboBoxModel<E> model) {
-            super(model);
-            setBackground(new Color(255, 255, 255)); // Fondo blanco para coincidir con jPanel1
-            setForeground(Color.DARK_GRAY); // Texto oscuro
-        }
-
-        @Override
-        public Dimension getPreferredSize() {
-            return new Dimension(200, 40); // Aumentar altura para un look más moderno
-        }
-
-        @Override
-        public void updateUI() {
-            setRenderer(null);
-            super.updateUI();
-
-            Accessible a = getAccessibleContext().getAccessibleChild(0);
-            if (a instanceof ComboPopup) {
-                ((ComboPopup) a).getList().addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                        JList<?> list = (JList<?>) e.getComponent();
-                        if (SwingUtilities.isLeftMouseButton(e)) {
-                            keepOpen = true;
-                            updateItem(list.locationToIndex(e.getPoint()));
-                        }
-                    }
-                });
-            }
-
-            DefaultListCellRenderer renderer = new DefaultListCellRenderer() {
-                @Override
-                public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                    Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                    if (index >= 0) {
-                        c.setBackground(isSelected ? new Color(0, 120, 215, 50) : new Color(255, 255, 255));
-                        c.setForeground(Color.DARK_GRAY);
-                    } else {
-                        c.setBackground(new Color(0, 0, 0, 0)); // Fondo transparente para el texto seleccionado
-                    }
-                    return c;
-                }
-            };
-            JCheckBox check = new JCheckBox();
-            check.setOpaque(false);
-            check.setForeground(new Color(0, 120, 215)); // Color de casilla moderna
-            setRenderer((list, value, index, isSelected, cellHasFocus) -> {
-                panel.removeAll();
-                Component c = renderer.getListCellRendererComponent(
-                        list, value, index, isSelected, cellHasFocus);
-                if (index < 0) {
-                    String txt = getCheckedItemString(list.getModel());
-                    JLabel l = (JLabel) c;
-                    l.setText(txt.isEmpty() ? " " : txt);
-                    l.setForeground(Color.DARK_GRAY);
-                    l.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-                    panel.setOpaque(false); // Hacer el panel transparente
-                    panel.setBackground(new Color(0, 0, 0, 0)); // Fondo transparente
-                } else {
-                    check.setSelected(value.isSelected());
-                    panel.add(check, BorderLayout.WEST);
-                    panel.setBackground(isSelected ? new Color(0, 120, 215, 50) : new Color(255, 255, 255));
-                }
-                panel.add(c, BorderLayout.CENTER);
-                return panel;
-            });
-            initActionMap();
-        }
-
-        protected void initActionMap() {
-            KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0);
-            getInputMap(JComponent.WHEN_FOCUSED).put(ks, "checkbox-select");
-            getActionMap().put("checkbox-select", new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    Accessible a = getAccessibleContext().getAccessibleChild(0);
-                    if (a instanceof ComboPopup) {
-                        updateItem(((ComboPopup) a).getList().getSelectedIndex());
-                    }
-                }
-            });
-        }
-
-        protected void updateItem(int index) {
-            if (isPopupVisible() && index >= 0) {
-                E item = getItemAt(index);
-                item.setSelected(!item.isSelected());
-                setSelectedIndex(-1);
-                setSelectedItem(item);
-            }
-        }
-
-        @Override
-        public void setPopupVisible(boolean v) {
-            if (keepOpen) {
-                keepOpen = false;
-            } else {
-                super.setPopupVisible(v);
-            }
-        }
-
-        protected static <E extends CheckableItem> String getCheckedItemString(ListModel<E> model) {
-            return IntStream.range(0, model.getSize())
-                    .mapToObj(model::getElementAt)
-                    .filter(CheckableItem::isSelected)
-                    .map(Objects::toString)
-                    .sorted()
-                    .collect(Collectors.joining(", "));
+        // Configuración inicial
+        if (idEtapa > 0) {
+            cargarDatosEtapa(idEtapa);
         }
     }
 
@@ -278,14 +102,14 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         txtetapa = new RSMaterialComponent.RSTextFieldMaterial();
-        jLabel11 = new javax.swing.JLabel();
         Boxestado = new RSMaterialComponent.RSComboBoxMaterial();
         txtFechainicio = new com.toedter.calendar.JDateChooser();
         txtfechafin = new com.toedter.calendar.JDateChooser();
         btnCancelar1 = new rojeru_san.RSButtonRiple();
         btnGuardar1 = new rojeru_san.RSButtonRiple();
         jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        PanMaterialessss = new javax.swing.JPanel();
+        PanHerramientas = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -301,11 +125,11 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         jLabel1.setText("Etapa Produccion");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, 50));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel6.setText("Estado:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 70, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 70, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setText("Fecha final:");
@@ -326,11 +150,7 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
                 txtetapaActionPerformed(evt);
             }
         });
-        jPanel1.add(txtetapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 200, 30));
-
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel11.setText("Materiales:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 150, -1, -1));
+        jPanel1.add(txtetapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 270, 30));
 
         Boxestado.setForeground(new java.awt.Color(102, 102, 102));
         Boxestado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", "pendiente", "proceso", "completado" }));
@@ -340,18 +160,18 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
                 BoxestadoActionPerformed(evt);
             }
         });
-        jPanel1.add(Boxestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 100, -1, 30));
+        jPanel1.add(Boxestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 100, 240, 30));
 
         txtFechainicio.setBackground(new java.awt.Color(255, 255, 255));
         txtFechainicio.setForeground(new java.awt.Color(255, 255, 255));
         txtFechainicio.setDateFormatString("y-MM-d");
         txtFechainicio.setMaxSelectableDate(new java.util.Date(253370786472000L));
-        jPanel1.add(txtFechainicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 200, 30));
+        jPanel1.add(txtFechainicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 180, 250, 30));
 
         txtfechafin.setBackground(new java.awt.Color(255, 255, 255));
         txtfechafin.setForeground(new java.awt.Color(255, 255, 255));
         txtfechafin.setDateFormatString("y-MM-d");
-        jPanel1.add(txtfechafin, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 200, 30));
+        jPanel1.add(txtfechafin, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 270, 30));
 
         btnCancelar1.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
@@ -363,7 +183,7 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
                 btnCancelar1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 310, 140, -1));
+        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 590, 140, -1));
 
         btnGuardar1.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
@@ -375,25 +195,51 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
                 btnGuardar1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 310, 140, -1));
+        jPanel1.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 590, 140, -1));
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel12.setText("Fecha inicio:");
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 150, -1, -1));
 
-        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel13.setText("Herramientas:");
-        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 230, -1, -1));
+        PanMaterialessss.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout PanMaterialessssLayout = new javax.swing.GroupLayout(PanMaterialessss);
+        PanMaterialessss.setLayout(PanMaterialessssLayout);
+        PanMaterialessssLayout.setHorizontalGroup(
+            PanMaterialessssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        PanMaterialessssLayout.setVerticalGroup(
+            PanMaterialessssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(PanMaterialessss, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 250, 250, 300));
+
+        PanHerramientas.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout PanHerramientasLayout = new javax.swing.GroupLayout(PanHerramientas);
+        PanHerramientas.setLayout(PanHerramientasLayout);
+        PanHerramientasLayout.setHorizontalGroup(
+            PanHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 280, Short.MAX_VALUE)
+        );
+        PanHerramientasLayout.setVerticalGroup(
+            PanHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(PanHerramientas, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 280, 300));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 588, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
         );
 
         pack();
@@ -408,127 +254,114 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelar1ActionPerformed
 
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
-    // 1. Validación de campos
-    if (txtetapa.getText().trim().isEmpty()
-            || txtFechainicio.getDate() == null
-            || Boxestado.getSelectedIndex() <= 0) {
-        new espacio_alerta((Frame) this.getParent(), true,
-                "Error", "Todos los campos son obligatorios").setVisible(true);
-        return;
-    }
-    // 2. Mostrar diálogo de confirmación
-    alertaa confirmDialog = new alertaa(
-            (Frame) this.getParent(),
-            true,
-            "Confirmar",
-            "¿Desea guardar los datos?"
-    );
-    confirmDialog.setVisible(true);
+        // 1. Validación de campos
+        if (txtetapa.getText().trim().isEmpty()
+                || txtFechainicio.getDate() == null
+                || Boxestado.getSelectedIndex() <= 0) {
+            new espacio_alerta((Frame) this.getParent(), true,
+                    "Error", "Todos los campos son obligatorios").setVisible(true);
+            return;
+        }
+        // 2. Mostrar diálogo de confirmación
+        alertaa confirmDialog = new alertaa(
+                (Frame) this.getParent(),
+                true,
+                "Confirmar",
+                "¿Desea guardar los datos?"
+        );
+        confirmDialog.setVisible(true);
 
-    if (!confirmDialog.opcionConfirmada) {
-        return;
-    }
-
-    try {
-        // 3. Obtener valores del formulario
-        String nombreEtapa = txtetapa.getText().trim();
-        Date fechaInicio = new Date(txtFechainicio.getDate().getTime());
-        Date fechaFin = txtfechafin.getDate() != null
-                ? new Date(txtfechafin.getDate().getTime()) : null;
-        String estado = Boxestado.getSelectedItem().toString();
-
-        // 4. Validar fechas
-        if (fechaFin != null && fechaFin.before(fechaInicio)) {
-            new Error_fecha((Frame) this.getParent(), true,
-                    "Error", "La fecha final no puede ser anterior a la inicial").setVisible(true);
+        if (!confirmDialog.opcionConfirmada) {
             return;
         }
 
-        // 5. Obtener materiales y herramientas seleccionados
-        List<String> materialesSeleccionados = new ArrayList<>();
-        List<String> herramientasSeleccionadas = new ArrayList<>();
-        for (int i = 0; i < cmbMateriales.getModel().getSize(); i++) {
-            CheckableItem item = cmbMateriales.getModel().getElementAt(i);
-            if (item.isSelected()) {
-                materialesSeleccionados.add(item.toString());
+        try {
+            // 3. Obtener valores del formulario
+            String nombreEtapa = txtetapa.getText().trim();
+            Date fechaInicio = new Date(txtFechainicio.getDate().getTime());
+            Date fechaFin = txtfechafin.getDate() != null
+                    ? new Date(txtfechafin.getDate().getTime()) : null;
+            String estado = Boxestado.getSelectedItem().toString();
+
+            // 4. Validar fechas
+            if (fechaFin != null && fechaFin.before(fechaInicio)) {
+                new Error_fecha((Frame) this.getParent(), true,
+                        "Error", "La fecha final no puede ser anterior a la inicial").setVisible(true);
+                return;
             }
-        }
-        for (int i = 0; i < cmbHerramientas.getModel().getSize(); i++) {
-            CheckableItem item = cmbHerramientas.getModel().getElementAt(i);
-            if (item.isSelected()) {
-                herramientasSeleccionadas.add(item.toString());
-            }
-        }
 
-        // 6. Abrir FormularioMH para editar cantidades
-        FormularioMH formMH = new FormularioMH((Frame) this.getParent(), true, materialesSeleccionados, herramientasSeleccionadas);
-        formMH.setVisible(true);
+            // 5. Obtener materiales y herramientas seleccionados
+            List<String> materialesSeleccionados = new ArrayList<>();
+            List<String> herramientasSeleccionadas = new ArrayList<>();
 
-        if (formMH.isConfirmado()) {
-            // 7. Actualizar etapa en la base de datos
-            try (Connection con = Conexion.getConnection()) {
-                String sql;
-                if (idEtapa == 0) {
-                    // Insertar nuevo registro
-                    sql = "INSERT INTO etapa_produccion (nombre_etapa, fecha_inicio, fecha_fin, estado) "
-                            + "VALUES (?, ?, ?, ?)";
-                } else {
-                    // Actualizar registro existente
-                    sql = "UPDATE etapa_produccion SET nombre_etapa = ?, fecha_inicio = ?, "
-                            + "fecha_fin = ?, estado = ? WHERE idetapa_produccion = ?";
-                }
+            // 6. Abrir FormularioMH para editar cantidades
+            FormularioMH formMH = new FormularioMH((Frame) this.getParent(), true, materialesSeleccionados, herramientasSeleccionadas);
+            formMH.setVisible(true);
 
-                try (PreparedStatement ps = con.prepareStatement(sql)) {
-                    ps.setString(1, nombreEtapa);
-                    ps.setDate(2, fechaInicio);
-                    ps.setDate(3, fechaFin);
-                    ps.setString(4, estado);
-
-                    if (idEtapa > 0) {
-                        ps.setInt(5, idEtapa);
+            if (formMH.isConfirmado()) {
+                // 7. Actualizar etapa en la base de datos
+                try (Connection con = Conexion.getConnection()) {
+                    String sql;
+                    if (idEtapa == 0) {
+                        // Insertar nuevo registro
+                        sql = "INSERT INTO etapa_produccion (nombre_etapa, fecha_inicio, fecha_fin, estado) "
+                                + "VALUES (?, ?, ?, ?)";
+                    } else {
+                        // Actualizar registro existente
+                        sql = "UPDATE etapa_produccion SET nombre_etapa = ?, fecha_inicio = ?, "
+                                + "fecha_fin = ?, estado = ? WHERE idetapa_produccion = ?";
                     }
 
-                    int affectedRows = ps.executeUpdate();
-                    if (affectedRows > 0) {
-                        this.datosModificados = true;
-                        // 8. Actualizar cantidades de materiales y herramientas en la tabla utilizado
-                        Map<String, String> cantidadesMateriales = formMH.getCantidadesMateriales();
-                        Map<String, String> cantidadesHerramientas = formMH.getCantidadesHerramientas();
+                    try (PreparedStatement ps = con.prepareStatement(sql)) {
+                        ps.setString(1, nombreEtapa);
+                        ps.setDate(2, fechaInicio);
+                        ps.setDate(3, fechaFin);
+                        ps.setString(4, estado);
 
-                        // Actualizar o insertar en la tabla utilizado
-                        String updateUtilizado = "INSERT INTO utilizado (etapa_produccion_idetapa_produccion, inventario_id_inventario, cantidad_usada) "
-                                + "VALUES (?, (SELECT id_inventario FROM inventario WHERE nombre = ?), ?) "
-                                + "ON DUPLICATE KEY UPDATE cantidad_usada = ?";
-                        try (PreparedStatement psUtilizado = con.prepareStatement(updateUtilizado)) {
-                            if (idEtapa > 0) {
-                                for (Map.Entry<String, String> entry : cantidadesMateriales.entrySet()) {
-                                    psUtilizado.setInt(1, idEtapa);
-                                    psUtilizado.setString(2, entry.getKey());
-                                    psUtilizado.setDouble(3, Double.parseDouble(entry.getValue().replace(",", ".")));
-                                    psUtilizado.setDouble(4, Double.parseDouble(entry.getValue().replace(",", ".")));
-                                    psUtilizado.executeUpdate();
-                                }
-                                for (Map.Entry<String, String> entry : cantidadesHerramientas.entrySet()) {
-                                    psUtilizado.setInt(1, idEtapa);
-                                    psUtilizado.setString(2, entry.getKey());
-                                    psUtilizado.setDouble(3, Double.parseDouble(entry.getValue().replace(",", ".")));
-                                    psUtilizado.setDouble(4, Double.parseDouble(entry.getValue().replace(",", ".")));
-                                    psUtilizado.executeUpdate();
-                                }
-                            }
+                        if (idEtapa > 0) {
+                            ps.setInt(5, idEtapa);
                         }
 
-                        
-                        this.dispose();
+                        int affectedRows = ps.executeUpdate();
+                        if (affectedRows > 0) {
+                            this.datosModificados = true;
+                            // 8. Actualizar cantidades de materiales y herramientas en la tabla utilizado
+                            Map<String, String> cantidadesMateriales = formMH.getCantidadesMateriales();
+                            Map<String, String> cantidadesHerramientas = formMH.getCantidadesHerramientas();
+
+                            // Actualizar o insertar en la tabla utilizado
+                            String updateUtilizado = "INSERT INTO utilizado (etapa_produccion_idetapa_produccion, inventario_id_inventario, cantidad_usada) "
+                                    + "VALUES (?, (SELECT id_inventario FROM inventario WHERE nombre = ?), ?) "
+                                    + "ON DUPLICATE KEY UPDATE cantidad_usada = ?";
+                            try (PreparedStatement psUtilizado = con.prepareStatement(updateUtilizado)) {
+                                if (idEtapa > 0) {
+                                    for (Map.Entry<String, String> entry : cantidadesMateriales.entrySet()) {
+                                        psUtilizado.setInt(1, idEtapa);
+                                        psUtilizado.setString(2, entry.getKey());
+                                        psUtilizado.setDouble(3, Double.parseDouble(entry.getValue().replace(",", ".")));
+                                        psUtilizado.setDouble(4, Double.parseDouble(entry.getValue().replace(",", ".")));
+                                        psUtilizado.executeUpdate();
+                                    }
+                                    for (Map.Entry<String, String> entry : cantidadesHerramientas.entrySet()) {
+                                        psUtilizado.setInt(1, idEtapa);
+                                        psUtilizado.setString(2, entry.getKey());
+                                        psUtilizado.setDouble(3, Double.parseDouble(entry.getValue().replace(",", ".")));
+                                        psUtilizado.setDouble(4, Double.parseDouble(entry.getValue().replace(",", ".")));
+                                        psUtilizado.executeUpdate();
+                                    }
+                                }
+                            }
+
+                            this.dispose();
+                        }
                     }
                 }
             }
+        } catch (SQLException e) {
+            new Error_guardar((Frame) this.getParent(), true,
+                    "Error", "Error al guardar: " + e.getMessage()).setVisible(true);
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        new Error_guardar((Frame) this.getParent(), true,
-                "Error", "Error al guardar: " + e.getMessage()).setVisible(true);
-        e.printStackTrace();
-    }
 
     }//GEN-LAST:event_btnGuardar1ActionPerformed
 
@@ -573,13 +406,13 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSComboBoxMaterial Boxestado;
+    private javax.swing.JPanel PanHerramientas;
+    private javax.swing.JPanel PanMaterialessss;
     private rojeru_san.RSButtonRiple btnCancelar1;
     private rojeru_san.RSButtonRiple btnGuardar1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -659,10 +492,11 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
     }
 
     private void cargarMaterialesHerramientasUsados(Connection con, int idEtapa) throws SQLException {
-        System.out.println("Cargando materiales y herramientas para idEtapa: " + idEtapa);
-        System.out.println("cmbMateriales: " + (cmbMateriales != null ? "no es null" : "es null"));
-        System.out.println("cmbHerramientas: " + (cmbHerramientas != null ? "no es null" : "es null"));
+        // Crear mapas para almacenar materiales y herramientas
+        Map<String, String> materiales = new HashMap<>();
+        Map<String, String> herramientas = new HashMap<>();
 
+        // Consultar los materiales y herramientas usados
         String sql = "SELECT i.nombre, i.tipo, u.cantidad_usada "
                 + "FROM utilizado u "
                 + "JOIN inventario i ON u.inventario_id_inventario = i.id_inventario "
@@ -673,30 +507,78 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
                 while (rs.next()) {
                     String nombre = rs.getString("nombre");
                     String tipo = rs.getString("tipo");
-                    double cantidadUsada = rs.getDouble("cantidad_usada");
+                    String cantidadUsada = String.valueOf(rs.getDouble("cantidad_usada"));
 
-                    CheckedComboBox<CheckableItem> combo = tipo.equals("material") ? cmbMateriales : cmbHerramientas;
-                    if (combo != null) {
-                        for (int i = 0; i < combo.getModel().getSize(); i++) {
-                            CheckableItem item = combo.getModel().getElementAt(i);
-                            if (item.toString().equals(nombre)) {
-                                item.setSelected(true);
-                                System.out.println("Marcado " + tipo + ": " + nombre + " con cantidad usada: " + cantidadUsada);
-                                break;
-                            }
-                        }
-                    } else {
-                        System.err.println("Combo es null para tipo: " + tipo);
+                    // Clasificar según el tipo (material o herramienta)
+                    if ("material".equalsIgnoreCase(tipo)) {
+                        materiales.put(nombre, cantidadUsada);
+                    } else if ("herramienta".equalsIgnoreCase(tipo)) {
+                        herramientas.put(nombre, cantidadUsada);
                     }
-                }
-                if (cmbMateriales != null) {
-                    cmbMateriales.repaint();
-                }
-                if (cmbHerramientas != null) {
-                    cmbHerramientas.repaint();
                 }
             }
         }
+
+        // Configurar los paneles con los mapas de materiales y herramientas
+        configurarPaneles(materiales, herramientas);
     }
 
+    private void configurarPaneles(Map<String, String> materiales, Map<String, String> herramientas) {
+        // Configurar panel de materiales
+        PanMaterialessss.setLayout(new BoxLayout(PanMaterialessss, BoxLayout.Y_AXIS));
+        PanMaterialessss.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.GRAY),
+                "Materiales",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                new Font("Segoe UI", Font.BOLD, 18) // Tamaño 14 y negrita
+        ));
+        PanMaterialessss.setBackground(Color.WHITE);
+        PanMaterialessss.setPreferredSize(new java.awt.Dimension(350, 200)); // Ancho: 350px, Alto: 200px
+
+        for (Map.Entry<String, String> entry : materiales.entrySet()) {
+            JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            fila.setBackground(Color.WHITE);
+
+            JLabel lblNombre = new JLabel(entry.getKey() + ": ");
+            lblNombre.setFont(new Font("Segoe UI", Font.BOLD, 16));
+
+            JLabel lblCantidad = new JLabel(entry.getValue());
+            lblCantidad.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+
+            fila.add(lblNombre);
+            fila.add(lblCantidad);
+            PanMaterialessss.add(fila);
+        }
+
+        // Configurar panel de herramientas
+        PanHerramientas.setLayout(new BoxLayout(PanHerramientas, BoxLayout.Y_AXIS));
+        PanHerramientas.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.GRAY),
+                "Herramientas",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                new Font("Segoe UI", Font.BOLD, 18) // Tamaño 14 y negrita
+        ));
+        PanHerramientas.setBackground(Color.WHITE);
+        PanHerramientas.setPreferredSize(new java.awt.Dimension(350, 200)); // Ancho: 350px, Alto: 200px
+
+        for (Map.Entry<String, String> entry : herramientas.entrySet()) {
+            JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            fila.setBackground(Color.WHITE);
+
+            JLabel lblNombre = new JLabel(entry.getKey() + ": ");
+            lblNombre.setFont(new Font("Segoe UI", Font.BOLD, 16));
+
+            JLabel lblCantidad = new JLabel(entry.getValue());
+            lblCantidad.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+
+            fila.add(lblNombre);
+            fila.add(lblCantidad);
+            PanHerramientas.add(fila);
+        }
+
+        // Ajustar tamaño del diálogo
+        pack();
+    }
 }

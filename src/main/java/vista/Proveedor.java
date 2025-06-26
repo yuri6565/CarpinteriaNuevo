@@ -76,8 +76,7 @@ tablaclientes.setGridColor(Color.WHITE); // o el color que desees
 
             btnNuevo1.setBackground(new Color(67, 71, 120));
             btnNuevo1.setBackgroundHover(new Color(118,142,240));
-            btnEditar1.setBackground(new Color(67, 71, 120));
-           btnEditar1.setBackgroundHover(new Color(118,142,240));
+            
             btnEliminar1.setBackground(new Color(67, 71, 120));
             btnEliminar1.setBackgroundHover(new Color(118,142,240));
         } else {
@@ -112,7 +111,6 @@ tablaclientes.setGridColor(Color.WHITE); // o el color que desees
 tablaclientes.setGridColor(Color.BLACK); // o el color que desees
 
             btnNuevo1.setBackground(new Color(46, 49, 82));
-            btnEditar1.setBackground(new Color(46, 49, 82));
             btnEliminar1.setBackground(new Color(46, 49, 82));
         }
     }
@@ -128,7 +126,6 @@ tablaclientes.setGridColor(Color.BLACK); // o el color que desees
 
         jPanel1 = new javax.swing.JPanel();
         btnNuevo1 = new RSMaterialComponent.RSButtonShape();
-        btnEditar1 = new RSMaterialComponent.RSButtonShape();
         btnEliminar1 = new RSMaterialComponent.RSButtonShape();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaclientes = new RSMaterialComponent.RSTableMetroCustom();
@@ -154,22 +151,7 @@ tablaclientes.setGridColor(Color.BLACK); // o el color que desees
                 btnNuevo1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnNuevo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 110, 110, 30));
-
-        btnEditar1.setBackground(new java.awt.Color(46, 49, 82));
-        btnEditar1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
-        btnEditar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil (1)_1.png"))); // NOI18N
-        btnEditar1.setText(" Editar");
-        btnEditar1.setBackgroundHover(new java.awt.Color(67, 150, 209));
-        btnEditar1.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
-        btnEditar1.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
-        btnEditar1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnEditar1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditar1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnEditar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 110, 110, 30));
+        jPanel1.add(btnNuevo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 110, 110, 30));
 
         btnEliminar1.setBackground(new java.awt.Color(46, 49, 82));
         btnEliminar1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -263,20 +245,6 @@ tablaclientes.setGridColor(Color.BLACK); // o el color que desees
         }
     }//GEN-LAST:event_btnNuevo1ActionPerformed
 
-    private void btnEditar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditar1ActionPerformed
-        int filaSeleccionada = tablaclientes.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(null, "Seleccione un cliente para editar");
-            return;
-        }
-
-        int idCliente = Integer.parseInt(tablaclientes.getValueAt(filaSeleccionada, 0).toString());
-        DefaultTableModel model = (DefaultTableModel) tablaclientes.getModel();
-        EditarCliente1 editar = new EditarCliente1(new javax.swing.JFrame(), true, idCliente, model, filaSeleccionada);
-        editar.setLocationRelativeTo(null);
-        editar.setVisible(true);
-    }//GEN-LAST:event_btnEditar1ActionPerformed
-
     private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed
         int filaSeleccionada = tablaclientes.getSelectedRow();
 
@@ -310,7 +278,6 @@ tablaclientes.setGridColor(Color.BLACK); // o el color que desees
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private RSMaterialComponent.RSButtonShape btnEditar1;
     private RSMaterialComponent.RSButtonShape btnEliminar1;
     private RSMaterialComponent.RSButtonShape btnNuevo1;
     private javax.swing.JPanel jPanel1;

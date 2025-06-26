@@ -44,78 +44,114 @@ public class Ctrl_Pedido {
 
     // Insertar un pedido y sus detalles
     public int insertar(Pedido pedido, List<PedidoDetalle> detalles) {
-        Connection con = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        int idPedido = -1;
+    Connection con = null;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+    int idPedido = -1;
 
-        try {
-            con = Conexion.getConnection();
-            con.setAutoCommit(false); // Iniciar transacción
+    try {
+        con = Conexion.getConnection();
+        con.setAutoCommit(false); // Iniciar transacción
 
-            // Insertar el pedido
-            String sql = "INSERT INTO pedido (nombre, estado, fecha_inicio, fecha_fin, cliente_codigo) VALUES (?, ?, ?, ?, ?)";
-            stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, pedido.getNombre());
-            stmt.setString(2, pedido.getEstado());
-            stmt.setDate(3, new java.sql.Date(pedido.getFecha_inicio().getTime()));
-            stmt.setDate(4, new java.sql.Date(pedido.getFecha_fin().getTime()));
-            stmt.setInt(5, pedido.getIdCliente());
-            stmt.executeUpdate();
+        // Insertar el pedido
+        String sql = "INSERT INTO pedido (nombre, estado, fecha_inicio, fecha_fin, cliente_codigo) VALUES (?, ?, ?, ?, ?)";
+        stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        stmt.setString(1, pedido.getNombre());
+        stmt.setString(2, pedido.getEstado());
+        stmt.setDate(3, new java.sql.Date(pedido.getFecha_inicio().getTime()));
+        stmt.setDate(4, new java.sql.Date(pedido.getFecha_fin().getTime()));
+        stmt.setInt(5, pedido.getIdCliente());
+        stmt.executeUpdate();
 
-            // Obtener el ID del pedido generado
-            rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                idPedido = rs.getInt(1);
-            }
+        // Obtener el ID del pedido generado
+        rs = stmt.getGeneratedKeys();
+        if (rs.next()) {
+            idPedido = rs.getInt(1);
+        }
 
-            // Insertar los detalles
-            if (detalles != null && !detalles.isEmpty()) {
-                String sqlDetalle = "INSERT INTO detalle_pedido (descripcion, cantidad, dimension, precio_unitario, subtotal, total, pedido_id_pedido) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                stmt = con.prepareStatement(sqlDetalle);
-                for (PedidoDetalle detalle : detalles) {
-                    stmt.setString(1, detalle.getDescripcion());
-                    stmt.setInt(2, detalle.getCantidad());
-                    stmt.setString(3, detalle.getDimensiones());
-                    stmt.setDouble(4, detalle.getPrecioUnitario());
-                    stmt.setDouble(5, detalle.getSubtotal());
-                    stmt.setDouble(6, detalle.getTotal());
-                    stmt.setInt(7, idPedido);
-                    stmt.executeUpdate();
+        // Insertar los detalles y luego los registros en produccion
+        if (detalles != null && !detalles.isEmpty()) {
+            String sqlDetalle = "INSERT INTO detalle_pedido (descripcion, cantidad, dimension, precio_unitario, subtotal, total, pedido_id_pedido) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sqlProduccion = "INSERT INTO produccion (fecha_inicio, fecha_fin, estado, detalle_pedido_iddetalle_pedido) VALUES (?, ?, 'pendiente', ?)";
+            
+            stmt = con.prepareStatement(sqlDetalle, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmtProduccion = con.prepareStatement(sqlProduccion);
+            
+            for (PedidoDetalle detalle : detalles) {
+                // Insertar detalle
+                stmt.setString(1, detalle.getDescripcion());
+                stmt.setInt(2, detalle.getCantidad());
+                stmt.setString(3, detalle.getDimensiones());
+                stmt.setDouble(4, detalle.getPrecioUnitario());
+                stmt.setDouble(5, detalle.getSubtotal());
+                stmt.setDouble(6, detalle.getTotal());
+                stmt.setInt(7, idPedido);
+                stmt.executeUpdate();
+
+                // Obtener el ID del detalle generado
+                rs = stmt.getGeneratedKeys();
+                int idDetalle = -1;
+                if (rs.next()) {
+                    idDetalle = rs.getInt(1);
                 }
-            }
 
-            con.commit(); // Confirmar transacción
-            return idPedido;
-
-        } catch (SQLException e) {
-            try {
-                if (con != null) {
-                    con.rollback(); // Revertir transacción en caso de error
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            JOptionPane.showMessageDialog(null, "Error al insertar el pedido: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-            return -1;
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+                // Insertar en la tabla produccion
+                stmtProduccion.setDate(1, new java.sql.Date(pedido.getFecha_inicio().getTime()));
+                stmtProduccion.setDate(2, new java.sql.Date(pedido.getFecha_fin().getTime()));
+                // Mapear el estado del pedido al ENUM de produccion
+                String estadoProduccion = mapearEstadoProduccion(pedido.getEstado());
+                stmtProduccion.setString(3, estadoProduccion);
+                stmtProduccion.setInt(4, idDetalle);
+                stmtProduccion.executeUpdate();
             }
         }
-    }
 
+        con.commit(); // Confirmar transacción
+        return idPedido;
+
+    } catch (SQLException e) {
+        try {
+            if (con != null) {
+                con.rollback(); // Revertir transacción en caso de error
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        JOptionPane.showMessageDialog(null, "Error al insertar el pedido: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+        return -1;
+    } finally {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+// Método auxiliar para mapear el estado del pedido al ENUM de produccion
+private String mapearEstadoProduccion(String estadoPedido) {
+    // Mapear el estado del pedido al ENUM permitido en la tabla produccion
+    switch (estadoPedido.toLowerCase()) {
+        case "pendiente":
+            return "pendiente";
+        case "proceso":
+            return "proceso";
+        case "completado":
+        case "finalizado":
+            return "finalizado";
+        default:
+            return "pendiente"; // Estado por defecto
+    }
+}
     // Obtener todos los pedidos con el nombre del cliente
     public List<MaterialConDetalles> obtenerMateriales() {
         List<MaterialConDetalles> lista = new ArrayList<>();

@@ -15,11 +15,10 @@ public class Ctrl_Proveedor {
 
     public int guardar(ProveedorDatos objeto) {
         int idGenerado = -1;
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement consulta = con.prepareStatement(
-                 "INSERT INTO proveedor (nombre, correo_electronico, telefono, direccion) VALUES (?, ?, ?, ?)",
-    Statement.RETURN_GENERATED_KEYS
-       )) {
+        try (Connection con = Conexion.getConnection(); PreparedStatement consulta = con.prepareStatement(
+                "INSERT INTO proveedor (nombre, correo_electronico, telefono, direccion) VALUES (?, ?, ?, ?)",
+                Statement.RETURN_GENERATED_KEYS
+        )) {
 
             consulta.setString(1, objeto.getNombre());
             consulta.setString(2, objeto.getCorreo_electronico());
@@ -38,36 +37,33 @@ public class Ctrl_Proveedor {
         return idGenerado;
     }
 
-public List<ProveedorDatos> obtenerProveedores() {
-    List<ProveedorDatos> lista = new ArrayList<>();
-    String sql = "SELECT id_proveedor, nombre, correo_electronico, telefono, direccion FROM proveedor";
+    public List<ProveedorDatos> obtenerProveedores() {
+        List<ProveedorDatos> lista = new ArrayList<>();
+        String sql = "SELECT id_proveedor, nombre, correo_electronico, telefono, direccion FROM proveedor";
 
-    try (Connection con = Conexion.getConnection();
-         PreparedStatement stmt = con.prepareStatement(sql);
-         ResultSet rs = stmt.executeQuery()) {
+        try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
-        while (rs.next()) {
-            ProveedorDatos datosprove = new ProveedorDatos();
-            datosprove.setId_proveedor(rs.getInt("id_proveedor"));
-            datosprove.setNombre(rs.getString("nombre"));
-            datosprove.setCorreo_electronico(rs.getString("correo_electronico"));
-            datosprove.setTelefono(rs.getString("telefono"));
-            datosprove.setDireccion(rs.getString("direccion"));
-            lista.add(datosprove);
+            while (rs.next()) {
+                ProveedorDatos datosprove = new ProveedorDatos();
+                datosprove.setId_proveedor(rs.getInt("id_proveedor"));
+                datosprove.setNombre(rs.getString("nombre"));
+                datosprove.setCorreo_electronico(rs.getString("correo_electronico"));
+                datosprove.setTelefono(rs.getString("telefono"));
+                datosprove.setDireccion(rs.getString("direccion"));
+                lista.add(datosprove);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener proveedores: " + e.getMessage());
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Error al obtener proveedores: " + e.getMessage());
-        e.printStackTrace();
+        return lista;
     }
-    return lista;
-}
 
     public ProveedorDatos obtenerProveedorPorid(int id_proveedor) {
         ProveedorDatos datosproveedor = null;
         String sql = "SELECT * FROM proveedor WHERE id_proveedor = ?";
 
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement consulta = con.prepareStatement(sql)) {
+        try (Connection con = Conexion.getConnection(); PreparedStatement consulta = con.prepareStatement(sql)) {
             consulta.setInt(1, id_proveedor);
             try (ResultSet rs = consulta.executeQuery()) {
                 if (rs.next()) {
@@ -89,8 +85,7 @@ public List<ProveedorDatos> obtenerProveedores() {
         boolean respuesta = false;
         String sql = "UPDATE proveedor SET nombre = ?, correo_electronico = ?, telefono = ?, direccion = ? WHERE id_proveedor = ?";
 
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement consulta = con.prepareStatement(sql)) {
+        try (Connection con = Conexion.getConnection(); PreparedStatement consulta = con.prepareStatement(sql)) {
             consulta.setString(1, objeto.getNombre());
             consulta.setString(2, objeto.getCorreo_electronico());
             consulta.setString(3, objeto.getTelefono());
@@ -111,14 +106,14 @@ public List<ProveedorDatos> obtenerProveedores() {
         try (Connection con = Conexion.getConnection()) {
             // Primero eliminar relaciones en carpinteriasistema_suministra
             try (PreparedStatement consultaSuministra = con.prepareStatement(
-                "DELETE FROM suministra WHERE proveedor_id_proveedor = ?")) {
+                    "DELETE FROM suministra WHERE proveedor_id_proveedor = ?")) {
                 consultaSuministra.setInt(1, id_proveedor);
                 consultaSuministra.executeUpdate();
             }
 
             // Luego eliminar el proveedor
             try (PreparedStatement consulta = con.prepareStatement(
-                "DELETE FROM proveedor WHERE id_proveedor = ?")) {
+                    "DELETE FROM proveedor WHERE id_proveedor = ?")) {
                 consulta.setInt(1, id_proveedor);
                 if (consulta.executeUpdate() > 0) {
                     respuesta = true;
@@ -131,30 +126,43 @@ public List<ProveedorDatos> obtenerProveedores() {
         return respuesta;
     }
 
-   public List<String> obtenerTodosNombresInventario() {
-        List<String> nombres = new ArrayList<>();
-        String sql = "SELECT nombre FROM inventario";
-        
-        try (Connection con = new Conexion().getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            
+    public List<String> obtenerTodosNombresInventario() {
+        List<String> productos = new ArrayList<>();
+        String sql = "SELECT nombre FROM inventario"; // Asegúrate que el nombre de la tabla es correcto
+        try (Connection conn = Conexion.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+
             while (rs.next()) {
-                nombres.add(rs.getString("nombre"));
+                productos.add(rs.getString("nombre"));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null; // En caso de error, devolvemos null (manejar en el llamador)
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        
-        return nombres;
+        return productos;
     }
-    
+
+    public List<String> obtenerNombresProductosPorProveedor(int idProveedor) {
+        List<String> productos = new ArrayList<>();
+        String sql = "SELECT i.nombre FROM suministra s "
+                + "JOIN inventario i ON s.inventario_id_inventario = i.id_inventario "
+                + "WHERE s.proveedor_id_proveedor = ?";
+
+        try (Connection conn = Conexion.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, idProveedor);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                productos.add(rs.getString("nombre"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return productos;
+    }
 
     public int obtenerIdInventarioPorNombre(String nombre) {
         String sql = "SELECT id_inventario FROM inventario WHERE nombre = ?";
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+        try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, nombre);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -167,31 +175,28 @@ public List<ProveedorDatos> obtenerProveedores() {
         return -1;
     }
 
-public boolean guardarSuministra(int idProveedor, int idInventario) {
-    String sql = "INSERT INTO suministra (proveedor_id_proveedor, inventario_id_inventario) VALUES (?, ?)";
-    try (Connection con = Conexion.getConnection();
-         PreparedStatement stmt = con.prepareStatement(sql)) {
-        stmt.setInt(1, idProveedor);
-        stmt.setInt(2, idInventario);
-        int rowsAffected = stmt.executeUpdate();
-        return rowsAffected > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al guardar relación proveedor-producto: " + e.getMessage());
-        return false;
+    public boolean guardarSuministra(int idProveedor, int idMaterial) {
+        String sql = "INSERT INTO suministra (proveedor_id_proveedor, inventario_id_inventario) VALUES (?, ?)";
+        try (Connection conn = Conexion.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, idProveedor);
+            pstmt.setInt(2, idMaterial);
+
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
-}
 
     public List<String> obtenerProveedoresConProductos() {
         List<String> resultados = new ArrayList<>();
-        String sql = "SELECT p.nombre AS nombre_proveedor, i.nombre AS nombre_producto " +
-                     "FROM proveedor p " +
-                     "INNER JOIN suministra s ON p.id_proveedor = s.proveedor_id_proveedor " +
-                     "INNER JOIN inventario i ON s.inventario_id_inventario = i.id_inventario";
+        String sql = "SELECT p.nombre AS nombre_proveedor, i.nombre AS nombre_producto "
+                + "FROM proveedor p "
+                + "INNER JOIN suministra s ON p.id_proveedor = s.proveedor_id_proveedor "
+                + "INNER JOIN inventario i ON s.inventario_id_inventario = i.id_inventario";
 
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 String proveedor = rs.getString("nombre_proveedor");
@@ -204,26 +209,43 @@ public boolean guardarSuministra(int idProveedor, int idInventario) {
         }
         return resultados;
     }
-    
+
     public List<String> obtenerProductosDeProveedor(int idProveedor) {
     List<String> productos = new ArrayList<>();
     String sql = "SELECT i.nombre FROM suministra s " +
                  "JOIN inventario i ON s.inventario_id_inventario = i.id_inventario " +
                  "WHERE s.proveedor_id_proveedor = ?";
-    try (Connection con = Conexion.getConnection();
-         PreparedStatement ps = con.prepareStatement(sql)) {
-        ps.setInt(1, idProveedor);
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                productos.add(rs.getString("nombre"));
-            }
+    
+    try (Connection conn = Conexion.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, idProveedor);
+        ResultSet rs = pstmt.executeQuery();
+        
+        while (rs.next()) {
+            productos.add(rs.getString("nombre"));
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al obtener productos del proveedor: " + e.getMessage());
+    } catch (SQLException ex) {
+        ex.printStackTrace();
     }
     return productos;
 }
 
+    public int obtenerIdMaterialPorNombre(String nombreMaterial) {
+        String sql = "SELECT id_inventario FROM inventario WHERE nombre = ?";
+        try (Connection conn = Conexion.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, nombreMaterial);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id_inventario");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return -1;
+    }
 
 }
+

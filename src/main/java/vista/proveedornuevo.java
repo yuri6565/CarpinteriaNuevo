@@ -41,10 +41,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.ComboPopup;
 import modelo.ProveedorDatos;
 
-
 public class proveedornuevo extends javax.swing.JDialog {
-public boolean guardado = false;
 
+    public boolean guardado = false;
 
     private CheckedComboBox<CheckableItem> cmbProducto;
     private Ctrl_Proveedor ctrlProveedor;
@@ -53,45 +52,43 @@ public boolean guardado = false;
         super(parent, modal);
         initComponents();
         setTitle("Nuevo Proveedor");
-        
 
-txtNombre.addActionListener(e -> txttelefono.requestFocus());
+        txtNombre.addActionListener(e -> txttelefono.requestFocus());
 
-txttelefono.addActionListener(e -> txtcorreo.requestFocus());
+        txttelefono.addActionListener(e -> txtcorreo.requestFocus());
 
-txtcorreo.addActionListener(e -> txtdireccion.requestFocus());
-    
+        txtcorreo.addActionListener(e -> txtdireccion.requestFocus());
+
         ctrlProveedor = new Ctrl_Proveedor();
         cmbProducto = new CheckedComboBox<>(makeProductModel());
         cmbProducto.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Fuente moderna
 
-
-//        jPanel1.add(cmbProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 190, 200, 30));
-//        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 480));
+        jPanel3.add(cmbProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 190, 200, 30));
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 480));
 
     }
+
     // Método para verificar si se presionó "Guardar"
     public boolean isGuardado() {
         return guardado;
     }
-    
-
 
     // Método para crear el modelo de productos
- private DefaultComboBoxModel<CheckableItem> makeProductModel() {
-    DefaultComboBoxModel<CheckableItem> model = new DefaultComboBoxModel<>();
-    // Obtener los nombres de los productos desde el controlador
-    List<String> productos = ctrlProveedor.obtenerTodosNombresInventario();
-    if (productos != null && !productos.isEmpty()) {
-        for (String producto : productos) {
-            model.addElement(new CheckableItem(producto, false));
+    private DefaultComboBoxModel<CheckableItem> makeProductModel() {
+        DefaultComboBoxModel<CheckableItem> model = new DefaultComboBoxModel<>();
+        // Obtener los nombres de los productos desde el controlador
+        List<String> productos = ctrlProveedor.obtenerTodosNombresInventario();
+        if (productos != null && !productos.isEmpty()) {
+            for (String producto : productos) {
+                model.addElement(new CheckableItem(producto, false));
+            }
+        } else {
+            // Si no hay productos, agregar un elemento por defecto o mostrar un mensaje
+            model.addElement(new CheckableItem("No hay productos disponibles", false));
         }
-    } else {
-        // Si no hay productos, agregar un elemento por defecto o mostrar un mensaje
-        model.addElement(new CheckableItem("No hay productos disponibles", false));
+        return model;
     }
-    return model;
-}
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -291,7 +288,60 @@ txtcorreo.addActionListener(e -> txtdireccion.requestFocus());
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar2ActionPerformed
-        this.dispose();
+
+        String nombre = txtNombre.getText().trim();
+        String correo = txtcorreo.getText().trim();
+        String telefono = txttelefono.getText().trim();
+        String direccion = txtdireccion.getText().trim();
+
+        // Validaciones existentes...
+        ProveedorDatos proveedor = new ProveedorDatos();
+        proveedor.setNombre(nombre);
+        proveedor.setCorreo_electronico(correo);
+        proveedor.setTelefono(telefono);
+        proveedor.setDireccion(direccion);
+
+        int idGenerado = ctrlProveedor.guardar(proveedor);
+        if (idGenerado != -1) {
+            List<Integer> idsMaterialesSeleccionados = new ArrayList<>();
+            for (int i = 0; i < cmbProducto.getItemCount(); i++) {
+                CheckableItem item = cmbProducto.getItemAt(i);
+                if (item.isSelected()) {
+                    int idMaterial = ctrlProveedor.obtenerIdMaterialPorNombre(item.toString().trim());
+                    if (idMaterial != -1) {
+                        idsMaterialesSeleccionados.add(idMaterial);
+                    }
+                }
+            }
+
+            if (!idsMaterialesSeleccionados.isEmpty()) {
+                for (Integer idMaterial : idsMaterialesSeleccionados) {
+                    if (!ctrlProveedor.guardarSuministra(idGenerado, idMaterial)) {
+                        JOptionPane.showMessageDialog(this, "Error al asociar material ID: " + idMaterial,
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
+                // Corregido: Usar nombresProductos en lugar de nombre
+                List<String> nombresProductos = ctrlProveedor.obtenerNombresProductosPorProveedor(idGenerado);
+                StringBuilder mensaje = new StringBuilder("Proveedor guardado. Productos:\n");
+                for (String prod : nombresProductos) {
+                    mensaje.append("- ").append(prod).append("\n");
+                }
+                JOptionPane.showMessageDialog(this, mensaje.toString(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Proveedor guardado (sin productos)",
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            guardado = true;
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al guardar proveedor",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+
     }//GEN-LAST:event_btnGuardar2ActionPerformed
 
     /**
@@ -428,7 +478,6 @@ txtcorreo.addActionListener(e -> txtdireccion.requestFocus());
                 });
             }
 
-      
             DefaultListCellRenderer renderer = new DefaultListCellRenderer() {
                 @Override
                 public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -511,6 +560,7 @@ txtcorreo.addActionListener(e -> txtdireccion.requestFocus());
 
     // Panel personalizado para un efecto visual moderno
     class ModernPanel extends JPanel {
+
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -523,7 +573,5 @@ txtcorreo.addActionListener(e -> txtdireccion.requestFocus());
             g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 10, 10);
         }
     }
-
-
 
 }

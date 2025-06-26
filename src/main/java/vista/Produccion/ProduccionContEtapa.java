@@ -343,7 +343,7 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
                         case "proceso":
                             label.setBackground(new Color(251, 139, 36)); // Amarillo oscuro
                             break;
-                        case "finalizado":
+                        case "completado":
                             label.setBackground(new Color(31, 123, 21)); // Verde oscuro
                             break;
                         default:
@@ -358,7 +358,7 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
                         case "proceso":
                             label.setBackground(new Color(255, 255, 153)); // Amarillo claro
                             break;
-                        case "finalizado":
+                        case "completado":
                             label.setBackground(new Color(204, 255, 204)); // Verde claro
                             break;
                         default:
@@ -512,7 +512,7 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
         Tabla1.setFontHead(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Tabla1.setFontRowHover(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         Tabla1.setFontRowSelect(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        Tabla1.setPreferredSize(new java.awt.Dimension(600, 223));
+        Tabla1.setPreferredSize(new java.awt.Dimension(600, 310));
         Tabla1.setRowHeight(23);
         Tabla1.setSelectionBackground(new java.awt.Color(109, 160, 221));
         Tabla1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -551,8 +551,8 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
                     .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnElimi, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(38, 38, 38)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(240, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(153, Short.MAX_VALUE))
         );
 
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1190, 630));
@@ -575,91 +575,54 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnElimiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimiActionPerformed
-        int selectedRow = Tabla1.getSelectedRow();
+// 1. Obtener filas seleccionadas
+        int[] selectedRows = Tabla1.getSelectedRows();
 
-        if (selectedRow < 0) {
+        // 2. Validar si hay filas seleccionadas
+        if (selectedRows.length == 0) {
             JOptionPane.showMessageDialog(this,
-                    "Seleccione una etapa para eliminar",
+                    "Por favor seleccione al menos una fila para eliminar",
                     "Advertencia",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // Convertir índice de vista a modelo (importante si hay filtros)
-        int modelRow = Tabla1.convertRowIndexToModel(selectedRow);
-        int idEtapa = (int) Tabla1.getModel().getValueAt(modelRow, 0);
-
-        // Verificar estado (opcional: no permitir eliminar etapas completadas)
-        String estado = Tabla1.getModel().getValueAt(modelRow, 5).toString();
-        if ("completado".equalsIgnoreCase(estado)) {
-            JOptionPane.showMessageDialog(this,
-                    "No se puede eliminar una etapa completada",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
+        // 3. Mostrar confirmación
         int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de eliminar esta etapa?",
+                "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
                 "Confirmar eliminación",
                 JOptionPane.YES_NO_OPTION);
 
+        // 4. Si el usuario no confirma, salir
         if (confirm != JOptionPane.YES_OPTION) {
             return;
         }
 
-        try (Connection con = Conexion.getConnection()) {
-            con.setAutoCommit(false); // Iniciar transacción
+        // 5. Eliminar registros
+        try (Connection con = new Conexion().getConnection()) {
+            String sql = "DELETE FROM etapa_produccion WHERE idetapa_produccion  = ?";
+            DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
 
-            try {
-                // 1. Eliminar registros en 'utilizado'
-                String sqlUtilizado = "DELETE FROM utilizado WHERE etapa_produccion_idetapa_produccion = ?";
-                try (PreparedStatement ps = con.prepareStatement(sqlUtilizado)) {
-                    ps.setInt(1, idEtapa);
+            // Eliminar en orden inverso para evitar problemas con los índices
+            for (int i = selectedRows.length - 1; i >= 0; i--) {
+                int row = selectedRows[i];
+                int id = (int) model.getValueAt(row, 0); // ID está en la columna 0
+
+                try (PreparedStatement ps = con.prepareStatement(sql)) {
+                    ps.setInt(1, id);
                     ps.executeUpdate();
+                    model.removeRow(row); // Eliminar de la tabla visual
                 }
-
-                // 2. Eliminar registros en 'asignada'
-                String sqlAsignada = "DELETE FROM asignada WHERE etapa_produccion_idetapa_produccion = ?";
-                try (PreparedStatement ps = con.prepareStatement(sqlAsignada)) {
-                    ps.setInt(1, idEtapa);
-                    ps.executeUpdate();
-                }
-
-                // 3. Finalmente eliminar la etapa
-                String sqlEtapa = "DELETE FROM etapa_produccion WHERE idetapa_produccion = ?";
-                try (PreparedStatement ps = con.prepareStatement(sqlEtapa)) {
-                    ps.setInt(1, idEtapa);
-                    int filasAfectadas = ps.executeUpdate();
-
-                    if (filasAfectadas > 0) {
-                        con.commit(); // Confirmar cambios
-                        JOptionPane.showMessageDialog(this,
-                                "Etapa eliminada correctamente",
-                                "Éxito",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        con.rollback();
-                        JOptionPane.showMessageDialog(this,
-                                "No se encontró la etapa a eliminar",
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            } catch (SQLException e) {
-                con.rollback(); // Revertir en caso de error
-                JOptionPane.showMessageDialog(this,
-                        "Error al eliminar etapa: " + e.getMessage(),
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                e.printStackTrace();
             }
 
-            cargarTablaEtapa(); // Refrescar la tabla
+            JOptionPane.showMessageDialog(this,
+                    "Registros eliminados correctamente",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
-                    "Error de conexión: " + e.getMessage(),
+                    "Error al eliminar: " + e.getMessage(),
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
