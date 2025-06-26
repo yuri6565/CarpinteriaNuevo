@@ -504,12 +504,18 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
     }
 
     private int guardarEtapaProduccion(Connection con) throws SQLException {
+        // Verifica que el ID de producción exista
+        if (!existeProduccion(con, this.idProduccion)) {
+            throw new SQLException("El ID de producción " + this.idProduccion + " no existe");
+        }
+
         String sql = "INSERT INTO etapa_produccion (nombre_etapa, fecha_inicio, fecha_fin, produccion_id_produccion, cantidad) VALUES (?, ?, ?, ?, ?)";
+
         try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, txtetapa.getText().trim());
             ps.setDate(2, new Date(txtFechainicio.getDate().getTime()));
             ps.setDate(3, txtfechafin.getDate() != null ? new Date(txtfechafin.getDate().getTime()) : null);
-            ps.setInt(4, idProduccion);
+            ps.setInt(4, idProduccion); // Asegúrate que es 1 o 2
             ps.setInt(5, Integer.parseInt(txtcantidad.getText().trim()));
             ps.executeUpdate();
 
@@ -518,6 +524,17 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
                     return rs.getInt(1);
                 }
                 throw new SQLException("No se generó ID para la etapa");
+            }
+        }
+    }
+
+// Método auxiliar para verificar existencia
+    private boolean existeProduccion(Connection con, int idProduccion) throws SQLException {
+        String sql = "SELECT id_produccion FROM produccion WHERE id_produccion = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idProduccion);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next(); // Retorna true si existe
             }
         }
     }

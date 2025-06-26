@@ -524,41 +524,33 @@ public final class Produccion extends javax.swing.JPanel {
     }//GEN-LAST:event_btnElimiActionPerformed
 
     private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseClicked
-    try {
-        // Obtener posición del clic
-        int column = Tabla1.columnAtPoint(evt.getPoint());
-        int viewRow = Tabla1.rowAtPoint(evt.getPoint());
+        try {
+            int column = Tabla1.columnAtPoint(evt.getPoint());
+            int viewRow = Tabla1.rowAtPoint(evt.getPoint());
 
-        // Validar que el clic fue en una fila y columna válida
-        if (viewRow < 0 || column < 0) {
-            return;
+            if (viewRow < 0 || column < 0) {
+                return;
+            }
+
+            if (column == 7) { // Columna "Ver Detalle"
+                int modelRow = Tabla1.convertRowIndexToModel(viewRow);
+                DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+
+                // Obtener el ID de producción directamente de la columna 0
+                int idProduccion = Integer.parseInt(model.getValueAt(modelRow, 0).toString());
+
+                // Llamar al método con solo el ID de producción
+                mostrarDetalleProduccion(idProduccion);
+            }
+        } catch (Exception e) {
+            new Error_guardar(
+                    (Frame) SwingUtilities.getWindowAncestor(this),
+                    true,
+                    "Error",
+                    "Error al procesar clic: " + e.getMessage()
+            ).setVisible(true);
+            e.printStackTrace();
         }
-
-        // Convertir índice de vista a modelo (filtrado)
-        int modelRow = Tabla1.convertRowIndexToModel(viewRow);
-        DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-
-        // Obtener el ID de producción
-        int idProduccion = obtenerIdProduccion(model, modelRow);
-        if (idProduccion <= 0) {
-            return;
-        }
-
-        // Ejecutar acción solo para la columna "Ver Detalle"
-        if (column == 7) { // Columna "Ver Detalle"
-            mostrarDetalleProduccion(model, modelRow, idProduccion);
-        }
-
-    } catch (Exception e) {
-        new Error_guardar(
-                (Frame) SwingUtilities.getWindowAncestor(this),
-                true,
-                "Error",
-                "Error al procesar clic: " + e.getMessage()
-        ).setVisible(true);
-        e.printStackTrace();
-    }
-
     }
 
 // Método auxiliar para obtener el ID de producción con validación
@@ -589,29 +581,108 @@ public final class Produccion extends javax.swing.JPanel {
         }
     }
 
+    private int obtenerIdProduccionDesdeBD(int idPedido) throws SQLException {
+        String sql = "SELECT p.id_produccion "
+                + "FROM produccion p "
+                + "JOIN detalle_pedido dp ON p.detalle_pedido_iddetalle_pedido = dp.iddetalle_pedido "
+                + "JOIN pedido ped ON dp.pedido_id_pedido = ped.id_pedido "
+                + "WHERE ped.id_pedido = ?";
+
+        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idPedido);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? rs.getInt("id_produccion") : -1;
+            }
+        }
+    }
+
+    private int obtenerIdDetallePedido(int idProduccion) throws SQLException {
+        String sql = "SELECT detalle_pedido_iddetalle_pedido FROM produccion WHERE id_produccion = ?";
+
+        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idProduccion);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("detalle_pedido_iddetalle_pedido");
+                } else {
+                    throw new SQLException("No se encontró detalle de pedido para la producción: " + idProduccion);
+                }
+            }
+        }
+    }
+
 // Método para mostrar el detalle de producción
-    private void mostrarDetalleProduccion(DefaultTableModel model, int modelRow, int idProduccion) {
+    private void mostrarDetalleProduccion(int idProduccion) {
         try {
-            String nombre = obtenerValorCelda(model, modelRow, 1);
-            String fechaInicio = obtenerValorCelda(model, modelRow, 3);
-            String fechaFin = obtenerValorCelda(model, modelRow, 4, "En proceso");
-            String estado = obtenerValorCelda(model, modelRow, 6);
-            int cantidad = obtenerValorCeldaEntero(model, modelRow, 5);
-            String dimensiones = obtenerValorCelda(model, modelRow, 8);
-            String cliente = obtenerValorCelda(model, modelRow, 2); // Cliente
+            if (idProduccion <= 0) {
+                throw new IllegalArgumentException("ID de producción inválido: " + idProduccion);
+            }
 
-            DetalleProduProducto detallePanel = new DetalleProduProducto(
-                    idProduccion, nombre, fechaInicio, fechaFin, estado, String.valueOf(cantidad), dimensiones, cliente
-            );
+            String sql = "SELECT p.id_produccion, dp.descripcion, "
+                    + "CONCAT(c.nombre, ' ', c.apellido) AS cliente, "
+                    + "p.fecha_inicio, p.fecha_fin, p.estado, "
+                    + "dp.cantidad, dp.dimension "
+                    + "FROM produccion p "
+                    + "JOIN detalle_pedido dp ON p.detalle_pedido_iddetalle_pedido = dp.iddetalle_pedido "
+                    + "JOIN pedido ped ON dp.pedido_id_pedido = ped.id_pedido "
+                    + "LEFT JOIN cliente c ON ped.cliente_codigo = c.codigo "
+                    + "WHERE p.id_produccion = ?";
 
-            removeAll();
-            setLayout(new BorderLayout());
-            add(detallePanel, BorderLayout.CENTER);
-            revalidate();
-            repaint();
+            try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setInt(1, idProduccion);
 
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+                        String nombre = rs.getString("descripcion");
+                        String cliente = rs.getString("cliente");
+                        String fechaInicio = sdf.format(rs.getDate("fecha_inicio"));
+                        String fechaFin = rs.getDate("fecha_fin") != null
+                                ? sdf.format(rs.getDate("fecha_fin")) : "En proceso";
+                        String estado = rs.getString("estado");
+                        String cantidad = String.valueOf(rs.getInt("cantidad"));
+                        String dimensiones = rs.getString("dimension");
+
+                        DetalleProduProducto detallePanel = new DetalleProduProducto(
+                                idProduccion, nombre, fechaInicio, fechaFin,
+                                estado, cantidad, dimensiones, cliente
+                        );
+
+                        removeAll();
+                        setLayout(new BorderLayout());
+                        add(detallePanel, BorderLayout.CENTER);
+                        revalidate();
+                        repaint();
+                    } else {
+                        throw new SQLException("No se encontraron datos para la producción ID: " + idProduccion);
+                    }
+                }
+            }
         } catch (Exception e) {
-            throw new RuntimeException("Error al mostrar detalle: " + e.getMessage(), e);
+            new Error_guardar(
+                    (Frame) SwingUtilities.getWindowAncestor(this),
+                    true,
+                    "Error",
+                    "Error al mostrar detalle: " + e.getMessage()
+            ).setVisible(true);
+            e.printStackTrace();
+        }
+    }
+
+    private String obtenerDimensionesDeBD(int idProduccion) {
+        String sql = "SELECT dp.dimension FROM produccion p "
+                + "JOIN detalle_pedido dp ON p.detalle_pedido_iddetalle_pedido = dp.iddetalle_pedido "
+                + "WHERE p.id_produccion = ?";
+
+        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idProduccion);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? rs.getString("dimension") : "";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "";
         }
     }
 
@@ -661,37 +732,37 @@ public final class Produccion extends javax.swing.JPanel {
 
     public void cargarTablaProduccion() {
         DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-        model.setRowCount(0); // Limpiar tabla
+        model.setRowCount(0);
 
         try (Connection con = new Conexion().getConnection()) {
-            // Consulta para obtener todas las producciones
-            String sqlProduccion = "SELECT p.id_produccion, ped.id_pedido, dp.descripcion, p.fecha_inicio, "
-                    + "p.fecha_fin, p.estado, dp.cantidad, dp.dimension, "
-                    + "CONCAT(c.nombre, ' ', c.apellido) AS nombre_cliente "
-                    + "FROM produccion p "
+            String sql = "SELECT p.id_produccion, dp.descripcion, "
+                    + // Cambiado a id_produccion como primer campo
+                    "CONCAT(c.nombre, ' ', c.apellido) AS cliente, "
+                    + "p.fecha_inicio, p.fecha_fin, p.estado, "
+                    + "dp.cantidad, dp.dimension, ped.id_pedido "
+                    + // Añadido id_pedido al final
+                    "FROM produccion p "
                     + "JOIN detalle_pedido dp ON p.detalle_pedido_iddetalle_pedido = dp.iddetalle_pedido "
                     + "JOIN pedido ped ON dp.pedido_id_pedido = ped.id_pedido "
                     + "LEFT JOIN cliente c ON ped.cliente_codigo = c.codigo "
                     + "ORDER BY p.estado ASC";
 
-            try (PreparedStatement psProduccion = con.prepareStatement(sqlProduccion)) {
-                try (ResultSet rsProduccion = psProduccion.executeQuery()) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            try (PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
-                    while (rsProduccion.next()) {
-                        // Agregar fila a la tabla
-                        model.addRow(new Object[]{
-                            rsProduccion.getInt("id_pedido"),
-                            rsProduccion.getString("descripcion"),
-                            rsProduccion.getString("nombre_cliente") != null ? rsProduccion.getString("nombre_cliente") : "Sin cliente",
-                            sdf.format(rsProduccion.getDate("fecha_inicio")),
-                            rsProduccion.getDate("fecha_fin") != null ? sdf.format(rsProduccion.getDate("fecha_fin")) : "En proceso",
-                            rsProduccion.getInt("cantidad"),
-                            rsProduccion.getString("estado"),
-                            "ver",
-                            rsProduccion.getString("dimension")
-                        });
-                    }
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+                while (rs.next()) {
+                    model.addRow(new Object[]{
+                        rs.getInt("id_produccion"), // Mostrar id_produccion en la columna 0
+                        rs.getString("descripcion"),
+                        rs.getString("cliente") != null ? rs.getString("cliente") : "Sin cliente",
+                        sdf.format(rs.getDate("fecha_inicio")),
+                        rs.getDate("fecha_fin") != null ? sdf.format(rs.getDate("fecha_fin")) : "En proceso",
+                        rs.getInt("cantidad"),
+                        rs.getString("estado"),
+                        "ver",
+                        rs.getString("dimension")
+                    });
                 }
             }
         } catch (SQLException e) {
