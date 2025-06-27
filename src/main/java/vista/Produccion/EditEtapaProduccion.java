@@ -61,7 +61,7 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
     private int idProduccionActual;
     private int idEtapa;
     private boolean datosModificados;
-    
+
     /**
      * Creates new form EtapaProduccion
      *
@@ -105,11 +105,12 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         Boxestado = new RSMaterialComponent.RSComboBoxMaterial();
         txtFechainicio = new com.toedter.calendar.JDateChooser();
         txtfechafin = new com.toedter.calendar.JDateChooser();
-        btnCancelar1 = new rojeru_san.RSButtonRiple();
+        agregarr = new rojeru_san.RSButtonRiple();
         btnGuardar1 = new rojeru_san.RSButtonRiple();
         jLabel12 = new javax.swing.JLabel();
         PanMaterialessss = new javax.swing.JPanel();
         PanHerramientas = new javax.swing.JPanel();
+        btnCancelar2 = new rojeru_san.RSButtonRiple();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -129,7 +130,7 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel6.setText("Estado:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 70, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setText("Fecha final:");
@@ -150,7 +151,7 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
                 txtetapaActionPerformed(evt);
             }
         });
-        jPanel1.add(txtetapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 270, 30));
+        jPanel1.add(txtetapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 250, 30));
 
         Boxestado.setForeground(new java.awt.Color(102, 102, 102));
         Boxestado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", "pendiente", "proceso", "completado" }));
@@ -160,30 +161,29 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
                 BoxestadoActionPerformed(evt);
             }
         });
-        jPanel1.add(Boxestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 100, 240, 30));
+        jPanel1.add(Boxestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 100, 260, 30));
 
         txtFechainicio.setBackground(new java.awt.Color(255, 255, 255));
         txtFechainicio.setForeground(new java.awt.Color(255, 255, 255));
         txtFechainicio.setDateFormatString("y-MM-d");
         txtFechainicio.setMaxSelectableDate(new java.util.Date(253370786472000L));
-        jPanel1.add(txtFechainicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 180, 250, 30));
+        jPanel1.add(txtFechainicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, 260, 30));
 
         txtfechafin.setBackground(new java.awt.Color(255, 255, 255));
         txtfechafin.setForeground(new java.awt.Color(255, 255, 255));
         txtfechafin.setDateFormatString("y-MM-d");
-        jPanel1.add(txtfechafin, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 270, 30));
+        jPanel1.add(txtfechafin, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 250, 30));
 
-        btnCancelar1.setBackground(new java.awt.Color(46, 49, 82));
-        btnCancelar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
-        btnCancelar1.setText("Volver");
-        btnCancelar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
-        btnCancelar1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
+        agregarr.setBackground(new java.awt.Color(46, 49, 82));
+        agregarr.setText("agregar mas");
+        agregarr.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        agregarr.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        agregarr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelar1ActionPerformed(evt);
+                agregarrActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 590, 140, -1));
+        jPanel1.add(agregarr, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 530, 140, 30));
 
         btnGuardar1.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
@@ -195,11 +195,11 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
                 btnGuardar1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 590, 140, -1));
+        jPanel1.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 540, 140, -1));
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel12.setText("Fecha inicio:");
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 150, -1, -1));
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 150, -1, -1));
 
         PanMaterialessss.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -214,7 +214,7 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel1.add(PanMaterialessss, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 250, 250, 300));
+        jPanel1.add(PanMaterialessss, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 220, 270, 300));
 
         PanHerramientas.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -222,14 +222,26 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         PanHerramientas.setLayout(PanHerramientasLayout);
         PanHerramientasLayout.setHorizontalGroup(
             PanHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 280, Short.MAX_VALUE)
+            .addGap(0, 250, Short.MAX_VALUE)
         );
         PanHerramientasLayout.setVerticalGroup(
             PanHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
-        jPanel1.add(PanHerramientas, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 280, 300));
+        jPanel1.add(PanHerramientas, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 250, 300));
+
+        btnCancelar2.setBackground(new java.awt.Color(46, 49, 82));
+        btnCancelar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
+        btnCancelar2.setText("Volver");
+        btnCancelar2.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        btnCancelar2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnCancelar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelar2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCancelar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 540, 140, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -239,7 +251,7 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -249,9 +261,9 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_BoxestadoActionPerformed
 
-    private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
+    private void agregarrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarrActionPerformed
         this.dispose();
-    }//GEN-LAST:event_btnCancelar1ActionPerformed
+    }//GEN-LAST:event_agregarrActionPerformed
 
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
         // 1. Validación de campos
@@ -311,6 +323,7 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
                         sql = "UPDATE etapa_produccion SET nombre_etapa = ?, fecha_inicio = ?, "
                                 + "fecha_fin = ?, estado = ? WHERE idetapa_produccion = ?";
                     }
+                    manejarEliminaciones(con, formMH, idEtapa);
 
                     try (PreparedStatement ps = con.prepareStatement(sql)) {
                         ps.setString(1, nombreEtapa);
@@ -369,6 +382,174 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtetapaActionPerformed
 
+    private void btnCancelar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCancelar2ActionPerformed
+    private void manejarEliminaciones(Connection con, FormularioMH formMH, int idEtapa) throws SQLException {
+        // 1. Para materiales a eliminar
+        for (String material : formMH.getMaterialesAEliminar()) {
+            // a. Obtener cantidad usada actual
+            String sqlSelect = "SELECT cantidad_usada FROM utilizado "
+                    + "WHERE etapa_produccion_idetapa_produccion = ? "
+                    + "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
+
+            try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
+                psSelect.setInt(1, idEtapa);
+                psSelect.setString(2, material);
+                ResultSet rs = psSelect.executeQuery();
+
+                if (rs.next()) {
+                    double cantidad = rs.getDouble("cantidad_usada");
+
+                    // b. Devolver al inventario
+                    String sqlUpdateInventario = "UPDATE inventario SET cantidad = cantidad + ? "
+                            + "WHERE nombre = ?";
+                    try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdateInventario)) {
+                        psUpdate.setDouble(1, cantidad);
+                        psUpdate.setString(2, material);
+                        psUpdate.executeUpdate();
+                    }
+
+                    // c. Eliminar de la tabla utilizado
+                    String sqlDelete = "DELETE FROM utilizado "
+                            + "WHERE etapa_produccion_idetapa_produccion = ? "
+                            + "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
+                    try (PreparedStatement psDelete = con.prepareStatement(sqlDelete)) {
+                        psDelete.setInt(1, idEtapa);
+                        psDelete.setString(2, material);
+                        psDelete.executeUpdate();
+                    }
+                }
+            }
+        }
+
+        // 2. Hacer lo mismo para herramientas
+        for (String herramienta : formMH.getHerramientasAEliminar()) {
+            // Misma lógica que para materiales
+            // a. Obtener cantidad usada actual
+            String sqlSelect = "SELECT cantidad_usada FROM utilizado "
+                    + "WHERE etapa_produccion_idetapa_produccion = ? "
+                    + "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
+
+            try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
+                psSelect.setInt(1, idEtapa);
+                psSelect.setString(2, herramienta);
+                ResultSet rs = psSelect.executeQuery();
+
+                if (rs.next()) {
+                    double cantidad = rs.getDouble("cantidad_usada");
+
+                    // b. Devolver al inventario
+                    String sqlUpdateInventario = "UPDATE inventario SET cantidad = cantidad + ? "
+                            + "WHERE nombre = ?";
+                    try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdateInventario)) {
+                        psUpdate.setDouble(1, cantidad);
+                        psUpdate.setString(2, herramienta);
+                        psUpdate.executeUpdate();
+                    }
+
+                    // c. Eliminar de la tabla utilizado
+                    String sqlDelete = "DELETE FROM utilizado "
+                            + "WHERE etapa_produccion_idetapa_produccion = ? "
+                            + "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
+                    try (PreparedStatement psDelete = con.prepareStatement(sqlDelete)) {
+                        psDelete.setInt(1, idEtapa);
+                        psDelete.setString(2, herramienta);
+                        psDelete.executeUpdate();
+                    }
+                }
+            }
+
+        }
+    }
+private void actualizarCantidadesUsadas(Connection con, FormularioMH formMH, int idEtapa) throws SQLException {
+    Map<String, String> cantidadesMateriales = formMH.getCantidadesMateriales();
+    Map<String, String> cantidadesHerramientas = formMH.getCantidadesHerramientas();
+    
+    // 1. Para materiales
+    for (Map.Entry<String, String> entry : cantidadesMateriales.entrySet()) {
+        String nombre = entry.getKey();
+        double cantidadNueva = Double.parseDouble(entry.getValue().replace(",", "."));
+        
+        // a. Obtener cantidad actual en utilizado
+        String sqlSelect = "SELECT cantidad_usada FROM utilizado " +
+                          "WHERE etapa_produccion_idetapa_produccion = ? " +
+                          "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
+        
+        try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
+            psSelect.setInt(1, idEtapa);
+            psSelect.setString(2, nombre);
+            ResultSet rs = psSelect.executeQuery();
+            
+            if (rs.next()) {
+                double cantidadActual = rs.getDouble("cantidad_usada");
+                double diferencia = cantidadActual - cantidadNueva;
+                
+                // b. Ajustar inventario si la cantidad cambió
+                if (diferencia != 0) {
+                    String sqlUpdateInventario = "UPDATE inventario SET cantidad = cantidad + ? " +
+                                               "WHERE nombre = ?";
+                    try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdateInventario)) {
+                        psUpdate.setDouble(1, diferencia);
+                        psUpdate.setString(2, nombre);
+                        psUpdate.executeUpdate();
+                    }
+                }
+            }
+            
+            // c. Actualizar cantidad en utilizado
+            String sqlUpdate = "UPDATE utilizado SET cantidad_usada = ? " +
+                             "WHERE etapa_produccion_idetapa_produccion = ? " +
+                             "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
+            try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
+                psUpdate.setDouble(1, cantidadNueva);
+                psUpdate.setInt(2, idEtapa);
+                psUpdate.setString(3, nombre);
+                psUpdate.executeUpdate();
+            }
+        }}
+    for (Map.Entry<String, String> entry : cantidadesHerramientas.entrySet()) {
+        String nombre = entry.getKey();
+        double cantidadNueva = Double.parseDouble(entry.getValue().replace(",", "."));
+        
+        // a. Obtener cantidad actual en utilizado
+        String sqlSelect = "SELECT cantidad_usada FROM utilizado " +
+                          "WHERE etapa_produccion_idetapa_produccion = ? " +
+                          "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
+        
+        try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
+            psSelect.setInt(1, idEtapa);
+            psSelect.setString(2, nombre);
+            ResultSet rs = psSelect.executeQuery();
+            
+            if (rs.next()) {
+                double cantidadActual = rs.getDouble("cantidad_usada");
+                double diferencia = cantidadActual - cantidadNueva;
+                
+                // b. Ajustar inventario si la cantidad cambió
+                if (diferencia != 0) {
+                    String sqlUpdateInventario = "UPDATE inventario SET cantidad = cantidad + ? " +
+                                               "WHERE nombre = ?";
+                    try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdateInventario)) {
+                        psUpdate.setDouble(1, diferencia);
+                        psUpdate.setString(2, nombre);
+                        psUpdate.executeUpdate();
+                    }
+                }
+            }
+            
+            // c. Actualizar cantidad en utilizado
+            String sqlUpdate = "UPDATE utilizado SET cantidad_usada = ? " +
+                             "WHERE etapa_produccion_idetapa_produccion = ? " +
+                             "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
+            try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
+                psUpdate.setDouble(1, cantidadNueva);
+                psUpdate.setInt(2, idEtapa);
+                psUpdate.setString(3, nombre);
+                psUpdate.executeUpdate();
+            }
+        }}
+}
     /**
      * @param args the command line arguments
      */
@@ -408,7 +589,8 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
     private RSMaterialComponent.RSComboBoxMaterial Boxestado;
     private javax.swing.JPanel PanHerramientas;
     private javax.swing.JPanel PanMaterialessss;
-    private rojeru_san.RSButtonRiple btnCancelar1;
+    private rojeru_san.RSButtonRiple agregarr;
+    private rojeru_san.RSButtonRiple btnCancelar2;
     private rojeru_san.RSButtonRiple btnGuardar1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
