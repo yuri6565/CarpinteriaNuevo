@@ -54,6 +54,8 @@ public class FormularioMH extends javax.swing.JDialog {
     private Map<String, Double> inventarioHerramientas = new HashMap<>();
     private List<String> materialesAEliminar = new ArrayList<>();
     private List<String> herramientasAEliminar = new ArrayList<>();
+    private Map<String, String> cantidadesHerramientasIniciales;
+    private Map<String, String> cantidadesMaterialesIniciales;
 
     public FormularioMH(Frame parent, boolean modal, List<String> materiales, List<String> herramientasLista) {
         super(parent, modal);
@@ -210,18 +212,15 @@ public class FormularioMH extends javax.swing.JDialog {
         formatter.setMinimumFractionDigits(2);
         formatter.setMaximumFractionDigits(2);
 
-        //System.out.println("Buscando material: " + nombreMaterial);
         String claveCompleta = inventarioMateriales.keySet().stream()
                 .filter(k -> k.startsWith(nombreMaterial + "|"))
                 .findFirst()
                 .orElse(nombreMaterial + "|unidad");
-        //System.out.println("Clave encontrada: " + claveCompleta);
 
         String[] partes = claveCompleta.split("\\|");
         String nombre = partes[0];
         String unidad = partes.length > 1 ? partes[1] : "unidad";
         double stockActual = inventarioMateriales.getOrDefault(claveCompleta, 0.0);
-        //System.out.println("Stock actual para material: " + nombre + " -> " + stockActual);
 
         JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
         fila.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -231,29 +230,14 @@ public class FormularioMH extends javax.swing.JDialog {
                 nombre, formatter.format(stockActual), unidad));
         label.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 
-        JTextField txtCantidad = new JTextField(formatter.format(0.0)); // Inicializar con '0,00'
+        JTextField txtCantidad = new JTextField(formatter.format(0.0));
         txtCantidad.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         txtCantidad.setForeground(Color.BLACK);
         txtCantidad.setPreferredSize(new Dimension(100, 30));
 
         ((javax.swing.text.AbstractDocument) txtCantidad.getDocument())
                 .setDocumentFilter(new NumberFilter(stockActual));
-        RSButtonRiple btnEliminar = new RSButtonRiple();
-        btnEliminar.setBackground(new Color(255, 85, 85));
-        btnEliminar.setText("X");
-        btnEliminar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnEliminar.setPreferredSize(new Dimension(30, 30));
-        btnEliminar.addActionListener(e -> {
-            panelMateriales.remove(fila);
-            panelMateriales.remove(Box.createVerticalStrut(5));
-            panelMateriales.revalidate();
-            panelMateriales.repaint();
-            materialesAEliminar.add(nombreMaterial); // Nueva lista para tracking
-        });
 
-        fila.add(label);
-        fila.add(txtCantidad);
-        fila.add(btnEliminar);
         fila.add(label);
         fila.add(txtCantidad);
         panelMateriales.add(fila);
@@ -298,13 +282,111 @@ public class FormularioMH extends javax.swing.JDialog {
 
         fila.add(label);
         fila.add(txtCantidad);
+
         panelHerramientas.add(fila);
         panelHerramientas.add(Box.createVerticalStrut(5));
         panelHerramientas.revalidate();
         panelHerramientas.repaint();
     }
-// DocumentFilter to restrict input to numbers and max quantity
+    // En FormularioMH.java
 
+    public void setCantidadesIniciales(Map<String, String> materiales, Map<String, String> herramientas) {
+        this.cantidadesMaterialesIniciales = materiales;
+        this.cantidadesHerramientasIniciales = herramientas;
+    }
+
+    private void actualizarCantidadesUsadas(Connection con, FormularioMH formMH, int idEtapa) throws SQLException {
+        Map<String, String> cantidadesMateriales = formMH.getCantidadesMateriales();
+        Map<String, String> cantidadesHerramientas = formMH.getCantidadesHerramientas();
+
+        // 1. Para materiales
+        for (Map.Entry<String, String> entry : cantidadesMateriales.entrySet()) {
+            String nombre = entry.getKey();
+            // Normalizar el valor reemplazando coma por punto
+            String cantidadStr = entry.getValue().replace(",", ".");
+            double cantidadNueva = Double.parseDouble(cantidadStr);
+
+            // a. Obtener cantidad actual en utilizado
+            String sqlSelect = "SELECT cantidad_usada FROM utilizado "
+                    + "WHERE etapa_produccion_idetapa_produccion = ? "
+                    + "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
+            try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
+                psSelect.setInt(1, idEtapa);
+                psSelect.setString(2, nombre);
+                ResultSet rs = psSelect.executeQuery();
+
+                if (rs.next()) {
+                    double cantidadActual = rs.getDouble("cantidad_usada");
+                    double diferencia = cantidadActual - cantidadNueva;
+
+                    // b. Ajustar inventario si la cantidad cambió
+                    if (diferencia != 0) {
+                        String sqlUpdateInventario = "UPDATE inventario SET cantidad = cantidad + ? "
+                                + "WHERE nombre = ?";
+                        try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdateInventario)) {
+                            psUpdate.setDouble(1, diferencia);
+                            psUpdate.setString(2, nombre);
+                            psUpdate.executeUpdate();
+                        }
+                    }
+                }
+
+                // c. Actualizar cantidad en utilizado
+                String sqlUpdate = "UPDATE utilizado SET cantidad_usada = ? "
+                        + "WHERE etapa_produccion_idetapa_produccion = ? "
+                        + "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
+                try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
+                    psUpdate.setDouble(1, cantidadNueva);
+                    psUpdate.setInt(2, idEtapa);
+                    psUpdate.setString(3, nombre);
+                    psUpdate.executeUpdate();
+                }
+            }
+        }
+
+        // 2. Para herramientas (código duplicado, puedes optimizarlo en un método separado si lo deseas)
+        for (Map.Entry<String, String> entry : cantidadesHerramientas.entrySet()) {
+            String nombre = entry.getKey();
+            String cantidadStr = entry.getValue().replace(",", ".");
+            double cantidadNueva = Double.parseDouble(cantidadStr);
+
+            String sqlSelect = "SELECT cantidad_usada FROM utilizado "
+                    + "WHERE etapa_produccion_idetapa_produccion = ? "
+                    + "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
+            try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
+                psSelect.setInt(1, idEtapa);
+                psSelect.setString(2, nombre);
+                ResultSet rs = psSelect.executeQuery();
+
+                if (rs.next()) {
+                    double cantidadActual = rs.getDouble("cantidad_usada");
+                    double diferencia = cantidadActual - cantidadNueva;
+
+                    if (diferencia != 0) {
+                        String sqlUpdateInventario = "UPDATE inventario SET cantidad = cantidad + ? "
+                                + "WHERE nombre = ?";
+                        try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdateInventario)) {
+                            psUpdate.setDouble(1, diferencia);
+                            psUpdate.setString(2, nombre);
+                            psUpdate.executeUpdate();
+                        }
+                    }
+                }
+
+                String sqlUpdate = "UPDATE utilizado SET cantidad_usada = ? "
+                        + "WHERE etapa_produccion_idetapa_produccion = ? "
+                        + "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
+                try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
+                    psUpdate.setDouble(1, cantidadNueva);
+                    psUpdate.setInt(2, idEtapa);
+                    psUpdate.setString(3, nombre);
+                    psUpdate.executeUpdate();
+                }
+            }
+        }
+    }
+
+// DocumentFilter to restrict input to numbers and max quantity
     public List<String> getMaterialesAEliminar() {
         return materialesAEliminar;
     }
@@ -530,6 +612,7 @@ public class FormularioMH extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
@@ -621,7 +704,51 @@ public class FormularioMH extends javax.swing.JDialog {
         }
 
     }//GEN-LAST:event_btnGuardar1ActionPerformed
+// En FormularioMH.java
 
+    public Map<String, Double> getMaterialesActualizados() {
+        Map<String, Double> materiales = new HashMap<>();
+        NumberFormat formatter = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
+
+        for (Component comp : panelMateriales.getComponents()) {
+            if (comp instanceof JPanel) {
+                JPanel fila = (JPanel) comp;
+                JLabel label = (JLabel) fila.getComponent(0);
+                JTextField txtCantidad = (JTextField) fila.getComponent(1);
+
+                String nombre = label.getText().split("<b>")[1].split("</b>")[0].trim();
+                try {
+                    double cantidad = formatter.parse(txtCantidad.getText()).doubleValue();
+                    materiales.put(nombre, cantidad);
+                } catch (ParseException e) {
+                    materiales.put(nombre, 0.0);
+                }
+            }
+        }
+        return materiales;
+    }
+
+    public Map<String, Double> getHerramientasActualizadas() {
+        Map<String, Double> herramientas = new HashMap<>();
+        NumberFormat formatter = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
+
+        for (Component comp : panelHerramientas.getComponents()) {
+            if (comp instanceof JPanel) {
+                JPanel fila = (JPanel) comp;
+                JLabel label = (JLabel) fila.getComponent(0);
+                JTextField txtCantidad = (JTextField) fila.getComponent(1);
+
+                String nombre = label.getText().split("<b>")[1].split("</b>")[0].trim();
+                try {
+                    double cantidad = formatter.parse(txtCantidad.getText()).doubleValue();
+                    herramientas.put(nombre, cantidad);
+                } catch (ParseException e) {
+                    herramientas.put(nombre, 0.0);
+                }
+            }
+        }
+        return herramientas;
+    }
     private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelar1ActionPerformed
