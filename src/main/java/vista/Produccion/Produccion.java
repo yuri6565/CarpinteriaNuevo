@@ -52,7 +52,7 @@ public final class Produccion extends javax.swing.JPanel {
         // Configura el modelo de tabla correctamente
         DefaultTableModel model = new DefaultTableModel(
                 new Object[][]{},
-                new String[]{"Codigo Pedido", "Nombre", "Cliente", "Fecha inicio", "Fecha Final", "Cantidad", "Estado", "Detalle", "Dimensiones"}
+                new String[]{"id produccion", "Codigo Pedido", "Nombre", "Cliente", "Fecha inicio", "Fecha Final", "Cantidad", "Estado", "Detalle", "Dimensiones"}
         ) {
 
             @Override
@@ -69,7 +69,8 @@ public final class Produccion extends javax.swing.JPanel {
         Tabla1.setModel(model);
 
         // Oculta las columnas adicionales después de establecer el modelo
-        Tabla1.removeColumn(Tabla1.getColumnModel().getColumn(8)); // Oculta Dimensiones
+        Tabla1.removeColumn(Tabla1.getColumnModel().getColumn(9)); // Oculta Dimensiones
+        Tabla1.removeColumn(Tabla1.getColumnModel().getColumn(0)); // Oculta Dimensiones
 
         // Configura el renderizador especial para la columna de estado (sobrescribe el general)
         Tabla1.getColumnModel().getColumn(6).setCellRenderer(new EstadoTableCellRenderer());
@@ -754,6 +755,7 @@ public final class Produccion extends javax.swing.JPanel {
                 while (rs.next()) {
                     model.addRow(new Object[]{
                         rs.getInt("id_produccion"), // Mostrar id_produccion en la columna 0
+                        rs.getInt("id_pedido"), // Mostrar id_produccion en la columna 0
                         rs.getString("descripcion"),
                         rs.getString("cliente") != null ? rs.getString("cliente") : "Sin cliente",
                         sdf.format(rs.getDate("fecha_inicio")),

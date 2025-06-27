@@ -37,6 +37,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import modelo.Conexion;
+import rojeru_san.RSButtonRiple;
 
 /**
  *
@@ -51,6 +52,8 @@ public class FormularioMH extends javax.swing.JDialog {
     private boolean confirmado = false;
     private Map<String, Double> inventarioMateriales = new HashMap<>();
     private Map<String, Double> inventarioHerramientas = new HashMap<>();
+    private List<String> materialesAEliminar = new ArrayList<>();
+    private List<String> herramientasAEliminar = new ArrayList<>();
 
     public FormularioMH(Frame parent, boolean modal, List<String> materiales, List<String> herramientasLista) {
         super(parent, modal);
@@ -235,7 +238,22 @@ public class FormularioMH extends javax.swing.JDialog {
 
         ((javax.swing.text.AbstractDocument) txtCantidad.getDocument())
                 .setDocumentFilter(new NumberFilter(stockActual));
+        RSButtonRiple btnEliminar = new RSButtonRiple();
+        btnEliminar.setBackground(new Color(255, 85, 85));
+        btnEliminar.setText("X");
+        btnEliminar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnEliminar.setPreferredSize(new Dimension(30, 30));
+        btnEliminar.addActionListener(e -> {
+            panelMateriales.remove(fila);
+            panelMateriales.remove(Box.createVerticalStrut(5));
+            panelMateriales.revalidate();
+            panelMateriales.repaint();
+            materialesAEliminar.add(nombreMaterial); // Nueva lista para tracking
+        });
 
+        fila.add(label);
+        fila.add(txtCantidad);
+        fila.add(btnEliminar);
         fila.add(label);
         fila.add(txtCantidad);
         panelMateriales.add(fila);
@@ -286,6 +304,14 @@ public class FormularioMH extends javax.swing.JDialog {
         panelHerramientas.repaint();
     }
 // DocumentFilter to restrict input to numbers and max quantity
+
+    public List<String> getMaterialesAEliminar() {
+        return materialesAEliminar;
+    }
+
+    public List<String> getHerramientasAEliminar() {
+        return herramientasAEliminar;
+    }
 
     private class NumberFilter extends DocumentFilter {
 
