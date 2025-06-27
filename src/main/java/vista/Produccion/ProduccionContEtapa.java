@@ -571,97 +571,163 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnElimiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimiActionPerformed
-// 1. Obtener filas seleccionadas
-        int[] selectedRows = Tabla1.getSelectedRows();
-
-        // 2. Validar si hay filas seleccionadas
-        if (selectedRows.length == 0) {
-            JOptionPane.showMessageDialog(this,
-                    "Por favor seleccione al menos una fila para eliminar",
-                    "Advertencia",
-                    JOptionPane.WARNING_MESSAGE);
+        int selectedRow = Tabla1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una etapa para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // 3. Mostrar confirmación
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
-                "Confirmar eliminación",
-                JOptionPane.YES_NO_OPTION);
+        int modelRow = Tabla1.convertRowIndexToModel(selectedRow);
+        DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+        int idEtapa = obtenerIdEtapa(model, modelRow);
 
-        // 4. Si el usuario no confirma, salir
-        if (confirm != JOptionPane.YES_OPTION) {
-            return;
+        if (idEtapa == -1) {
+            return; // El método obtenerIdEtapa ya muestra un mensaje de error
         }
 
-        // 5. Eliminar registros
-        try (Connection con = new Conexion().getConnection()) {
-            String sql = "DELETE FROM etapa_produccion WHERE idetapa_produccion  = ?";
-            DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-
-            // Eliminar en orden inverso para evitar problemas con los índices
-            for (int i = selectedRows.length - 1; i >= 0; i--) {
-                int row = selectedRows[i];
-                int id = (int) model.getValueAt(row, 0); // ID está en la columna 0
-
-                try (PreparedStatement ps = con.prepareStatement(sql)) {
-                    ps.setInt(1, id);
-                    ps.executeUpdate();
-                    model.removeRow(row); // Eliminar de la tabla visual
-                }
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar esta etapa? Esto devolverá los materiales al inventario.", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (eliminarEtapa(idEtapa)) {
+                JOptionPane.showMessageDialog(this, "Etapa eliminada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                cargarTablaEtapa(); // Refrescar la tabla
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al eliminar la etapa.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-
-            JOptionPane.showMessageDialog(this,
-                    "Registros eliminados correctamente",
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al eliminar: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
         }
-
     }//GEN-LAST:event_btnElimiActionPerformed
 
     private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseClicked
-    try {
-        int column = Tabla1.columnAtPoint(evt.getPoint());
-        int viewRow = Tabla1.rowAtPoint(evt.getPoint());
+        try {
+            int column = Tabla1.columnAtPoint(evt.getPoint());
+            int viewRow = Tabla1.rowAtPoint(evt.getPoint());
 
-        if (viewRow < 0 || column < 0) return;
+            if (viewRow < 0 || column < 0) {
+                return;
+            }
 
-        int modelRow = Tabla1.convertRowIndexToModel(viewRow);
-        DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-        int idEtapa = (int) model.getValueAt(modelRow, 0); // ID está en la columna 0
+            int modelRow = Tabla1.convertRowIndexToModel(viewRow);
+            DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+            int idEtapa = (int) model.getValueAt(modelRow, 0); // ID está en la columna 0
 
-        // Si hicieron clic en la columna de acciones (7)
-        if (column == 7) {
-            // Crear menú emergente
-            JPopupMenu popup = new JPopupMenu();
-            
-            JMenuItem verItem = new JMenuItem("Ver Detalles");
-            verItem.addActionListener(e -> mostrarDetalleEtapa(model, modelRow, idEtapa));
-            
-            JMenuItem editarItem = new JMenuItem("Editar");
-            editarItem.addActionListener(e -> editarEtapa(model, modelRow, idEtapa));
-            
-            popup.add(verItem);
-            popup.add(editarItem);
-            
-            // Mostrar el menú donde hicieron clic
-            popup.show(Tabla1, evt.getX(), evt.getY());
+            // Si hicieron clic en la columna de acciones (7)
+            if (column == 7) {
+                // Crear menú emergente
+                JPopupMenu popup = new JPopupMenu();
+
+                JMenuItem verItem = new JMenuItem("Ver Detalles");
+                verItem.addActionListener(e -> mostrarDetalleEtapa(model, modelRow, idEtapa));
+
+                JMenuItem editarItem = new JMenuItem("Editar");
+                editarItem.addActionListener(e -> editarEtapa(model, modelRow, idEtapa));
+
+                popup.add(verItem);
+                popup.add(editarItem);
+
+                // Mostrar el menú donde hicieron clic
+                popup.show(Tabla1, evt.getX(), evt.getY());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al procesar clic: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this,
-                "Error al procesar clic: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    
-}
     }//GEN-LAST:event_Tabla1MouseClicked
+    public boolean eliminarEtapa(int idEtapa) {
+    Connection con = null;
+    try {
+        con = Conexion.getConnection();
+        con.setAutoCommit(false);
 
+        // 1. Obtener todos los materiales/herramientas utilizados
+        String sqlSelect = "SELECT i.id_inventario, ut.cantidad_usada " +
+                         "FROM utilizado ut " +
+                         "JOIN inventario i ON ut.inventario_id_inventario = i.id_inventario " +
+                         "WHERE ut.etapa_produccion_idetapa_produccion = ?";
+        
+        // 2. Actualizar inventario (convertir formato decimal)
+        String sqlUpdateInventario = "UPDATE inventario SET cantidad = cantidad + ? " +
+                                   "WHERE id_inventario = ?";
+        
+        // 3. Eliminar asignaciones
+        String sqlDeleteAsignada = "DELETE FROM asignada WHERE etapa_produccion_idetapa_produccion = ?";
+        
+        // 4. Eliminar registros de utilizado
+        String sqlDeleteUtilizado = "DELETE FROM utilizado WHERE etapa_produccion_idetapa_produccion = ?";
+        
+        // 5. Eliminar la etapa
+        String sqlDeleteEtapa = "DELETE FROM etapa_produccion WHERE idetapa_produccion = ?";
+
+        // Paso 1: Obtener items utilizados
+        try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
+            psSelect.setInt(1, idEtapa);
+            ResultSet rs = psSelect.executeQuery();
+            
+            // Paso 2: Actualizar inventario
+            try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdateInventario)) {
+                while (rs.next()) {
+                    int idInventario = rs.getInt("id_inventario");
+                    String cantidadStr = rs.getString("cantidad_usada");
+                    
+                    // Convertir formato europeo (5,00) a formato SQL (5.00)
+                    double cantidad = 0.0;
+                    try {
+                        cantidad = Double.parseDouble(cantidadStr.replace(",", "."));
+                    } catch (NumberFormatException e) {
+                        System.err.println("Formato numérico inválido: " + cantidadStr);
+                        continue;
+                    }
+                    
+                    psUpdate.setDouble(1, cantidad);
+                    psUpdate.setInt(2, idInventario);
+                    psUpdate.addBatch();
+                }
+                psUpdate.executeBatch();
+            }
+        }
+
+        // Pasos 3-5: Eliminar registros relacionados
+        try (PreparedStatement psDeleteAsignada = con.prepareStatement(sqlDeleteAsignada)) {
+            psDeleteAsignada.setInt(1, idEtapa);
+            psDeleteAsignada.executeUpdate();
+        }
+
+        try (PreparedStatement psDeleteUtilizado = con.prepareStatement(sqlDeleteUtilizado)) {
+            psDeleteUtilizado.setInt(1, idEtapa);
+            psDeleteUtilizado.executeUpdate();
+        }
+
+        try (PreparedStatement psDeleteEtapa = con.prepareStatement(sqlDeleteEtapa)) {
+            psDeleteEtapa.setInt(1, idEtapa);
+            int affectedRows = psDeleteEtapa.executeUpdate();
+            
+            if (affectedRows > 0) {
+                con.commit();
+                return true;
+            }
+        }
+    } catch (SQLException e) {
+        try {
+            if (con != null) con.rollback();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        JOptionPane.showMessageDialog(this, 
+            "Error al eliminar: " + e.getMessage(), 
+            "Error", JOptionPane.ERROR_MESSAGE);
+    } finally {
+        if (con != null) {
+            try {
+                con.setAutoCommit(true);
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    return false;
+}
     private void editarEtapa(DefaultTableModel model, int modelRow, int idEtapa) {
         try {
             // Obtener datos de la fila
@@ -744,83 +810,86 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     public void cargarTablaEtapa() {
-    // 1. Crear modelo de tabla con columnas visibles
-    DefaultTableModel model = new DefaultTableModel(
-        new Object[][]{},
-        new String[]{"ID", "Nombre", "Cantidad", "Fecha inicio", "Fecha fin", "Estado", "Asignado", "Acciones"}
-    ) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false; // Hacer todas las celdas no editables
-        }
-        
-        @Override
-        public Class<?> getColumnClass(int column) {
-            // Especificar tipos de datos para cada columna
-            switch (column) {
-                case 0: return Integer.class; // ID
-                case 2: return Integer.class; // Cantidad
-                default: return String.class;
+        // 1. Crear modelo de tabla con columnas visibles
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"ID", "Nombre", "Cantidad", "Fecha inicio", "Fecha fin", "Estado", "Asignado", "Acciones"}
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Hacer todas las celdas no editables
             }
-        }
-    };
 
-    // 2. Asignar el modelo a la tabla
-    Tabla1.setModel(model);
-
-    // 3. Configurar ancho de columnas
-    Tabla1.getColumnModel().getColumn(0).setPreferredWidth(50);  // ID
-    Tabla1.getColumnModel().getColumn(6).setPreferredWidth(100); // Asignado
-    Tabla1.getColumnModel().getColumn(7).setPreferredWidth(120); // Acciones
-
-    // 4. Conexión y consulta a la base de datos
-    try (Connection con = Conexion.getConnection()) {
-        String sql = "SELECT ep.idetapa_produccion, ep.nombre_etapa, ep.cantidad, " +
-                    "ep.fecha_inicio, ep.fecha_fin, ep.estado, " +
-                    "u.nombre AS asignado " +
-                    "FROM etapa_produccion ep " +
-                    "LEFT JOIN asignada a ON ep.idetapa_produccion = a.etapa_produccion_idetapa_produccion " +
-                    "LEFT JOIN usuario u ON a.usuario_id_usuario = u.id_usuario " +
-                    "WHERE ep.produccion_id_produccion = ? " +
-                    "ORDER BY ep.fecha_inicio ASC";
-        
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, this.idProduccion);
-            ResultSet rs = ps.executeQuery();
-
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-            // 5. Poblar la tabla con los resultados
-            while (rs.next()) {
-                model.addRow(new Object[]{
-                    rs.getInt("idetapa_produccion"),
-                    rs.getString("nombre_etapa"),
-                    rs.getInt("cantidad"),
-                    sdf.format(rs.getDate("fecha_inicio")),
-                    rs.getDate("fecha_fin") != null ? sdf.format(rs.getDate("fecha_fin")) : "En proceso",
-                    rs.getString("estado"),
-                    rs.getString("asignado") != null ? rs.getString("asignado") : "No asignado",
-                    "Ver/Editar" // Columna combinada para acciones
-                });
+            @Override
+            public Class<?> getColumnClass(int column) {
+                // Especificar tipos de datos para cada columna
+                switch (column) {
+                    case 0:
+                        return Integer.class; // ID
+                    case 2:
+                        return Integer.class; // Cantidad
+                    default:
+                        return String.class;
+                }
             }
-            
-            System.out.println("Registros cargados: " + model.getRowCount());
+        };
+
+        // 2. Asignar el modelo a la tabla
+        Tabla1.setModel(model);
+
+        // 3. Configurar ancho de columnas
+        Tabla1.getColumnModel().getColumn(0).setPreferredWidth(50);  // ID
+        Tabla1.getColumnModel().getColumn(6).setPreferredWidth(100); // Asignado
+        Tabla1.getColumnModel().getColumn(7).setPreferredWidth(120); // Acciones
+
+        // 4. Conexión y consulta a la base de datos
+        try (Connection con = Conexion.getConnection()) {
+            String sql = "SELECT ep.idetapa_produccion, ep.nombre_etapa, ep.cantidad, "
+                    + "ep.fecha_inicio, ep.fecha_fin, ep.estado, "
+                    + "u.nombre AS asignado "
+                    + "FROM etapa_produccion ep "
+                    + "LEFT JOIN asignada a ON ep.idetapa_produccion = a.etapa_produccion_idetapa_produccion "
+                    + "LEFT JOIN usuario u ON a.usuario_id_usuario = u.id_usuario "
+                    + "WHERE ep.produccion_id_produccion = ? "
+                    + "ORDER BY ep.fecha_inicio ASC";
+
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setInt(1, this.idProduccion);
+                ResultSet rs = ps.executeQuery();
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+                // 5. Poblar la tabla con los resultados
+                while (rs.next()) {
+                    model.addRow(new Object[]{
+                        rs.getInt("idetapa_produccion"),
+                        rs.getString("nombre_etapa"),
+                        rs.getInt("cantidad"),
+                        sdf.format(rs.getDate("fecha_inicio")),
+                        rs.getDate("fecha_fin") != null ? sdf.format(rs.getDate("fecha_fin")) : "En proceso",
+                        rs.getString("estado"),
+                        rs.getString("asignado") != null ? rs.getString("asignado") : "No asignado",
+                        "Ver/Editar" // Columna combinada para acciones
+                    });
+                }
+
+                System.out.println("Registros cargados: " + model.getRowCount());
+            }
+        } catch (SQLException e) {
+            System.err.println("Error en cargarTablaEtapa: " + e.getMessage());
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar datos: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (SQLException e) {
-        System.err.println("Error en cargarTablaEtapa: " + e.getMessage());
-        JOptionPane.showMessageDialog(this,
-            "Error al cargar datos: " + e.getMessage(),
-            "Error", JOptionPane.ERROR_MESSAGE);
+
+        // 6. Configurar renderizadores DESPUÉS de cargar los datos
+        Tabla1.getColumnModel().getColumn(5).setCellRenderer(new EstadoTableCellRenderer());
+        Tabla1.getColumnModel().getColumn(7).setCellRenderer(new AccionesTableCellRenderer());
+
+        // 7. Forzar actualización visual
+        Tabla1.revalidate();
+        Tabla1.repaint();
     }
-
-    // 6. Configurar renderizadores DESPUÉS de cargar los datos
-    Tabla1.getColumnModel().getColumn(5).setCellRenderer(new EstadoTableCellRenderer());
-    Tabla1.getColumnModel().getColumn(7).setCellRenderer(new AccionesTableCellRenderer());
-
-    // 7. Forzar actualización visual
-    Tabla1.revalidate();
-    Tabla1.repaint();
-}
 
     private void filtrarTabla() {
         String textoBusqueda = txtbuscar.getText().trim();
@@ -834,7 +903,6 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
         }
 
         // Expresión regular para detectar si son solo números (1-2 dígitos)
-        
         if (textoBusqueda.matches("\\d{1}")) {
             // Buscar en ID (columna 0) y fechas (columnas 1 y 2)
             List<RowFilter<Object, Object>> filters = new ArrayList<>();
@@ -856,47 +924,48 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
             tr.setRowFilter(RowFilter.regexFilter("(?i)" + textoBusqueda));
         }
     }
-private class AccionesTableCellRenderer extends DefaultTableCellRenderer {
-    private final Font fontNormal = new Font("Tahoma", Font.PLAIN, 12);
-    private final Font fontBold = new Font("Tahoma", Font.BOLD, 12);
 
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row, int column) {
+    private class AccionesTableCellRenderer extends DefaultTableCellRenderer {
 
-        boolean oscuro = TemaManager.getInstance().isOscuro();
-        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        private final Font fontNormal = new Font("Tahoma", Font.PLAIN, 12);
+        private final Font fontBold = new Font("Tahoma", Font.BOLD, 12);
 
-        // Configuración basada en el tema
-        if (oscuro) {
-            if (isSelected) {
-                c.setBackground(new Color(67, 71, 120));
-                c.setForeground(Color.WHITE);
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+
+            boolean oscuro = TemaManager.getInstance().isOscuro();
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            // Configuración basada en el tema
+            if (oscuro) {
+                if (isSelected) {
+                    c.setBackground(new Color(67, 71, 120));
+                    c.setForeground(Color.WHITE);
+                } else {
+                    c.setBackground(row % 2 == 0 ? new Color(37, 37, 52) : new Color(30, 30, 45));
+                    c.setForeground(Color.WHITE);
+                }
             } else {
-                c.setBackground(row % 2 == 0 ? new Color(37, 37, 52) : new Color(30, 30, 45));
-                c.setForeground(Color.WHITE);
+                if (isSelected) {
+                    c.setBackground(table.getSelectionBackground());
+                    c.setForeground(Color.WHITE);
+                } else {
+                    c.setBackground(row % 2 == 0 ? new Color(242, 242, 242) : Color.WHITE);
+                    c.setForeground(Color.BLACK);
+                }
             }
-        } else {
-            if (isSelected) {
-                c.setBackground(table.getSelectionBackground());
-                c.setForeground(Color.WHITE);
-            } else {
-                c.setBackground(row % 2 == 0 ? new Color(242, 242, 242) : Color.WHITE);
-                c.setForeground(Color.BLACK);
-            }
+
+            setHorizontalAlignment(CENTER);
+            setText("Ver/Editar");
+            setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(oscuro ? new Color(100, 100, 100) : new Color(200, 200, 200), 1),
+                    BorderFactory.createEmptyBorder(0, 5, 0, 5)
+            ));
+            setFont(isSelected ? fontBold : fontNormal);
+
+            return c;
         }
-        
-        setHorizontalAlignment(CENTER);
-        setText("Ver/Editar");
-        setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(oscuro ? new Color(100, 100, 100) : new Color(200, 200, 200), 1),
-            BorderFactory.createEmptyBorder(0, 5, 0, 5)
-        ));
-        setFont(isSelected ? fontBold : fontNormal);
-
-        return c;
     }
-}
-
 
 }
