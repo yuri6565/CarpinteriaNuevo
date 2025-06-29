@@ -471,56 +471,66 @@ public final class Produccion extends javax.swing.JPanel {
     }//GEN-LAST:event_txtbuscarActionPerformed
 
     private void btnElimiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimiActionPerformed
-// 1. Obtener filas seleccionadas
         int[] selectedRows = Tabla1.getSelectedRows();
 
-        // 2. Validar si hay filas seleccionadas
         if (selectedRows.length == 0) {
-            JOptionPane.showMessageDialog(this,
-                    "Por favor seleccione al menos una fila para eliminar",
+            new Error_eliminar(
+                    (Frame) SwingUtilities.getWindowAncestor(this),
+                    true,
                     "Advertencia",
-                    JOptionPane.WARNING_MESSAGE);
+                    "Por favor seleccione al menos una fila para eliminar",
+                    "/warning-triangle-sign-free-vector-removebg-preview.png"
+            ).setVisible(true);
             return;
         }
 
-        // 3. Mostrar confirmación
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
+        // Usar tu diálogo personalizado en lugar de JOptionPane
+        alertaEliminar confirmDialog = new alertaEliminar(
+                (Frame) SwingUtilities.getWindowAncestor(this),
+                true,
                 "Confirmar eliminación",
-                JOptionPane.YES_NO_OPTION);
+                "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
+                "/warning-triangle-sign-free-vector-removebg-preview.png"
+        );
 
-        // 4. Si el usuario no confirma, salir
-        if (confirm != JOptionPane.YES_OPTION) {
-            return;
+        confirmDialog.setVisible(true);
+
+        if (!confirmDialog.confirmarEliminar()) {
+            return; // Si el usuario cancela, no hacer nada
         }
 
-        // 5. Eliminar registros
+        // Resto del código de eliminación...
         try (Connection con = new Conexion().getConnection()) {
             String sql = "DELETE FROM produccion WHERE id_produccion = ?";
             DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
 
-            // Eliminar en orden inverso para evitar problemas con los índices
             for (int i = selectedRows.length - 1; i >= 0; i--) {
                 int row = selectedRows[i];
-                int id = (int) model.getValueAt(row, 0); // ID está en la columna 0
+                int id = (int) model.getValueAt(row, 0);
 
                 try (PreparedStatement ps = con.prepareStatement(sql)) {
                     ps.setInt(1, id);
                     ps.executeUpdate();
-                    model.removeRow(row); // Eliminar de la tabla visual
+                    model.removeRow(row);
                 }
             }
 
-            JOptionPane.showMessageDialog(this,
-                    "Registros eliminados correctamente",
+            new alertaEliminar(
+                    (Frame) SwingUtilities.getWindowAncestor(this),
+                    true,
                     "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
+                    "Registros eliminados correctamente",
+                    "/success-icon.png" // Cambia por tu icono de éxito
+            ).setVisible(true);
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al eliminar: " + e.getMessage(),
+            new alertaEliminar(
+                    (Frame) SwingUtilities.getWindowAncestor(this),
+                    true,
                     "Error",
-                    JOptionPane.ERROR_MESSAGE);
+                    "Error al eliminar: " + e.getMessage(),
+                    "/error-icon.png" // Cambia por tu icono de error
+            ).setVisible(true);
         }
     }//GEN-LAST:event_btnElimiActionPerformed
 

@@ -4,31 +4,32 @@
  */
 package vista.Produccion;
 
+import vista.alertas.*;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
+import javax.swing.JDialog;
 
 /**
  *
  * @author EQUIPO
  */
-public class Error_fecha extends javax.swing.JDialog {
+public class alertaEliminar extends JDialog {
 
-    private Object customIconPath;
+    private boolean confirmed = false;
 
-    /**
-     * Creates new form Error_fecha
-     */
-    public Error_fecha(Frame parent, boolean modal, String error, String la_fecha_final_no_puede_ser_anterior_a_la) {
+    public alertaEliminar(Frame parent, boolean modal, String error, String todos_los_campos_son_obligatorios, String customIconPath) {
         super(parent, modal);
-        if (!isVisible()) { 
+        if (!isVisible()) { // Prevent multiple instances
             initComponents();
             System.out.println("Setting error: " + error);
-            
-            if (customIconPath != null && getClass().getResource((String) customIconPath) != null) {
-                jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource((String) customIconPath)));
+            System.out.println("Setting message: " + todos_los_campos_son_obligatorios);
+            jLabel1.setText(error != null ? error : "¿Estás seguro?");
+            //jLabel2.setText(todos_los_campos_son_obligatorios != null ? todos_los_campos_son_obligatorios : "¿Está seguro que desea eliminar este producto?");
+            if (customIconPath != null && getClass().getResource(customIconPath) != null) {
+                rSLabelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource(customIconPath)));
             } else {
-                jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/warning-triangle-sign-free-vector-removebg-preview.png")));
+                rSLabelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/warning-triangle-sign-free-vector-removebg-preview.png")));
             }
             setOpacity(0.0f);
             setBackground(new java.awt.Color(0, 0, 0, 0));
@@ -60,25 +61,26 @@ public class Error_fecha extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jEImagePanel1 = new LIB.JEImagePanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        rSLabelImage1 = new rojerusan.RSLabelImage();
         btnCancelar = new rojeru_san.RSButtonRiple();
         jLabel2 = new javax.swing.JLabel();
+        btnCancelar1 = new rojeru_san.RSButtonRiple();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
+        setResizable(false);
 
-        jEImagePanel1.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
-        jEImagePanel1.setMinimumSize(new java.awt.Dimension(510, 221));
+        jEImagePanel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/fondotransparente.png"))); // NOI18N
         jEImagePanel1.setPreferredSize(new java.awt.Dimension(500, 192));
         jEImagePanel1.setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(510, 250));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(46, 49, 82));
@@ -86,19 +88,16 @@ public class Error_fecha extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Century751 BT", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Alerta");
+        jLabel1.setText("¿Estás seguro?");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Century751 BT", 1, 36)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/crisis.png"))); // NOI18N
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+        rSLabelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/warning-triangle-sign-free-vector-removebg-preview.png"))); // NOI18N
+        jPanel2.add(rSLabelImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 80, 70));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 90));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 510, 100));
 
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
-        btnCancelar.setText("Volver");
+        btnCancelar.setText("No");
         btnCancelar.setColorHover(new java.awt.Color(102, 0, 0));
         btnCancelar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
         btnCancelar.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
@@ -107,39 +106,50 @@ public class Error_fecha extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 130, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 190, 130, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("La fecha final no puede ser anterior a la inicial");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, -1, -1));
+        jLabel2.setText("¿Está seguro que desea eliminar esta/s Produccion/es?");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, -1, -1));
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipady = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(127, 167, 154, 197);
-        jEImagePanel1.add(jPanel1, gridBagConstraints);
+        btnCancelar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnCancelar1.setText("Si");
+        btnCancelar1.setColorHover(new java.awt.Color(102, 0, 0));
+        btnCancelar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        btnCancelar1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelar1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, 130, -1));
+
+        jEImagePanel1.add(jPanel1, new java.awt.GridBagConstraints());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jEImagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 854, Short.MAX_VALUE)
+            .addComponent(jEImagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jEImagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+            .addComponent(jEImagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        confirmed = false;
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
+        // TODO add your handling code here:
+        confirmed = true; // Confirmado
+        this.dispose();
+    }//GEN-LAST:event_btnCancelar1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -153,23 +163,29 @@ public class Error_fecha extends javax.swing.JDialog {
                 }
             }
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(alertaEliminarEtapa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(alertaEliminar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
         java.awt.EventQueue.invokeLater(() -> {
-            alertaEliminarEtapa dialog = new alertaEliminarEtapa(new javax.swing.JFrame(), true, "¿Estás seguro?", "¿Está seguro que desea eliminar este producto?", "/warning-triangle-sign-free-vector-removebg-preview.png");
+            alertaEliminar dialog = new alertaEliminar(new javax.swing.JFrame(), true, "¿Estás seguro?", "¿Está seguro que desea eliminar este producto?", "/warning-triangle-sign-free-vector-removebg-preview.png");
             dialog.setVisible(true);
         });
     }
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
+    private rojeru_san.RSButtonRiple btnCancelar1;
     private LIB.JEImagePanel jEImagePanel1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private rojerusan.RSLabelImage rSLabelImage1;
     // End of variables declaration//GEN-END:variables
+
+    public boolean confirmarEliminar() {
+        setModal(true); // Ensure modal behavior
+        setVisible(true);
+        return confirmed;
+    }
+
 }

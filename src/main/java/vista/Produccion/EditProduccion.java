@@ -196,7 +196,7 @@ public class EditProduccion extends javax.swing.JDialog {
                     (Frame) this.getParent(),
                     true,
                     "Éxito",
-                    "Datos actualizados correctamente"
+                    "Datos actualizados correctamente", "/success-icon.png"
             ).setVisible(true);
         }
 
