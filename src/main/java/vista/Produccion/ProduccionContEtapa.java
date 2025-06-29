@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -573,7 +575,13 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
     private void btnElimiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimiActionPerformed
         int selectedRow = Tabla1.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione una etapa para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
+            new Error_eliminar(
+                    (Frame) SwingUtilities.getWindowAncestor(this),
+                    true,
+                    "Error",
+                    "Seleccione una etapa para eliminar",
+                    "/warning-triangle-sign-free-vector-removebg-preview.png"
+            ).setVisible(true);
             return;
         }
 
@@ -582,17 +590,41 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
         int idEtapa = obtenerIdEtapa(model, modelRow);
 
         if (idEtapa == -1) {
-            return; // El método obtenerIdEtapa ya muestra un mensaje de error
+            return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar esta etapa? Esto devolverá los materiales al inventario.", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-        if (confirm == JOptionPane.YES_OPTION) {
-            if (eliminarEtapa(idEtapa)) {
-                JOptionPane.showMessageDialog(this, "Etapa eliminada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                cargarTablaEtapa(); // Refrescar la tabla
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al eliminar la etapa.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+        // Usar tu diálogo personalizado
+        alertaEliminarEtapa confirmDialog = new alertaEliminarEtapa(
+                (Frame) SwingUtilities.getWindowAncestor(this),
+                true,
+                "Confirmar eliminación",
+                "¿Está seguro de eliminar esta etapa? Esto devolverá los materiales al inventario.",
+                "/warning-triangle-sign-free-vector-removebg-preview.png"
+        );
+
+        confirmDialog.setVisible(true);
+
+        if (!confirmDialog.confirmarEliminar()) {
+            return;
+        }
+
+        if (eliminarEtapa(idEtapa)) {
+            new DatosActualizados(
+                    (Frame) SwingUtilities.getWindowAncestor(this),
+                    true,
+                    "Éxito",
+                    "Etapa eliminada correctamente",
+                    "/success-icon.png"
+            ).setVisible(true);
+            cargarTablaEtapa();
+        } else {
+            new DatosActualizados(
+                    (Frame) SwingUtilities.getWindowAncestor(this),
+                    true,
+                    "Error",
+                    "Error al eliminar la etapa",
+                    "/error-icon.png"
+            ).setVisible(true);
         }
     }//GEN-LAST:event_btnElimiActionPerformed
 
@@ -635,99 +667,127 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_Tabla1MouseClicked
     public boolean eliminarEtapa(int idEtapa) {
-    Connection con = null;
-    try {
-        con = Conexion.getConnection();
-        con.setAutoCommit(false);
+        Connection con = null;
+        try {
+            con = Conexion.getConnection();
+            con.setAutoCommit(false); // Iniciar transacción
 
-        // 1. Obtener todos los materiales/herramientas utilizados
-        String sqlSelect = "SELECT i.id_inventario, ut.cantidad_usada " +
-                         "FROM utilizado ut " +
-                         "JOIN inventario i ON ut.inventario_id_inventario = i.id_inventario " +
-                         "WHERE ut.etapa_produccion_idetapa_produccion = ?";
-        
-        // 2. Actualizar inventario (convertir formato decimal)
-        String sqlUpdateInventario = "UPDATE inventario SET cantidad = cantidad + ? " +
-                                   "WHERE id_inventario = ?";
-        
-        // 3. Eliminar asignaciones
-        String sqlDeleteAsignada = "DELETE FROM asignada WHERE etapa_produccion_idetapa_produccion = ?";
-        
-        // 4. Eliminar registros de utilizado
-        String sqlDeleteUtilizado = "DELETE FROM utilizado WHERE etapa_produccion_idetapa_produccion = ?";
-        
-        // 5. Eliminar la etapa
-        String sqlDeleteEtapa = "DELETE FROM etapa_produccion WHERE idetapa_produccion = ?";
+            // 1. Obtener todos los materiales/herramientas utilizados en esta etapa
+            String sqlSelect = "SELECT i.id_inventario, ut.cantidad_usada, i.cantidad as cantidad_actual "
+                    + "FROM utilizado ut "
+                    + "JOIN inventario i ON ut.inventario_id_inventario = i.id_inventario "
+                    + "WHERE ut.etapa_produccion_idetapa_produccion = ?";
 
-        // Paso 1: Obtener items utilizados
-        try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
-            psSelect.setInt(1, idEtapa);
-            ResultSet rs = psSelect.executeQuery();
-            
-            // Paso 2: Actualizar inventario
-            try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdateInventario)) {
+            // 2. Actualizar inventario (sumar las cantidades usadas)
+            String sqlUpdateInventario = "UPDATE inventario SET cantidad = ? "
+                    + "WHERE id_inventario = ?";
+
+            // 3. Eliminar asignaciones de empleados
+            String sqlDeleteAsignada = "DELETE FROM asignada WHERE etapa_produccion_idetapa_produccion = ?";
+
+            // 4. Eliminar registros de materiales/herramientas utilizados
+            String sqlDeleteUtilizado = "DELETE FROM utilizado WHERE etapa_produccion_idetapa_produccion = ?";
+
+            // 5. Eliminar la etapa de producción
+            String sqlDeleteEtapa = "DELETE FROM etapa_produccion WHERE idetapa_produccion = ?";
+
+            // Paso 1: Obtener items utilizados y preparar actualización de inventario
+            try (PreparedStatement psSelect = con.prepareStatement(sqlSelect); PreparedStatement psUpdate = con.prepareStatement(sqlUpdateInventario)) {
+
+                psSelect.setInt(1, idEtapa);
+                ResultSet rs = psSelect.executeQuery();
+
                 while (rs.next()) {
                     int idInventario = rs.getInt("id_inventario");
-                    String cantidadStr = rs.getString("cantidad_usada");
-                    
-                    // Convertir formato europeo (5,00) a formato SQL (5.00)
-                    double cantidad = 0.0;
-                    try {
-                        cantidad = Double.parseDouble(cantidadStr.replace(",", "."));
-                    } catch (NumberFormatException e) {
-                        System.err.println("Formato numérico inválido: " + cantidadStr);
-                        continue;
-                    }
-                    
-                    psUpdate.setDouble(1, cantidad);
+                    double cantidadUsada = rs.getDouble("cantidad_usada");
+                    String cantidadActualStr = rs.getString("cantidad_actual");
+
+                    // Convertir cantidad actual de String (con coma) a double
+                    double cantidadActual = convertirStringADouble(cantidadActualStr);
+
+                    // Calcular nueva cantidad
+                    double nuevaCantidad = cantidadActual + cantidadUsada;
+
+                    // Convertir de vuelta a String con formato de coma
+                    String nuevaCantidadStr = convertirDoubleAString(nuevaCantidad);
+
+                    // Preparar actualización para cada item
+                    psUpdate.setString(1, nuevaCantidadStr);
                     psUpdate.setInt(2, idInventario);
                     psUpdate.addBatch();
                 }
+
+                // Ejecutar todas las actualizaciones de inventario
                 psUpdate.executeBatch();
             }
-        }
 
-        // Pasos 3-5: Eliminar registros relacionados
-        try (PreparedStatement psDeleteAsignada = con.prepareStatement(sqlDeleteAsignada)) {
-            psDeleteAsignada.setInt(1, idEtapa);
-            psDeleteAsignada.executeUpdate();
-        }
-
-        try (PreparedStatement psDeleteUtilizado = con.prepareStatement(sqlDeleteUtilizado)) {
-            psDeleteUtilizado.setInt(1, idEtapa);
-            psDeleteUtilizado.executeUpdate();
-        }
-
-        try (PreparedStatement psDeleteEtapa = con.prepareStatement(sqlDeleteEtapa)) {
-            psDeleteEtapa.setInt(1, idEtapa);
-            int affectedRows = psDeleteEtapa.executeUpdate();
-            
-            if (affectedRows > 0) {
-                con.commit();
-                return true;
+            // Paso 2: Eliminar asignaciones de empleados
+            try (PreparedStatement ps = con.prepareStatement(sqlDeleteAsignada)) {
+                ps.setInt(1, idEtapa);
+                ps.executeUpdate();
             }
-        }
-    } catch (SQLException e) {
-        try {
-            if (con != null) con.rollback();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        JOptionPane.showMessageDialog(this, 
-            "Error al eliminar: " + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-    } finally {
-        if (con != null) {
+
+            // Paso 3: Eliminar registros de materiales utilizados
+            try (PreparedStatement ps = con.prepareStatement(sqlDeleteUtilizado)) {
+                ps.setInt(1, idEtapa);
+                ps.executeUpdate();
+            }
+
+            // Paso 4: Eliminar la etapa de producción
+            try (PreparedStatement ps = con.prepareStatement(sqlDeleteEtapa)) {
+                ps.setInt(1, idEtapa);
+                int affectedRows = ps.executeUpdate();
+
+                if (affectedRows > 0) {
+                    con.commit(); // Confirmar todas las operaciones
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
             try {
-                con.setAutoCommit(true);
-                con.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+                if (con != null) {
+                    con.rollback(); // Revertir en caso de error
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
+            JOptionPane.showMessageDialog(this,
+                    "Error al eliminar la etapa: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true); // Restaurar auto-commit
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+// Método para convertir String con coma a double
+    private double convertirStringADouble(String cantidadStr) throws SQLException {
+        if (cantidadStr == null || cantidadStr.isEmpty()) {
+            return 0.0;
+        }
+        try {
+            // Reemplazar coma por punto para parsear a double
+            return Double.parseDouble(cantidadStr.replace(",", "."));
+        } catch (NumberFormatException e) {
+            throw new SQLException("Formato de cantidad inválido en inventario: " + cantidadStr);
         }
     }
-    return false;
-}
+
+// Método para convertir double a String con coma
+    private String convertirDoubleAString(double cantidad) {
+        // Formatear el double con coma decimal
+        return String.format(Locale.GERMAN, "%.2f", cantidad)
+                .replace(".", ","); // Asegurar formato con coma
+    }
+
     private void editarEtapa(DefaultTableModel model, int modelRow, int idEtapa) {
         try {
             // Obtener datos de la fila
