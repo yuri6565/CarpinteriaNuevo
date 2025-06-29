@@ -8,10 +8,14 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.awt.Desktop;
+import java.io.File;
+import java.text.DecimalFormat;
 
 public class GeneradorIngresosPDF {
     public void generarPDF(String cliente, DefaultTableModel tablaModel, String total, String archivoSalida, String fecha) {
@@ -47,20 +51,20 @@ public class GeneradorIngresosPDF {
                 // Título "Ingresos"
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
                 contentStream.beginText();
-                contentStream.newLineAtOffset(50, 750);
+                contentStream.newLineAtOffset(30, 750);
                 contentStream.showText("Ingresos");
                 contentStream.endText();
 
                 // Fecha
                 contentStream.setFont(PDType1Font.HELVETICA, 12);
                 contentStream.beginText();
-                contentStream.newLineAtOffset(50, 730);
+                contentStream.newLineAtOffset(30, 730);
                 contentStream.showText("Fecha Inicio: " + (fecha != null ? fecha : new SimpleDateFormat("dd/MM/yyyy").format(new Date())));
                 contentStream.endText();
 
                 // Datos del cliente
                 contentStream.beginText();
-                contentStream.newLineAtOffset(50, 710);
+                contentStream.newLineAtOffset(30, 710);
                 contentStream.showText("Cliente: " + (cliente != null ? cliente : "No especificado"));
                 contentStream.endText();
 
@@ -80,15 +84,13 @@ public class GeneradorIngresosPDF {
                 contentStream.showText("Precio Unitario");
                 contentStream.newLineAtOffset(90, 0);
                 contentStream.showText("Subtotal");
-                contentStream.newLineAtOffset(70, 0);
-                contentStream.showText("Total");
                 contentStream.endText();
 
                 // Dibujar línea horizontal debajo del encabezado
                 yPosition -= 5;
                 contentStream.setLineWidth(0.5f);
                 contentStream.moveTo(30, yPosition);
-                contentStream.lineTo(550, yPosition); // Ajusta el ancho según tus necesidades
+                contentStream.lineTo(530, yPosition); // Aumentado a 530 puntos
                 contentStream.stroke();
 
                 yPosition -= 15;
@@ -96,6 +98,7 @@ public class GeneradorIngresosPDF {
 
                 // Llenar detalles del pedido (excluir la fila de resumen)
                 int detailRows = Math.max(0, tablaModel.getRowCount() - 1); // Evitar índices negativos
+                DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
                 for (int i = 0; i < detailRows; i++) {
                     yPosition -= 20;
                     if (yPosition < 400) { // Cambio de página si se acerca al límite
@@ -118,15 +121,13 @@ public class GeneradorIngresosPDF {
                             newContentStream.showText("Precio Unitario");
                             newContentStream.newLineAtOffset(90, 0);
                             newContentStream.showText("Subtotal");
-                            newContentStream.newLineAtOffset(70, 0);
-                            newContentStream.showText("Total");
                             newContentStream.endText();
 
                             // Dibujar línea horizontal debajo del encabezado en nueva página
                             yPosition = 745;
                             newContentStream.setLineWidth(0.5f);
                             newContentStream.moveTo(30, yPosition);
-                            newContentStream.lineTo(550, yPosition);
+                            newContentStream.lineTo(530, yPosition); // Aumentado a 530 puntos
                             newContentStream.stroke();
 
                             yPosition -= 15;
@@ -141,17 +142,17 @@ public class GeneradorIngresosPDF {
                             newContentStream.newLineAtOffset(60, 0);
                             newContentStream.showText(tablaModel.getValueAt(i, 3) != null ? tablaModel.getValueAt(i, 3).toString() : "");
                             newContentStream.newLineAtOffset(80, 0);
-                            newContentStream.showText(tablaModel.getValueAt(i, 4) != null ? tablaModel.getValueAt(i, 4).toString() : "");
+                            Object precioUnitarioValue = tablaModel.getValueAt(i, 4);
+                            newContentStream.showText(precioUnitarioValue != null ? decimalFormat.format(Double.parseDouble(precioUnitarioValue.toString())).replace(",", ".") : "0.00");
                             newContentStream.newLineAtOffset(90, 0);
-                            newContentStream.showText(tablaModel.getValueAt(i, 5) != null ? tablaModel.getValueAt(i, 5).toString() : "");
-                            newContentStream.newLineAtOffset(70, 0);
-                            newContentStream.showText(tablaModel.getValueAt(i, 6) != null ? tablaModel.getValueAt(i, 6).toString() : "");
+                            Object subtotalValue = tablaModel.getValueAt(i, 5);
+                            newContentStream.showText(subtotalValue != null ? decimalFormat.format(Double.parseDouble(subtotalValue.toString())).replace(",", ".") : "0.00");
                             newContentStream.endText();
 
                             // Dibujar línea horizontal debajo de la fila
                             yPosition -= 20;
                             newContentStream.moveTo(30, yPosition);
-                            newContentStream.lineTo(550, yPosition);
+                            newContentStream.lineTo(530, yPosition); // Aumentado a 530 puntos
                             newContentStream.stroke();
                         }
                     } else {
@@ -165,28 +166,28 @@ public class GeneradorIngresosPDF {
                         contentStream.newLineAtOffset(60, 0);
                         contentStream.showText(tablaModel.getValueAt(i, 3) != null ? tablaModel.getValueAt(i, 3).toString() : "");
                         contentStream.newLineAtOffset(80, 0);
-                        contentStream.showText(tablaModel.getValueAt(i, 4) != null ? tablaModel.getValueAt(i, 4).toString() : "");
+                        Object precioUnitarioValue = tablaModel.getValueAt(i, 4);
+                        contentStream.showText(precioUnitarioValue != null ? decimalFormat.format(Double.parseDouble(precioUnitarioValue.toString())).replace(",", ".") : "0.00");
                         contentStream.newLineAtOffset(90, 0);
-                        contentStream.showText(tablaModel.getValueAt(i, 5) != null ? tablaModel.getValueAt(i, 5).toString() : "");
-                        contentStream.newLineAtOffset(70, 0);
-                        contentStream.showText(tablaModel.getValueAt(i, 6) != null ? tablaModel.getValueAt(i, 6).toString() : "");
+                        Object subtotalValue = tablaModel.getValueAt(i, 5);
+                        contentStream.showText(subtotalValue != null ? decimalFormat.format(Double.parseDouble(subtotalValue.toString())).replace(",", ".") : "0.00");
                         contentStream.endText();
 
                         // Dibujar línea horizontal debajo de la fila
                         yPosition -= 5;
                         contentStream.moveTo(30, yPosition);
-                        contentStream.lineTo(550, yPosition);
+                        contentStream.lineTo(530, yPosition); // Aumentado a 530 puntos
                         contentStream.stroke();
                         yPosition -= 15;
                     }
                 }
 
-                // Espacio entre secciones
-                yPosition -= 40;
+                // Espacio aumentado entre secciones
+                yPosition -= 60;
 
                 // Línea horizontal para separar secciones
                 contentStream.moveTo(30, yPosition);
-                contentStream.lineTo(550, yPosition);
+                contentStream.lineTo(530, yPosition); // Aumentado a 530 puntos
                 contentStream.stroke();
 
                 // Sección de Resumen (abajo)
@@ -203,31 +204,40 @@ public class GeneradorIngresosPDF {
                     contentStream.setFont(PDType1Font.HELVETICA, 12);
                     contentStream.beginText();
                     contentStream.newLineAtOffset(30, yPosition);
-                    contentStream.showText("Monto Total: " + (tablaModel.getValueAt(lastRow, 7) != null ? tablaModel.getValueAt(lastRow, 7).toString() : "0.0"));
-                    contentStream.newLineAtOffset(100, 0);
                     contentStream.showText("Pagado: " + (tablaModel.getValueAt(lastRow, 8) != null ? tablaModel.getValueAt(lastRow, 8).toString() : "0.0"));
-                    contentStream.newLineAtOffset(80, 0);
+                    contentStream.newLineAtOffset(120, 0);
                     contentStream.showText("Debido: " + (tablaModel.getValueAt(lastRow, 9) != null ? tablaModel.getValueAt(lastRow, 9).toString() : "0.0"));
                     contentStream.endText();
 
                     // Dibujar línea horizontal debajo del resumen
                     yPosition -= 5;
                     contentStream.moveTo(30, yPosition);
-                    contentStream.lineTo(550, yPosition);
+                    contentStream.lineTo(530, yPosition); // Aumentado a 530 puntos
                     contentStream.stroke();
                 }
 
-                // Total General
+                // Total General con cálculo de subtotales y formato de miles
                 yPosition -= 40;
                 contentStream.beginText();
                 contentStream.newLineAtOffset(30, yPosition);
-                contentStream.showText("Total General: " + (total != null ? total : "$0.00"));
+                double totalSum = 0;
+                for (int i = 0; i < tablaModel.getRowCount() - 1; i++) {
+                    Object value = tablaModel.getValueAt(i, 5);
+                    if (value != null) {
+                        try {
+                            totalSum += Double.parseDouble(value.toString());
+                        } catch (NumberFormatException e) {
+                            totalSum += 0.0;
+                        }
+                    }
+                }
+                contentStream.showText("Total General: $" + decimalFormat.format(totalSum).replace(",", "."));
                 contentStream.endText();
 
                 // Línea horizontal debajo de Total General
                 yPosition -= 5;
                 contentStream.moveTo(30, yPosition);
-                contentStream.lineTo(550, yPosition);
+                contentStream.lineTo(530, yPosition); // Aumentado a 530 puntos
                 contentStream.stroke();
 
                 // Mensaje
@@ -238,10 +248,26 @@ public class GeneradorIngresosPDF {
                 contentStream.endText();
             }
 
-            System.out.println("Guardando documento en: " + archivoSalida);
-            document.save(archivoSalida);
-            System.out.println("Documento guardado");
-            JOptionPane.showMessageDialog(null, "PDF generado en: " + archivoSalida);
+            // Generar en memoria y abrir en el navegador
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                document.save(baos);
+                byte[] pdfBytes = baos.toByteArray();
+                File tempFile = File.createTempFile("ingresos_", ".pdf");
+                tempFile.deleteOnExit();
+                try (java.io.FileOutputStream fos = new java.io.FileOutputStream(tempFile)) {
+                    fos.write(pdfBytes);
+                }
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(tempFile);
+                    System.out.println("PDF abierto en el navegador: " + tempFile.getAbsolutePath());
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se puede abrir el PDF automáticamente. Guarda los bytes manualmente si es necesario.");
+                }
+            } catch (IOException e) {
+                System.out.println("Error al abrir el PDF: " + e.getMessage());
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al abrir el PDF: " + e.getMessage());
+            }
         } catch (IOException e) {
             System.out.println("Error al generar PDF: " + e.getMessage());
             e.printStackTrace();
