@@ -227,99 +227,154 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
     }
 
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
-        // 1. Validación de campos
-        if (txtetapa.getText().trim().isEmpty()
-                || txtFechainicio.getDate() == null
-                || Boxestado.getSelectedIndex() <= 0) {
-            new espacio_alerta((Frame) this.getParent(), true,
-                    "Error", "Todos los campos son obligatorios").setVisible(true);
+        // Validación de campos
+        if (txtetapa.getText().trim().isEmpty() || txtFechainicio.getDate() == null || Boxestado.getSelectedIndex() <= 0) {
+            new espacio_alerta((Frame) this.getParent(), true, "Error", "Todos los campos son obligatorios").setVisible(true);
             return;
         }
 
-        // 2. Mostrar diálogo de confirmación
-        alertaa confirmDialog = new alertaa(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
+        // Diálogo de confirmación
+        alertaa confirmDialog = new alertaa((Frame) this.getParent(), true, "Confirmar", "¿Desea guardar los datos?");
         confirmDialog.setVisible(true);
-
         if (!confirmDialog.opcionConfirmada) {
             return;
         }
 
+        Connection con = null;
         try {
-            // 3. Obtener valores del formulario
+            // Obtener valores del formulario
             String nombreEtapa = txtetapa.getText().trim();
             Date fechaInicio = new Date(txtFechainicio.getDate().getTime());
-            Date fechaFin = txtfechafin.getDate() != null
-                    ? new Date(txtfechafin.getDate().getTime()) : null;
+            Date fechaFin = txtfechafin.getDate() != null ? new Date(txtfechafin.getDate().getTime()) : null;
             String estado = Boxestado.getSelectedItem().toString();
 
-            // 4. Validar fechas
+            // Validar fechas
             if (fechaFin != null && fechaFin.before(fechaInicio)) {
-                new Error_fecha((Frame) this.getParent(), true,
-                        "Error", "La fecha final no puede ser anterior a la inicial").setVisible(true);
+                new Error_fecha((Frame) this.getParent(), true, "Error", "La fecha final no puede ser anterior a la inicial").setVisible(true);
                 return;
             }
 
-            // 5. Actualizar etapa en la base de datos
-            try (Connection con = Conexion.getConnection()) {
-                con.setAutoCommit(false); // Iniciar transacción
+            con = Conexion.getConnection();
+            con.setAutoCommit(false);
 
-                // 5.1 Guardar/actualizar la etapa
-                String sql;
-                int idEtapaGenerado = idEtapa;
+            // Guardar/actualizar la etapa
+            if (idEtapa == 0) {
+                // Insertar nueva etapa
+                String sql = "INSERT INTO etapa_produccion (nombre_etapa, fecha_inicio, fecha_fin, estado, produccion_id_produccion) VALUES (?, ?, ?, ?, ?)";
+                try (PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                    ps.setString(1, nombreEtapa);
+                    ps.setDate(2, fechaInicio);
+                    ps.setDate(3, fechaFin);
+                    ps.setString(4, estado);
+                    ps.setInt(5, idProduccionActual);
+                    ps.executeUpdate();
 
-                if (idEtapa == 0) {
-                    // Insertar nuevo registro
-                    sql = "INSERT INTO etapa_produccion (nombre_etapa, fecha_inicio, fecha_fin, estado, produccion_id_produccion) "
-                            + "VALUES (?, ?, ?, ?, ?)";
-                    try (PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                        ps.setString(1, nombreEtapa);
-                        ps.setDate(2, fechaInicio);
-                        ps.setDate(3, fechaFin);
-                        ps.setString(4, estado);
-                        ps.setInt(5, idProduccionActual);
-                        ps.executeUpdate();
+                    try (ResultSet rs = ps.getGeneratedKeys()) {
+                        if (rs.next()) {
+                            idEtapa = rs.getInt(1);
+                        }
+                    }
+                }
+            } else {
+                // Actualizar etapa existente
+                String sql = "UPDATE etapa_produccion SET nombre_etapa = ?, fecha_inicio = ?, fecha_fin = ?, estado = ? WHERE idetapa_produccion = ?";
+                try (PreparedStatement ps = con.prepareStatement(sql)) {
+                    ps.setString(1, nombreEtapa);
+                    ps.setDate(2, fechaInicio);
+                    ps.setDate(3, fechaFin);
+                    ps.setString(4, estado);
+                    ps.setInt(5, idEtapa);
+                    ps.executeUpdate();
+                }
+            }
 
-                        // Obtener el ID generado
-                        try (ResultSet rs = ps.getGeneratedKeys()) {
-                            if (rs.next()) {
-                                idEtapaGenerado = rs.getInt(1);
+            // Lógica para actualizar estados de producción y pedido
+            if ("proceso".equals(estado)) {
+                // Actualizar producción a "proceso" si no está finalizada
+                String sqlUpdateProduccion = "UPDATE produccion SET estado = 'proceso' WHERE id_produccion = ? AND estado != 'finalizado'";
+                try (PreparedStatement ps = con.prepareStatement(sqlUpdateProduccion)) {
+                    ps.setInt(1, idProduccionActual);
+                    ps.executeUpdate();
+                }
+
+                // Actualizar pedido a "proceso" si no está finalizado
+                String sqlUpdatePedido = "UPDATE pedido p JOIN produccion pr ON p.id_pedido = pr.detalle_pedido_iddetalle_pedido "
+                        + "SET p.estado = 'proceso' WHERE pr.id_produccion = ? AND p.estado != 'finalizado'";
+                try (PreparedStatement ps = con.prepareStatement(sqlUpdatePedido)) {
+                    ps.setInt(1, idProduccionActual);
+                    ps.executeUpdate();
+                }
+            } else if ("completado".equals(estado)) {
+                // Verificar si todas las etapas están completadas
+                String sqlVerificarEtapas = "SELECT COUNT(*) AS incompletas FROM etapa_produccion "
+                        + "WHERE produccion_id_produccion = ? AND estado != 'completado'";
+
+                try (PreparedStatement ps = con.prepareStatement(sqlVerificarEtapas)) {
+                    ps.setInt(1, idProduccionActual);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next() && rs.getInt("incompletas") == 0) {
+                        // Todas las etapas completadas - marcar producción como finalizada
+                        String sqlUpdateProduccion = "UPDATE produccion SET estado = 'finalizado', fecha_fin = CURDATE() "
+                                + "WHERE id_produccion = ?";
+                        try (PreparedStatement psProd = con.prepareStatement(sqlUpdateProduccion)) {
+                            psProd.setInt(1, idProduccionActual);
+                            psProd.executeUpdate();
+                        }
+
+                        // Verificar si todas las producciones del pedido están finalizadas
+                        String sqlVerificarProducciones = "SELECT COUNT(*) AS incompletas FROM produccion "
+                                + "WHERE detalle_pedido_iddetalle_pedido = "
+                                + "(SELECT detalle_pedido_iddetalle_pedido FROM produccion WHERE id_produccion = ?) "
+                                + "AND estado != 'finalizado'";
+
+                        try (PreparedStatement psPed = con.prepareStatement(sqlVerificarProducciones)) {
+                            psPed.setInt(1, idProduccionActual);
+                            ResultSet rsPed = psPed.executeQuery();
+                            if (rsPed.next() && rsPed.getInt("incompletas") == 0) {
+                                // Todas las producciones finalizadas - marcar pedido como finalizado
+                                String sqlUpdatePedido = "UPDATE pedido SET estado = 'finalizado', fecha_fin = CURDATE() "
+                                        + "WHERE id_pedido = "
+                                        + "(SELECT p.id_pedido FROM pedido p "
+                                        + "JOIN produccion pr ON p.id_pedido = pr.detalle_pedido_iddetalle_pedido "
+                                        + "WHERE pr.id_produccion = ?)";
+                                try (PreparedStatement psUpdatePed = con.prepareStatement(sqlUpdatePedido)) {
+                                    psUpdatePed.setInt(1, idProduccionActual);
+                                    psUpdatePed.executeUpdate();
+                                }
                             }
                         }
                     }
-                } else {
-                    // Actualizar registro existente
-                    sql = "UPDATE etapa_produccion SET nombre_etapa = ?, fecha_inicio = ?, "
-                            + "fecha_fin = ?, estado = ? WHERE idetapa_produccion = ?";
-                    try (PreparedStatement ps = con.prepareStatement(sql)) {
-                        ps.setString(1, nombreEtapa);
-                        ps.setDate(2, fechaInicio);
-                        ps.setDate(3, fechaFin);
-                        ps.setString(4, estado);
-                        ps.setInt(5, idEtapa);
-                        ps.executeUpdate();
-                    }
                 }
-
-
-                con.commit(); // Confirmar todos los cambios
-                this.datosModificados = true;
-                this.dispose();
             }
+
+            con.commit();
+            this.datosModificados = true;
+            this.dispose();
+
+            // Mostrar mensaje de éxito
+            JOptionPane.showMessageDialog(this, "Datos guardados correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
-            new Error_guardar((Frame) this.getParent(), true,
-                    "Error", "Error al guardar: " + e.getMessage()).setVisible(true);
+            try {
+                if (con != null) {
+                    con.rollback();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            new Error_guardar((Frame) this.getParent(), true, "Error", "Error al guardar: " + e.getMessage()).setVisible(true);
             e.printStackTrace();
-
+        } finally {
+            try {
+                if (con != null) {
+                    con.setAutoCommit(true);
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-    }//GEN-LAST:event_btnGuardar1ActionPerformed
-    
 
-    
+    }//GEN-LAST:event_btnGuardar1ActionPerformed
 
     private String validarFormatoDecimal(String valor) {
         // Asegurar que el valor tenga el formato correcto para visualización
@@ -329,7 +384,6 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         }
         return valor.replace(".", ","); // Normalizar a comas para visualización
     }
-
 
     public boolean actualizarMaterialesEtapa(int idEtapa, Map<Integer, Double> nuevosMateriales) {
         try (Connection con = Conexion.getConnection()) {
@@ -799,7 +853,6 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
                 }
             }
 
-
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
                     "Error al cargar datos: " + e.getMessage(),
@@ -808,7 +861,4 @@ public class EditEtapaProduccion extends javax.swing.JDialog {
         }
     }
 
-   
-
-    
 }

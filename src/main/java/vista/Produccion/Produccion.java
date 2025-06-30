@@ -84,7 +84,7 @@ public final class Produccion extends javax.swing.JPanel {
         cantidadColumn.setPreferredWidth(10);
 
         TableColumn cantidadColumn2 = Tabla1.getColumnModel().getColumn(0);
-        cantidadColumn2.setPreferredWidth(4);
+        cantidadColumn2.setPreferredWidth(8);
         // Carga los datos
         cargarTablaProduccion();
         TemaManager.getInstance().addThemeChangeListener(() -> {
@@ -750,7 +750,7 @@ public final class Produccion extends javax.swing.JPanel {
                     + // Cambiado a id_produccion como primer campo
                     "CONCAT(c.nombre, ' ', c.apellido) AS cliente, "
                     + "p.fecha_inicio, p.fecha_fin, p.estado, "
-                    + "dp.cantidad, dp.dimension, ped.id_pedido "
+                    + "dp.cantidad, dp.dimension, ped.num_pedido "
                     + // Añadido id_pedido al final
                     "FROM produccion p "
                     + "JOIN detalle_pedido dp ON p.detalle_pedido_iddetalle_pedido = dp.iddetalle_pedido "
@@ -765,7 +765,7 @@ public final class Produccion extends javax.swing.JPanel {
                 while (rs.next()) {
                     model.addRow(new Object[]{
                         rs.getInt("id_produccion"), // Mostrar id_produccion en la columna 0
-                        rs.getInt("id_pedido"), // Mostrar id_produccion en la columna 0
+                        rs.getString("num_pedido"), // Mostrar id_produccion en la columna 0
                         rs.getString("descripcion"),
                         rs.getString("cliente") != null ? rs.getString("cliente") : "Sin cliente",
                         sdf.format(rs.getDate("fecha_inicio")),

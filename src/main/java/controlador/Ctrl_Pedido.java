@@ -129,11 +129,16 @@ public class Ctrl_Pedido {
                 pedido.setId_pedido(idPedido); // Asignar el ID al objeto Pedido
             }
 
-            // Insertar los detalles
+// Insertar los detalles y luego los registros en produccion
             if (detalles != null && !detalles.isEmpty()) {
                 String sqlDetalle = "INSERT INTO detalle_pedido (descripcion, cantidad, dimension, precio_unitario, subtotal, total, pedido_id_pedido) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                stmt = con.prepareStatement(sqlDetalle);
+                String sqlProduccion = "INSERT INTO produccion (fecha_inicio, fecha_fin, estado, detalle_pedido_iddetalle_pedido) VALUES (?, ?, ?, ? )"; // Corregido: 4 placeholders
+
+                stmt = con.prepareStatement(sqlDetalle, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement stmtProduccion = con.prepareStatement(sqlProduccion);
+
                 for (PedidoDetalle detalle : detalles) {
+                    // Insertar detalle
                     stmt.setString(1, detalle.getDescripcion());
                     stmt.setInt(2, detalle.getCantidad());
                     stmt.setString(3, detalle.getDimensiones());
@@ -142,9 +147,23 @@ public class Ctrl_Pedido {
                     stmt.setDouble(6, detalle.getTotal());
                     stmt.setInt(7, idPedido);
                     stmt.executeUpdate();
+
+                    // Obtener el ID del detalle generado
+                    rs = stmt.getGeneratedKeys();
+                    int idDetalle = -1;
+                    if (rs.next()) {
+                        idDetalle = rs.getInt(1);
+                    }
+
+                    // Insertar en la tabla produccion
+                    stmtProduccion.setDate(1, new java.sql.Date(pedido.getFecha_inicio().getTime()));
+                    stmtProduccion.setDate(2, new java.sql.Date(pedido.getFecha_fin().getTime()));
+                    // Mapear el estado del pedido al ENUM de produccion
+                    stmtProduccion.setString(3, "pendiente");
+                    stmtProduccion.setInt(4, idDetalle); // Corregido: 4to parámetro
+                    stmtProduccion.executeUpdate();
                 }
             }
-
             con.commit(); // Confirmar transacción
             return idPedido;
 
@@ -397,6 +416,129 @@ public class Ctrl_Pedido {
                 return "pendiente"; // Estado por defecto
         }
     }
-    
-    
+    // ... [otros métodos existentes] ...
+
+    /**
+     * Actualiza el estado de una producción basado en sus etapas
+     */
+    public boolean actualizarEstadoProduccionSegunEtapas(int idProduccion) throws SQLException {
+        Connection con = null;
+        try {
+            con = Conexion.getConnection();
+            con.setAutoCommit(false);
+            
+            // 1. Verificar estados de todas las etapas
+            String sql = "SELECT estado FROM etapa_produccion WHERE produccion_id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, idProduccion);
+            ResultSet rs = ps.executeQuery();
+            
+            boolean todasCompletadas = true;
+            boolean algunaEnProceso = false;
+            boolean algunaPendiente = false;
+            
+            while (rs.next()) {
+                String estado = rs.getString("estado").toLowerCase();
+                
+                if ("pendiente".equals(estado)) {
+                    todasCompletadas = false;
+                    algunaPendiente = true;
+                } else if ("proceso".equals(estado)) {
+                    todasCompletadas = false;
+                    algunaEnProceso = true;
+                } else if (!"completado".equals(estado)) {
+                    todasCompletadas = false;
+                }
+            }
+            
+            // 2. Determinar nuevo estado
+            String nuevoEstado;
+            if (todasCompletadas) {
+                nuevoEstado = "finalizado";
+            } else if (algunaEnProceso) {
+                nuevoEstado = "proceso";
+            } else {
+                nuevoEstado = "pendiente";
+            }
+            
+            // 3. Actualizar producción
+            String sqlUpdate = "UPDATE produccion SET estado = ? WHERE id_produccion = ?";
+            PreparedStatement psUpdate = con.prepareStatement(sqlUpdate);
+            psUpdate.setString(1, nuevoEstado);
+            psUpdate.setInt(2, idProduccion);
+            psUpdate.executeUpdate();
+            
+            // 4. Obtener ID del pedido para actualizarlo también
+            String sqlPedido = "SELECT dp.pedido_id_pedido FROM detalle_pedido dp " +
+                              "JOIN produccion p ON dp.iddetalle_pedido = p.detalle_pedido_iddetalle_pedido " +
+                              "WHERE p.id_produccion = ?";
+            
+            PreparedStatement psPedido = con.prepareStatement(sqlPedido);
+            psPedido.setInt(1, idProduccion);
+            rs = psPedido.executeQuery();
+            
+            if (rs.next()) {
+                int idPedido = rs.getInt("pedido_id_pedido");
+                actualizarEstadoPedidoSegunProducciones(idPedido, con);
+            }
+            
+            con.commit();
+            return true;
+        } catch (SQLException e) {
+            if (con != null) con.rollback();
+            throw e;
+        } finally {
+            if (con != null) {
+                con.setAutoCommit(true);
+                con.close();
+            }
+        }
+    }
+
+    /**
+     * Actualiza el estado del pedido basado en sus producciones
+     */
+    private void actualizarEstadoPedidoSegunProducciones(int idPedido, Connection con) throws SQLException {
+        // 1. Verificar estados de todas las producciones del pedido
+        String sql = "SELECT estado FROM produccion p " +
+                   "JOIN detalle_pedido dp ON p.detalle_pedido_iddetalle_pedido = dp.iddetalle_pedido " +
+                   "WHERE dp.pedido_id_pedido = ?";
+        
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, idPedido);
+        ResultSet rs = ps.executeQuery();
+        
+        boolean todasFinalizadas = true;
+        boolean algunaEnProceso = false;
+        
+        while (rs.next()) {
+            String estado = rs.getString("estado").toLowerCase();
+            
+            if ("pendiente".equals(estado)) {
+                todasFinalizadas = false;
+            } else if ("proceso".equals(estado)) {
+                todasFinalizadas = false;
+                algunaEnProceso = true;
+            } else if (!"finalizado".equals(estado)) {
+                todasFinalizadas = false;
+            }
+        }
+        
+        // 2. Determinar nuevo estado del pedido
+        String nuevoEstado;
+        if (todasFinalizadas) {
+            nuevoEstado = "finalizado";
+        } else if (algunaEnProceso) {
+            nuevoEstado = "proceso";
+        } else {
+            nuevoEstado = "pendiente";
+        }
+        
+        // 3. Actualizar pedido
+        String sqlUpdate = "UPDATE pedido SET estado = ? WHERE id_pedido = ?";
+        PreparedStatement psUpdate = con.prepareStatement(sqlUpdate);
+        psUpdate.setString(1, nuevoEstado);
+        psUpdate.setInt(2, idPedido);
+        psUpdate.executeUpdate();
+    }
 }

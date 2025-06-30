@@ -448,17 +448,102 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
             dialog.setVisible(true);
 
             if (dialog.isConfirmado()) {
-                guardarDatosCompletos(dialog.getCantidadesMateriales(), dialog.getCantidadesHerramientas());
+                Connection con = null;
+                try {
+                    con = Conexion.getConnection();
+                    con.setAutoCommit(false); // Iniciar transacción
+
+                    // 1. Guardar etapa principal
+                    int idEtapa = guardarEtapaProduccion(con);
+
+                    // 2. Obtener el ID del detalle_pedido asociado a esta producción
+                    int idDetallePedido = -1;
+                    String sqlGetDetallePedido = "SELECT detalle_pedido_iddetalle_pedido FROM produccion WHERE id_produccion = ?";
+                    try (PreparedStatement ps = con.prepareStatement(sqlGetDetallePedido)) {
+                        ps.setInt(1, idProduccion);
+                        try (ResultSet rs = ps.executeQuery()) {
+                            if (rs.next()) {
+                                idDetallePedido = rs.getInt("detalle_pedido_iddetalle_pedido");
+                            } else {
+                                throw new SQLException("No se encontró el detalle de pedido asociado a esta producción");
+                            }
+                        }
+                    }
+
+                    // 3. Obtener el ID del pedido asociado al detalle_pedido
+                    int idPedido = -1;
+                    String sqlGetPedido = "SELECT pedido_id_pedido FROM detalle_pedido WHERE iddetalle_pedido = ?";
+                    try (PreparedStatement ps = con.prepareStatement(sqlGetPedido)) {
+                        ps.setInt(1, idDetallePedido);
+                        try (ResultSet rs = ps.executeQuery()) {
+                            if (rs.next()) {
+                                idPedido = rs.getInt("pedido_id_pedido");
+                            } else {
+                                throw new SQLException("No se encontró el pedido asociado a este detalle de pedido");
+                            }
+                        }
+                    }
+
+                    // 4. Actualizar estado de producción a "proceso"
+                    String sqlUpdateProduccion = "UPDATE produccion SET estado = 'proceso' WHERE id_produccion = ?";
+                    try (PreparedStatement ps = con.prepareStatement(sqlUpdateProduccion)) {
+                        ps.setInt(1, idProduccion);
+                        ps.executeUpdate();
+                    }
+
+                    // 5. Actualizar estado del pedido vinculado a "proceso"
+                    String sqlUpdatePedido = "UPDATE pedido SET estado = 'proceso' WHERE id_pedido = ?";
+                    try (PreparedStatement ps = con.prepareStatement(sqlUpdatePedido)) {
+                        ps.setInt(1, idPedido);
+                        ps.executeUpdate();
+                    }
+
+                    // 6. Guardar materiales y actualizar inventario
+                    guardarMaterialesHerramientas(con, idEtapa, dialog.getCantidadesMateriales(), "material");
+
+                    // 7. Guardar herramientas y actualizar inventario
+                    guardarMaterialesHerramientas(con, idEtapa, dialog.getCantidadesHerramientas(), "herramienta");
+
+                    // 8. Guardar asignación de trabajador
+                    guardarAsignado(con, idEtapa, BoxAsignado.getSelectedItem().toString());
+
+                    con.commit(); // Confirmar transacción
+
+                    // Mostrar mensaje de éxito con tu clase personalizada
+                    new Datos_guardados(
+                            (Frame) this.getParent(),
+                            true,
+                            "Éxito",
+                            "Etapa guardada y producción/pedido marcados como 'proceso'"
+                    ).setVisible(true);
+
+                } catch (SQLException | ParseException e) {
+                    if (con != null) {
+                        try {
+                            con.rollback();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(FormuEtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    new Error_guardar((Frame) this.getParent(), true, "Error", "Error al guardar: " + e.getMessage()).setVisible(true);
+                } finally {
+                    if (con != null) {
+                        try {
+                            con.setAutoCommit(true);
+                            con.close();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(FormuEtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
             }
         } catch (NumberFormatException e) {
             new Error_guardar((Frame) this.getParent(), true, "Error",
                     "La cantidad debe ser un número válido").setVisible(true);
-        } catch (ParseException ex) {
-            Logger.getLogger(FormuEtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.dispose();
-    }//GEN-LAST:event_btnGuardar1ActionPerformed
 
+    }//GEN-LAST:event_btnGuardar1ActionPerformed
     private boolean guardarDatosCompletos(Map<String, String> cantidadesMateriales,
             Map<String, String> cantidadesHerramientas) throws ParseException {
         Connection con = null;
@@ -478,7 +563,19 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
             // 4. Guardar asignación de trabajador
             guardarAsignado(con, idEtapa, BoxAsignado.getSelectedItem().toString());
 
+            // 5. Actualizar estado del pedido a "en proceso"
+            actualizarEstadoPedidoYProduccion(con, this.idProduccion);
+
             con.commit(); // Confirmar transacción
+
+            // Mostrar mensaje de éxito con tu clase personalizada
+            new Datos_guardados(
+                    (Frame) this.getParent(),
+                    true,
+                    "Éxito",
+                    "Etapa guardada y producción marcada como 'en proceso'"
+            ).setVisible(true);
+
             return true;
 
         } catch (SQLException e) {
@@ -499,6 +596,82 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(FormuEtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+// Método mejorado que actualiza tanto el pedido como la producción
+    private void actualizarEstadoPedidoYProduccion(Connection con, int idProduccion) throws SQLException {
+        // Primero obtenemos el id_pedido asociado a esta producción
+        String sqlGetPedido = "SELECT pedido_id_pedido FROM produccion WHERE id_produccion = ?";
+        int idPedido = -1;
+
+        try (PreparedStatement ps = con.prepareStatement(sqlGetPedido)) {
+            ps.setInt(1, idProduccion);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    idPedido = rs.getInt("pedido_id_pedido");
+                } else {
+                    throw new SQLException("No se encontró el pedido asociado a la producción " + idProduccion);
+                }
+            }
+        }
+
+        // Actualizamos el estado del pedido a "en proceso"
+        String sqlUpdatePedido = "UPDATE pedido SET estado = 'en proceso' WHERE id_pedido = ?";
+        try (PreparedStatement ps = con.prepareStatement(sqlUpdatePedido)) {
+            ps.setInt(1, idPedido);
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("No se pudo actualizar el estado del pedido " + idPedido);
+            }
+        }
+
+        // También actualizamos el estado de la producción a "en proceso" por consistencia
+        String sqlUpdateProduccion = "UPDATE produccion SET estado = 'en proceso' WHERE id_produccion = ?";
+        try (PreparedStatement ps = con.prepareStatement(sqlUpdateProduccion)) {
+            ps.setInt(1, idProduccion);
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("No se pudo actualizar el estado de la producción " + idProduccion);
+            }
+        }
+    }
+
+// Método para mostrar errores usando tu clase personalizada
+    private void mostrarError(String mensaje) {
+        new Error_guardar(
+                (Frame) this.getParent(),
+                true,
+                "Error",
+                mensaje
+        ).setVisible(true);
+    }
+
+// Método nuevo para actualizar el estado del pedido
+    private void actualizarEstadoPedido(Connection con, int idProduccion) throws SQLException {
+        // Primero obtenemos el id_pedido asociado a esta producción
+        String sqlGetPedido = "SELECT pedido_id_pedido FROM produccion WHERE id_produccion = ?";
+        int idPedido = -1;
+
+        try (PreparedStatement ps = con.prepareStatement(sqlGetPedido)) {
+            ps.setInt(1, idProduccion);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    idPedido = rs.getInt("pedido_id_pedido");
+                } else {
+                    throw new SQLException("No se encontró el pedido asociado a la producción " + idProduccion);
+                }
+            }
+        }
+
+        // Actualizamos el estado del pedido a "en proceso"
+        String sqlUpdate = "UPDATE pedido SET estado = 'proceso' WHERE id_pedido = ?";
+        try (PreparedStatement ps = con.prepareStatement(sqlUpdate)) {
+            ps.setInt(1, idPedido);
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("No se pudo actualizar el estado del pedido " + idPedido);
             }
         }
     }
@@ -650,11 +823,6 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
                 }
             }
         }
-    }
-// Métodos auxiliares para mostrar mensajes
-
-    private void mostrarError(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     private void guardarAsignado(Connection con, int idEtapa, String nombreUsuario) throws SQLException {
