@@ -9,6 +9,7 @@ import controlador.Ctrl_CategoriaMaterial;
 import controlador.Ctrl_MarcaMaterial;
 import controlador.Ctrl_UnidadMaterial;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
@@ -33,6 +34,16 @@ import modelo.Categoria;
 import modelo.Marca;
 import modelo.MaterialDatos;
 import modelo.Unidad;
+import vista.alertas.MaterialingreseCantidad;
+import vista.alertas.MaterialAlerPrecio;
+import vista.alertas.MaterialAlertaCategoria;
+import vista.alertas.MaterialAlertaMarca;
+import vista.alertas.MaterialPrecioNega;
+import vista.alertas.MaterialvalorValida;
+import vista.alertas.MaterialingreseNombre;
+import vista.alertas.MaterialStockMin;
+import vista.alertas.MaterialUnidadMedida;
+import vista.alertas.productoexito;
 
 /**
  *
@@ -85,10 +96,13 @@ public class nuevoMateriales extends javax.swing.JDialog {
                 // Permitir: dígitos, coma, backspace y delete
                 if (!(Character.isDigit(c) || c == ',' || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE)) {
                     e.consume();
-                    JOptionPane.showMessageDialog(null,
-                            "Solo se permiten números enteros y decimales (use coma para decimales)",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
+                    try {
+                        MaterialvalorValida dialog = new MaterialvalorValida((Frame) getParent(), true);
+                        dialog.setVisible(true);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Error al mostrar el diálogo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                     return;
                 }
 
@@ -552,33 +566,39 @@ public class nuevoMateriales extends javax.swing.JDialog {
 
         // Validar campos obligatorios
         if (nombre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingrese el nombre del material.", "Error", JOptionPane.ERROR_MESSAGE);
+            MaterialingreseNombre dialog = new MaterialingreseNombre((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
         if (stockMinimo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingrese un stock mínimo.", "Error", JOptionPane.ERROR_MESSAGE);
+            MaterialStockMin dialog = new MaterialStockMin((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
         if (categoriaNombre == null || categoriaNombre.equals("Seleccione categoría:")) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una categoría.", "Error", JOptionPane.ERROR_MESSAGE);
+            MaterialAlertaCategoria dialog = new MaterialAlertaCategoria((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
         if (marcaNombre == null || marcaNombre.equals("Seleccione marca:")) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una marca.", "Error", JOptionPane.ERROR_MESSAGE);
+            MaterialAlertaMarca dialog = new MaterialAlertaMarca((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
         if (unidadNombre == null || unidadNombre.equals("Seleccione unidad-medida:")) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una unidad de medida.", "Error", JOptionPane.ERROR_MESSAGE);
+            MaterialUnidadMedida dialog = new MaterialUnidadMedida((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
         // Validar y obtener la cantidad
         if (cantidad.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingrese la cantidad.", "Error", JOptionPane.ERROR_MESSAGE);
+            MaterialingreseCantidad dialog = new MaterialingreseCantidad((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
@@ -587,11 +607,13 @@ public class nuevoMateriales extends javax.swing.JDialog {
         try {
             precioUnitario = Integer.parseInt(txtPrecioUnitario.getText().replace(".", "").trim());
             if (precioUnitario < 0) {
-                JOptionPane.showMessageDialog(this, "El precio no puede ser negativo.", "Error", JOptionPane.ERROR_MESSAGE);
+                MaterialPrecioNega dialog = new MaterialPrecioNega((Frame) this.getParent(), true);
+                dialog.setVisible(true);
                 return;
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Ingrese un número válido en el precio.", "Error", JOptionPane.ERROR_MESSAGE);
+            MaterialAlerPrecio dialog = new MaterialAlerPrecio((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
@@ -654,8 +676,13 @@ public class nuevoMateriales extends javax.swing.JDialog {
                 imagenBytes
         );
 
+        //productoexito dialog = new productoexito();
+        // dialog.setVisible(true);
+        //por el momento lo dejo asi, funcionaba sin necesidad que apareciera el joption lo juro xd D:
+        //sumando que son la 1 am jajaj
         materialGuardado = true;
         dispose();
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void cmbUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbUnidadActionPerformed

@@ -5,8 +5,11 @@
 package vista.Inventario0;
 
 import controlador.Ctrl_UnidadHerramienta;
+import java.awt.Frame;
 import javax.swing.JOptionPane;
 import modelo.Unidad;
+import vista.alertas.AlerGuardadoExitgeneral;
+import vista.alertas.MaterialUnidadMedida;
 
 /**
  *
@@ -162,7 +165,8 @@ public class nuevaUMherramienta extends javax.swing.JDialog {
             Ctrl_UnidadHerramienta dao = new Ctrl_UnidadHerramienta();
 
             if (dao.insertar(categoria)) {
-                JOptionPane.showMessageDialog(this, "Unidad de medida añadida correctamente.");
+                AlerGuardadoExitgeneral dialog = new AlerGuardadoExitgeneral((Frame) this.getParent(), true);
+                dialog.setVisible(true);
                 txtNombre.setText("");
 
                 // Notificar al listener que se guardó una categoría
@@ -174,7 +178,8 @@ public class nuevaUMherramienta extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Error al añadir unidad de medida.");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Ingrese un nombre.");
+            MaterialUnidadMedida dialog = new MaterialUnidadMedida((Frame) this.getParent(), true);
+            dialog.setVisible(true);
         }
 
     }//GEN-LAST:event_btnGuardarActionPerformed

@@ -5,8 +5,11 @@
 package vista.Inventario0;
 
 import controlador.Ctrl_MarcaHerramienta;
+import java.awt.Frame;
 import javax.swing.JOptionPane;
 import modelo.Marca;
+import vista.alertas.AlerGuardadoExitgeneral;
+import vista.alertas.MaterialNombreMarca;
 
 /**
  *
@@ -162,7 +165,8 @@ public class nuevaMarcaHerramienta extends javax.swing.JDialog {
             Ctrl_MarcaHerramienta dao = new Ctrl_MarcaHerramienta();
 
             if (dao.insertar(categoria)) {
-                JOptionPane.showMessageDialog(this, "Marca añadida correctamente.");
+                AlerGuardadoExitgeneral dialog = new AlerGuardadoExitgeneral((Frame) this.getParent(), true);
+                dialog.setVisible(true);
                 txtNombre.setText("");
 
                 // Notificar al listener que se guardó una categoría
@@ -174,7 +178,8 @@ public class nuevaMarcaHerramienta extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Error al añadir marca.");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Ingrese un nombre.");
+            MaterialNombreMarca dialog = new MaterialNombreMarca((Frame) this.getParent(), true);
+            dialog.setVisible(true);
         }
 
     }//GEN-LAST:event_btnGuardarActionPerformed
