@@ -5,15 +5,18 @@
 package vista.Inventario0;
 
 import controlador.Ctrl_CategoriaHerramienta;
+import java.awt.Frame;
 import javax.swing.JOptionPane;
 import modelo.Categoria;
+import vista.alertas.AlerGuardadoExitgeneral;
+import vista.alertas.MaterialingreseCategoria;
 
 /**
  *
  * @author ZenBook
  */
 public class nuevaCategoriaHerramienta extends javax.swing.JDialog {
-   
+
     private boolean guardado = false; // Indica si se presionó "Guardar"
 
     /**
@@ -23,13 +26,14 @@ public class nuevaCategoriaHerramienta extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
     }
-    
-        public interface CategoriaGuardadaListener {
+
+    public interface CategoriaGuardadaListener {
+
         void onCategoriaGuardada();
     }
-    
+
     private CategoriaGuardadaListener listener;
-    
+
     public void setCategoriaGuardadaListener(CategoriaGuardadaListener listener) {
         this.listener = listener;
     }
@@ -155,25 +159,27 @@ public class nuevaCategoriaHerramienta extends javax.swing.JDialog {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         String nombre = txtNombre.getText().trim();
-        
+
         if (!nombre.isEmpty()) {
             Categoria categoria = new Categoria(nombre);
             Ctrl_CategoriaHerramienta dao = new Ctrl_CategoriaHerramienta();
-            
+
             if (dao.insertar(categoria)) {
-                JOptionPane.showMessageDialog(this, "Categoría añadida correctamente.");
+                AlerGuardadoExitgeneral dialog = new AlerGuardadoExitgeneral((Frame) this.getParent(), true);
+                dialog.setVisible(true);
                 txtNombre.setText("");
-                
+
                 // Notificar al listener que se guardó una categoría
                 if (listener != null) {
                     listener.onCategoriaGuardada();
                 }
-                
+
             } else {
                 JOptionPane.showMessageDialog(this, "Error al añadir categoría.");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Ingrese un nombre.");
+            MaterialingreseCategoria dialog = new MaterialingreseCategoria((Frame) this.getParent(), true);
+            dialog.setVisible(true);
         }
 
     }//GEN-LAST:event_btnGuardarActionPerformed

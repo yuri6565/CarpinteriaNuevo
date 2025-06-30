@@ -5,10 +5,15 @@
 package vista.Inventario0;
 
 import controlador.Ctrl_UnidadHerramienta;
+import java.awt.Frame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import modelo.Unidad;
+import vista.alertas.ActualizadoCorrectUniMed;
+import vista.alertas.AlerGuardadoExitgeneral;
+import vista.alertas.AlertaNoVacio;
+import vista.alertas.MaterialUnidadMedida;
 
 /**
  *
@@ -341,13 +346,15 @@ public class herramientaUnidad extends javax.swing.JDialog {
 
             if (dao.insertar(categoria)) {
                 actualizarTabla(); // Refresca la tabla con los datos nuevos
-                JOptionPane.showMessageDialog(this, "Categoría añadida correctamente.");
+                AlerGuardadoExitgeneral dialog = new AlerGuardadoExitgeneral((Frame) this.getParent(), true);
+                dialog.setVisible(true);
                 txtNombre.setText(""); // Limpiar campo de entrada
             } else {
                 JOptionPane.showMessageDialog(this, "Error al añadir categoría.");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Ingrese un nombre.");
+            MaterialUnidadMedida dialog = new MaterialUnidadMedida((Frame) this.getParent(), true);
+            dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnAñadirActionPerformed
 
@@ -362,13 +369,15 @@ public class herramientaUnidad extends javax.swing.JDialog {
 
             if (dao.actualizar(categoria)) {  // Necesitarás implementar este método
                 actualizarTabla();
-                JOptionPane.showMessageDialog(this, "¡Categoría actualizada!");
+                ActualizadoCorrectUniMed dialog = new ActualizadoCorrectUniMed((Frame) this.getParent(), true);
+                dialog.setVisible(true);
                 limpiarCampos();
             } else {
                 JOptionPane.showMessageDialog(this, "Error al actualizar", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            AlertaNoVacio dialog = new AlertaNoVacio((Frame) this.getParent(), true);
+            dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
 

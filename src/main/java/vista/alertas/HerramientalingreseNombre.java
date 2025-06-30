@@ -13,54 +13,46 @@ import javax.swing.JDialog;
 
 /**
  *
- * @author EQUIPO
+ * @author LENOVO
  */
-/**
- *
- * @author EQUIPO
- */
-public class LoginAlerta extends JDialog {
 
-    public LoginAlerta() {
-        if (!isVisible()) { // Prevent multiple instances
-            initComponents();
-            setOpacity(0.0f);
-            setBackground(new java.awt.Color(0, 0, 0, 0));
-            Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-            setSize(pantalla);
-            // Agregar KeyListener para detectar la tecla Enter
-            addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyPressed(KeyEvent e) {
-                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        btnCancelarActionPerformed(null); // Simula el clic en el botón OK
-                    }
+public class HerramientalingreseNombre extends JDialog {
+
+    public HerramientalingreseNombre(Frame parent, boolean modal) {
+        super(parent, modal);
+        setUndecorated(true); // Establecer undecorated antes de cualquier otra configuración
+        initComponents();
+        setOpacity(0.0f); // Ahora es seguro establecer la opacidad
+        setBackground(new java.awt.Color(0, 0, 0, 0));
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(pantalla); // Establecer tamaño de pantalla completa
+        setLocationRelativeTo(null); // Centrar en la pantalla
+
+        // Agregar KeyListener para detectar la tecla Enter
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    btnCancelarActionPerformed(null); // Simula el clic en el botón OK
                 }
-            });
-            setFocusable(true); // Asegura que el diálogo pueda recibir el foco
-            // Manual fade-in effect
-            new Thread(() -> {
-                for (float i = 0.0f; i <= 1.0f; i += 0.1f) {
+            }
+        });
+        setFocusable(true); // Asegura que el diálogo pueda recibir el foco
+
+        // Manual fade-in effect
+        new Thread(() -> {
+            for (float i = 0.0f; i <= 1.0f; i += 0.1f) {
+                setOpacity(i);
+                try {
                     setOpacity(i);
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
-                setOpacity(1.0f);
-                setVisible(true); // Show after fade-in
-            }).start();
-        }
-    }
-
-    public LoginAlerta(Frame parent, boolean isEmpty) {
-        this(); // Llama al constructor por defecto
-        this.setLocationRelativeTo(parent); // Centra respecto al padre
-        // No sobrescribimos jLabel1 ni jLabel2, usamos el texto del diseñador
-        if (!isVisible()) {
-            setVisible(true); // Muestra el diálogo
-        }
+            }
+            setOpacity(1.0f);
+            setVisible(true); // Mostrar después del fade-in
+        }).start();
     }
 
     /**
@@ -82,8 +74,6 @@ public class LoginAlerta extends JDialog {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
-        setResizable(false);
 
         jEImagePanel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/fondotransparente.png"))); // NOI18N
         jEImagePanel1.setPreferredSize(new java.awt.Dimension(500, 192));
@@ -123,8 +113,8 @@ public class LoginAlerta extends JDialog {
         jPanel3.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 190, 130, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 21)); // NOI18N
-        jLabel2.setText("Error,  Ingrese su usuario y contraseña");
-        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 130, -1, -1));
+        jLabel2.setText("Porfavor, Ingrese el nombre de la herramienta");
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, -1, -1));
 
         jEImagePanel1.add(jPanel3, new java.awt.GridBagConstraints());
 
@@ -146,26 +136,27 @@ public class LoginAlerta extends JDialog {
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+        /**
+         * @param args the command line arguments
+         */
+        public static void main(String args[]) {
+            try {
+                for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
                 }
+            } catch (Exception ex) {
+                java.util.logging.Logger.getLogger(HerramientalingreseNombre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(LoginAlerta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+            java.awt.EventQueue.invokeLater(() -> {
+                HerramientalingreseNombre dialog = new HerramientalingreseNombre(null, true);
+                dialog.setVisible(true);
+            });
         }
 
-        java.awt.EventQueue.invokeLater(() -> {
-            LoginAlerta dialog = new LoginAlerta();
-            dialog.setVisible(true);
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
     private LIB.JEImagePanel jEImagePanel1;
@@ -176,5 +167,4 @@ public class LoginAlerta extends JDialog {
     private javax.swing.JPanel jPanel3;
     private rojerusan.RSLabelImage rSLabelImage1;
     // End of variables declaration//GEN-END:variables
-
 }

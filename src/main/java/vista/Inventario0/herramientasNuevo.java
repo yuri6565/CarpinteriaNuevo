@@ -7,6 +7,8 @@ package vista.Inventario0;
 import controlador.Ctrl_CategoriaHerramienta;
 import controlador.Ctrl_MarcaHerramienta;
 import controlador.Ctrl_UnidadHerramienta;
+import java.awt.Dialog;
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -28,6 +30,18 @@ import modelo.HerramientaDatos;
 import modelo.Marca;
 import modelo.MaterialDatos;
 import modelo.Unidad;
+import vista.alertas.HerramientaGuardadoExit;
+import vista.alertas.HerramientalingreseNombre;
+import vista.alertas.HerramientasEstado;
+import vista.alertas.MaterialAlerPrecio;
+import vista.alertas.MaterialAlertaCategoria;
+import vista.alertas.MaterialAlertaMarca;
+import vista.alertas.MaterialPrecioNega;
+import vista.alertas.MaterialStockMin;
+import vista.alertas.MaterialUnidadMedida;
+import vista.alertas.MaterialingreseCantidad;
+import vista.alertas.MaterialingreseNombre;
+import vista.alertas.productoexito;
 
 /**
  *
@@ -63,7 +77,7 @@ public class herramientasNuevo extends javax.swing.JDialog {
         cargarCategorias();
         cargarMarcas();
         cargarUnidades();
-        
+
         btnMarca.setToolTipText("<html><b>Agregar marca</html>");
         btnCategoria.setToolTipText("<html><b>Agregar categoría</html>");
         btnUM.setToolTipText("<html><b>Agregar U.M</html>");
@@ -516,33 +530,39 @@ public class herramientasNuevo extends javax.swing.JDialog {
 
         // Validar campos obligatorios
         if (nombre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingrese el nombre de la herramienta.", "Error", JOptionPane.ERROR_MESSAGE);
+            HerramientalingreseNombre dialog = new HerramientalingreseNombre((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
         // Validar y obtener la cantidad
         if (cantidad.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingrese la cantidad.", "Error", JOptionPane.ERROR_MESSAGE);
+            MaterialingreseCantidad dialog = new MaterialingreseCantidad((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
         if (categoriaNombre == null || categoriaNombre.equals("Seleccione categoría:")) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una categoría.", "Error", JOptionPane.ERROR_MESSAGE);
+            MaterialAlertaCategoria dialog = new MaterialAlertaCategoria((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
         if (marcaNombre == null || marcaNombre.equals("Seleccione marca:")) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una marca.", "Error", JOptionPane.ERROR_MESSAGE);
+            MaterialAlertaMarca dialog = new MaterialAlertaMarca((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
         if (unidadNombre == null || unidadNombre.equals("Seleccione unidad-medida:")) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una unidad de medida.", "Error", JOptionPane.ERROR_MESSAGE);
+            MaterialUnidadMedida dialog = new MaterialUnidadMedida((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
         if (estado == null || estado.equals("Seleccione estado:")) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una estado.", "Error", JOptionPane.ERROR_MESSAGE);
+            HerramientasEstado dialog = new HerramientasEstado((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
@@ -551,11 +571,13 @@ public class herramientasNuevo extends javax.swing.JDialog {
         try {
             precioUnitario = Integer.parseInt(txtPrecioUnitario.getText().replace(".", "").trim());
             if (precioUnitario < 0) {
-                JOptionPane.showMessageDialog(this, "El precio no puede ser negativo.", "Error", JOptionPane.ERROR_MESSAGE);
+                MaterialPrecioNega dialog = new MaterialPrecioNega((Frame) this.getParent(), true);
+                dialog.setVisible(true);
                 return;
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Ingrese un número válido en el precio.", "Error", JOptionPane.ERROR_MESSAGE);
+            MaterialAlerPrecio dialog = new MaterialAlerPrecio((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
@@ -618,6 +640,8 @@ public class herramientasNuevo extends javax.swing.JDialog {
                 imagenBytes
         );
 
+        //HerramientaGuardadoExit dialog = new HerramientaGuardadoExit();
+       // dialog.setVisible(true);
         materialGuardado = true;
         dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed

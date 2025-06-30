@@ -5,17 +5,24 @@
 package vista.Inventario0;
 
 import controlador.Ctrl_UnidadMaterial;
+import java.awt.Frame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import modelo.Unidad;
+import vista.alertas.ActualizadoCorrectUniMed;
+import vista.alertas.AlerGuardadoExitgeneral;
+import vista.alertas.AlertaNoVacio;
+import vista.alertas.MaterialUnidadMedida;
 
 /**
  *
  * @author ZenBook
  */
 public class materialUnidad extends javax.swing.JDialog {
+
     private int ultimaFilaSeleccionada = -1;
+
     /**
      * Creates new form materialUnidad
      */
@@ -24,47 +31,47 @@ public class materialUnidad extends javax.swing.JDialog {
         initComponents();
         actualizarTabla();
         tabla1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        
-            // Listener para selección de filas
+
+        // Listener para selección de filas
         tabla1.getSelectionModel().addListSelectionListener(e -> {
-        if (!e.getValueIsAdjusting()) {
-            cargarDatosSeleccionados();
-        }
-    });
+            if (!e.getValueIsAdjusting()) {
+                cargarDatosSeleccionados();
+            }
+        });
     }
-    
+
     private void actualizarTabla() {
-    DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
-    model.setRowCount(0); // Limpiar tabla
+        DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
+        model.setRowCount(0); // Limpiar tabla
 
         Ctrl_UnidadMaterial dao = new Ctrl_UnidadMaterial();
-    
-    for (Unidad unidad : dao.obtenerCategoriasMaterial()) {
-        model.addRow(new Object[]{unidad.getCodigo(), unidad.getNombre()});
-    } 
-   }
-    
-    private void cargarDatosSeleccionados() {
-    int[] selectedRows = tabla1.getSelectedRows(); // Obtener todas las filas seleccionadas
 
-    if (selectedRows.length == 1) { // Solo cargar datos si hay exactamente una fila seleccionada
-        int filaSeleccionada = selectedRows[0];
-        DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
-        txtCodigo.setText(model.getValueAt(filaSeleccionada, 0).toString()); // Código
-        txtNombre.setText(model.getValueAt(filaSeleccionada, 1).toString()); // Nombre
-        ultimaFilaSeleccionada = filaSeleccionada;
-    } else {
-        // Si hay más de una fila seleccionada o ninguna, limpiar los campos
-        limpiarCampos();
-        ultimaFilaSeleccionada = -1;
+        for (Unidad unidad : dao.obtenerCategoriasMaterial()) {
+            model.addRow(new Object[]{unidad.getCodigo(), unidad.getNombre()});
+        }
     }
+
+    private void cargarDatosSeleccionados() {
+        int[] selectedRows = tabla1.getSelectedRows(); // Obtener todas las filas seleccionadas
+
+        if (selectedRows.length == 1) { // Solo cargar datos si hay exactamente una fila seleccionada
+            int filaSeleccionada = selectedRows[0];
+            DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
+            txtCodigo.setText(model.getValueAt(filaSeleccionada, 0).toString()); // Código
+            txtNombre.setText(model.getValueAt(filaSeleccionada, 1).toString()); // Nombre
+            ultimaFilaSeleccionada = filaSeleccionada;
+        } else {
+            // Si hay más de una fila seleccionada o ninguna, limpiar los campos
+            limpiarCampos();
+            ultimaFilaSeleccionada = -1;
+        }
     }
-    
-    
+
     private void limpiarCampos() {
-    txtCodigo.setText("");
-    txtNombre.setText("");
+        txtCodigo.setText("");
+        txtNombre.setText("");
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -246,9 +253,9 @@ public class materialUnidad extends javax.swing.JDialog {
 
         if (filasSeleccionadas.length == 0) {
             JOptionPane.showMessageDialog(this,
-                "Selecciona al menos una categoría primero",
-                "Advertencia",
-                JOptionPane.WARNING_MESSAGE);
+                    "Selecciona al menos una categoría primero",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -261,11 +268,11 @@ public class materialUnidad extends javax.swing.JDialog {
         }
 
         int confirmacion = JOptionPane.showConfirmDialog(
-            this,
-            mensajeConfirmacion,
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE
+                this,
+                mensajeConfirmacion,
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
         );
 
         if (confirmacion == JOptionPane.YES_OPTION) {
@@ -291,24 +298,24 @@ public class materialUnidad extends javax.swing.JDialog {
             if (errorOcurrido) {
                 if (eliminadosExitosos > 0) {
                     JOptionPane.showMessageDialog(this,
-                        "Se eliminaron " + eliminadosExitosos + " categorías, pero hubo errores con algunas.",
-                        "Resultado parcial",
-                        JOptionPane.WARNING_MESSAGE);
+                            "Se eliminaron " + eliminadosExitosos + " categorías, pero hubo errores con algunas.",
+                            "Resultado parcial",
+                            JOptionPane.WARNING_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(this,
-                        "Error al eliminar todas las categorías seleccionadas",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                            "Error al eliminar todas las categorías seleccionadas",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 String mensajeExito = (filasSeleccionadas.length == 1)
-                ? "¡Categoría eliminada correctamente!"
-                : "¡Se eliminaron " + filasSeleccionadas.length + " categorías correctamente!";
+                        ? "¡Categoría eliminada correctamente!"
+                        : "¡Se eliminaron " + filasSeleccionadas.length + " categorías correctamente!";
 
                 JOptionPane.showMessageDialog(this,
-                    mensajeExito,
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
+                        mensajeExito,
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
 
             limpiarCampos();
@@ -324,13 +331,15 @@ public class materialUnidad extends javax.swing.JDialog {
 
             if (dao.insertar(categoria)) {
                 actualizarTabla(); // Refresca la tabla con los datos nuevos
-                JOptionPane.showMessageDialog(this, "Categoría añadida correctamente.");
+                AlerGuardadoExitgeneral dialog = new AlerGuardadoExitgeneral((Frame) this.getParent(), true);
+                dialog.setVisible(true);
                 txtNombre.setText(""); // Limpiar campo de entrada
             } else {
                 JOptionPane.showMessageDialog(this, "Error al añadir categoría.");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Ingrese un nombre.");
+            MaterialUnidadMedida dialog = new MaterialUnidadMedida((Frame) this.getParent(), true);
+            dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnAñadirActionPerformed
 
@@ -345,13 +354,15 @@ public class materialUnidad extends javax.swing.JDialog {
 
             if (dao.actualizar(categoria)) {  // Necesitarás implementar este método
                 actualizarTabla();
-                JOptionPane.showMessageDialog(this, "¡Categoría actualizada!");
+                ActualizadoCorrectUniMed dialog = new ActualizadoCorrectUniMed((Frame) this.getParent(), true);
+                dialog.setVisible(true);
                 limpiarCampos();
             } else {
                 JOptionPane.showMessageDialog(this, "Error al actualizar", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            AlertaNoVacio dialog = new AlertaNoVacio((Frame) this.getParent(), true);
+            dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
