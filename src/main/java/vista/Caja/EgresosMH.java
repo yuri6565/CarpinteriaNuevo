@@ -2,14 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista.Produccion;
+package vista.Caja;
 
+import java.awt.BorderLayout;
+import vista.Produccion.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,9 +36,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.border.TitledBorder;
+import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
+import modelo.CheckableItem;
 import modelo.Conexion;
 import rojeru_san.RSButtonRiple;
 
@@ -43,10 +49,10 @@ import rojeru_san.RSButtonRiple;
  *
  * @author SENA
  */
-public class FormularioMH extends javax.swing.JDialog {
+public class EgresosMH extends javax.swing.JDialog {
 
-    private List<String> materialesSeleccionados;
-    private List<String> herramientasSeleccionadas;
+    private final List<String> materialesSeleccionados;
+    private final List<String> herramientasSeleccionadas;
     private JPanel panelMateriales;
     private JPanel panelHerramientas;
     private boolean confirmado = false;
@@ -56,23 +62,59 @@ public class FormularioMH extends javax.swing.JDialog {
     private List<String> herramientasAEliminar = new ArrayList<>();
     private Map<String, String> cantidadesHerramientasIniciales;
     private Map<String, String> cantidadesMaterialesIniciales;
+    private final double cantidadTotal = 0;
+    private JTextField txtCantidadnuevo;
 
-    public FormularioMH(Frame parent, boolean modal, List<String> materiales, List<String> herramientasLista) {
+    // Constructor principal
+    public EgresosMH(Frame parent, boolean modal, List<CheckableItem> itemsSeleccionados, double cantidadTotal) {
         super(parent, modal);
-        this.materialesSeleccionados = materiales;
-        this.herramientasSeleccionadas = herramientasLista;
-        //System.out.println("Materiales seleccionados: " + materiales);
-        //System.out.println("Herramientas seleccionadas: " + herramientasLista);
+        this.materialesSeleccionados = new ArrayList<>();
+        this.herramientasSeleccionadas = new ArrayList<>();
+
+        // Clasificación mejorada de items
+        for (CheckableItem item : itemsSeleccionados) {
+            // Consultar a la base de datos para determinar el tipo real
+            String tipo = obtenerTipoItemDesdeBD(item.getId());
+
+            if (tipo != null && tipo.equalsIgnoreCase("material")) {
+                materialesSeleccionados.add(item.toString());
+            } else if (tipo != null && tipo.equalsIgnoreCase("herramienta")) {
+                herramientasSeleccionadas.add(item.toString());
+            }
+        }
+
         initComponents();
+        configurarInterfaz();
+    }
+
+    private String obtenerTipoItemDesdeBD(int idItem) {
+        String tipo = null;
+        try (Connection con = Conexion.getConnection()) {
+            String sql = "SELECT tipo FROM inventario WHERE id_inventario = ?";
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setInt(1, idItem);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        tipo = rs.getString("tipo");
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EgresosMH.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return tipo;
+    }
+
+    private void configurarInterfaz() {
         cargarInventario();
         generarCamposDinamicos();
-        // Configurar JScrollPane para ContenedorH
+
+        // Configuración de los scroll panes
         ContenedorH.setBackground(new java.awt.Color(255, 255, 255));
         JScrollPane scrollPaneH = new JScrollPane(ContenedorH);
         scrollPaneH.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         jPanel1.add(scrollPaneH, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 60, 360, 370));
 
-        // Configurar JScrollPane para ContenedorM
         ContenedorM.setBackground(new java.awt.Color(255, 255, 255));
         JScrollPane scrollPaneM = new JScrollPane(ContenedorM);
         scrollPaneM.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -82,7 +124,6 @@ public class FormularioMH extends javax.swing.JDialog {
     private void cargarInventario() {
         inventarioMateriales.clear();
         inventarioHerramientas.clear();
-        //System.out.println("Iniciando carga de inventario...");
 
         try (Connection con = Conexion.getConnection()) {
             // Cargar materiales
@@ -92,20 +133,14 @@ public class FormularioMH extends javax.swing.JDialog {
                     + "WHERE i.tipo = 'material' ";
             try (PreparedStatement ps = con.prepareStatement(sqlMateriales)) {
                 ResultSet rs = ps.executeQuery();
-                int materialCount = 0;
                 while (rs.next()) {
                     String nombre = rs.getString("nombre");
                     String cantidadStr = rs.getString("cantidad").trim();
-                    //System.out.println("Cantidad cruda para material " + nombre + ": '" + cantidadStr + "'");
                     double cantidad = parseCantidad(cantidadStr);
-                    //System.out.println("Cantidad parseada para material " + nombre + ": " + cantidad);
                     String unidad = rs.getString("unidad");
                     String clave = nombre + "|" + unidad;
                     inventarioMateriales.put(clave, cantidad);
-                    // System.out.println("Material cargado: " + clave + " -> " + cantidad);
-                    materialCount++;
                 }
-                // System.out.println("Total materiales cargados: " + materialCount);
             }
 
             // Cargar herramientas
@@ -115,96 +150,21 @@ public class FormularioMH extends javax.swing.JDialog {
                     + "WHERE i.tipo = 'herramienta' ";
             try (PreparedStatement ps = con.prepareStatement(sqlHerramientas)) {
                 ResultSet rs = ps.executeQuery();
-                int herramientaCount = 0;
                 while (rs.next()) {
                     String nombre = rs.getString("nombre");
                     String cantidadStr = rs.getString("cantidad").trim();
-                    //System.out.println("Cantidad cruda para herramienta " + nombre + ": '" + cantidadStr + "'");
                     double cantidad = parseCantidad(cantidadStr);
-                    //System.out.println("Cantidad parseada para herramienta " + nombre + ": " + cantidad);
                     String unidad = rs.getString("unidad");
                     String clave = nombre + "|" + unidad;
                     inventarioHerramientas.put(clave, cantidad);
-                    //System.out.println("Herramienta cargada: " + clave + " -> " + cantidad);
-                    herramientaCount++;
                 }
-                //System.out.println("Total herramientas cargadas: " + herramientaCount);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FormularioMH.class.getName()).log(Level.SEVERE, "Error al cargar inventario", ex);
+            Logger.getLogger(EgresosMH.class.getName()).log(Level.SEVERE, "Error al cargar inventario", ex);
             JOptionPane.showMessageDialog(this,
                     "Error al cargar el inventario: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    private double parseCantidad(String cantidadStr) {
-        try {
-            // Normalizar: eliminar puntos (separadores de miles) y reemplazar coma por punto
-            String normalized = cantidadStr.replace(".", "").replace(",", ".");
-            double cantidad = Double.parseDouble(normalized);
-            if (cantidad < 0) {
-                //System.err.println("Cantidad negativa detectada: " + cantidadStr + " -> " + cantidad);
-                return 0.0;
-            }
-            return cantidad;
-        } catch (NumberFormatException e) {
-            // System.err.println("Error al parsear cantidad: '" + cantidadStr + "' - " + e.getMessage());
-            return 0.0; // Valor predeterminado
-        }
-    }
-
-    private void generarCamposDinamicos() {
-        panelMateriales = new JPanel();
-        panelMateriales.setLayout(new BoxLayout(panelMateriales, BoxLayout.Y_AXIS));
-        panelMateriales.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.GRAY),
-                "Materiales",
-                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION,
-                new Font("Segoe UI", Font.BOLD, 18) // Tamaño 14 y negrita
-        ));
-        panelMateriales.setBackground(Color.WHITE);
-        panelHerramientas = new JPanel();
-        panelHerramientas.setLayout(new BoxLayout(panelHerramientas, BoxLayout.Y_AXIS));
-        panelHerramientas.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.GRAY),
-                "Herramientas",
-                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION,
-                new Font("Segoe UI", Font.BOLD, 18) // Tamaño 14 y negrita
-        ));
-        panelHerramientas.setBackground(Color.WHITE);
-
-        // Agregar campos para materiales
-        for (String material : materialesSeleccionados) {
-            agregarCampoMaterial(material);
-        }
-
-        // Agregar campos para herramientas
-        for (String herramienta : herramientasSeleccionadas) {
-            agregarCampoHerramienta(herramienta);
-        }
-
-        // Añadir panelMateriales a ContenedorM
-        ContenedorM.setLayout(new BoxLayout(ContenedorM, BoxLayout.Y_AXIS));
-        ContenedorM.removeAll();
-        ContenedorM.add(panelMateriales);
-
-        // Añadir panelHerramientas a ContenedorH
-        ContenedorH.setLayout(new BoxLayout(ContenedorH, BoxLayout.Y_AXIS));
-        ContenedorH.removeAll();
-        ContenedorH.add(panelHerramientas);
-
-        // Forzar revalidación y repintado
-        ContenedorM.revalidate();
-        ContenedorM.repaint();
-        ContenedorH.revalidate();
-        ContenedorH.repaint();
-
-        // Ajustar tamaño del JDialog (fijo para permitir scroll)
-        this.setSize(520, 700); // Tamaño fijo suficiente para título, botones y área de scroll
-        this.pack();
     }
 
     private void agregarCampoMaterial(String nombreMaterial) {
@@ -212,6 +172,7 @@ public class FormularioMH extends javax.swing.JDialog {
         formatter.setMinimumFractionDigits(2);
         formatter.setMaximumFractionDigits(2);
 
+        // Buscar en inventario de materiales
         String claveCompleta = inventarioMateriales.keySet().stream()
                 .filter(k -> k.startsWith(nombreMaterial + "|"))
                 .findFirst()
@@ -221,6 +182,44 @@ public class FormularioMH extends javax.swing.JDialog {
         String nombre = partes[0];
         String unidad = partes.length > 1 ? partes[1] : "unidad";
         double stockActual = inventarioMateriales.getOrDefault(claveCompleta, 0.0);
+
+        // Crear fila con estilo original
+        JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        fila.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        fila.setBackground(Color.WHITE);
+
+        JLabel label = new JLabel(String.format("<html><b>%s</b> (Stock: %s %s)</html>",
+                nombre, formatter.format(stockActual), unidad));
+        label.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+
+        JTextField txtCantidad = new JTextField(formatter.format(0.0));
+        txtCantidad.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        txtCantidad.setForeground(Color.BLACK);
+        txtCantidad.setPreferredSize(new Dimension(100, 30));
+
+        // Aplicar filtro de números
+        ((AbstractDocument) txtCantidad.getDocument()).setDocumentFilter(new NumberFilter());
+
+        fila.add(label);
+        fila.add(txtCantidad);
+        panelMateriales.add(fila);
+        panelMateriales.add(Box.createVerticalStrut(5));
+    }
+
+    private void agregarCampoHerramienta(String nombreHerramienta) {
+        NumberFormat formatter = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
+        formatter.setMinimumFractionDigits(2);
+        formatter.setMaximumFractionDigits(2);
+
+        String claveCompleta = inventarioHerramientas.keySet().stream()
+                .filter(k -> k.startsWith(nombreHerramienta + "|"))
+                .findFirst()
+                .orElse(nombreHerramienta + "|unidad");
+
+        String[] partes = claveCompleta.split("\\|");
+        String nombre = partes[0];
+        String unidad = partes.length > 1 ? partes[1] : "unidad";
+        double stockActual = inventarioHerramientas.getOrDefault(claveCompleta, 0.0);
 
         JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
         fila.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -235,58 +234,89 @@ public class FormularioMH extends javax.swing.JDialog {
         txtCantidad.setForeground(Color.BLACK);
         txtCantidad.setPreferredSize(new Dimension(100, 30));
 
-        ((javax.swing.text.AbstractDocument) txtCantidad.getDocument())
-                .setDocumentFilter(new NumberFilter(stockActual));
+        ((AbstractDocument) txtCantidad.getDocument()).setDocumentFilter(new NumberFilter());
 
         fila.add(label);
         fila.add(txtCantidad);
-        panelMateriales.add(fila);
-        panelMateriales.add(Box.createVerticalStrut(5));
-        panelMateriales.revalidate();
-        panelMateriales.repaint();
+        panelHerramientas.add(fila); // CORRECCIÓN: Ahora se agrega al panel correcto
+        panelHerramientas.add(Box.createVerticalStrut(5));
     }
 
-    private void agregarCampoHerramienta(String nombreHerramienta) {
-        NumberFormat formatter = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
-        formatter.setMinimumFractionDigits(2);
-        formatter.setMaximumFractionDigits(2);
+    private void actualizarStockInventario(Connection con, int idInventario, double cantidad) throws SQLException {
+        // Validar que la cantidad sea positiva
+        if (cantidad <= 0) {
+            throw new SQLException("La cantidad debe ser mayor que cero");
+        }
 
-        //System.out.println("Buscando herramienta: " + nombreHerramienta);
-        String claveCompleta = inventarioHerramientas.keySet().stream()
-                .filter(k -> k.startsWith(nombreHerramienta + "|"))
-                .findFirst()
-                .orElse(nombreHerramienta + "|unidad");
-        //System.out.println("Clave encontrada: " + claveCompleta);
+        // Obtener la cantidad actual del inventario
+        String sqlSelect = "SELECT cantidad FROM inventario WHERE id_inventario = ?";
+        double cantidadActual = 0.0;
+        try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
+            psSelect.setInt(1, idInventario);
+            try (ResultSet rs = psSelect.executeQuery()) {
+                if (rs.next()) {
+                    String cantidadStr = rs.getString("cantidad").trim();
+                    cantidadActual = parseCantidad(cantidadStr);
+                } else {
+                    throw new SQLException("No se encontró el inventario con ID: " + idInventario);
+                }
+            }
+        }
 
-        String[] partes = claveCompleta.split("\\|");
-        String nombre = partes[0];
-        String unidad = partes.length > 1 ? partes[1] : "unidad";
-        double stockActual = inventarioHerramientas.getOrDefault(claveCompleta, 0.0);
-        //System.out.println("Stock actual para herramienta: " + nombre + " -> " + stockActual);
+        // Sumar la nueva cantidad (sin restricciones de máximo)
+        double nuevaCantidad = cantidadActual + cantidad;
 
-        JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        fila.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        fila.setBackground(Color.WHITE);
+        // Formatear la cantidad
+        java.text.NumberFormat numberFormat = java.text.NumberFormat.getNumberInstance(java.util.Locale.forLanguageTag("es-ES"));
+        numberFormat.setMinimumFractionDigits(2);
+        numberFormat.setMaximumFractionDigits(2);
+        String cantidadFormateada = numberFormat.format(nuevaCantidad).replace(".", ",");
 
-        JLabel label = new JLabel(String.format("<html><b>%s</b> (Stock: %s %s)</html>",
-                nombre, formatter.format(stockActual), unidad));
-        label.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        // Actualizar el inventario
+        String sqlUpdate = "UPDATE inventario SET cantidad = ? WHERE id_inventario = ?";
+        try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
+            psUpdate.setString(1, cantidadFormateada);
+            psUpdate.setInt(2, idInventario);
+            int affectedRows = psUpdate.executeUpdate();
 
-        JTextField txtCantidad = new JTextField(formatter.format(0.0)); // Inicializar con '0,00'
-        txtCantidad.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        txtCantidad.setForeground(Color.BLACK);
-        txtCantidad.setPreferredSize(new Dimension(100, 30));
+            if (affectedRows == 0) {
+                throw new SQLException("No se pudo actualizar el stock");
+            }
+        }
+    }
 
-        ((javax.swing.text.AbstractDocument) txtCantidad.getDocument())
-                .setDocumentFilter(new NumberFilter(stockActual));
+    private double parseCantidad(String cantidadStr) {
+        try {
+            String normalized = cantidadStr.replace(".", "").replace(",", ".");
+            return Double.parseDouble(normalized);
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
 
-        fila.add(label);
-        fila.add(txtCantidad);
+    private void actualizarInventario(Connection con, List<CheckableItem> seleccionados) throws SQLException {
+        try {
+            // Validar que haya seleccionados
+            if (seleccionados == null || seleccionados.isEmpty()) {
+                throw new SQLException("No hay ítems seleccionados para actualizar");
+            }
 
-        panelHerramientas.add(fila);
-        panelHerramientas.add(Box.createVerticalStrut(5));
-        panelHerramientas.revalidate();
-        panelHerramientas.repaint();
+            // Obtener la cantidad del campo (asumiendo que es la misma para todos)
+            double cantidad = Double.parseDouble(txtCantidadnuevo.getText().trim().replace(",", "."));
+
+            // Validar cantidad positiva
+            if (cantidad <= 0) {
+                throw new SQLException("La cantidad debe ser mayor que cero");
+            }
+
+            // Actualizar cada ítem seleccionado
+            for (CheckableItem item : seleccionados) {
+                actualizarStockInventario(con, item.getId(), cantidad);
+            }
+
+        } catch (NumberFormatException e) {
+            throw new SQLException("Formato de cantidad inválido: " + e.getMessage());
+        }
     }
 
     public void setCantidadesIniciales(Map<String, String> materiales, Map<String, String> herramientas) {
@@ -294,98 +324,6 @@ public class FormularioMH extends javax.swing.JDialog {
         this.cantidadesHerramientasIniciales = herramientas;
     }
 
-    private void actualizarCantidadesUsadas(Connection con, FormularioMH formMH, int idEtapa) throws SQLException {
-        Map<String, String> cantidadesMateriales = formMH.getCantidadesMateriales();
-        Map<String, String> cantidadesHerramientas = formMH.getCantidadesHerramientas();
-
-        // 1. Para materiales
-        for (Map.Entry<String, String> entry : cantidadesMateriales.entrySet()) {
-            String nombre = entry.getKey();
-            // Normalizar el valor reemplazando coma por punto
-            String cantidadStr = entry.getValue().replace(",", ".");
-            double cantidadNueva = Double.parseDouble(cantidadStr);
-
-            // a. Obtener cantidad actual en utilizado
-            String sqlSelect = "SELECT cantidad_usada FROM utilizado "
-                    + "WHERE etapa_produccion_idetapa_produccion = ? "
-                    + "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
-            try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
-                psSelect.setInt(1, idEtapa);
-                psSelect.setString(2, nombre);
-                ResultSet rs = psSelect.executeQuery();
-
-                if (rs.next()) {
-                    double cantidadActual = rs.getDouble("cantidad_usada");
-                    double diferencia = cantidadActual - cantidadNueva;
-
-                    // b. Ajustar inventario si la cantidad cambió
-                    if (diferencia != 0) {
-                        String sqlUpdateInventario = "UPDATE inventario SET cantidad = cantidad + ? "
-                                + "WHERE nombre = ?";
-                        try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdateInventario)) {
-                            psUpdate.setDouble(1, diferencia);
-                            psUpdate.setString(2, nombre);
-                            psUpdate.executeUpdate();
-                        }
-                    }
-                }
-
-                // c. Actualizar cantidad en utilizado
-                String sqlUpdate = "UPDATE utilizado SET cantidad_usada = ? "
-                        + "WHERE etapa_produccion_idetapa_produccion = ? "
-                        + "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
-                try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
-                    psUpdate.setDouble(1, cantidadNueva);
-                    psUpdate.setInt(2, idEtapa);
-                    psUpdate.setString(3, nombre);
-                    psUpdate.executeUpdate();
-                }
-            }
-        }
-
-        // 2. Para herramientas (código duplicado, puedes optimizarlo en un método separado si lo deseas)
-        for (Map.Entry<String, String> entry : cantidadesHerramientas.entrySet()) {
-            String nombre = entry.getKey();
-            String cantidadStr = entry.getValue().replace(",", ".");
-            double cantidadNueva = Double.parseDouble(cantidadStr);
-
-            String sqlSelect = "SELECT cantidad_usada FROM utilizado "
-                    + "WHERE etapa_produccion_idetapa_produccion = ? "
-                    + "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
-            try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
-                psSelect.setInt(1, idEtapa);
-                psSelect.setString(2, nombre);
-                ResultSet rs = psSelect.executeQuery();
-
-                if (rs.next()) {
-                    double cantidadActual = rs.getDouble("cantidad_usada");
-                    double diferencia = cantidadActual - cantidadNueva;
-
-                    if (diferencia != 0) {
-                        String sqlUpdateInventario = "UPDATE inventario SET cantidad = cantidad + ? "
-                                + "WHERE nombre = ?";
-                        try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdateInventario)) {
-                            psUpdate.setDouble(1, diferencia);
-                            psUpdate.setString(2, nombre);
-                            psUpdate.executeUpdate();
-                        }
-                    }
-                }
-
-                String sqlUpdate = "UPDATE utilizado SET cantidad_usada = ? "
-                        + "WHERE etapa_produccion_idetapa_produccion = ? "
-                        + "AND inventario_id_inventario = (SELECT id_inventario FROM inventario WHERE nombre = ?)";
-                try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
-                    psUpdate.setDouble(1, cantidadNueva);
-                    psUpdate.setInt(2, idEtapa);
-                    psUpdate.setString(3, nombre);
-                    psUpdate.executeUpdate();
-                }
-            }
-        }
-    }
-
-// DocumentFilter to restrict input to numbers and max quantity
     public List<String> getMaterialesAEliminar() {
         return materialesAEliminar;
     }
@@ -394,60 +332,11 @@ public class FormularioMH extends javax.swing.JDialog {
         return herramientasAEliminar;
     }
 
-    private class NumberFilter extends DocumentFilter {
-
-        private final double maxQuantity;
-        private final NumberFormat numberFormat;
-
-        public NumberFilter(double maxQuantity) {
-            this.maxQuantity = maxQuantity;
-            this.numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
-            numberFormat.setMinimumFractionDigits(0);
-            numberFormat.setMaximumFractionDigits(2);
-        }
-
-        @Override
-        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
-                throws BadLocationException {
-            String newStr = fb.getDocument().getText(0, fb.getDocument().getLength());
-            newStr = newStr.substring(0, offset) + text + newStr.substring(offset + length);
-
-            if (isValidInput(newStr)) {
-                super.replace(fb, offset, length, text, attrs);
-            } else {
-                Toolkit.getDefaultToolkit().beep();
-            }
-        }
-
-        @Override
-        public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
-                throws BadLocationException {
-            String newStr = fb.getDocument().getText(0, fb.getDocument().getLength());
-            newStr = newStr.substring(0, offset) + string + newStr.substring(offset);
-
-            if (isValidInput(newStr)) {
-                super.insertString(fb, offset, string, attr);
-            } else {
-                Toolkit.getDefaultToolkit().beep();
-            }
-        }
-
-        private boolean isValidInput(String input) {
-            if (input.isEmpty()) {
-                return true;
-            }
-            if (!input.matches("\\d*,?\\d{0,2}")) {
-                return false;
-            }
-            try {
-                Number parsed = numberFormat.parse(input);
-                double value = parsed.doubleValue();
-                return value >= 0 && value <= maxQuantity;
-            } catch (ParseException e) {
-                return false;
-            }
-        }
+    private void mostrarError(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    
 
     public boolean isConfirmado() {
         return confirmado;
@@ -456,29 +345,25 @@ public class FormularioMH extends javax.swing.JDialog {
     public Map<String, String> getCantidadesMateriales() {
         Map<String, String> cantidades = new HashMap<>();
         NumberFormat formatter = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
-        formatter.setMinimumFractionDigits(2);
-        formatter.setMaximumFractionDigits(2);
 
         for (Component comp : panelMateriales.getComponents()) {
             if (comp instanceof JPanel) {
                 JPanel fila = (JPanel) comp;
-                JLabel label = (JLabel) fila.getComponent(0);
-                JTextField txtCantidad = (JTextField) fila.getComponent(1);
+                if (fila.getComponentCount() >= 2) {
+                    JLabel label = (JLabel) fila.getComponent(0);
+                    JTextField txtCantidad = (JTextField) fila.getComponent(1);
 
-                String textoLabel = label.getText();
-                String nombreMaterial = textoLabel.split("<b>")[1].split("</b>")[0].trim();
-
-                String cantidadStr = txtCantidad.getText().trim();
-                try {
-                    double cantidad = cantidadStr.isEmpty() || cantidadStr.equals("0,00") ? 0.0
-                            : formatter.parse(cantidadStr).doubleValue();
-                    cantidades.put(nombreMaterial, formatter.format(cantidad));
-                } catch (ParseException e) {
-                    cantidades.put(nombreMaterial, "");
+                    String nombreMaterial = obtenerNombreDeLabel(label.getText());
+                    cantidades.put(nombreMaterial, txtCantidad.getText().trim());
                 }
             }
         }
         return cantidades;
+    }
+
+    private String obtenerNombreDeLabel(String textoLabel) {
+        // Extrae el nombre del material/herramienta del texto del label
+        return textoLabel.replaceAll("<html><b>|</b>.*", "");
     }
 
     public Map<String, String> getCantidadesHerramientas() {
@@ -615,12 +500,17 @@ public class FormularioMH extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
+        Connection con = null;
         try {
             NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
             numberFormat.setMinimumFractionDigits(2);
             numberFormat.setMaximumFractionDigits(2);
 
-            // Validar cantidades de materiales
+            // Obtener conexión y comenzar transacción
+            con = Conexion.getConnection();
+            con.setAutoCommit(false);
+
+            // Procesar MATERIALES (SUMAR al inventario)
             for (Component comp : panelMateriales.getComponents()) {
                 if (comp instanceof JPanel) {
                     JPanel fila = (JPanel) comp;
@@ -629,36 +519,33 @@ public class FormularioMH extends javax.swing.JDialog {
 
                     String textoLabel = label.getText();
                     String nombreMaterial = textoLabel.split("<b>")[1].split("</b>")[0].trim();
-                    double stockActual = numberFormat.parse(
-                            textoLabel.split("Stock: ")[1].split("\\s")[0]).doubleValue();
                     String cantidadStr = txtCantidad.getText().trim();
-                    double cantidad = cantidadStr.isEmpty() || cantidadStr.equals("0,00") ? 0.0
-                            : numberFormat.parse(cantidadStr).doubleValue();
 
-                    if (cantidad > stockActual) {
-                        new Error_guardar(
-                                (Frame) SwingUtilities.getWindowAncestor(this),
-                                true,
-                                "Error",
-                                "La cantidad de " + nombreMaterial + " excede el stock disponible ("
-                                + numberFormat.format(stockActual) + ")"
-                        ).setVisible(true);
+                    if (cantidadStr.isEmpty() || cantidadStr.equals("0,00")) {
+                        continue;
+                    }
+
+                    double cantidad = numberFormat.parse(cantidadStr).doubleValue();
+
+                    if (cantidad <= 0) {
+                        con.rollback();
+                        JOptionPane.showMessageDialog(this,
+                                "La cantidad de " + nombreMaterial + " debe ser mayor que cero",
+                                "Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
-                    if (cantidad < 0) {
-                        new Error_guardar(
-                                (Frame) SwingUtilities.getWindowAncestor(this),
-                                true,
-                                "Error",
-                                "La cantidad de " + nombreMaterial + " no puede ser negativa"
-                        ).setVisible(true);
-                        return;
+                    // SUMAR la cantidad al inventario (cambió el - por +)
+                    String sql = "UPDATE inventario SET cantidad = cantidad + ? WHERE nombre = ? AND tipo = 'material'";
+                    try (PreparedStatement ps = con.prepareStatement(sql)) {
+                        ps.setDouble(1, cantidad);
+                        ps.setString(2, nombreMaterial);
+                        ps.executeUpdate();
                     }
                 }
             }
 
-            // Validar cantidades de herramientas
+            // Procesar HERRAMIENTAS (SUMAR al inventario)
             for (Component comp : panelHerramientas.getComponents()) {
                 if (comp instanceof JPanel) {
                     JPanel fila = (JPanel) comp;
@@ -667,40 +554,69 @@ public class FormularioMH extends javax.swing.JDialog {
 
                     String textoLabel = label.getText();
                     String nombreHerramienta = textoLabel.split("<b>")[1].split("</b>")[0].trim();
-                    double stockActual = numberFormat.parse(
-                            textoLabel.split("Stock: ")[1].split("\\s")[0]).doubleValue();
                     String cantidadStr = txtCantidad.getText().trim();
-                    double cantidad = cantidadStr.isEmpty() || cantidadStr.equals("0,00") ? 0.0
-                            : numberFormat.parse(cantidadStr).doubleValue();
 
-                    if (cantidad > stockActual) {
+                    if (cantidadStr.isEmpty() || cantidadStr.equals("0,00")) {
+                        continue;
+                    }
+
+                    double cantidad = numberFormat.parse(cantidadStr).doubleValue();
+
+                    if (cantidad <= 0) {
+                        con.rollback();
                         JOptionPane.showMessageDialog(this,
-                                "La cantidad de " + nombreHerramienta + " excede el stock disponible ("
-                                + numberFormat.format(stockActual) + ")",
+                                "La cantidad de " + nombreHerramienta + " debe ser mayor que cero",
                                 "Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
-                    if (cantidad < 0) {
-                        JOptionPane.showMessageDialog(this,
-                                "La cantidad de " + nombreHerramienta + " no puede ser negativa",
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
+                    // SUMAR la cantidad al inventario (cambió el - por +)
+                    String sql = "UPDATE inventario SET cantidad = cantidad + ? WHERE nombre = ? AND tipo = 'herramienta'";
+                    try (PreparedStatement ps = con.prepareStatement(sql)) {
+                        ps.setDouble(1, cantidad);
+                        ps.setString(2, nombreHerramienta);
+                        ps.executeUpdate();
                     }
                 }
             }
 
+            // Confirmar transacción
+            con.commit();
             confirmado = true;
+            JOptionPane.showMessageDialog(this,
+                    "Ingresos al inventario registrados correctamente",
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
+
         } catch (ParseException | NumberFormatException e) {
-            new Error_guardar(
-                    (Frame) SwingUtilities.getWindowAncestor(this),
-                    true,
-                    "Error",
-                    "Ingrese valores numéricos válidos (ej: 10,50)"
-            ).setVisible(true);
-            e.printStackTrace();
+            try {
+                if (con != null) {
+                    con.rollback();
+                }
+            } catch (SQLException ex) {
+            }
+            JOptionPane.showMessageDialog(this,
+                    "Error en formato de números: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException e) {
+            try {
+                if (con != null) {
+                    con.rollback();
+                }
+            } catch (SQLException ex) {
+            }
+            JOptionPane.showMessageDialog(this,
+                    "Error al actualizar inventario: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+            }
         }
+
 
     }//GEN-LAST:event_btnGuardar1ActionPerformed
 
@@ -748,6 +664,7 @@ public class FormularioMH extends javax.swing.JDialog {
         return herramientas;
     }
     private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
+        this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnCancelar1ActionPerformed
 
@@ -763,18 +680,18 @@ public class FormularioMH extends javax.swing.JDialog {
                 }
             }
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(FormularioMH.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EgresosMH.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         java.awt.EventQueue.invokeLater(() -> {
-            List<String> materiales = new ArrayList<>();
-            materiales.add("Material1");
-            materiales.add("Material2");
-            List<String> herramientas = new ArrayList<>();
-            herramientas.add("Herramienta1");
-            herramientas.add("Herramienta2");
+            // Ejemplo con CheckableItems
+            List<CheckableItem> seleccionados = new ArrayList<>();
+            seleccionados.add(new CheckableItem(1, "Material 1", false));
+            seleccionados.add(new CheckableItem(2, "Material 2", false));
+            seleccionados.add(new CheckableItem(3, "Herramienta 1", false));
+            seleccionados.add(new CheckableItem(4, "Herramienta 2", false));
 
-            FormularioMH dialog = new FormularioMH(new javax.swing.JFrame(), true, materiales, herramientas);
+            EgresosMH dialog = new EgresosMH(new javax.swing.JFrame(), true, seleccionados, 0.0);
             dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
                 public void windowClosing(java.awt.event.WindowEvent e) {
@@ -794,4 +711,107 @@ public class FormularioMH extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
+private void generarCamposDinamicos() {
+        panelMateriales = new JPanel();
+        panelMateriales.setLayout(new BoxLayout(panelMateriales, BoxLayout.Y_AXIS));
+        panelMateriales.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.GRAY),
+                "Materiales",
+                TitledBorder.DEFAULT_JUSTIFICATION,
+                TitledBorder.DEFAULT_POSITION,
+                new Font("Segoe UI", Font.BOLD, 18)
+        ));
+        panelMateriales.setBackground(Color.WHITE);
+
+        panelHerramientas = new JPanel();
+        panelHerramientas.setLayout(new BoxLayout(panelHerramientas, BoxLayout.Y_AXIS));
+        panelHerramientas.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.GRAY),
+                "Herramientas",
+                TitledBorder.DEFAULT_JUSTIFICATION,
+                TitledBorder.DEFAULT_POSITION,
+                new Font("Segoe UI", Font.BOLD, 18)
+        ));
+        panelHerramientas.setBackground(Color.WHITE);
+
+        // Agregar campos para materiales
+        for (String material : materialesSeleccionados) {
+            agregarCampoMaterial(material);
+        }
+
+        // Agregar campos para herramientas
+        for (String herramienta : herramientasSeleccionadas) {
+            agregarCampoHerramienta(herramienta);
+        }
+
+        ContenedorM.setLayout(new BoxLayout(ContenedorM, BoxLayout.Y_AXIS));
+        ContenedorM.removeAll();
+        ContenedorM.add(panelMateriales);
+
+        ContenedorH.setLayout(new BoxLayout(ContenedorH, BoxLayout.Y_AXIS));
+        ContenedorH.removeAll();
+        ContenedorH.add(panelHerramientas);
+
+        ContenedorM.revalidate();
+        ContenedorM.repaint();
+        ContenedorH.revalidate();
+        ContenedorH.repaint();
+    }
+
+    private class NumberFilter extends DocumentFilter {
+
+        private Double maxQuantity = null; // Ahora es opcional
+        private final NumberFormat numberFormat;
+
+        // Constructor original (para compatibilidad)
+        public NumberFilter(double maxQuantity) {
+            this.maxQuantity = maxQuantity;
+            this.numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
+            numberFormat.setMinimumFractionDigits(0);
+            numberFormat.setMaximumFractionDigits(2);
+        }
+
+        // Nuevo constructor sin restricciones
+        public NumberFilter() {
+            this.numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
+            numberFormat.setMinimumFractionDigits(0);
+            numberFormat.setMaximumFractionDigits(2);
+        }
+
+        @Override
+        public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+                throws BadLocationException {
+            String newStr = fb.getDocument().getText(0, fb.getDocument().getLength()) + string;
+            if (isValidInput(newStr)) {
+                super.insertString(fb, offset, string, attr);
+            } else {
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
+
+        @Override
+        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+                throws BadLocationException {
+            String newStr = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
+            if (isValidInput(newStr)) {
+                super.replace(fb, offset, length, text, attrs);
+            } else {
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
+
+        private boolean isValidInput(String input) {
+            if (input.isEmpty()) {
+                return true;
+            }
+            try {
+                Number parsed = numberFormat.parse(input.replace(",", "."));
+                double value = parsed.doubleValue();
+                // Solo verifica el máximo si maxQuantity no es null
+                return value >= 0 && (maxQuantity == null || value <= maxQuantity);
+            } catch (ParseException e) {
+                return false;
+            }
+        }
+    }
 }

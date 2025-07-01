@@ -2,17 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package vista.Produccion;
+package vista.alertas;
 
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
+import javax.swing.JDialog;
+import vista.Produccion.alertaEliminarEtapa;
 
 /**
  *
  * @author EQUIPO
  */
-public class Error_fecha extends javax.swing.JDialog {
+public class Error_fecha extends JDialog {
 
     private Object customIconPath;
 
