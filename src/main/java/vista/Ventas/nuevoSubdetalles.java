@@ -5,6 +5,7 @@
 package vista.Ventas;
 
 import java.awt.Color;
+import java.awt.Frame;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
@@ -18,6 +19,12 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
 import modelo.PedidoDetalle;
 import vista.Inventario0.NumberFormatFilterInventario;
+import vista.alertas.IngreseNumeroValido;
+import vista.alertas.MaterialPrecioNega;
+import vista.alertas.PedidoAlertasmedidas;
+import vista.alertas.Pedidoanadirdescripcion;
+import vista.alertas.PedidocantidadInvalida;
+import vista.alertas.Pedidomayorquecero;
 
 /**
  *
@@ -457,13 +464,15 @@ public class nuevoSubdetalles extends javax.swing.JDialog {
         String precioUnitarioStr = txtPrecio.getText().replace(".", "").trim();
 
         if (descripcion.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingrese la descripción.", "Error", JOptionPane.ERROR_MESSAGE);
+            Pedidoanadirdescripcion dialog = new Pedidoanadirdescripcion((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
         // Validar medidas (alto y ancho son obligatorios, profundidad es opcional)
         if (alto.isEmpty() || ancho.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, complete al menos el alto y el ancho.", "Error", JOptionPane.ERROR_MESSAGE);
+            PedidoAlertasmedidas dialog = new PedidoAlertasmedidas((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
@@ -477,11 +486,13 @@ public class nuevoSubdetalles extends javax.swing.JDialog {
         try {
             cantidad = Integer.parseInt(cantidadStr);
             if (cantidad <= 0) {
-                JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a 0.", "Error", JOptionPane.ERROR_MESSAGE);
+                Pedidomayorquecero dialog = new Pedidomayorquecero((Frame) this.getParent(), true);
+                dialog.setVisible(true);
                 return;
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Cantidad inválida.", "Error", JOptionPane.ERROR_MESSAGE);
+            PedidocantidadInvalida dialog = new PedidocantidadInvalida((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
@@ -490,11 +501,13 @@ public class nuevoSubdetalles extends javax.swing.JDialog {
         try {
             precioUnitario = Integer.parseInt(txtPrecio.getText().replace(".", "").trim());
             if (precioUnitario < 0) {
-                JOptionPane.showMessageDialog(this, "El precio no puede ser negativo.", "Error", JOptionPane.ERROR_MESSAGE);
+                MaterialPrecioNega dialog = new MaterialPrecioNega((Frame) this.getParent(), true);
+                dialog.setVisible(true);
                 return;
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Ingrese un número válido en el precio.", "Error", JOptionPane.ERROR_MESSAGE);
+            IngreseNumeroValido dialog = new IngreseNumeroValido((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 

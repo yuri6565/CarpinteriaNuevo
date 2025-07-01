@@ -8,6 +8,7 @@ import controlador.Ctrl_Cliente;
 import controlador.Ctrl_Pedido;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -26,6 +27,9 @@ import modelo.Conexion;
 import modelo.Pedido;
 import modelo.PedidoDetalle;
 import vista.TemaManager;
+import vista.alertas.PedidoIngreseClienteValido;
+import vista.alertas.PedidoIngresefechaFIN;
+import vista.alertas.PedidoIngresefechaINI;
 
 /**
  *
@@ -66,7 +70,7 @@ public class DetallesPedido extends javax.swing.JPanel {
 
         TableColumn cantidadColumn = tablaDetalles.getColumnModel().getColumn(1);
         cantidadColumn.setPreferredWidth(30); // Ajustar el ancho de la columna
-        
+
         TableColumn dimensionesColumn = tablaDetalles.getColumnModel().getColumn(2);
         dimensionesColumn.setPreferredWidth(110); // Ajustar el ancho de la columna
 
@@ -457,11 +461,13 @@ public class DetallesPedido extends javax.swing.JPanel {
         java.util.Date fechaInicio = dateFinicio.getDate();
         java.util.Date fechaFin = dateFfin.getDate();
         if (fechaInicio == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fecha de inicio válida.", "Error", JOptionPane.ERROR_MESSAGE);
+            PedidoIngresefechaINI dialog = new PedidoIngresefechaINI((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
         if (fechaFin == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fecha de fin válida.", "Error", JOptionPane.ERROR_MESSAGE);
+            PedidoIngresefechaFIN dialog = new PedidoIngresefechaFIN((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
         pedido.setFecha_inicio(fechaInicio);
@@ -470,7 +476,8 @@ public class DetallesPedido extends javax.swing.JPanel {
         // Obtener cliente_codigo basado en el cliente seleccionado
         String clienteSeleccionado = (String) cmbCliente.getSelectedItem();
         if (clienteSeleccionado == null || clienteSeleccionado.equals("Seleccione cliente:")) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione un cliente válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            PedidoIngreseClienteValido dialog = new PedidoIngreseClienteValido((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 

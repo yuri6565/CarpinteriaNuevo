@@ -16,9 +16,9 @@ import javax.swing.JDialog;
  * @author LENOVO
  */
 
-public class MaterialNombreMarca extends JDialog {
+public class Pedidomayorquecero extends JDialog {
 
-    public MaterialNombreMarca(Frame parent, boolean modal) {
+    public Pedidomayorquecero(Frame parent, boolean modal) {
         super(parent, modal);
         setUndecorated(true); // Establecer undecorated antes de cualquier otra configuración
         initComponents();
@@ -72,6 +72,7 @@ public class MaterialNombreMarca extends JDialog {
         rSLabelImage1 = new rojerusan.RSLabelImage();
         btnCancelar = new rojeru_san.RSButtonRiple();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -113,8 +114,12 @@ public class MaterialNombreMarca extends JDialog {
         jPanel3.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 190, 130, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 21)); // NOI18N
-        jLabel2.setText("Por favor, Ingrese un nombre para la marca");
-        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, -1, -1));
+        jLabel2.setText("La cantidad debe ser mayor a 0");
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, 300, -1));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 21)); // NOI18N
+        jLabel3.setText("Por favor ingrese una cantidad mayor ");
+        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 150, -1, -1));
 
         jEImagePanel1.add(jPanel3, new java.awt.GridBagConstraints());
 
@@ -148,11 +153,11 @@ public class MaterialNombreMarca extends JDialog {
                     }
                 }
             } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(MaterialNombreMarca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(Pedidomayorquecero.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
 
             java.awt.EventQueue.invokeLater(() -> {
-                MaterialNombreMarca dialog = new MaterialNombreMarca(null, true);
+                Pedidomayorquecero dialog = new Pedidomayorquecero(null, true);
                 dialog.setVisible(true);
             });
         }
@@ -162,6 +167,7 @@ public class MaterialNombreMarca extends JDialog {
     private LIB.JEImagePanel jEImagePanel1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

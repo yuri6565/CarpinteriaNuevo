@@ -315,6 +315,8 @@ public class Usuarios1 extends javax.swing.JPanel {
                 (DefaultTableModel) tablaUsuarios.getModel(), selectedRow);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
+        /*AlerGuardadoExitgeneral dialog = new AlerGuardadoExitgeneral((Frame) this.getParent(), true);
+            dialog.setVisible(true);*/
         if (dialog.isGuardado()) {
             cargarTablaUsuarios(); // Reload the table if needed
         }
