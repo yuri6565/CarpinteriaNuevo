@@ -442,6 +442,7 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
                     (Frame) this.getParent(),
                     true,
                     materiales,
+                                        
                     herramientas
             );
             dialog.setLocationRelativeTo(this);
