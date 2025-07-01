@@ -3,24 +3,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package vista.alertas;
+
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import javax.swing.JDialog;
 
-
 /**
  *
  * @author EQUIPO
  */
-
-
-
 /**
  *
  * @author EQUIPO
  */
 public class alertaEliminarcategoria111 extends JDialog {
+
     private boolean confirmed = false;
 
     public alertaEliminarcategoria111(Frame parent, boolean modal, String error, String todos_los_campos_son_obligatorios, String customIconPath) {
@@ -46,13 +44,18 @@ public class alertaEliminarcategoria111 extends JDialog {
             new Thread(() -> {
                 for (float i = 0.0f; i <= 1.0f; i += 0.1f) {
                     setOpacity(i);
-                    try { Thread.sleep(50); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
                 setOpacity(1.0f);
                 setVisible(true); // Show after fade-in
             }).start();
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -141,13 +144,15 @@ public class alertaEliminarcategoria111 extends JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-confirmed = false;
- this.dispose();
+        confirmed = false;
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    
     private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
-            // TODO add your handling code here:
+        // TODO add your handling code here:
         confirmed = true; // Confirmado
         this.dispose();
     }//GEN-LAST:event_btnCancelar1ActionPerformed
@@ -155,7 +160,7 @@ confirmed = false;
     /**
      * @param args the command line arguments
      */
-public static void main(String args[]) {
+    public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -184,7 +189,7 @@ public static void main(String args[]) {
     private rojerusan.RSLabelImage rSLabelImage1;
     // End of variables declaration//GEN-END:variables
 
-public boolean confirmarEliminar() {
+    public boolean confirmarEliminar() {
         setModal(true); // Ensure modal behavior
         setVisible(true);
         return confirmed;

@@ -136,6 +136,7 @@ public class VistaClientes extends javax.swing.JPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaclientes = new RSMaterialComponent.RSTableMetroCustom();
         txtBuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
+        btnFiltrar1 = new RSMaterialComponent.RSButtonShape();
 
         setPreferredSize(new java.awt.Dimension(1290, 730));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -158,7 +159,7 @@ public class VistaClientes extends javax.swing.JPanel {
                 btnNuevo1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnNuevo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 110, 110, 30));
+        jPanel1.add(btnNuevo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 110, 110, 30));
 
         btnEditar1.setBackground(new java.awt.Color(175, 180, 185));
         btnEditar1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -255,6 +256,22 @@ public class VistaClientes extends javax.swing.JPanel {
         });
         jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 90, 430, 40));
 
+        btnFiltrar1.setBackground(new java.awt.Color(67, 94, 190));
+        btnFiltrar1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnFiltrar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/filtrar (1).png"))); // NOI18N
+        btnFiltrar1.setText("Filtrar");
+        btnFiltrar1.setBackgroundHover(new java.awt.Color(118, 142, 240));
+        btnFiltrar1.setFocusable(false);
+        btnFiltrar1.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        btnFiltrar1.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnFiltrar1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnFiltrar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFiltrar1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnFiltrar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 90, 90, 30));
+
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, 730));
     }// </editor-fold>//GEN-END:initComponents
 
@@ -317,10 +334,15 @@ public class VistaClientes extends javax.swing.JPanel {
 
     }//GEN-LAST:event_txtBuscarActionPerformed
 
+    private void btnFiltrar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFiltrar1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonShape btnEditar1;
     private RSMaterialComponent.RSButtonShape btnEliminar1;
+    private RSMaterialComponent.RSButtonShape btnFiltrar1;
     private RSMaterialComponent.RSButtonShape btnNuevo1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane3;

@@ -7,49 +7,56 @@ package vista.Produccion;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.JDialog;
 
 /**
  *
  * @author EQUIPO
  */
-public class Error_fecha extends javax.swing.JDialog {
+public class Error_fecha extends JDialog {
 
     private Object customIconPath;
 
     /**
      * Creates new form Error_fecha
      */
-    public Error_fecha(Frame parent, boolean modal, String error, String la_fecha_final_no_puede_ser_anterior_a_la) {
-        super(parent, modal);
-        if (!isVisible()) { 
-            initComponents();
-            System.out.println("Setting error: " + error);
-            
-            if (customIconPath != null && getClass().getResource((String) customIconPath) != null) {
-                jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource((String) customIconPath)));
-            } else {
-                jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/warning-triangle-sign-free-vector-removebg-preview.png")));
-            }
-            setOpacity(0.0f);
-            setBackground(new java.awt.Color(0, 0, 0, 0));
-            Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-            setSize(pantalla);
-            setLocationRelativeTo(parent);
+    public Error_fecha(Frame parent, boolean modal) {
+      super(parent, modal);
+        setUndecorated(true); // Establecer undecorated antes de cualquier otra configuración
+        initComponents();
+        setOpacity(0.0f); // Ahora es seguro establecer la opacidad
+        setBackground(new java.awt.Color(0, 0, 0, 0));
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(pantalla); // Establecer tamaño de pantalla completa
+        setLocationRelativeTo(null); // Centrar en la pantalla
 
-            // Manual fade-in effect
-            new Thread(() -> {
-                for (float i = 0.0f; i <= 1.0f; i += 0.1f) {
-                    setOpacity(i);
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
+        // Agregar KeyListener para detectar la tecla Enter
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    btnCancelarActionPerformed(null); // Simula el clic en el botón OK
                 }
-                setOpacity(1.0f);
-                setVisible(true); // Show after fade-in
-            }).start();
-        }
+            }
+        });
+        setFocusable(true); // Asegura que el diálogo pueda recibir el foco
+
+        // Manual fade-in effect
+        new Thread(() -> {
+            for (float i = 0.0f; i <= 1.0f; i += 0.1f) {
+                setOpacity(i);
+                try {
+                    setOpacity(i);
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            setOpacity(1.0f);
+            setVisible(true); // Mostrar después del fade-in
+        }).start();
     }
 
     /**

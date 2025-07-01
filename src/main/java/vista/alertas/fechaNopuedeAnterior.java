@@ -114,9 +114,9 @@ public class fechaNopuedeAnterior extends JDialog {
         });
         jPanel3.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 190, 130, -1));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 21)); // NOI18N
-        jLabel2.setText("Upss debes agregar al menos un detalle al pedido");
-        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, -1));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 25)); // NOI18N
+        jLabel2.setText("La fecha final no puede ser anterior a la inicial");
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
 
         jEImagePanel1.add(jPanel3, new java.awt.GridBagConstraints());
 

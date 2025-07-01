@@ -21,6 +21,7 @@ import javax.swing.table.TableColumn;
 import modelo.Cliente;
 import modelo.Pedido;
 import modelo.PedidoDetalle;
+import vista.alertas.AlerProveedorGuardadoexi;
 import vista.alertas.DebesLLenarDatos;
 import vista.alertas.MaterialStockMin;
 import vista.alertas.PedidoIngreseNombre;
@@ -199,8 +200,9 @@ public class pedidoNuevo extends javax.swing.JDialog {
     private void validarFechasEnTiempoReal() {
         if (dateFinicio.getDate() != null && dateFfin.getDate() != null) {
             if (dateFfin.getDate().before(dateFinicio.getDate())) {
-                fechaNopuedeAnterior dialog = new fechaNopuedeAnterior((Frame) this.getParent(), true);
+                 fechaNopuedeAnterior dialog = new fechaNopuedeAnterior((Frame) this.getParent(), true);
                 dialog.setVisible(true);
+               
 
                 dateFfin.setDate(null); // Limpia la fecha incorrecta
                 dateFfin.requestFocus(); // Enfoca el campo para corrección
@@ -563,12 +565,10 @@ public class pedidoNuevo extends javax.swing.JDialog {
         int nuevoIdPedido = controlador.insertar(nuevoPedido, detalles);
         if (nuevoIdPedido > 0) {
             String numeroPedido = nuevoPedido.getNum_pedido(); // Asegúrate de que Pedido tenga este getter
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Pedido guardado exitosamente.\nNúmero: " + numeroPedido,
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+            
+            AlerProveedorGuardadoexi dialog = new AlerProveedorGuardadoexi((Frame) this.getParent(), true);
+            dialog.setVisible(true);
+            
             parent.cargarDatosIniciales();
             dispose();
         } else {

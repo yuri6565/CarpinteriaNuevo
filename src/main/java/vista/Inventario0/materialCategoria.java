@@ -16,6 +16,7 @@ import vista.alertas.ActualizadoCorrectcat;
 import vista.alertas.AlerGuardadoExitgeneral;
 import vista.alertas.MaterialingreseCategoria;
 import vista.alertas.MaterialingreseNombre;
+import vista.alertas.alertaEliminarcategoria111;
 
 /**
  *
@@ -252,6 +253,9 @@ public class materialCategoria extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
 
+    
+    
+    //no le supe a la alerta de eliminar, pero ya esta creada, solo es llamar, no se como D:
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         int[] filasSeleccionadas = tabla1.getSelectedRows();
 
@@ -263,6 +267,7 @@ public class materialCategoria extends javax.swing.JDialog {
             return;
         }
 
+        
         // Mensaje diferente para 1 vs múltiples elementos
         String mensajeConfirmacion;
         if (filasSeleccionadas.length == 1) {

@@ -442,7 +442,6 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
                     (Frame) this.getParent(),
                     true,
                     materiales,
-                                        
                     herramientas
             );
             dialog.setLocationRelativeTo(this);
@@ -871,14 +870,9 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         }
 
         if (txtfechafin.getDate().before(txtFechainicio.getDate())) {
-            Error_fecha errorFecha = new Error_fecha(
-                    (Frame) this.getParent(),
-                    true,
-                    "Error",
-                    "La fecha final no puede ser anterior a la inicial"
-            );
-            errorFecha.setLocationRelativeTo(null);
-            errorFecha.setVisible(true);
+            Error_fecha dialog = new Error_fecha((Frame) this.getParent(), true);
+            dialog.setVisible(true);
+
             return false;
         }
 
