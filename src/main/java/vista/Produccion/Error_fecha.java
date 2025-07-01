@@ -4,7 +4,9 @@
  */
 package vista.Produccion;
 
+import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Toolkit;
 
 /**
  *
@@ -12,12 +14,42 @@ import java.awt.Frame;
  */
 public class Error_fecha extends javax.swing.JDialog {
 
+    private Object customIconPath;
+
     /**
      * Creates new form Error_fecha
      */
     public Error_fecha(Frame parent, boolean modal, String error, String la_fecha_final_no_puede_ser_anterior_a_la) {
         super(parent, modal);
-        initComponents();
+        if (!isVisible()) { 
+            initComponents();
+            System.out.println("Setting error: " + error);
+            
+            if (customIconPath != null && getClass().getResource((String) customIconPath) != null) {
+                jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource((String) customIconPath)));
+            } else {
+                jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/warning-triangle-sign-free-vector-removebg-preview.png")));
+            }
+            setOpacity(0.0f);
+            setBackground(new java.awt.Color(0, 0, 0, 0));
+            Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+            setSize(pantalla);
+            setLocationRelativeTo(parent);
+
+            // Manual fade-in effect
+            new Thread(() -> {
+                for (float i = 0.0f; i <= 1.0f; i += 0.1f) {
+                    setOpacity(i);
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                setOpacity(1.0f);
+                setVisible(true); // Show after fade-in
+            }).start();
+        }
     }
 
     /**
@@ -28,7 +60,9 @@ public class Error_fecha extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
+        jEImagePanel1 = new LIB.JEImagePanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -38,6 +72,11 @@ public class Error_fecha extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
+
+        jEImagePanel1.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
+        jEImagePanel1.setMinimumSize(new java.awt.Dimension(510, 221));
+        jEImagePanel1.setPreferredSize(new java.awt.Dimension(500, 192));
+        jEImagePanel1.setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -75,15 +114,23 @@ public class Error_fecha extends javax.swing.JDialog {
         jLabel2.setText("La fecha final no puede ser anterior a la inicial");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, -1, -1));
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipady = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(127, 167, 154, 197);
+        jEImagePanel1.add(jPanel1, gridBagConstraints);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jEImagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 854, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jEImagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
         );
 
         pack();
@@ -98,11 +145,6 @@ public class Error_fecha extends javax.swing.JDialog {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -110,37 +152,20 @@ public class Error_fecha extends javax.swing.JDialog {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Error_fecha.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Error_fecha.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Error_fecha.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Error_fecha.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(alertaEliminarEtapa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                Error_fecha dialog = new Error_fecha(new javax.swing.JFrame(), true, "Error", "La fecha final no puede ser anterior a la inicial");
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            alertaEliminarEtapa dialog = new alertaEliminarEtapa(new javax.swing.JFrame(), true, "¿Estás seguro?", "¿Está seguro que desea eliminar este producto?", "/warning-triangle-sign-free-vector-removebg-preview.png");
+            dialog.setVisible(true);
         });
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
+    private LIB.JEImagePanel jEImagePanel1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

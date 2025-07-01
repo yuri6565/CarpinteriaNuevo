@@ -136,7 +136,7 @@ private List<Departamento> departamentos;
 
   
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jPanel3 = new javax.swing.JPanel();
@@ -442,25 +442,25 @@ private List<Departamento> departamentos;
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 510, 680));
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void btnGuardar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar2ActionPerformed
+    private void btnGuardar2ActionPerformed(java.awt.event.ActionEvent evt) {                                            
         this.dispose();
-    }//GEN-LAST:event_btnGuardar2ActionPerformed
+    }                                           
 
-    private void ghActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ghActionPerformed
+    private void ghActionPerformed(java.awt.event.ActionEvent evt) {                                   
         // TODO add your handling code here:
-    }//GEN-LAST:event_ghActionPerformed
+    }                                  
 
-    private void gh1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gh1ActionPerformed
+    private void gh1ActionPerformed(java.awt.event.ActionEvent evt) {                                    
        actualizarMunicipios();
-    }//GEN-LAST:event_gh1ActionPerformed
+    }                                   
 
-    private void identificaciontxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_identificaciontxtActionPerformed
+    private void identificaciontxtActionPerformed(java.awt.event.ActionEvent evt) {                                                  
         // TODO add your handling code here:
-    }//GEN-LAST:event_identificaciontxtActionPerformed
+    }                                                 
 
-    private void btnguardarrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarrActionPerformed
+    private void btnguardarrActionPerformed(java.awt.event.ActionEvent evt) {                                            
     boolean isValid = true;
 
         // Limpiar mensajes de error previos
@@ -544,11 +544,11 @@ proveedor.setNombre(txtNombre12.getText().trim()); // Nombre como texto
         } else {
             JOptionPane.showMessageDialog(this, "Error al guardar el proveedor.", "Error", JOptionPane.ERROR_MESSAGE);
         }     
-    }//GEN-LAST:event_btnguardarrActionPerformed
+    }                                           
 
-    private void btnCancelar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar2ActionPerformed
+    private void btnCancelar2ActionPerformed(java.awt.event.ActionEvent evt) {                                             
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnCancelar2ActionPerformed
+    }                                            
 
     /**
      * @param args the command line arguments
@@ -593,7 +593,7 @@ proveedor.setNombre(txtNombre12.getText().trim()); // Nombre como texto
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private rojeru_san.RSButtonRiple btnCancelar2;
     private rojeru_san.RSButtonRiple btnGuardar2;
     private rojeru_san.RSButtonRiple btnguardarr;
@@ -638,7 +638,7 @@ proveedor.setNombre(txtNombre12.getText().trim()); // Nombre como texto
     private RSMaterialComponent.RSTextFieldMaterial txtcorreo;
     private RSMaterialComponent.RSTextFieldMaterial txtdireccion;
     private RSMaterialComponent.RSTextFieldMaterial txttelefono;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 // Clases internas para el CheckedComboBox
     class CheckableItem {
 

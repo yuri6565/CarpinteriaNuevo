@@ -442,23 +442,109 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
                     (Frame) this.getParent(),
                     true,
                     materiales,
+                                        
                     herramientas
             );
             dialog.setLocationRelativeTo(this);
             dialog.setVisible(true);
 
             if (dialog.isConfirmado()) {
-                guardarDatosCompletos(dialog.getCantidadesMateriales(), dialog.getCantidadesHerramientas());
+                Connection con = null;
+                try {
+                    con = Conexion.getConnection();
+                    con.setAutoCommit(false); // Iniciar transacción
+
+                    // 1. Guardar etapa principal
+                    int idEtapa = guardarEtapaProduccion(con);
+
+                    // 2. Obtener el ID del detalle_pedido asociado a esta producción
+                    int idDetallePedido = -1;
+                    String sqlGetDetallePedido = "SELECT detalle_pedido_iddetalle_pedido FROM produccion WHERE id_produccion = ?";
+                    try (PreparedStatement ps = con.prepareStatement(sqlGetDetallePedido)) {
+                        ps.setInt(1, idProduccion);
+                        try (ResultSet rs = ps.executeQuery()) {
+                            if (rs.next()) {
+                                idDetallePedido = rs.getInt("detalle_pedido_iddetalle_pedido");
+                            } else {
+                                throw new SQLException("No se encontró el detalle de pedido asociado a esta producción");
+                            }
+                        }
+                    }
+
+                    // 3. Obtener el ID del pedido asociado al detalle_pedido
+                    int idPedido = -1;
+                    String sqlGetPedido = "SELECT pedido_id_pedido FROM detalle_pedido WHERE iddetalle_pedido = ?";
+                    try (PreparedStatement ps = con.prepareStatement(sqlGetPedido)) {
+                        ps.setInt(1, idDetallePedido);
+                        try (ResultSet rs = ps.executeQuery()) {
+                            if (rs.next()) {
+                                idPedido = rs.getInt("pedido_id_pedido");
+                            } else {
+                                throw new SQLException("No se encontró el pedido asociado a este detalle de pedido");
+                            }
+                        }
+                    }
+
+                    // 4. Actualizar estado de producción a "proceso"
+                    String sqlUpdateProduccion = "UPDATE produccion SET estado = 'proceso' WHERE id_produccion = ?";
+                    try (PreparedStatement ps = con.prepareStatement(sqlUpdateProduccion)) {
+                        ps.setInt(1, idProduccion);
+                        ps.executeUpdate();
+                    }
+
+                    // 5. Actualizar estado del pedido vinculado a "proceso"
+                    String sqlUpdatePedido = "UPDATE pedido SET estado = 'proceso' WHERE id_pedido = ?";
+                    try (PreparedStatement ps = con.prepareStatement(sqlUpdatePedido)) {
+                        ps.setInt(1, idPedido);
+                        ps.executeUpdate();
+                    }
+
+                    // 6. Guardar materiales y actualizar inventario
+                    guardarMaterialesHerramientas(con, idEtapa, dialog.getCantidadesMateriales(), "material");
+
+                    // 7. Guardar herramientas y actualizar inventario
+                    guardarMaterialesHerramientas(con, idEtapa, dialog.getCantidadesHerramientas(), "herramienta");
+
+                    // 8. Guardar asignación de trabajador
+                    guardarAsignado(con, idEtapa, BoxAsignado.getSelectedItem().toString());
+
+                    con.commit(); // Confirmar transacción
+
+                    // Mostrar mensaje de éxito con tu clase personalizada
+                    new Datos_guardados(
+                            (Frame) this.getParent(),
+                            true,
+                            "Éxito",
+                            "Etapa guardada y producción/pedido marcados como 'proceso'"
+                    ).setVisible(true);
+
+                } catch (SQLException | ParseException e) {
+                    if (con != null) {
+                        try {
+                            con.rollback();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(FormuEtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    new Error_guardar((Frame) this.getParent(), true, "Error", "Error al guardar: " + e.getMessage()).setVisible(true);
+                } finally {
+                    if (con != null) {
+                        try {
+                            con.setAutoCommit(true);
+                            con.close();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(FormuEtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
             }
         } catch (NumberFormatException e) {
             new Error_guardar((Frame) this.getParent(), true, "Error",
                     "La cantidad debe ser un número válido").setVisible(true);
-        } catch (ParseException ex) {
-            Logger.getLogger(FormuEtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.dispose();
-    }//GEN-LAST:event_btnGuardar1ActionPerformed
 
+    }//GEN-LAST:event_btnGuardar1ActionPerformed
     private boolean guardarDatosCompletos(Map<String, String> cantidadesMateriales,
             Map<String, String> cantidadesHerramientas) throws ParseException {
         Connection con = null;
@@ -478,7 +564,19 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
             // 4. Guardar asignación de trabajador
             guardarAsignado(con, idEtapa, BoxAsignado.getSelectedItem().toString());
 
+            // 5. Actualizar estado del pedido a "en proceso"
+            actualizarEstadoPedidoYProduccion(con, this.idProduccion);
+
             con.commit(); // Confirmar transacción
+
+            // Mostrar mensaje de éxito con tu clase personalizada
+            new Datos_guardados(
+                    (Frame) this.getParent(),
+                    true,
+                    "Éxito",
+                    "Etapa guardada y producción marcada como 'en proceso'"
+            ).setVisible(true);
+
             return true;
 
         } catch (SQLException e) {
@@ -503,14 +601,95 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         }
     }
 
+// Método mejorado que actualiza tanto el pedido como la producción
+    private void actualizarEstadoPedidoYProduccion(Connection con, int idProduccion) throws SQLException {
+        // Primero obtenemos el id_pedido asociado a esta producción
+        String sqlGetPedido = "SELECT pedido_id_pedido FROM produccion WHERE id_produccion = ?";
+        int idPedido = -1;
+
+        try (PreparedStatement ps = con.prepareStatement(sqlGetPedido)) {
+            ps.setInt(1, idProduccion);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    idPedido = rs.getInt("pedido_id_pedido");
+                } else {
+                    throw new SQLException("No se encontró el pedido asociado a la producción " + idProduccion);
+                }
+            }
+        }
+
+        // Actualizamos el estado del pedido a "en proceso"
+        String sqlUpdatePedido = "UPDATE pedido SET estado = 'en proceso' WHERE id_pedido = ?";
+        try (PreparedStatement ps = con.prepareStatement(sqlUpdatePedido)) {
+            ps.setInt(1, idPedido);
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("No se pudo actualizar el estado del pedido " + idPedido);
+            }
+        }
+
+        // También actualizamos el estado de la producción a "en proceso" por consistencia
+        String sqlUpdateProduccion = "UPDATE produccion SET estado = 'en proceso' WHERE id_produccion = ?";
+        try (PreparedStatement ps = con.prepareStatement(sqlUpdateProduccion)) {
+            ps.setInt(1, idProduccion);
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("No se pudo actualizar el estado de la producción " + idProduccion);
+            }
+        }
+    }
+
+// Método para mostrar errores usando tu clase personalizada
+    private void mostrarError(String mensaje) {
+        new Error_guardar(
+                (Frame) this.getParent(),
+                true,
+                "Error",
+                mensaje
+        ).setVisible(true);
+    }
+
+// Método nuevo para actualizar el estado del pedido
+    private void actualizarEstadoPedido(Connection con, int idProduccion) throws SQLException {
+        // Primero obtenemos el id_pedido asociado a esta producción
+        String sqlGetPedido = "SELECT pedido_id_pedido FROM produccion WHERE id_produccion = ?";
+        int idPedido = -1;
+
+        try (PreparedStatement ps = con.prepareStatement(sqlGetPedido)) {
+            ps.setInt(1, idProduccion);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    idPedido = rs.getInt("pedido_id_pedido");
+                } else {
+                    throw new SQLException("No se encontró el pedido asociado a la producción " + idProduccion);
+                }
+            }
+        }
+
+        // Actualizamos el estado del pedido a "en proceso"
+        String sqlUpdate = "UPDATE pedido SET estado = 'proceso' WHERE id_pedido = ?";
+        try (PreparedStatement ps = con.prepareStatement(sqlUpdate)) {
+            ps.setInt(1, idPedido);
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("No se pudo actualizar el estado del pedido " + idPedido);
+            }
+        }
+    }
+
     private int guardarEtapaProduccion(Connection con) throws SQLException {
-        String sql = "INSERT INTO etapa_produccion (nombre_etapa, fecha_inicio, fecha_fin, produccion_id_produccion, cantidad) VALUES (?,  ?, ?, ?, ?)";
+        // Verifica que el ID de producción exista
+        if (!existeProduccion(con, this.idProduccion)) {
+            throw new SQLException("El ID de producción " + this.idProduccion + " no existe");
+        }
+
+        String sql = "INSERT INTO etapa_produccion (nombre_etapa, fecha_inicio, fecha_fin, produccion_id_produccion, cantidad) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, txtetapa.getText().trim());
             ps.setDate(2, new Date(txtFechainicio.getDate().getTime()));
             ps.setDate(3, txtfechafin.getDate() != null ? new Date(txtfechafin.getDate().getTime()) : null);
-            ps.setInt(4, idProduccion);
+            ps.setInt(4, idProduccion); // Asegúrate que es 1 o 2
             ps.setInt(5, Integer.parseInt(txtcantidad.getText().trim()));
             ps.executeUpdate();
 
@@ -523,96 +702,107 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         }
     }
 
-    private void guardarMaterialesHerramientas(Connection con, int idEtapa,
-        Map<String, String> cantidades, String tipo)
-        throws SQLException, ParseException {
-    String sqlInsert = "INSERT INTO utilizado (etapa_produccion_idetapa_produccion, inventario_id_inventario, cantidad_usada) VALUES (?, ?, ?)";
-    String sqlUpdate = "UPDATE inventario SET cantidad = ? WHERE id_inventario = ?";
-    NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
-    numberFormat.setMinimumFractionDigits(2);
-    numberFormat.setMaximumFractionDigits(2);
-
-    for (Map.Entry<String, String> entry : cantidades.entrySet()) {
-        String nombre = entry.getKey();
-        String valor = entry.getValue();
-
-        // Saltar si no hay cantidad
-        if (valor == null || valor.trim().isEmpty() || valor.trim().equals("0") || valor.trim().equals("0,0") || valor.trim().equals("0,00")) {
-            continue;
-        }
-
-        int idInventario = obtenerIdInventario(con, nombre, tipo);
-        double cantidad;
-
-        try {
-            // Normalizar valor (reemplazar puntos por nada, coma por punto)
-            String normalizedValor = valor.replace(".", "").replace(",", ".");
-            cantidad = Double.parseDouble(normalizedValor);
-            if (cantidad < 0) {
-                throw new NumberFormatException("La cantidad no puede ser negativa");
-            }
-        } catch (NumberFormatException e) {
-            throw new SQLException("Valor inválido para cantidad: " + valor + " en " + nombre, e);
-        }
-
-        // Obtener cantidad actual del inventario
-        String sqlSelect = "SELECT cantidad FROM inventario WHERE id_inventario = ?";
-        String cantidadActualStr;
-        try (PreparedStatement ps = con.prepareStatement(sqlSelect)) {
-            ps.setInt(1, idInventario);
+// Método auxiliar para verificar existencia
+    private boolean existeProduccion(Connection con, int idProduccion) throws SQLException {
+        String sql = "SELECT id_produccion FROM produccion WHERE id_produccion = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idProduccion);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    cantidadActualStr = rs.getString("cantidad").trim();
-                } else {
-                    throw new SQLException("No se encontró inventario para id: " + idInventario);
+                return rs.next(); // Retorna true si existe
+            }
+        }
+    }
+
+    private void guardarMaterialesHerramientas(Connection con, int idEtapa,
+            Map<String, String> cantidades, String tipo)
+            throws SQLException, ParseException {
+        String sqlInsert = "INSERT INTO utilizado (etapa_produccion_idetapa_produccion, inventario_id_inventario, cantidad_usada) VALUES (?, ?, ?)";
+        String sqlUpdate = "UPDATE inventario SET cantidad = ? WHERE id_inventario = ?";
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
+        numberFormat.setMinimumFractionDigits(2);
+        numberFormat.setMaximumFractionDigits(2);
+
+        for (Map.Entry<String, String> entry : cantidades.entrySet()) {
+            String nombre = entry.getKey();
+            String valor = entry.getValue();
+
+            // Saltar si no hay cantidad
+            if (valor == null || valor.trim().isEmpty() || valor.trim().equals("0") || valor.trim().equals("0,0") || valor.trim().equals("0,00")) {
+                continue;
+            }
+
+            int idInventario = obtenerIdInventario(con, nombre, tipo);
+            double cantidad;
+
+            try {
+                // Normalizar valor (reemplazar puntos por nada, coma por punto)
+                String normalizedValor = valor.replace(".", "").replace(",", ".");
+                cantidad = Double.parseDouble(normalizedValor);
+                if (cantidad < 0) {
+                    throw new NumberFormatException("La cantidad no puede ser negativa");
+                }
+            } catch (NumberFormatException e) {
+                throw new SQLException("Valor inválido para cantidad: " + valor + " en " + nombre, e);
+            }
+
+            // Obtener cantidad actual del inventario
+            String sqlSelect = "SELECT cantidad FROM inventario WHERE id_inventario = ?";
+            String cantidadActualStr;
+            try (PreparedStatement ps = con.prepareStatement(sqlSelect)) {
+                ps.setInt(1, idInventario);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        cantidadActualStr = rs.getString("cantidad").trim();
+                    } else {
+                        throw new SQLException("No se encontró inventario para id: " + idInventario);
+                    }
                 }
             }
-        }
 
-        // Parsear cantidad actual
-        double cantidadActual = parseCantidad(cantidadActualStr);
-        double nuevaCantidad = cantidadActual - cantidad;
+            // Parsear cantidad actual
+            double cantidadActual = parseCantidad(cantidadActualStr);
+            double nuevaCantidad = cantidadActual - cantidad;
 
-        // Validar que no se consuma más de lo disponible
-        if (nuevaCantidad < 0) {
-            throw new SQLException("Cantidad insuficiente para " + nombre + ": disponible=" + cantidadActual + ", solicitada=" + cantidad);
-        }
+            // Validar que no se consuma más de lo disponible
+            if (nuevaCantidad < 0) {
+                throw new SQLException("Cantidad insuficiente para " + nombre + ": disponible=" + cantidadActual + ", solicitada=" + cantidad);
+            }
 
-        // Formatear nueva cantidad como '12,50'
-        String nuevaCantidadStr = numberFormat.format(nuevaCantidad);
+            // Formatear nueva cantidad como '12,50'
+            String nuevaCantidadStr = numberFormat.format(nuevaCantidad);
 
-        // Insertar en tabla utilizado
-        try (PreparedStatement ps = con.prepareStatement(sqlInsert)) {
-            ps.setInt(1, idEtapa);
-            ps.setInt(2, idInventario);
-            ps.setDouble(3, cantidad);
-            ps.executeUpdate();
-        }
+            // Insertar en tabla utilizado
+            try (PreparedStatement ps = con.prepareStatement(sqlInsert)) {
+                ps.setInt(1, idEtapa);
+                ps.setInt(2, idInventario);
+                ps.setDouble(3, cantidad);
+                ps.executeUpdate();
+            }
 
-        // Actualizar inventario
-        try (PreparedStatement ps = con.prepareStatement(sqlUpdate)) {
-            ps.setString(1, nuevaCantidadStr);
-            ps.setInt(2, idInventario);
-            ps.executeUpdate();
+            // Actualizar inventario
+            try (PreparedStatement ps = con.prepareStatement(sqlUpdate)) {
+                ps.setString(1, nuevaCantidadStr);
+                ps.setInt(2, idInventario);
+                ps.executeUpdate();
+            }
         }
     }
-}
 
 // Reutilizar parseCantidad de FormularioMH
-private double parseCantidad(String cantidadStr) {
-    try {
-        String normalized = cantidadStr.replace(".", "").replace(",", ".");
-        double cantidad = Double.parseDouble(normalized);
-        if (cantidad < 0) {
-            System.err.println("Cantidad negativa detectada: " + cantidadStr + " -> " + cantidad);
+    private double parseCantidad(String cantidadStr) {
+        try {
+            String normalized = cantidadStr.replace(".", "").replace(",", ".");
+            double cantidad = Double.parseDouble(normalized);
+            if (cantidad < 0) {
+                System.err.println("Cantidad negativa detectada: " + cantidadStr + " -> " + cantidad);
+                return 0.0;
+            }
+            return cantidad;
+        } catch (NumberFormatException e) {
+            System.err.println("Error al parsear cantidad: '" + cantidadStr + "' - " + e.getMessage());
             return 0.0;
         }
-        return cantidad;
-    } catch (NumberFormatException e) {
-        System.err.println("Error al parsear cantidad: '" + cantidadStr + "' - " + e.getMessage());
-        return 0.0;
     }
-}
 
     private int obtenerIdInventario(Connection con, String nombre, String tipo) throws SQLException {
         if (nombre == null || nombre.trim().isEmpty()) {
@@ -634,11 +824,6 @@ private double parseCantidad(String cantidadStr) {
                 }
             }
         }
-    }
-// Métodos auxiliares para mostrar mensajes
-
-    private void mostrarError(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     private void guardarAsignado(Connection con, int idEtapa, String nombreUsuario) throws SQLException {

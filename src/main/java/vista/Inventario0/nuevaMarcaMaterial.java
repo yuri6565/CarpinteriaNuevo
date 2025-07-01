@@ -5,8 +5,12 @@
 package vista.Inventario0;
 
 import controlador.Ctrl_MarcaMaterial;
+import java.awt.Frame;
 import javax.swing.JOptionPane;
 import modelo.Marca;
+import vista.alertas.AlerGuardadoExitgeneral;
+import vista.alertas.MaterialNombreMarca;
+import vista.alertas.MaterialUnidadMedida;
 
 /**
  *
@@ -25,11 +29,12 @@ public class nuevaMarcaMaterial extends javax.swing.JDialog {
     }
 
     public interface CategoriaGuardadaListener {
+
         void onCategoriaGuardada();
     }
-    
+
     private CategoriaGuardadaListener listener;
-    
+
     public void setCategoriaGuardadaListener(CategoriaGuardadaListener listener) {
         this.listener = listener;
     }
@@ -161,18 +166,20 @@ public class nuevaMarcaMaterial extends javax.swing.JDialog {
             Ctrl_MarcaMaterial dao = new Ctrl_MarcaMaterial();
 
             if (dao.insertar(categoria)) {
-                JOptionPane.showMessageDialog(this, "Categoría añadida correctamente.");
+                AlerGuardadoExitgeneral dialog = new AlerGuardadoExitgeneral((Frame) this.getParent(), true);
+                dialog.setVisible(true);
                 txtNombre.setText(""); // Limpiar campo de entrada
                 // Notificar al listener que se guardó una categoría
                 if (listener != null) {
                     listener.onCategoriaGuardada();
                 }
-                
+
             } else {
                 JOptionPane.showMessageDialog(this, "Error al añadir marca.");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Ingrese un nombre.");
+            MaterialNombreMarca dialog = new MaterialNombreMarca((Frame) this.getParent(), true);
+            dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 

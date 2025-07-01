@@ -7,6 +7,7 @@ package vista.Inventario0;
 import controlador.Ctrl_CategoriaMaterial;
 import controlador.Ctrl_MarcaMaterial;
 import controlador.Ctrl_UnidadMaterial;
+import java.awt.Frame;
 import modelo.MaterialDatos;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -30,6 +31,7 @@ import modelo.Categoria;
 import modelo.Marca;
 import modelo.MaterialDatos;
 import modelo.Unidad;
+import vista.alertas.AlerActualizadogeneral;
 
 /**
  *
@@ -614,6 +616,8 @@ public class materialEditar extends javax.swing.JDialog {
         dispose(); // Cierra la ventana emergente
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private static AlerActualizadogeneral updateSuccessDialog = null; 
+    
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         String nombre = txtNombre.getText().trim();
         String descripcion = txtDescripcion.getText().trim();
@@ -687,11 +691,17 @@ public class materialEditar extends javax.swing.JDialog {
             material.setIdUnidadMedida(idUnidadMedida);
             material.setImagen(imagenBytes != null ? imagenBytes : material.getImagen()); // Usar nueva imagen o mantener la original
 
-            // Mostrar mensaje de éxito
-            JOptionPane.showMessageDialog(this,
-                    "Material actualizado exitosamente",
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
+            try {
+                if (updateSuccessDialog == null) {
+                    updateSuccessDialog = new AlerActualizadogeneral((Frame) getParent(), true);
+                } else {
+                    updateSuccessDialog.dispose(); // Cerrar el diálogo anterior si existe
+                }
+                updateSuccessDialog.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error al mostrar el diálogo de éxito: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
 
             guardado = true;
             dispose(); // Cierra el JDialog

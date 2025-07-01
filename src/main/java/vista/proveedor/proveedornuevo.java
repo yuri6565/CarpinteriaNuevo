@@ -4,22 +4,25 @@
  */
 package vista.proveedor;
 
+import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
-
+import vista.alertas.AlerProveedorGuardadoexi;
+import vista.alertas.AlertaNopuedeserVacio;
+import vista.alertas.ErrorcrearProveedor;
+import vista.alertas.MaterialingreseNombre;
 
 public class proveedornuevo extends javax.swing.JDialog {
 
-    
     public proveedornuevo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-         setTitle("Nuevo Proveedor");
+        setTitle("Nuevo Proveedor");
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -168,47 +171,49 @@ public class proveedornuevo extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-   
+
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         try {
-        // Obtener valores
-        String nombre = txtNombre.getText();
-        String correo = txtcorreo.getText();        
-        String telefono = txttelefono.getText();
-        String direccion = txtdireccion1.getText(); // Corregido: usar txtdireccion1 en lugar de txtcorreo
-        
-        // Validar campos obligatorios
-        if (nombre.isEmpty() || correo.isEmpty() || telefono.isEmpty() || direccion.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        // Insertar en BD
-        try (Connection con = new Conexion().getConnection();
-             PreparedStatement ps = con.prepareStatement(
-                 "INSERT INTO proveedor (nombre, correo_electronico, telefono, direccion) VALUES (?, ?, ?, ?)")) {
-            
-            ps.setString(1, nombre);
-            ps.setString(2, correo);
-            ps.setString(3, telefono);
-            ps.setString(4, direccion);
-            
-            int filasAfectadas = ps.executeUpdate();
-            
-            if (filasAfectadas > 0) {
-                JOptionPane.showMessageDialog(this, "Proveedor guardado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "No se pudo guardar el proveedor", "Error", JOptionPane.ERROR_MESSAGE);
+            // Obtener valores
+            String nombre = txtNombre.getText();
+            String correo = txtcorreo.getText();
+            String telefono = txttelefono.getText();
+            String direccion = txtdireccion1.getText(); // Corregido: usar txtdireccion1 en lugar de txtcorreo
+
+            // Validar campos obligatorios
+            if (nombre.isEmpty() || correo.isEmpty() || telefono.isEmpty() || direccion.isEmpty()) {
+                AlertaNopuedeserVacio dialog = new AlertaNopuedeserVacio((Frame) this.getParent(), true);
+                dialog.setVisible(true);
+                return;
             }
+
+            // Insertar en BD
+            try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(
+                    "INSERT INTO proveedor (nombre, correo_electronico, telefono, direccion) VALUES (?, ?, ?, ?)")) {
+
+                ps.setString(1, nombre);
+                ps.setString(2, correo);
+                ps.setString(3, telefono);
+                ps.setString(4, direccion);
+
+                int filasAfectadas = ps.executeUpdate();
+
+                if (filasAfectadas > 0) {
+                    AlerProveedorGuardadoexi dialog = new AlerProveedorGuardadoexi((Frame) this.getParent(), true);
+                    dialog.setVisible(true);
+                    this.dispose();
+                } else {
+                    ErrorcrearProveedor dialog = new ErrorcrearProveedor((Frame) this.getParent(), true);
+                    dialog.setVisible(true);
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
-/*
+        /*
     try {
         // Obtener valores
       

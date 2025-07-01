@@ -9,13 +9,18 @@ package vista.proveedor;
  * @author buitr
  */
 import controlador.Ctrl_ProveedorPrd;
+import java.awt.Frame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import modelo.ProductoProveedor;
+import vista.alertas.AlerGuardadoExitgeneral;
+import vista.alertas.ProveedoringreseNombreProd;
 
 public class proveedorProducto extends javax.swing.JDialog {
- private int ultimaFilaSeleccionada = -1;
+
+    private int ultimaFilaSeleccionada = -1;
+
     /**
      * Creates new form proveedorProducto
      */
@@ -24,52 +29,47 @@ public class proveedorProducto extends javax.swing.JDialog {
         initComponents();
         actualizarTabla();
         tabla1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        
-            // Listener para selección de filas
+
+        // Listener para selección de filas
         tabla1.getSelectionModel().addListSelectionListener(e -> {
-        if (!e.getValueIsAdjusting()) {
-            cargarDatosSeleccionados();
-        }
-    });
+            if (!e.getValueIsAdjusting()) {
+                cargarDatosSeleccionados();
+            }
+        });
     }
-    
+
     private void actualizarTabla() {
-    DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
-    model.setRowCount(0); // Limpiar tabla
-
-    Ctrl_ProveedorPrd prdp = new Ctrl_ProveedorPrd();
-    
-    for (ProductoProveedor Productoroveedor : prdp.obtenerCategoriasProductoProveedors()) {
-        model.addRow(new Object[]{Productoroveedor.getCodigo(), Productoroveedor.getNombre()});
-    } 
-   }
-    
-    
-    
-    
-
-
-    
-    
-    private void cargarDatosSeleccionados() {
-    int[] selectedRows = tabla1.getSelectedRows(); // Obtener todas las filas seleccionadas
-
-    if (selectedRows.length == 1) { // Solo cargar datos si hay exactamente una fila seleccionada
-        int filaSeleccionada = selectedRows[0];
         DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
-        txtCodigo.setText(model.getValueAt(filaSeleccionada, 0).toString()); // Código
-        txtNombre.setText(model.getValueAt(filaSeleccionada, 1).toString()); // Nombre
-        ultimaFilaSeleccionada = filaSeleccionada;
-    } else {
-        // Si hay más de una fila seleccionada o ninguna, limpiar los campos
-        limpiarCampos();
-        ultimaFilaSeleccionada = -1;
+        model.setRowCount(0); // Limpiar tabla
+
+        Ctrl_ProveedorPrd prdp = new Ctrl_ProveedorPrd();
+
+        for (ProductoProveedor Productoroveedor : prdp.obtenerCategoriasProductoProveedors()) {
+            model.addRow(new Object[]{Productoroveedor.getCodigo(), Productoroveedor.getNombre()});
+        }
     }
+
+    private void cargarDatosSeleccionados() {
+        int[] selectedRows = tabla1.getSelectedRows(); // Obtener todas las filas seleccionadas
+
+        if (selectedRows.length == 1) { // Solo cargar datos si hay exactamente una fila seleccionada
+            int filaSeleccionada = selectedRows[0];
+            DefaultTableModel model = (DefaultTableModel) tabla1.getModel();
+            txtCodigo.setText(model.getValueAt(filaSeleccionada, 0).toString()); // Código
+            txtNombre.setText(model.getValueAt(filaSeleccionada, 1).toString()); // Nombre
+            ultimaFilaSeleccionada = filaSeleccionada;
+        } else {
+            // Si hay más de una fila seleccionada o ninguna, limpiar los campos
+            limpiarCampos();
+            ultimaFilaSeleccionada = -1;
+        }
     }
-     private void limpiarCampos() {
-    txtCodigo.setText("");
-    txtNombre.setText("");
+
+    private void limpiarCampos() {
+        txtCodigo.setText("");
+        txtNombre.setText("");
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -246,9 +246,9 @@ public class proveedorProducto extends javax.swing.JDialog {
 
         if (filasSeleccionadas.length == 0) {
             JOptionPane.showMessageDialog(this,
-                "Selecciona al menos una categoría primero",
-                "Advertencia",
-                JOptionPane.WARNING_MESSAGE);
+                    "Selecciona al menos una categoría primero",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -261,11 +261,11 @@ public class proveedorProducto extends javax.swing.JDialog {
         }
 
         int confirmacion = JOptionPane.showConfirmDialog(
-            this,
-            mensajeConfirmacion,
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE
+                this,
+                mensajeConfirmacion,
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
         );
 
         if (confirmacion == JOptionPane.YES_OPTION) {
@@ -291,24 +291,24 @@ public class proveedorProducto extends javax.swing.JDialog {
             if (errorOcurrido) {
                 if (eliminadosExitosos > 0) {
                     JOptionPane.showMessageDialog(this,
-                        "Se eliminaron " + eliminadosExitosos + " categorías, pero hubo errores con algunas.",
-                        "Resultado parcial",
-                        JOptionPane.WARNING_MESSAGE);
+                            "Se eliminaron " + eliminadosExitosos + " categorías, pero hubo errores con algunas.",
+                            "Resultado parcial",
+                            JOptionPane.WARNING_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(this,
-                        "Error al eliminar todas las categorías seleccionadas",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                            "Error al eliminar todas las categorías seleccionadas",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 String mensajeExito = (filasSeleccionadas.length == 1)
-                ? "¡Categoría eliminada correctamente!"
-                : "¡Se eliminaron " + filasSeleccionadas.length + " categorías correctamente!";
+                        ? "¡Categoría eliminada correctamente!"
+                        : "¡Se eliminaron " + filasSeleccionadas.length + " categorías correctamente!";
 
                 JOptionPane.showMessageDialog(this,
-                    mensajeExito,
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
+                        mensajeExito,
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
 
             limpiarCampos();
@@ -324,14 +324,15 @@ public class proveedorProducto extends javax.swing.JDialog {
 
             if (prdp.insertar(categoria)) {
                 actualizarTabla(); // Refresca la tabla con los datos nuevos
-                JOptionPane.showMessageDialog(this, "Categoría añadida correctamente.");
+                AlerGuardadoExitgeneral dialog = new AlerGuardadoExitgeneral((Frame) this.getParent(), true);
+                dialog.setVisible(true);
                 txtNombre.setText(""); // Limpiar campo de entrada
             } else {
                 JOptionPane.showMessageDialog(this, "Error al añadir categoría.");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Ingrese un nombre.");
-        }
+            ProveedoringreseNombreProd dialog = new ProveedoringreseNombreProd((Frame) this.getParent(), true);
+            dialog.setVisible(true);        }
     }//GEN-LAST:event_btnAñadirActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
