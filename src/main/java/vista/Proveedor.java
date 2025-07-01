@@ -7,16 +7,29 @@ package vista;
 import controlador.Ctrl_Cliente;
 import controlador.Ctrl_Proveedor;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTable;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import modelo.ProveedorDatos;
+import rojeru_san.efectos.ValoresEnum;
+import rojerusan.RSLabelIcon;
 
 
 /**
@@ -27,25 +40,433 @@ public class Proveedor extends javax.swing.JPanel {
 
     private int id_proveedor;
     private Ctrl_Proveedor proveedorContro;
+    private int currentPage = 0;
+    private final int PROVEEDORES_POR_PAGINA = 19;
+    private List<ProveedorDatos> todosLosProveedores = new ArrayList<>();
+    private boolean[] seleccionados;
+private int idproveedor;
 
     public Proveedor(JFrame jFrame, boolean par) {
         proveedorContro = new Ctrl_Proveedor();
         initComponents();
-        aplicarTema(); // Apply initial theme
-        cargartablacliente();
-        // Register for theme changes
-        TemaManager.getInstance().addThemeChangeListener(() -> {
-            aplicarTema(); // Update theme when it changes
+        rSCheckBox1.addActionListener(e -> seleccionarTodo());
+        cargartablaproveedores();
+        aplicarTema();
+        TemaManager.getInstance().addThemeChangeListener(this::aplicarTema);
+    }
+
+    public void cargartablaproveedores() {
+        tablaclientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        DefaultTableModel model = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int fila, int columna) {
+                return columna == 0 || columna == 8 || columna == 9; // "Seleccionar", "Productos", and "Acciones"
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 0) return Boolean.class;
+                if (columnIndex == 8) return ProductCell.class;
+                return String.class;
+            }
+        };
+
+        model.addColumn("Seleccionar");
+        model.addColumn("Código");
+        model.addColumn("Nombres");
+        model.addColumn("Email");
+        model.addColumn("Teléfono");
+        model.addColumn("Dirección");
+        model.addColumn("Estado");
+        model.addColumn("Ubicación");
+        model.addColumn("Productos");
+        model.addColumn("Acciones");
+
+        List<ProveedorDatos> proveedores = proveedorContro.obtenerProveedoresConProductos();
+        todosLosProveedores = new ArrayList<>(proveedores);
+        System.out.println("Número de proveedores cargados: " + todosLosProveedores.size());
+
+        seleccionados = new boolean[todosLosProveedores.size()];
+
+        for (ProveedorDatos proveedor : todosLosProveedores) {
+            System.out.println("Proveedor ID: " + proveedor.getId_proveedor() +
+                    ", Nombre: " + proveedor.getNombre() +
+                    ", Apellido: " + proveedor.getApellido() +
+                    ", Departamento: " + proveedor.getDepartamento() +
+                    ", Municipio: " + proveedor.getMunicipio() +
+                    ", Productos: " + proveedor.getProductos());
+
+            List<String> productos = proveedor.getProductos();
+            if (productos == null || productos.isEmpty()) {
+                productos = proveedorContro.obtenerProductosDeProveedor(proveedor.getId_proveedor());
+                System.out.println("Productos fallback para " + proveedor.getId_proveedor() + ": " + productos);
+            }
+            String productosResumen = (productos != null && !productos.isEmpty()) ? 
+                    (productos.size() > 2 ? String.join(", ", productos.subList(0, 2)) + " + (" + (productos.size() - 2) + " más)" : String.join(", ", productos)) : 
+                    "Sin productos";
+            String ubicacion = (proveedor.getDepartamento() != null ? proveedor.getDepartamento() : "Sin departamento") + "/" +
+                    (proveedor.getMunicipio() != null ? proveedor.getMunicipio() : "Sin municipio");
+            String nombreCompleto = (proveedor.getNombre() != null ? proveedor.getNombre() : "Sin nombre") + " " +
+                    (proveedor.getApellido() != null ? proveedor.getApellido() : "Sin apellido");
+            model.addRow(new Object[]{
+                    false,
+                    proveedor.getId_proveedor(),
+                    nombreCompleto,
+                    proveedor.getCorreo_electronico(),
+                    proveedor.getTelefono(),
+                    proveedor.getDireccion(),
+                    proveedor.getEstado(),
+                    ubicacion,
+                    new ProductCell(productosResumen, productos), // Store ProductCell for editor
+                    "Ver Productos"
+            });
+        }
+
+        tablaclientes.setModel(model);
+        mostrarPagina(currentPage);
+
+        // Configurar renderers y editores
+        tablaclientes.getColumnModel().getColumn(0).setCellRenderer(new CustomCheckboxRenderer());
+        tablaclientes.getColumnModel().getColumn(0).setCellEditor(new CustomCheckboxEditor());
+        tablaclientes.getColumnModel().getColumn(8).setCellRenderer(new ProductCellRenderer());
+        tablaclientes.getColumnModel().getColumn(8).setCellEditor(new ProductCellEditor());
+        tablaclientes.getColumnModel().getColumn(9).setCellRenderer(new ButtonPanelRenderer());
+        tablaclientes.getColumnModel().getColumn(9).setCellEditor(new ButtonPanelEditor(new JCheckBox()));
+
+        // Ajustar anchos basados en la imagen (aproximados en píxeles)
+        tablaclientes.getColumnModel().getColumn(0).setPreferredWidth(120);
+        tablaclientes.getColumnModel().getColumn(1).setPreferredWidth(130);
+        tablaclientes.getColumnModel().getColumn(2).setPreferredWidth(250);
+        tablaclientes.getColumnModel().getColumn(3).setPreferredWidth(240);
+        tablaclientes.getColumnModel().getColumn(4).setPreferredWidth(130);
+        tablaclientes.getColumnModel().getColumn(5).setPreferredWidth(180);
+        tablaclientes.getColumnModel().getColumn(6).setPreferredWidth(80);
+        tablaclientes.getColumnModel().getColumn(7).setPreferredWidth(200);
+        tablaclientes.getColumnModel().getColumn(8).setPreferredWidth(115);
+        tablaclientes.getColumnModel().getColumn(9).setPreferredWidth(80);
+        tablaclientes.setRowHeight(29);
+
+        tablaclientes.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int fila_point = tablaclientes.rowAtPoint(e.getPoint());
+                if (fila_point > -1) {
+                    try {
+                        id_proveedor = Integer.parseInt(tablaclientes.getValueAt(fila_point, 1).toString());
+                    } catch (NumberFormatException ex) {
+                        System.out.println("Error al parsear id_proveedor: " + ex.getMessage());
+                    }
+                }
+            }
         });
     }
 
-    // ... (keep initComponents, action listeners, and cargartablacliente as they are)
+    private void mostrarPagina(int pagina) {
+        DefaultTableModel model = (DefaultTableModel) tablaclientes.getModel();
+        model.setRowCount(0);
+
+        int inicio = pagina * PROVEEDORES_POR_PAGINA;
+        int fin = Math.min(inicio + PROVEEDORES_POR_PAGINA, todosLosProveedores.size());
+
+        if (inicio >= todosLosProveedores.size()) {
+            currentPage = 0;
+            inicio = 0;
+            fin = Math.min(PROVEEDORES_POR_PAGINA, todosLosProveedores.size());
+        }
+
+        for (int i = inicio; i < fin; i++) {
+            ProveedorDatos proveedor = todosLosProveedores.get(i);
+            List<String> productos = proveedor.getProductos();
+            if (productos == null || productos.isEmpty()) {
+                productos = proveedorContro.obtenerProductosDeProveedor(proveedor.getId_proveedor());
+            }
+            String productosResumen = (productos != null && !productos.isEmpty()) ? 
+                    (productos.size() > 2 ? String.join(", ", productos.subList(0, 2)) + " + (" + (productos.size() - 2) + " más)" : String.join(", ", productos)) : 
+                    "Sin productos";
+            String ubicacion = (proveedor.getDepartamento() != null ? proveedor.getDepartamento() : "") + "/" +
+                    (proveedor.getMunicipio() != null ? proveedor.getMunicipio() : "");
+            String nombreCompleto = (proveedor.getNombre() != null ? proveedor.getNombre() : "") + " " +
+                    (proveedor.getApellido() != null ? proveedor.getApellido() : "");
+            model.addRow(new Object[]{
+                    seleccionados[i],
+                    proveedor.getId_proveedor(),
+                    nombreCompleto,
+                    proveedor.getCorreo_electronico() != null ? proveedor.getCorreo_electronico() : "",
+                    proveedor.getTelefono() != null ? proveedor.getTelefono() : "",
+                    proveedor.getDireccion() != null ? proveedor.getDireccion() : "",
+                    proveedor.getEstado() != null ? proveedor.getEstado() : "",
+                    ubicacion,
+                    new ProductCell(productosResumen, productos), // Store ProductCell for editor
+                    "Ver Productos"
+            });
+        }
+
+        int totalPaginas = (int) Math.ceil((double) todosLosProveedores.size() / PROVEEDORES_POR_PAGINA);
+        paginacion.setText("Página " + (currentPage + 1) + " de " + totalPaginas);
+        Añadir5.setEnabled(currentPage > 0);
+        Añadir4.setEnabled(currentPage < totalPaginas - 1);
+    }
+
+    private void seleccionarTodo() {
+        DefaultTableModel model = (DefaultTableModel) tablaclientes.getModel();
+        boolean seleccionado = rSCheckBox1.isSelected();
+        int inicio = currentPage * PROVEEDORES_POR_PAGINA;
+        int fin = Math.min(inicio + PROVEEDORES_POR_PAGINA, todosLosProveedores.size());
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            model.setValueAt(seleccionado, i, 0);
+            seleccionados[inicio + i] = seleccionado;
+        }
+    }
+
+    class ButtonPanelRenderer extends JPanel implements TableCellRenderer {
+        private RSLabelIcon editIcon;
+        private RSLabelIcon deleteIcon;
+
+        public ButtonPanelRenderer() {
+            setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 2, 0));
+            setOpaque(true);
+
+            editIcon = new RSLabelIcon();
+            editIcon.setIcons(ValoresEnum.ICONS.EDIT);
+            editIcon.setToolTipText("Editar");
+            editIcon.setPreferredSize(new Dimension(20, 20));
+
+            deleteIcon = new RSLabelIcon();
+            deleteIcon.setIcons(ValoresEnum.ICONS.DELETE);
+            deleteIcon.setToolTipText("Eliminar");
+            deleteIcon.setPreferredSize(new Dimension(20, 20));
+
+            add(editIcon);
+            add(deleteIcon);
+
+            updateTheme();
+            TemaManager.getInstance().addThemeChangeListener(this::updateTheme);
+        }
+
+        private void updateTheme() {
+            boolean oscuro = TemaManager.getInstance().isOscuro();
+            Color fondo = oscuro ? new Color(21, 21, 33) : Color.WHITE;
+            setBackground(fondo);
+            editIcon.setBackground(oscuro ? new Color(67, 71, 120) : new Color(46, 49, 82));
+            deleteIcon.setBackground(oscuro ? new Color(67, 71, 120) : new Color(46, 49, 82));
+            editIcon.setForeground(new Color(29, 30, 81));
+            deleteIcon.setForeground(new Color(29, 30, 81));
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            if (isSelected) {
+                setBackground(new Color(240, 240, 240));
+            } else {
+                updateTheme();
+            }
+            return this;
+        }
+    }
+
+    class CustomCheckboxRenderer extends JCheckBox implements TableCellRenderer {
+        public CustomCheckboxRenderer() {
+            setHorizontalAlignment(CENTER);
+            setOpaque(true);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            boolean oscuro = TemaManager.getInstance().isOscuro();
+            Color fondo = oscuro ? new Color(21, 21, 33) : Color.WHITE;
+            Color borde = oscuro ? new Color(100, 100, 150) : new Color(180, 180, 180);
+            Color seleccion = oscuro ? new Color(118, 142, 240) : new Color(72, 92, 188);
+
+            if (isSelected) {
+                setBackground(new Color(240, 240, 240));
+            } else {
+                setBackground(fondo);
+            }
+
+            setBorderPainted(true);
+            setForeground(seleccion);
+            setSelected(Boolean.TRUE.equals(value));
+            setBorder(javax.swing.BorderFactory.createLineBorder(borde));
+            return this;
+        }
+    }
+
+    class CustomCheckboxEditor extends DefaultCellEditor {
+        private final JCheckBox checkBox;
+
+        public CustomCheckboxEditor() {
+            super(new JCheckBox());
+            checkBox = (JCheckBox) getComponent();
+            checkBox.setOpaque(true);
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                boolean isSelected, int row, int column) {
+            boolean oscuro = TemaManager.getInstance().isOscuro();
+            checkBox.setBackground(oscuro ? new Color(21, 21, 33) : Color.WHITE);
+            checkBox.setSelected(Boolean.TRUE.equals(value));
+            return checkBox;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return checkBox.isSelected();
+        }
+    }
+
+    class ButtonPanelEditor extends DefaultCellEditor {
+        private JPanel panel;
+        private RSLabelIcon editIcon;
+        private RSLabelIcon deleteIcon;
+        private String label;
+        private boolean isPushed;
+        private int selectedRow;
+
+        public ButtonPanelEditor(JCheckBox checkBox) {
+            super(checkBox);
+            panel = new JPanel();
+            panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 2, 0));
+            panel.setOpaque(true);
+
+            editIcon = new RSLabelIcon();
+            editIcon.setIcons(ValoresEnum.ICONS.EDIT);
+            editIcon.setToolTipText("Editar");
+            editIcon.setPreferredSize(new Dimension(20, 20));
+
+            deleteIcon = new RSLabelIcon();
+            deleteIcon.setIcons(ValoresEnum.ICONS.DELETE);
+            deleteIcon.setToolTipText("Eliminar");
+            deleteIcon.setPreferredSize(new Dimension(20, 20));
+
+            panel.add(editIcon);
+            panel.add(deleteIcon);
+
+            editIcon.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    isPushed = true;
+                    fireEditingStopped();
+                    try {
+                        String codigoStr = tablaclientes.getValueAt(selectedRow, 1).toString();
+                        if (codigoStr == null || codigoStr.trim().isEmpty()) {
+                            JOptionPane.showMessageDialog(Proveedor.this, "Código de proveedor no válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        int codigo = Integer.parseInt(codigoStr);
+                        ProveedorDatos proveedor = proveedorContro.obtenerProveedorPorid(codigo);
+                        if (proveedor != null) {
+                            proveedorEditar dialog = new proveedorEditar((JFrame) javax.swing.SwingUtilities.getWindowAncestor(Proveedor.this), true, codigo);
+                            dialog.setLocationRelativeTo(null);
+                            dialog.setVisible(true);
+                            if (dialog.isGuardado()) {
+                                cargartablaproveedores();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(Proveedor.this, "No se encontró el proveedor con código: " + codigo, "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(Proveedor.this, "El código del proveedor no es un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                        ex.printStackTrace();
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(Proveedor.this, "Error al editar el proveedor: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            deleteIcon.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    isPushed = true;
+                    fireEditingStopped();
+                    try {
+                        int codigo = Integer.parseInt(tablaclientes.getValueAt(selectedRow, 1).toString());
+                        if (proveedorContro.tieneProductos(codigo)) {
+                            int opcion = JOptionPane.showConfirmDialog(Proveedor.this,
+                                    "Este proveedor tiene productos asociados. ¿Desea marcarlo como inactivo?",
+                                    "Proveedor con Productos", JOptionPane.YES_NO_OPTION);
+                            if (opcion == JOptionPane.YES_OPTION) {
+                                if (proveedorContro.desactivar(codigo)) {
+                                    JOptionPane.showMessageDialog(Proveedor.this, "Proveedor marcado como inactivo.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                                    cargartablaproveedores();
+                                } else {
+                                    JOptionPane.showMessageDialog(Proveedor.this, "Error al marcar como inactivo.", "Error", JOptionPane.ERROR_MESSAGE);
+                                }
+                            }
+                        } else {
+                            int confirm = JOptionPane.showConfirmDialog(Proveedor.this,
+                                    "¿Está seguro de que desea eliminar el proveedor con código " + codigo + "?",
+                                    "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+                            if (confirm == JOptionPane.YES_OPTION) {
+                                if (proveedorContro.eliminar(codigo)) {
+                                    JOptionPane.showMessageDialog(Proveedor.this, "Proveedor eliminado correctamente");
+                                    cargartablaproveedores();
+                                } else {
+                                    JOptionPane.showMessageDialog(Proveedor.this, "Error al eliminar el proveedor");
+                                }
+                            }
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(Proveedor.this, "Error al eliminar el proveedor: " + ex.getMessage());
+                    }
+                }
+            });
+
+            updateTheme();
+            TemaManager.getInstance().addThemeChangeListener(this::updateTheme);
+        }
+
+        private void updateTheme() {
+            boolean oscuro = TemaManager.getInstance().isOscuro();
+            Color fondo = oscuro ? new Color(21, 21, 33) : Color.WHITE;
+            panel.setBackground(fondo);
+            editIcon.setBackground(oscuro ? new Color(67, 71, 120) : new Color(46, 49, 82));
+            deleteIcon.setBackground(oscuro ? new Color(67, 71, 120) : new Color(46, 49, 82));
+            editIcon.setForeground(new Color(29, 30, 81));
+            deleteIcon.setForeground(new Color(29, 30, 81));
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                boolean isSelected, int row, int column) {
+            label = (value == null) ? "" : value.toString();
+            isPushed = true;
+            selectedRow = row;
+            if (row == table.getSelectedRow()) {
+                panel.setBackground(new Color(240, 240, 240));
+            } else {
+                updateTheme();
+            }
+            return panel;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return label;
+        }
+
+        @Override
+        public boolean stopCellEditing() {
+            isPushed = false;
+            return super.stopCellEditing();
+        }
+
+        @Override
+        protected void fireEditingStopped() {
+            super.fireEditingStopped();
+        }
+    }
 
     public void aplicarTema() {
         boolean oscuro = TemaManager.getInstance().isOscuro();
 
         if (oscuro) {
-            Color fondo = new Color(21,21,33);
+            Color fondo = new Color(21, 21, 33);
             Color primario = new Color(40, 60, 150);
             Color texto = Color.WHITE;
 
@@ -54,16 +475,17 @@ public class Proveedor extends javax.swing.JPanel {
             txtBuscar.setForeground(texto);
             txtBuscar.setColorIcon(texto);
             txtBuscar.setPhColor(Color.LIGHT_GRAY);
-            
-            
-          tablaclientes.setBackground(new Color (21,21,33));
-            tablaclientes.setBackgoundHead(new Color (67, 71, 120));
-            tablaclientes.setForegroundHead(new Color (255,255,255));
+            paginacion.setBackground(texto);
+            rSCheckBox1.setColorCheck(new Color(21, 21, 33));
+            rSButtonMaterialRippleIcon1.setBackground(new Color(21, 21, 33));
+            tablaclientes.setBackground(new Color(21, 21, 33));
+            tablaclientes.setBackgoundHead(new Color(67, 71, 120));
+            tablaclientes.setForegroundHead(new Color(255, 255, 255));
             tablaclientes.setBackgoundHover(new Color(40, 50, 90));
-         tablaclientes.setFont(new Font("Tahoma", Font.PLAIN, 15));
-            tablaclientes.setColorPrimary(new Color(37,37,52));
+            tablaclientes.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            tablaclientes.setColorPrimary(new Color(37, 37, 52));
             tablaclientes.setColorPrimaryText(texto);
-            tablaclientes.setColorSecondary(new Color(30,30,45));
+            tablaclientes.setColorSecondary(new Color(30, 30, 45));
             tablaclientes.setColorSecundaryText(texto);
             tablaclientes.setColorBorderHead(primario);
             tablaclientes.setColorBorderRows(fondo.darker());
@@ -71,47 +493,47 @@ public class Proveedor extends javax.swing.JPanel {
             tablaclientes.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
             tablaclientes.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
             tablaclientes.setEffectHover(true);
-              tablaclientes.setShowGrid(true);
-tablaclientes.setGridColor(Color.WHITE); // o el color que desees
+            tablaclientes.setShowGrid(true);
+            tablaclientes.setGridColor(Color.WHITE);
 
             btnNuevo1.setBackground(new Color(67, 71, 120));
-            btnNuevo1.setBackgroundHover(new Color(118,142,240));
-            
-            btnEliminar1.setBackground(new Color(67, 71, 120));
-            btnEliminar1.setBackgroundHover(new Color(118,142,240));
+            btnNuevo1.setBackgroundHover(new Color(118, 142, 240));
+            btnNuevo2.setBackground(new Color(67, 71, 120));
+            btnNuevo2.setBackgroundHover(new Color(118, 142, 240));
         } else {
             Color fondo = new Color(242, 247, 255);
             Color texto = Color.BLACK;
             Color primario = new Color(72, 92, 188);
+            paginacion.setBackground(texto);
+            rSButtonMaterialRippleIcon1.setBackground(new Color(242, 247, 255));
 
             jPanel1.setBackground(fondo);
             txtBuscar.setBackground(fondo);
             txtBuscar.setForeground(texto);
             txtBuscar.setColorIcon(texto);
             txtBuscar.setPhColor(Color.GRAY);
-            
-            
-      tablaclientes.setBackground(new Color (255,255,255));
-            tablaclientes.setBackgoundHead(new Color (46,49,82));
+
+            tablaclientes.setBackground(new Color(255, 255, 255));
+            tablaclientes.setBackgoundHead(new Color(46, 49, 82));
             tablaclientes.setForegroundHead(Color.WHITE);
-            tablaclientes.setBackgoundHover(new Color(67,150,209));
-           tablaclientes.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            tablaclientes.setBackgoundHover(new Color(67, 150, 209));
+            tablaclientes.setFont(new Font("Tahoma", Font.PLAIN, 15));
             tablaclientes.setColorPrimary(new Color(242, 242, 242));
             tablaclientes.setColorPrimaryText(texto);
             tablaclientes.setColorSecondary(new Color(255, 255, 255));
             tablaclientes.setColorSecundaryText(texto);
             tablaclientes.setColorBorderHead(primario);
-            tablaclientes.setColorBorderRows(new Color(0,0,0));
+            tablaclientes.setColorBorderRows(new Color(0, 0, 0));
             tablaclientes.setFontHead(new Font("Tahoma", Font.BOLD, 15));
             tablaclientes.setFontRowHover(new Font("Tahoma", Font.BOLD, 15));
             tablaclientes.setFontRowSelect(new Font("Tahoma", Font.BOLD, 15));
             tablaclientes.setEffectHover(true);
-            tablaclientes.setSelectionBackground(new Color(67,150,209));
+            tablaclientes.setSelectionBackground(new Color(67, 150, 209));
             tablaclientes.setShowGrid(true);
-tablaclientes.setGridColor(Color.BLACK); // o el color que desees
+            tablaclientes.setGridColor(Color.BLACK);
 
             btnNuevo1.setBackground(new Color(46, 49, 82));
-            btnEliminar1.setBackground(new Color(46, 49, 82));
+            btnNuevo2.setBackground(new Color(46, 49, 82));
         }
     }
 
@@ -121,15 +543,21 @@ tablaclientes.setGridColor(Color.BLACK); // o el color que desees
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         btnNuevo1 = new RSMaterialComponent.RSButtonShape();
-        btnEliminar1 = new RSMaterialComponent.RSButtonShape();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaclientes = new RSMaterialComponent.RSTableMetroCustom();
         txtBuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
+        btnNotificacion1 = new rojerusan.RSLabelIcon();
+        Añadir4 = new rojeru_san.RSButtonRiple();
+        rSButtonMaterialRippleIcon1 = new RSMaterialComponent.RSButtonMaterialRippleIcon();
+        btnNuevo2 = new RSMaterialComponent.RSButtonShape();
+        Añadir5 = new rojeru_san.RSButtonRiple();
+        rSCheckBox1 = new rojerusan.RSCheckBox();
+        paginacion = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(1290, 730));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -151,40 +579,24 @@ tablaclientes.setGridColor(Color.BLACK); // o el color que desees
                 btnNuevo1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnNuevo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 110, 110, 30));
-
-        btnEliminar1.setBackground(new java.awt.Color(46, 49, 82));
-        btnEliminar1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
-        btnEliminar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (1).png"))); // NOI18N
-        btnEliminar1.setText(" Eliminar");
-        btnEliminar1.setToolTipText("");
-        btnEliminar1.setBackgroundHover(new java.awt.Color(67, 150, 209));
-        btnEliminar1.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
-        btnEliminar1.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
-        btnEliminar1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnEliminar1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminar1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnEliminar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 110, 110, 30));
+        jPanel1.add(btnNuevo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 60, 110, 30));
 
         tablaclientes.setForeground(new java.awt.Color(255, 255, 255));
         tablaclientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Codigo", "Nombre", "Correo Electronico", "Telefono", "Direccion", "Producto"
+                "Seleccionar", "Codigo", "Tipo. Doc", "Nombre", "Correo Electronico", "Telefono", "Direccion", "Estado", "Producto", "Acciones"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, true
+                true, false, true, true, true, true, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -216,7 +628,7 @@ tablaclientes.setGridColor(Color.BLACK); // o el color que desees
         jScrollPane3.setViewportView(tablaclientes);
         tablaclientes.getColumnModel().getColumn(0).setPreferredWidth(10);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, 1160, 530));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, 1200, 530));
 
         txtBuscar.setBackground(new java.awt.Color(242, 247, 255));
         txtBuscar.setForeground(new java.awt.Color(0, 0, 0));
@@ -230,62 +642,270 @@ tablaclientes.setGridColor(Color.BLACK); // o el color que desees
                 txtBuscarActionPerformed(evt);
             }
         });
-        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 90, 430, 40));
+        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 430, 40));
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, 730));
-    }// </editor-fold>//GEN-END:initComponents
+        btnNotificacion1.setBackground(new java.awt.Color(255, 255, 255));
+        btnNotificacion1.setForeground(new java.awt.Color(255, 255, 255));
+        btnNotificacion1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.TUNE);
+        btnNotificacion1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnNotificacion1MouseClicked(evt);
+            }
+        });
+        jPanel1.add(btnNotificacion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 60, -1, -1));
 
-    private void btnNuevo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevo1ActionPerformed
-        proveedornuevo dialog = new proveedornuevo(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
+        Añadir4.setBackground(new java.awt.Color(46, 49, 82));
+        Añadir4.setText("Siguiente");
+        Añadir4.setColorHover(new java.awt.Color(0, 153, 51));
+        Añadir4.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        Añadir4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Añadir4ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Añadir4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 680, 98, 40));
 
-        if (dialog.isGuardado()) {
-            cargartablacliente(); 
+        rSButtonMaterialRippleIcon1.setBackground(new java.awt.Color(102, 102, 102));
+        rSButtonMaterialRippleIcon1.setForeground(new java.awt.Color(253, 126, 20));
+        rSButtonMaterialRippleIcon1.setBackgroundHover(new java.awt.Color(242, 247, 255));
+        rSButtonMaterialRippleIcon1.setForegroundHover(new java.awt.Color(255, 51, 51));
+        rSButtonMaterialRippleIcon1.setForegroundIcon(new java.awt.Color(255, 51, 51));
+        rSButtonMaterialRippleIcon1.setForegroundIconHover(new java.awt.Color(255, 51, 51));
+        rSButtonMaterialRippleIcon1.setForegroundText(new java.awt.Color(255, 51, 51));
+        rSButtonMaterialRippleIcon1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.DELETE);
+        rSButtonMaterialRippleIcon1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSButtonMaterialRippleIcon1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(rSButtonMaterialRippleIcon1, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 680, 40, 40));
+
+        btnNuevo2.setBackground(new java.awt.Color(67, 94, 190));
+        btnNuevo2.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnNuevo2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnNuevo2.setText(" Nuevo");
+        btnNuevo2.setBackgroundHover(new java.awt.Color(118, 142, 240));
+        btnNuevo2.setFocusable(false);
+        btnNuevo2.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        btnNuevo2.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnNuevo2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnNuevo2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevo2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNuevo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 60, 110, 30));
+
+        Añadir5.setBackground(new java.awt.Color(46, 49, 82));
+        Añadir5.setText("Anterior");
+        Añadir5.setColorHover(new java.awt.Color(0, 153, 51));
+        Añadir5.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        Añadir5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Añadir5ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Añadir5, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 680, 90, 40));
+
+        rSCheckBox1.setForeground(new java.awt.Color(102, 102, 255));
+        rSCheckBox1.setText("Seleccionar Todo");
+        jPanel1.add(rSCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 680, 190, 20));
+
+        paginacion.setBackground(new java.awt.Color(0, 0, 0));
+        paginacion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        paginacion.setForeground(new java.awt.Color(51, 51, 51));
+        paginacion.setText("Escritorio");
+        paginacion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                paginacionMouseClicked(evt);
+            }
+        });
+        jPanel1.add(paginacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 680, -1, -1));
+
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1340, 730));
+    }// </editor-fold>                        
+
+    private void btnNuevo1ActionPerformed(java.awt.event.ActionEvent evt) {                                          
+ proveedornuevo dialog = new proveedornuevo(new javax.swing.JFrame(), true);
+    dialog.setLocationRelativeTo(null);
+    dialog.setVisible(true);
+
+    if (dialog.isGuardado()) {
+        cargartablaproveedores(); 
+    }
+    }                                         
+
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {                                          
+       String textoBusqueda = txtBuscar.getText().trim();
+        if (textoBusqueda.isEmpty()) {
+            cargartablaproveedores();
+        } else {
+            cargartablaproveedoresFiltrado(textoBusqueda);
         }
-    }//GEN-LAST:event_btnNuevo1ActionPerformed
 
-    private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed
-        int filaSeleccionada = tablaclientes.getSelectedRow();
+    }                                         
 
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un cliente para eliminar");
-            return;
+    private void btnNotificacion1MouseClicked(java.awt.event.MouseEvent evt) {                                              
+        // TODO add your handling code here:
+    }                                             
+
+    private void Añadir4ActionPerformed(java.awt.event.ActionEvent evt) {                                        
+int totalPaginas = (int) Math.ceil((double) todosLosProveedores.size() / PROVEEDORES_POR_PAGINA);
+        if (currentPage < totalPaginas - 1) {
+            currentPage++;
+            mostrarPagina(currentPage);
         }
+    }                                       
 
-        int idCliente = (int) tablaclientes.getValueAt(filaSeleccionada, 0);
-        Ctrl_Cliente controlCliente = new Ctrl_Cliente();
+    private void rSButtonMaterialRippleIcon1ActionPerformed(java.awt.event.ActionEvent evt) {                                                            
+  List<Integer> idsAEliminar = new ArrayList<>();
+        List<String> nombresProveedoresAEliminar = new ArrayList<>();
+        List<Integer> proveedoresConProductos = new ArrayList<>();
+        List<String> proveedoresConProductosNombres = new ArrayList<>();
 
-        int confirmacion = JOptionPane.showConfirmDialog(this,
-            "¿Está seguro de que desea eliminar el cliente con código " + idCliente + "?",
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION);
-
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            if (controlCliente.eliminar(idCliente)) {
-                JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente");
-                cargartablacliente(); // Recargar la tabla
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al eliminar cliente");
+        DefaultTableModel model = (DefaultTableModel) tablaclientes.getModel();
+        int inicio = currentPage * PROVEEDORES_POR_PAGINA;
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if (Boolean.TRUE.equals(model.getValueAt(i, 0))) {
+                int id = Integer.parseInt(model.getValueAt(i, 1).toString());
+                String nombre = model.getValueAt(i, 2).toString();
+                if (proveedorContro.tieneProductos(id)) {
+                    proveedoresConProductos.add(id);
+                    proveedoresConProductosNombres.add(nombre);
+                } else {
+                    idsAEliminar.add(id);
+                    nombresProveedoresAEliminar.add(nombre);
+                }
+                seleccionados[inicio + i] = false;
             }
         }
-    }//GEN-LAST:event_btnEliminar1ActionPerformed
 
-    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
-        // TODO add your handling code here:
+        if (!proveedoresConProductos.isEmpty()) {
+            String mensaje = "No se pueden eliminar los siguientes proveedores porque tienen productos asociados:\n" +
+                    String.join(", ", proveedoresConProductosNombres) +
+                    "\n¿Desea marcarlos como inactivos?";
+            int opcion = JOptionPane.showConfirmDialog(this, mensaje, "Proveedores con Productos", JOptionPane.YES_NO_OPTION);
+            if (opcion == JOptionPane.YES_OPTION) {
+                for (Integer id : proveedoresConProductos) {
+                    if (proveedorContro.desactivar(id)) {
+                        JOptionPane.showMessageDialog(this, "Proveedor(es) marcados como inactivo(s).", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error al marcar proveedor(es) como inactivo(s).", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        }
 
-    }//GEN-LAST:event_txtBuscarActionPerformed
+        if (!idsAEliminar.isEmpty()) {
+            String mensaje = "¿Está seguro que desea eliminar " +
+                    (idsAEliminar.size() > 1 ? "estos " + idsAEliminar.size() + " proveedores?" : "este proveedor?") +
+                    "\nProveedores: " + String.join(", ", nombresProveedoresAEliminar);
+            int confirm = JOptionPane.showConfirmDialog(this, mensaje, "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                boolean todasEliminadas = true;
+                for (Integer id : idsAEliminar) {
+                    if (!proveedorContro.eliminar(id)) {
+                        todasEliminadas = false;
+                        JOptionPane.showMessageDialog(this, "Error al eliminar el proveedor con ID: " + id);
+                    }
+                }
+                if (todasEliminadas) {
+                    JOptionPane.showMessageDialog(this, "Proveedor(es) eliminado(s) correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                }
+                todosLosProveedores.removeIf(proveedor -> idsAEliminar.contains(proveedor.getId_proveedor()));
+                mostrarPagina(currentPage);
+            }
+        } else if (proveedoresConProductos.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay proveedores seleccionados para eliminar.", "Sin selección", JOptionPane.WARNING_MESSAGE);
+        }
+
+        rSCheckBox1.setSelected(false);
+    
+    }                                                           
+
+    private void btnNuevo2ActionPerformed(java.awt.event.ActionEvent evt) {                                          
+//        crear_cliente dialog = new crear_cliente(new javax.swing.JFrame(), true);
+//        dialog.setLocationRelativeTo(null);
+//        dialog.setVisible(true);
+//
+//        if (dialog.isGuardado()) {
+//            cargartablaclientes(); // Use the correct method with all columns
+//        }
+    }                                         
+
+    private void Añadir5ActionPerformed(java.awt.event.ActionEvent evt) {                                        
+if (currentPage > 0) {
+            currentPage--;
+            mostrarPagina(currentPage);
+        }
+    }                                       
+
+    private void paginacionMouseClicked(java.awt.event.MouseEvent evt) {                                        
+        // TODO add your handling code here: 777777
+    }                                       
 
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private RSMaterialComponent.RSButtonShape btnEliminar1;
+    // Variables declaration - do not modify                     
+    private rojeru_san.RSButtonRiple Añadir4;
+    private rojeru_san.RSButtonRiple Añadir5;
+    private rojerusan.RSLabelIcon btnNotificacion1;
     private RSMaterialComponent.RSButtonShape btnNuevo1;
+    private RSMaterialComponent.RSButtonShape btnNuevo2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel paginacion;
+    private RSMaterialComponent.RSButtonMaterialRippleIcon rSButtonMaterialRippleIcon1;
+    private rojerusan.RSCheckBox rSCheckBox1;
     private RSMaterialComponent.RSTableMetroCustom tablaclientes;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtBuscar;
-    // End of variables declaration//GEN-END:variables
- public void cargartablacliente() {
+    // End of variables declaration                   
+ 
+    
+    
+   private void cargartablaproveedoresFiltrado(String textoBusqueda) {
+    DefaultTableModel model = (DefaultTableModel) tablaclientes.getModel();
+    model.setRowCount(0);
+
+    List<ProveedorDatos> proveedoresFiltrados = todosLosProveedores.stream()
+            .filter(p -> (p.getNombre() != null && p.getNombre().toLowerCase().contains(textoBusqueda.toLowerCase())) ||
+                         (p.getApellido() != null && p.getApellido().toLowerCase().contains(textoBusqueda.toLowerCase())))
+            .toList();
+
+    int inicio = currentPage * PROVEEDORES_POR_PAGINA;
+    int fin = Math.min(inicio + PROVEEDORES_POR_PAGINA, proveedoresFiltrados.size());
+
+    for (int i = inicio; i < fin; i++) {
+        ProveedorDatos proveedor = proveedoresFiltrados.get(i);
+        List<String> productos = proveedor.getProductos();
+        if (productos == null || productos.isEmpty()) {
+            productos = proveedorContro.obtenerProductosDeProveedor(proveedor.getId_proveedor());
+        }
+        String productosResumen = (productos != null && !productos.isEmpty()) ? 
+                               (productos.size() > 2 ? String.join(", ", productos.subList(0, 2)) + " + (" + (productos.size() - 2) + " más)" : String.join(", ", productos)) : 
+                               "Sin productos";
+        String ubicacion = (proveedor.getDepartamento() != null ? proveedor.getDepartamento() : "Sin departamento") + "/" +
+                          (proveedor.getMunicipio() != null ? proveedor.getMunicipio() : "Sin municipio");
+        model.addRow(new Object[]{
+            false,
+            String.valueOf(proveedor.getId_proveedor()),
+            proveedor.getNombre() != null ? proveedor.getNombre() : "Sin nombre",
+            proveedor.getApellido() != null ? proveedor.getApellido() : "Sin apellido",
+            proveedor.getCorreo_electronico() != null ? proveedor.getCorreo_electronico() : "Sin correo",
+            proveedor.getTelefono() != null ? proveedor.getTelefono() : "Sin teléfono",
+            proveedor.getDireccion() != null ? proveedor.getDireccion() : "Sin dirección",
+            proveedor.getEstado() != null ? proveedor.getEstado() : "Sin estado",
+            ubicacion,
+            new ProductCell(productosResumen, productos),
+            "Ver Productos"
+        });
+    }
+
+    int totalPaginas = (int) Math.ceil((double) proveedoresFiltrados.size() / PROVEEDORES_POR_PAGINA);
+    paginacion.setText("Página " + (currentPage + 1) + " de " + totalPaginas);
+    Añadir5.setEnabled(currentPage > 0);
+    Añadir4.setEnabled(currentPage < totalPaginas - 1);
+}
+    public void cargartablacliente() {
     tablaclientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
     DefaultTableModel model = new DefaultTableModel();
@@ -296,7 +916,7 @@ tablaclientes.setGridColor(Color.BLACK); // o el color que desees
     model.addColumn("Dirección");
     model.addColumn("Producto");
 
-    List<modelo.ProveedorDatos> proveedores = proveedorContro.obtenerProveedores();
+    List<modelo.ProveedorDatos> proveedores = proveedorContro.obtenerProveedoresConProductos();
     for (modelo.ProveedorDatos proveedor : proveedores) {
         Object[] fila = new Object[6];
         fila[0] = proveedor.getId_proveedor();
@@ -322,14 +942,22 @@ tablaclientes.setGridColor(Color.BLACK); // o el color que desees
         }
     });
 }
+    
+    
+    
+    
   private String obtenerProductosPorProveedor(int idProveedor) {
-    List<String> productos = proveedorContro.obtenerProveedoresConProductos()
-        .stream()
-        .filter(p -> p.contains("Proveedor: " + idProveedor + " | "))
-        .map(p -> p.replace("Proveedor: " + idProveedor + " | Producto: ", ""))
-        .collect(Collectors.toList());
+    String[] productos = null; // Inicializa como array para evitar null
+    try {
+        productos = proveedorContro.obtenerProductosDeProveedor(idProveedor).toArray(new String[0]);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
 
-    return productos.isEmpty() ? "Sin productos" : String.join(", ", productos);
+    if (productos != null) {
+        return String.join(", ", productos); // Une los productos con comas
+    }
+    return "Sin productos";
 }
 
     private void cargartablaclienteFiltrado(String textoBusqueda) {
@@ -343,7 +971,7 @@ tablaclientes.setGridColor(Color.BLACK); // o el color que desees
         model.addColumn("Dirección");
         model.addColumn("Producto");
 
-        List<modelo.ProveedorDatos> proveedores = proveedorContro.obtenerProveedores()
+        List<modelo.ProveedorDatos> proveedores = proveedorContro.obtenerProveedoresConProductos()
             .stream()
             .filter(p -> p.getNombre() != null && p.getNombre().toLowerCase().contains(textoBusqueda.toLowerCase()))
             .toList();
@@ -362,10 +990,118 @@ tablaclientes.setGridColor(Color.BLACK); // o el color que desees
         tablaclientes.setModel(model);
     }
     
-    
+    private static class ProductCell {
+    private final String summary;
+    private final List<String> fullList;
+
+    public ProductCell(String summary, List<String> fullList) {
+        this.summary = summary;
+        this.fullList = fullList;
+    }
+
+    public String getSummary() { return summary; }
+    public List<String> getFullList() { return fullList; }
+}
 
 
+// Renderer for the "Productos" column
+class ProductCellRenderer extends JPanel implements TableCellRenderer {
+    private final javax.swing.JLabel label;
+
+    public ProductCellRenderer() {
+        setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        setOpaque(true);
+        label = new javax.swing.JLabel();
+        label.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        add(label);
+
+        updateTheme();
+        TemaManager.getInstance().addThemeChangeListener(this::updateTheme);
+    }
+
+    private void updateTheme() {
+        boolean oscuro = TemaManager.getInstance().isOscuro();
+        Color fondo = oscuro ? new Color(21, 21, 33) : Color.WHITE;
+        Color texto = oscuro ? Color.WHITE : Color.BLACK;
+        setBackground(fondo);
+        label.setForeground(texto);
+    }
+
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
+            boolean isSelected, boolean hasFocus, int row, int column) {
+        if (value instanceof ProductCell) {
+            ProductCell cell = (ProductCell) value;
+            label.setText(cell.getSummary());
+            if (isSelected) {
+                setBackground(new Color(240, 240, 240));
+                label.setForeground(Color.BLUE);
+            } else {
+                updateTheme();
+            }
+        }
+        return this;
+    }
+}
+
+// Editor for the "Productos" column (to handle click for "Ver más")
+class ProductCellEditor extends DefaultCellEditor {
+    private final JPanel panel;
+    private final javax.swing.JLabel label;
+    private ProductCell currentCell;
+
+    public ProductCellEditor() {
+        super(new JCheckBox());
+        panel = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        panel.setOpaque(true);
+        label = new javax.swing.JLabel();
+        label.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (currentCell != null && currentCell.getFullList() != null && !currentCell.getFullList().isEmpty()) {
+                    String fullList = String.join("\n", currentCell.getFullList());
+                    JOptionPane.showMessageDialog(Proveedor.this, fullList, "Lista de Productos", JOptionPane.INFORMATION_MESSAGE);
+                }
+                fireEditingStopped();
+            }
+        });
+        panel.add(label);
+
+        updateTheme();
+        TemaManager.getInstance().addThemeChangeListener(this::updateTheme);
+    }
+
+    private void updateTheme() {
+        boolean oscuro = TemaManager.getInstance().isOscuro();
+        Color fondo = oscuro ? new Color(21, 21, 33) : Color.WHITE;
+        Color texto = oscuro ? Color.WHITE : Color.BLACK;
+        panel.setBackground(fondo);
+        label.setForeground(texto);
+    }
+
+    @Override
+    public Component getTableCellEditorComponent(JTable table, Object value,
+            boolean isSelected, int row, int column) {
+        if (value instanceof ProductCell) {
+            currentCell = (ProductCell) value;
+            label.setText(currentCell.getSummary());
+            if (isSelected) {
+                panel.setBackground(new Color(240, 240, 240));
+                label.setForeground(Color.BLUE);
+            } else {
+                updateTheme();
+            }
+        }
+        return panel;
+    }
+
+    @Override
+    public Object getCellEditorValue() {
+        return currentCell;
+    }
+}
 
 
 }
-

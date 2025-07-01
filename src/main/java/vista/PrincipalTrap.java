@@ -110,7 +110,6 @@ getHeight());
         item1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 60, 1, 1)); // Margen izquierdo para alinear con el texto del menú
         item1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         item1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        item1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tratar-con-cuidado.png")));
         item1.setIconTextGap(10);
         item1.setText("Materiales");
         item1.setColorHover(new Color(150, 150, 150)); // Mismo color de hover que los botones del menú
@@ -125,7 +124,6 @@ getHeight());
         item2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 60, 1, 1)); // Margen izquierdo para alinear con el texto del menú
         item2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         item2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        item2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/llave-inglesa.png")));
         item2.setIconTextGap(10);
         item2.setText("Herramientas");
         item2.setColorHover(new Color(150, 150, 150)); // Mismo color de hover que los botones del menú
@@ -191,7 +189,6 @@ getHeight());
         item3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 60, 1, 1));
         item3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         item3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        item3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bolsa-de-la-compra.png"))); // Puedes cambiar el icono
         item3.setIconTextGap(10);
         item3.setText("Pedidos");
         item3.setColorHover(new Color(150, 150, 150));
@@ -205,7 +202,6 @@ getHeight());
         item4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 60, 1, 1));
         item4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         item4.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        item4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/solicitud-de-cotizacion.png"))); // Puedes cambiar el icono
         item4.setIconTextGap(10);
         item4.setText("Cotización");
         item4.setColorHover(new Color(150, 150, 150));

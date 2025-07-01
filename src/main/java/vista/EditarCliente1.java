@@ -245,7 +245,6 @@ public class EditarCliente1 extends javax.swing.JDialog {
 // Validación de campos (sin cambios)...
         modelo.Cliente cliente = new modelo.Cliente();
         cliente.setIdentificacion(identificaciontxt.getSelectedItem().toString());
-        cliente.setNumero(Integer.parseInt(numerotxt.getText()));
         cliente.setNombre(nombretxt.getText());
         cliente.setApellido(apellidotxt.getText());
         cliente.setTelefono(telefonotxt.getText());
@@ -258,7 +257,6 @@ public class EditarCliente1 extends javax.swing.JDialog {
             if (tableModel != null && selectedRow != -1) {
                 tableModel.setValueAt(idCliente, selectedRow, 0); // Código
                 tableModel.setValueAt(cliente.getIdentificacion(), selectedRow, 1); // Identificación
-                tableModel.setValueAt(cliente.getNumero(), selectedRow, 2); // Número
                 tableModel.setValueAt(cliente.getNombre(), selectedRow, 3); // Nombre
                 tableModel.setValueAt(cliente.getApellido(), selectedRow, 4); // Apellido
                 tableModel.setValueAt(cliente.getTelefono(), selectedRow, 5); // Teléfono
@@ -372,11 +370,10 @@ public class EditarCliente1 extends javax.swing.JDialog {
 
     private void cargarDatosCliente() {
         Ctrl_Cliente controlCliente = new Ctrl_Cliente();
-        modelo.Cliente cliente = controlCliente.obtenerClientePorid(idCliente);
+        modelo.Cliente cliente = controlCliente.obtenerClientePorId(idCliente);
 
         if (cliente != null) {
             identificaciontxt.setSelectedItem(cliente.getIdentificacion());
-            numerotxt.setText(String.valueOf(cliente.getNumero()));
             nombretxt.setText(cliente.getNombre());
             apellidotxt.setText(cliente.getApellido());
             telefonotxt.setText(cliente.getTelefono());
@@ -385,5 +382,9 @@ public class EditarCliente1 extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "No se pudo cargar la información del cliente.");
             dispose();
         }
+    }
+
+    boolean isGuardado() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

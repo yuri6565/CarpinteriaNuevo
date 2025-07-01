@@ -31,8 +31,9 @@ public class Login1121 extends javax.swing.JFrame {
 
     private boolean isPasswordVisible = false;
     // Rutas de las imágenes
-    private final String eyeOpenPath = "/vista (1).png";   // Ojo abierto
-    private final String eyeClosedPath = "/ojo (2).png"; // Ojo cerrado
+    private final String eyeOpenPath = "/ojo.png";   // Ojo abierto
+    private final String eyeClosedPath = "/ojo2.png"; // Ojo cerrado
+   
 
     private ImageIcon eyeOpenIcon;
     private ImageIcon eyeClosedIcon;

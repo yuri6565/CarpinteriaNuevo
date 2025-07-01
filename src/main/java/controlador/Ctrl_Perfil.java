@@ -15,189 +15,223 @@ import modelo.UsuarioModelo;
  * @author Personal
  */
 public class Ctrl_Perfil {
-   
+
     public UsuarioModelo obtenerUsuario(int id_usuario) {
-    UsuarioModelo usuario = new UsuarioModelo();
-    Connection cn = Conexion.getConnection();
-    String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
-    try (PreparedStatement ps = cn.prepareStatement(sql)) {
-        ps.setInt(1, id_usuario);
-        ResultSet rs = ps.executeQuery();
+        UsuarioModelo usuario = new UsuarioModelo();
+        Connection cn = Conexion.getConnection();
+        String sql = "SELECT id_usuario, tipodeiden, nombre, apellido, usuario, contrasena, correo_electronico, telefono, rol, imagen FROM usuario WHERE id_usuario = ?";
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, id_usuario);
+            ResultSet rs = ps.executeQuery();
 
-        if (rs.next()) {
-            usuario.setId_usuario(rs.getInt("id_usuario"));
-            usuario.setNombre(rs.getString("nombre"));
-            usuario.setApellido(rs.getString("apellido"));
-            usuario.setCorreo_electronico(rs.getString("correo_electronico"));
-            usuario.setUsuario(rs.getString("usuario"));
-            usuario.setContrasena(rs.getString("contrasena"));
-            usuario.setTelefono(rs.getString("telefono"));
-            usuario.setRol(rs.getString("rol"));
+            if (rs.next()) {
+                usuario.setId_usuario(rs.getInt("id_usuario"));
+                usuario.setTipodeiden(rs.getString("tipodeiden"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setApellido(rs.getString("apellido"));
+                usuario.setCorreo_electronico(rs.getString("correo_electronico"));
+                usuario.setUsuario(rs.getString("usuario"));
+                usuario.setContrasena(rs.getString("contrasena"));
+                usuario.setTelefono(rs.getString("telefono"));
+                usuario.setRol(rs.getString("rol"));
+                usuario.setImagen(rs.getBytes("imagen"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener usuario: " + e.getMessage());
         }
-
-    } catch (SQLException e) {
-        System.err.println("Error al obtener usuario: " + e.getMessage());
-        // Aquí puedes lanzar una excepción si lo prefieres
-        // throw new RuntimeException("Error al obtener usuario", e);
+        return usuario;
     }
 
-    return usuario;
-}
-
-
-    // Método para actualizar los datos de un usuario
     public boolean actualizarUsuario(UsuarioModelo usuario, boolean esTrabajador) {
+        if (usuario.getId_usuario() <= 0) {
+            JOptionPane.showMessageDialog(null, "ID de usuario inválido.");
+            return false;
+        }
         boolean exito = false;
         Connection cn = Conexion.getConnection();
         String rolActual = obtenerUsuario(usuario.getId_usuario()).getRol();
         String rolFinal = esTrabajador ? rolActual : usuario.getRol();
 
-        String sql = "UPDATE usuario SET nombre = ?, apellido = ?, correo_electronico = ?, usuario = ?, contrasena = ?, telefono = ?, rol = ? WHERE id_usuario = ?";
+        String sql = "UPDATE usuario SET id_usuario = ?, tipodeiden = ?, nombre = ?, apellido = ?, correo_electronico = ?, usuario = ?, contrasena = ?, telefono = ?, rol = ? WHERE id_usuario = ?";
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setString(1, usuario.getNombre());
-            ps.setString(2, usuario.getApellido());
-            ps.setString(3, usuario.getCorreo_electronico());
-            ps.setString(4, usuario.getUsuario());
-            ps.setString(5, usuario.getContrasena());
-            ps.setString(6, usuario.getTelefono());
-            ps.setString(7, rolFinal);
-            ps.setInt(8, usuario.getId_usuario());
+            ps.setInt(1, usuario.getId_usuario());
+            ps.setString(2, usuario.getTipodeiden());
+            ps.setString(3, usuario.getNombre());
+            ps.setString(4, usuario.getApellido());
+            ps.setString(5, usuario.getCorreo_electronico());
+            ps.setString(6, usuario.getUsuario());
+            String hashedPassword = Conexion.hashSHA256(usuario.getContrasena());
+            if (hashedPassword == null) {
+                JOptionPane.showMessageDialog(null, "Error al encriptar la contraseña.");
+                return false;
+            }
+            ps.setString(7, hashedPassword);
+            ps.setString(8, usuario.getTelefono());
+            ps.setString(9, rolFinal);
+            ps.setInt(10, usuario.getId_usuario());
 
             int filasAfectadas = ps.executeUpdate();
             exito = filasAfectadas > 0;
-            
         } catch (SQLException e) {
-            System.out.println("Error al conectar la base de datos, no se encuentra");
             JOptionPane.showMessageDialog(null, "Error al actualizar usuario");
         }
-
         return exito;
     }
-
-    // Método para guardar un nuevo usuario
-    public boolean guardar(UsuarioModelo objeto) {
+    
+    
+    
+public boolean guardar(UsuarioModelo objeto) {
+        if (objeto.getId_usuario() <= 0) {
+            JOptionPane.showMessageDialog(null, "ID de usuario inválido.");
+            return false;
+        }
         boolean respuesta = false;
-        Connection con = Conexion.getConnection();
-
-        try {
-            String sql = "INSERT INTO usuario (nombre, apellido, usuario, contrasena, correo_electronico, telefono, rol) " +
-                         "VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-            PreparedStatement consulta = con.prepareStatement(sql);
-            consulta.setString(1, objeto.getNombre());
-            consulta.setString(2, objeto.getApellido());
-            consulta.setString(3, objeto.getUsuario());
-            consulta.setString(4, objeto.getContrasena());
-            consulta.setString(5, objeto.getCorreo_electronico());
-            consulta.setString(6, objeto.getTelefono());
-            consulta.setString(7, objeto.getRol());
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement consulta = con.prepareStatement(
+                 "INSERT INTO usuario (id_usuario, tipodeiden, imagen, nombre, apellido, usuario, contrasena, correo_electronico, telefono, rol) " +
+                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+            consulta.setInt(1, objeto.getId_usuario());
+            consulta.setString(2, objeto.getTipodeiden());
+            consulta.setBytes(3, objeto.getImagen());
+            consulta.setString(4, objeto.getNombre());
+            consulta.setString(5, objeto.getApellido());
+            consulta.setString(6, objeto.getUsuario());
+            // Hash the password before storing
+            String hashedPassword = Conexion.hashSHA256(objeto.getContrasena());
+            if (hashedPassword == null) {
+                JOptionPane.showMessageDialog(null, "Error al encriptar la contraseña.");
+                return false;
+            }
+            consulta.setString(7, hashedPassword);
+            consulta.setString(8, objeto.getCorreo_electronico());
+            consulta.setString(9, objeto.getTelefono());
+            consulta.setString(10, objeto.getRol());
 
             if (consulta.executeUpdate() > 0) {
                 respuesta = true;
             }
-
-            consulta.close();
-            con.close();
-
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al guardar usuario: " + e.getMessage());
         }
-
         return respuesta;
     }
 
-   public List<UsuarioModelo> obtenerUsuarios() {
-    List<UsuarioModelo> lista = new ArrayList<>();
-    String sql = "SELECT * FROM usuario";
-
-    try (Connection con = Conexion.getConnection();
-         PreparedStatement stmt = con.prepareStatement(sql);
-         ResultSet rs = stmt.executeQuery()) {
-
-        while (rs.next()) {
-            UsuarioModelo usuario = new UsuarioModelo();
-            usuario.setId_usuario(rs.getInt("id_usuario"));
-            usuario.setNombre(rs.getString("nombre"));
-            usuario.setApellido(rs.getString("apellido"));
-            usuario.setUsuario(rs.getString("usuario"));
-            usuario.setContrasena(rs.getString("contrasena"));
-            usuario.setCorreo_electronico(rs.getString("correo_electronico"));
-            usuario.setTelefono(rs.getString("telefono"));
-            usuario.setRol(rs.getString("rol"));
-            lista.add(usuario);
-        }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Error al obtener usuarios: " + e.getMessage());
-    }
-
-    return lista;
-}
-   
-   public boolean existeUsuario(String usuario) {
-    boolean existe = false;
-    String sql = "SELECT id_usuario FROM usuario WHERE usuario = ?";
-
-    try (Connection conn = Conexion.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
-        
-        ps.setString(1, usuario);
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                existe = true;
+    public List<UsuarioModelo> obtenerUsuarios() {
+        List<UsuarioModelo> lista = new ArrayList<>();
+        String sql = "SELECT id_usuario, tipodeiden, nombre, apellido, usuario, contrasena, correo_electronico, telefono, rol, imagen FROM usuario";
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                UsuarioModelo usuario = new UsuarioModelo();
+                usuario.setId_usuario(rs.getInt("id_usuario"));
+                usuario.setTipodeiden(rs.getString("tipodeiden"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setApellido(rs.getString("apellido"));
+                usuario.setUsuario(rs.getString("usuario"));
+                usuario.setContrasena(rs.getString("contrasena"));
+                usuario.setCorreo_electronico(rs.getString("correo_electronico"));
+                usuario.setTelefono(rs.getString("telefono"));
+                usuario.setRol(rs.getString("rol"));
+                usuario.setImagen(rs.getBytes("imagen"));
+                lista.add(usuario);
             }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener usuarios: " + e.getMessage());
         }
-
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Error al verificar existencia del usuario: " + e.getMessage());
+        return lista;
     }
 
-    return existe;
-}
-
-
-
-   public boolean editar(UsuarioModelo objeto, int id_usuario) {
-    boolean respuesta = false;
-    try (Connection con = Conexion.getConnection();
-         PreparedStatement consulta = con.prepareStatement(
-             "UPDATE usuario SET nombre = ?, apellido = ?, usuario = ?, contrasena = ?, correo_electronico = ?, telefono = ?, rol = ? WHERE id_usuario = ?")) {
-        consulta.setString(1, objeto.getNombre());
-        consulta.setString(2, objeto.getApellido());
-        consulta.setString(3, objeto.getUsuario());
-        consulta.setString(4, objeto.getContrasena());
-        consulta.setString(5, objeto.getCorreo_electronico());
-        consulta.setString(6, objeto.getTelefono());
-        consulta.setString(7, objeto.getRol());
-        consulta.setInt(8, id_usuario);
-        respuesta = consulta.executeUpdate() > 0;
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Error al editar usuario: " + e.getMessage());
+    public boolean existeUsuario(String usuario) {
+        boolean existe = false;
+        String sql = "SELECT id_usuario FROM usuario WHERE usuario = ?";
+        try (Connection conn = Conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, usuario);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    existe = true;
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al verificar existencia del usuario: " + e.getMessage());
+        }
+        return existe;
     }
-    return respuesta;
-}
+
+    public boolean editar(UsuarioModelo objeto, int id_usuario) {
+        if (objeto.getId_usuario() <= 0 || id_usuario <= 0) {
+            JOptionPane.showMessageDialog(null, "ID de usuario inválido.");
+            return false;
+        }
+        boolean respuesta = false;
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement consulta = con.prepareStatement(
+                 "UPDATE usuario SET id_usuario = ?, tipodeiden = ?, imagen = ?, nombre = ?, apellido = ?, usuario = ?, contrasena = ?, correo_electronico = ?, telefono = ?, rol = ? WHERE id_usuario = ?")) {
+            consulta.setInt(1, objeto.getId_usuario());
+            consulta.setString(2, objeto.getTipodeiden());
+            consulta.setBytes(3, objeto.getImagen());
+            consulta.setString(4, objeto.getNombre());
+            consulta.setString(5, objeto.getApellido());
+            consulta.setString(6, objeto.getUsuario());
+            String hashedPassword = Conexion.hashSHA256(objeto.getContrasena());
+            if (hashedPassword == null) {
+                JOptionPane.showMessageDialog(null, "Error al encriptar la contraseña.");
+                return false;
+            }
+            consulta.setString(7, hashedPassword);
+            consulta.setString(8, objeto.getCorreo_electronico());
+            consulta.setString(9, objeto.getTelefono());
+            consulta.setString(10, objeto.getRol());
+            consulta.setInt(11, id_usuario);
+
+            respuesta = consulta.executeUpdate() > 0;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al editar usuario: " + e.getMessage());
+        }
+        return respuesta;
+    }
 
     public boolean eliminar(int id_usuario) {
+        if (id_usuario <= 0) {
+            JOptionPane.showMessageDialog(null, "ID de usuario inválido.");
+            return false;
+        }
         boolean respuesta = false;
-        Connection con = Conexion.getConnection();
-
-        try {
-            String sql = "DELETE FROM usuario WHERE id_usuario = ?";
-            PreparedStatement consulta = con.prepareStatement(sql);
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement consulta = con.prepareStatement("DELETE FROM usuario WHERE id_usuario = ?")) {
             consulta.setInt(1, id_usuario);
-
             if (consulta.executeUpdate() > 0) {
                 respuesta = true;
             }
-
-            consulta.close();
-            con.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al eliminar usuario: " + e.getMessage());
         }
-
         return respuesta;
     }
 
-    
-    
+    public boolean existeIdUsuario(String idUsuario) {
+        boolean existe = false;
+        String sql = "SELECT id_usuario FROM usuario WHERE id_usuario = ?";
+        try (Connection conn = Conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            int id;
+            try {
+                id = Integer.parseInt(idUsuario);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "El número de identificación debe ser un valor numérico válido.");
+                return false;
+            }
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    existe = true;
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al verificar existencia del número de identificación: " + e.getMessage());
+        }
+        return existe;
+    }
 }
+
