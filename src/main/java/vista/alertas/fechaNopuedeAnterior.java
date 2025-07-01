@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package vista.alertas;
-
+/**/
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
@@ -15,10 +15,12 @@ import javax.swing.JDialog;
  *
  * @author LENOVO
  */
+public class fechaNopuedeAnterior extends JDialog {
 
-public class MaterialNombreMarca extends JDialog {
-
-    public MaterialNombreMarca(Frame parent, boolean modal) {
+    /**
+     * Creates new form AlertaNoVacio
+     */
+    public fechaNopuedeAnterior(Frame parent, boolean modal) {
         super(parent, modal);
         setUndecorated(true); // Establecer undecorated antes de cualquier otra configuración
         initComponents();
@@ -95,7 +97,7 @@ public class MaterialNombreMarca extends JDialog {
         jLabel1.setText("Alerta");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, -1, -1));
 
-        rSLabelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/warning-error-sign-free-vector55-removebg-preview.png"))); // NOI18N
+        rSLabelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/warning-triangle-sign-free-vector-removebg-preview.png"))); // NOI18N
         jPanel2.add(rSLabelImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 80, 70));
 
         jPanel3.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 530, 90));
@@ -113,8 +115,8 @@ public class MaterialNombreMarca extends JDialog {
         jPanel3.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 190, 130, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 21)); // NOI18N
-        jLabel2.setText("Por favor, Ingrese un nombre para la marca");
-        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, -1, -1));
+        jLabel2.setText("Upss debes agregar al menos un detalle al pedido");
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, -1));
 
         jEImagePanel1.add(jPanel3, new java.awt.GridBagConstraints());
 
@@ -122,11 +124,11 @@ public class MaterialNombreMarca extends JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jEImagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE)
+            .addComponent(jEImagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jEImagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+            .addComponent(jEImagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
 
         pack();
@@ -136,26 +138,50 @@ public class MaterialNombreMarca extends JDialog {
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-        /**
-         * @param args the command line arguments
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        public static void main(String args[]) {
-            try {
-                for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                    if ("Nimbus".equals(info.getName())) {
-                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                        break;
-                    }
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
                 }
-            } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(MaterialNombreMarca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
-
-            java.awt.EventQueue.invokeLater(() -> {
-                MaterialNombreMarca dialog = new MaterialNombreMarca(null, true);
-                dialog.setVisible(true);
-            });
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(fechaNopuedeAnterior.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(fechaNopuedeAnterior.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(fechaNopuedeAnterior.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(fechaNopuedeAnterior.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                fechaNopuedeAnterior dialog = new fechaNopuedeAnterior(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;

@@ -7,6 +7,7 @@ package vista;
 import controlador.Ctrl_Cliente;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
@@ -21,6 +22,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import modelo.Conexion;
 import rojeru_san.RSButton;
+import vista.alertas.AlerGuardadoExitgeneral;
+import vista.alertas.SeleccioneClienteEditar;
 
 /**
  *
@@ -268,7 +271,8 @@ public class VistaClientes extends javax.swing.JPanel {
     private void btnEditar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditar1ActionPerformed
         int filaSeleccionada = tablaclientes.getSelectedRow();
         if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(null, "Seleccione un cliente para editar");
+            SeleccioneClienteEditar dialog = new SeleccioneClienteEditar((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
@@ -277,6 +281,9 @@ public class VistaClientes extends javax.swing.JPanel {
         EditarCliente1 editar = new EditarCliente1(new javax.swing.JFrame(), true, idCliente, model, filaSeleccionada);
         editar.setLocationRelativeTo(null);
         editar.setVisible(true);
+
+        AlerGuardadoExitgeneral dialog = new AlerGuardadoExitgeneral((Frame) this.getParent(), true);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnEditar1ActionPerformed
 
     private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed

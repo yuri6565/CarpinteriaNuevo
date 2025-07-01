@@ -16,9 +16,9 @@ import javax.swing.JDialog;
  * @author LENOVO
  */
 
-public class MaterialNombreMarca extends JDialog {
+public class PedidoIngreseNombre extends JDialog {
 
-    public MaterialNombreMarca(Frame parent, boolean modal) {
+    public PedidoIngreseNombre(Frame parent, boolean modal) {
         super(parent, modal);
         setUndecorated(true); // Establecer undecorated antes de cualquier otra configuración
         initComponents();
@@ -113,7 +113,7 @@ public class MaterialNombreMarca extends JDialog {
         jPanel3.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 190, 130, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 21)); // NOI18N
-        jLabel2.setText("Por favor, Ingrese un nombre para la marca");
+        jLabel2.setText("Por favor, Ingrese un nombre para el pedido");
         jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, -1, -1));
 
         jEImagePanel1.add(jPanel3, new java.awt.GridBagConstraints());
@@ -148,11 +148,11 @@ public class MaterialNombreMarca extends JDialog {
                     }
                 }
             } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(MaterialNombreMarca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(PedidoIngreseNombre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
 
             java.awt.EventQueue.invokeLater(() -> {
-                MaterialNombreMarca dialog = new MaterialNombreMarca(null, true);
+                PedidoIngreseNombre dialog = new PedidoIngreseNombre(null, true);
                 dialog.setVisible(true);
             });
         }

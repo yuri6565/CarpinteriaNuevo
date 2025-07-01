@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package vista.alertas;
-
+/**/
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;

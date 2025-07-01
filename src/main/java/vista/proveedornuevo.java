@@ -96,11 +96,11 @@ public class proveedornuevo extends javax.swing.JDialog {
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        btnGuardar2 = new rojeru_san.RSButtonRiple();
+        btnGuardar1 = new rojeru_san.RSButtonRiple();
         jLabel6 = new javax.swing.JLabel();
         lblProducto1 = new javax.swing.JLabel();
         btnCancelar1 = new rojeru_san.RSButtonRiple();
-        btnGuardar1 = new rojeru_san.RSButtonRiple();
+        btnGuardar2 = new rojeru_san.RSButtonRiple();
         jLabel12 = new javax.swing.JLabel();
         txttelefono = new RSMaterialComponent.RSTextFieldMaterial();
         txtcorreo = new RSMaterialComponent.RSTextFieldMaterial();
@@ -138,17 +138,17 @@ public class proveedornuevo extends javax.swing.JDialog {
         jLabel2.setText("Crear Proveedor");
         jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        btnGuardar2.setBackground(new java.awt.Color(46, 49, 82));
-        btnGuardar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/x.png"))); // NOI18N
-        btnGuardar2.setColorHover(new java.awt.Color(204, 0, 0));
-        btnGuardar2.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
-        btnGuardar2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        btnGuardar2.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnGuardar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/x.png"))); // NOI18N
+        btnGuardar1.setColorHover(new java.awt.Color(204, 0, 0));
+        btnGuardar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        btnGuardar1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnGuardar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardar2ActionPerformed(evt);
+                btnGuardar1ActionPerformed(evt);
             }
         });
-        jPanel4.add(btnGuardar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 0, 40, 30));
+        jPanel4.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 0, 40, 30));
 
         jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 70));
 
@@ -166,11 +166,16 @@ public class proveedornuevo extends javax.swing.JDialog {
         btnCancelar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
         jPanel3.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 420, 140, -1));
 
-        btnGuardar1.setBackground(new java.awt.Color(46, 49, 82));
-        btnGuardar1.setText("Guardar");
-        btnGuardar1.setColorHover(new java.awt.Color(0, 153, 51));
-        btnGuardar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        jPanel3.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 420, 140, -1));
+        btnGuardar2.setBackground(new java.awt.Color(46, 49, 82));
+        btnGuardar2.setText("Guardar");
+        btnGuardar2.setColorHover(new java.awt.Color(0, 153, 51));
+        btnGuardar2.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        btnGuardar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardar2ActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnGuardar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 420, 140, -1));
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel12.setText("Telefono:");
@@ -287,7 +292,12 @@ public class proveedornuevo extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnGuardar1ActionPerformed
+
     private void btnGuardar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar2ActionPerformed
+        // TODO add your handling code here:
 
         String nombre = txtNombre.getText().trim();
         String correo = txtcorreo.getText().trim();

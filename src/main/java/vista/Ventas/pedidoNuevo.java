@@ -6,6 +6,7 @@ package vista.Ventas;
 
 import controlador.Ctrl_Cliente;
 import controlador.Ctrl_Pedido;
+import java.awt.Frame;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -20,6 +21,13 @@ import javax.swing.table.TableColumn;
 import modelo.Cliente;
 import modelo.Pedido;
 import modelo.PedidoDetalle;
+import vista.alertas.DebesLLenarDatos;
+import vista.alertas.MaterialStockMin;
+import vista.alertas.PedidoIngreseNombre;
+import vista.alertas.PedidoIngresefechaFIN;
+import vista.alertas.PedidoIngresefechaINI;
+import vista.alertas.Pedidoseleccionecliente;
+import vista.alertas.fechaNopuedeAnterior;
 import vista.crear_cliente;
 
 /**
@@ -51,7 +59,7 @@ public class pedidoNuevo extends javax.swing.JDialog {
 
         TableColumn cantidadColumn = tablaDetalles.getColumnModel().getColumn(1);
         cantidadColumn.setPreferredWidth(30); // Ajustar el ancho de la columna
-        
+
         TableColumn dimensionesColumn = tablaDetalles.getColumnModel().getColumn(2);
         dimensionesColumn.setPreferredWidth(110); // Ajustar el ancho de la columna
 
@@ -191,10 +199,8 @@ public class pedidoNuevo extends javax.swing.JDialog {
     private void validarFechasEnTiempoReal() {
         if (dateFinicio.getDate() != null && dateFfin.getDate() != null) {
             if (dateFfin.getDate().before(dateFinicio.getDate())) {
-                JOptionPane.showMessageDialog(this,
-                        "La fecha final no puede ser anterior a la fecha inicial",
-                        "Error en fechas",
-                        JOptionPane.ERROR_MESSAGE);
+                fechaNopuedeAnterior dialog = new fechaNopuedeAnterior((Frame) this.getParent(), true);
+                dialog.setVisible(true);
 
                 dateFfin.setDate(null); // Limpia la fecha incorrecta
                 dateFfin.requestFocus(); // Enfoca el campo para corrección
@@ -430,22 +436,26 @@ public class pedidoNuevo extends javax.swing.JDialog {
 
         // Validaciones
         if (nombre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingrese el nombre del pedido.", "Error", JOptionPane.ERROR_MESSAGE);
+            PedidoIngreseNombre dialog = new PedidoIngreseNombre((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
         if (clienteNombreCompleto == null || clienteNombreCompleto.equals("Seleccione cliente:")) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione un cliente.", "Error", JOptionPane.ERROR_MESSAGE);
+            Pedidoseleccionecliente dialog = new Pedidoseleccionecliente((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
         if (fechaInicio == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione la fecha de inicio.", "Error", JOptionPane.ERROR_MESSAGE);
+            PedidoIngresefechaINI dialog = new PedidoIngresefechaINI((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
         if (fechaFin == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione la fecha de fin.", "Error", JOptionPane.ERROR_MESSAGE);
+            PedidoIngresefechaFIN dialog = new PedidoIngresefechaFIN((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
@@ -511,7 +521,8 @@ public class pedidoNuevo extends javax.swing.JDialog {
         }
 
         if (detalles.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe agregar al menos un detalle al pedido.", "Error", JOptionPane.ERROR_MESSAGE);
+            DebesLLenarDatos dialog = new DebesLLenarDatos((Frame) this.getParent(), true);
+            dialog.setVisible(true);
             return;
         }
 
