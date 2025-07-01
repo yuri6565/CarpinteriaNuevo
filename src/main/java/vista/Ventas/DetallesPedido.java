@@ -425,7 +425,7 @@ public class DetallesPedido extends javax.swing.JPanel {
         }
 
         if (clienteSeleccionadoObj != null) {
-            pedido.setIdCliente(clienteSeleccionadoObj.getid_cliente());
+//            pedido.setIdCliente(clienteSeleccionadoObj.getid_cliente());
         } else {
             JOptionPane.showMessageDialog(this, "Error al obtener el cliente seleccionado.", "Error", JOptionPane.ERROR_MESSAGE);
             return;

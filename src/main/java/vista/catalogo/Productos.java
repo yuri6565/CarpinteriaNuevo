@@ -30,6 +30,7 @@ import modelo.catalogoproducto;
 import newscomponents.RSPanelEffect;
 import rojeru_san.efectos.ValoresEnum;
 import rojerusan.RSLabelIcon;
+import vista.TemaManager;
 
 import vista.alertas.alertaEliminar1;
 import vista.alertas.borradooconexito;
@@ -71,6 +72,8 @@ public class Productos extends javax.swing.JPanel {
         this.controladorProducto = new Ctrl_productocatalogo();
         this.parentPanel = parentPanel; // Correctly assign the passed parent panel
         initComponents(); // Let the GUI builder handle the layout
+          TemaManager.getInstance().addThemeChangeListener(this::aplicarTema);
+        aplicarTema();
         panelCards.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
         panelCards.setBackground(new Color(242, 247, 255));
         jPanel2.setBackground(new java.awt.Color(255, 255, 255)); // Blanco
@@ -87,6 +90,52 @@ public class Productos extends javax.swing.JPanel {
         setupFilterPopup();
 
     }
+    
+    
+    // ... (keep initComponents, action listeners, and cargartablacliente as they are)
+    public void aplicarTema() {
+    boolean oscuro = TemaManager.getInstance().isOscuro();
+    Color fondo = oscuro ? new Color(21, 21, 33) : new Color(255, 255, 255);
+    Color texto = oscuro ? Color.WHITE : Color.BLACK;
+    Color primario = oscuro ? new Color(40, 60, 150) : new Color(72, 92, 188);
+
+    setBackground(fondo);
+    jPanel1.setBackground(fondo);
+    jPanel2.setBackground(oscuro ? fondo : new Color(242, 247, 255));
+    panelCards.setBackground(fondo);
+
+    txtBuscar.setBackground(fondo);
+    txtBuscar.setForeground(texto);
+    txtBuscar.setColorIcon(texto);
+    txtBuscar.setPhColor(oscuro ? Color.LIGHT_GRAY : Color.GRAY);
+
+    // Update buttons
+    Anterior.setBackground(oscuro ? new Color(46, 49, 82) : primario);
+    Siguiente.setBackground(oscuro ? new Color(46, 49, 82) : primario);
+    Añadir2.setBackground(oscuro ? new Color(46, 49, 82) : primario);
+    Añadir3.setBackground(oscuro ? new Color(46, 49, 82) : primario);
+    btnVolver.setBackground(oscuro ? new Color(46, 49, 82) : primario);
+
+    // Update cards
+    for (Component comp : panelCards.getComponents()) {
+        if (comp instanceof RSPanelEffect) {
+            comp.setBackground(fondo);
+            for (Component subComp : ((RSPanelEffect) comp).getComponents()) {
+                if (subComp instanceof JPanel) {
+                    subComp.setBackground(fondo);
+                    for (Component label : ((JPanel) subComp).getComponents()) {
+                        if (label instanceof JLabel) {
+                            ((JLabel) label).setForeground(texto);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    revalidate();
+    repaint();
+}
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -122,10 +171,10 @@ public class Productos extends javax.swing.JPanel {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBackground(new java.awt.Color(242, 247, 255));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panelCards.setBackground(new java.awt.Color(242, 247, 255));
+        panelCards.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout panelCardsLayout = new javax.swing.GroupLayout(panelCards);
         panelCards.setLayout(panelCardsLayout);
@@ -407,19 +456,29 @@ public class Productos extends javax.swing.JPanel {
     }//GEN-LAST:event_EliminarMouseClicked
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // Crear una nueva instancia de pedido pasando el contenedor
-        //new javax.swing.JFrame()
-
-        removeAll(); // Clear current content
-        setLayout(new BorderLayout()); // Use BorderLayout for the panel
-
-        catalogo22 dialog = new catalogo22((JFrame) getTopLevelAncestor(), true);
-        dialog.setVisible(true);
-        // O recarga la página
-        mostrarPagina(currentPage);
-
-        revalidate();
-        repaint();
+      if (parentPanel != null) {
+        // Clear the parent panel
+        parentPanel.removeAll();
+        
+        // Set the layout for the parent panel
+        parentPanel.setLayout(new BorderLayout());
+        
+        // Create a new instance of catalogo22 (non-modal)
+        catalogo22 catalogoPanel = new catalogo22((JFrame) getTopLevelAncestor(), false);
+        
+        // Add the catalogo22 panel to the parent panel
+        parentPanel.add(catalogoPanel, BorderLayout.CENTER);
+        
+        // Update the UI
+        parentPanel.revalidate();
+        parentPanel.repaint();
+    } else {
+        System.err.println("Error: parentPanel is null. Cannot navigate back to categories.");
+        JOptionPane.showMessageDialog(this, 
+            "No se puede volver a categorías. El panel principal no está definido.", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void Añadir3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir3ActionPerformed

@@ -16,6 +16,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
@@ -80,7 +81,7 @@ public class Principal extends javax.swing.JFrame {
     private Timer updateTimer;
     private rojerusan.RSLabelImage circulo;
     private JLabel textoCirculo;
-
+private perfil1 perfilPanel;
     private rojeru_san.RSButton item1;
     private rojeru_san.RSButton item2;
     private rojeru_san.RSButton item4;
@@ -557,6 +558,22 @@ public class Principal extends javax.swing.JFrame {
             }
         }
     }
+private void cargarImagenAvatar() {
+        UsuarioModelo usuario = controlador.obtenerUsuario(idUsuario);
+        if (usuario.getImagen() != null && usuario.getImagen().length > 0) {
+            ImageIcon icon = new ImageIcon(usuario.getImagen());
+            Image img = icon.getImage().getScaledInstance(rSLabelCircleImage1.getWidth(), 
+                                                       rSLabelCircleImage1.getHeight(), 
+                                                       Image.SCALE_SMOOTH);
+            rSLabelCircleImage1.setIcon(new ImageIcon(img));
+        } else {
+            rSLabelCircleImage1.setIcon(new ImageIcon(getClass().getResource("/profile_image.png"))); // Imagen por defecto
+        }
+    }
+
+    public void actualizarAvatar() {
+        cargarImagenAvatar(); // Reutiliza el método para actualizar
+    }
 
     private void configurarPopupMenu() {
         JPopupMenu userPopupMenu = new JPopupMenu();
@@ -570,7 +587,7 @@ public class Principal extends javax.swing.JFrame {
         JMenuItem messagesItem = new JMenuItem("Mensajes");
         JMenuItem logoutItem = new JMenuItem("Salir");
 
-        // Personalizar los ítems sin hover
+        // Personalizar los ítems
         Font menuFont = new Font("Arial", Font.PLAIN, 14);
         Dimension itemSize = new Dimension(150, 30);
 
@@ -579,7 +596,7 @@ public class Principal extends javax.swing.JFrame {
         settingsItem.setBackground(new Color(255, 255, 255));
         settingsItem.setOpaque(false);
         settingsItem.setPreferredSize(itemSize);
-        settingsItem.setBorderPainted(false);  // Eliminar bordes al hacer hover
+        settingsItem.setBorderPainted(false);
 
         profileItem.setFont(menuFont);
         profileItem.setForeground(new Color(100, 100, 100));
@@ -612,6 +629,7 @@ public class Principal extends javax.swing.JFrame {
         rSLabelCircleImage1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                cargarImagenAvatar(); // Actualizar imagen antes de mostrar el menú
                 userPopupMenu.show(rSLabelCircleImage1, 0, rSLabelCircleImage1.getHeight());
             }
         });
@@ -619,27 +637,24 @@ public class Principal extends javax.swing.JFrame {
         // Acciones de los ítems del menú  
         settingsItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Abriendo configuración..."));
         profileItem.addActionListener(e -> {
-            // Cargar la vista de InformacionBasica en el contenedor  
-            perfil1 info = new perfil1(idUsuario);
-
-            info.setSize(1290, 730);
-            info.setLocation(0, 0);
-            contenedor.removeAll();
-            contenedor.add(info);
+            if (perfilPanel == null) {
+                perfilPanel = new perfil1(idUsuario);
+                perfilPanel.setSize(1290, 730);
+                perfilPanel.setLocation(0, 0);
+                contenedor.removeAll();
+                contenedor.add(perfilPanel);
+            } else {
+                perfilPanel.cargarPerfil(); // Recarga los datos
+            }
             contenedor.revalidate();
             contenedor.repaint();
         });
         messagesItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Abriendo mensajes..."));
         logoutItem.addActionListener(e -> {
-            // Cerrar la ventana actual
-            JFrame topFrame = (JFrame) javax.swing.SwingUtilities.getWindowAncestor(rSLabelCircleImage1);
-            topFrame.dispose();
-
-            // Mostrar la ventana de login
+            dispose(); // Cerrar la ventana actual
             Login1121 login = new Login1121();
             login.setVisible(true);
         });
-
     }
 
     private void animacion() {

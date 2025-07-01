@@ -14,10 +14,10 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 import modelo.UsuarioModelo;
 
 
@@ -26,11 +26,15 @@ import modelo.UsuarioModelo;
  *
  * @author ZenBook
  */
-public class crear_usuario extends javax.swing.JDialog {
- 
+public class editar_usuario2 extends javax.swing.JDialog {
+ private int idUsuario;
+    private JPanel parentPanel;
+    private DefaultTableModel tableModel;
+    private int selectedRow;
+    public boolean guardado = false; 
     private String[] datos; // Almacena los datos ingresados
-    private boolean guardado = false; // Indica si se presionó "Guardar"
-
+    private final String eyeOpenPath = "/ojo.png";   // Ojo abierto
+    private final String eyeClosedPath = "/ojo2.png";   // Ojo cerrado
   private String correoIngresado = "";
     private boolean isPasswordVisible = false;
     private boolean isPasswordVisible1 = false; // Para el segundo campo
@@ -40,36 +44,30 @@ public class crear_usuario extends javax.swing.JDialog {
     /**
      * Creates new form nuevoMateriales
      */
-   public crear_usuario(java.awt.Frame parent, boolean modal) {
-    super(parent, modal);
-    initComponents();
-
-    // Cargar el ícono del ojo
-    URL iconUrl = getClass().getResource("/imagenes/ojo.png");
-    if (iconUrl == null) {
-        System.err.println("❌ No se encontró /imagenes/ojo.png");
-    } else {
-        System.out.println("✅ Imagen encontrada: " + iconUrl);
-        ImageIcon icono = new ImageIcon(iconUrl);
-        jLabel1.setIcon(icono); // ← Asegúrate que jLabel1 existe y es donde va el ícono
+    public editar_usuario2(java.awt.Frame parent, boolean modal, int idUsuario, DefaultTableModel tableModel, int selectedRow) {
+        super(parent, modal);
+        initComponents();
+        // Cargar íconos
+        eyeOpenIcon = new ImageIcon(getClass().getResource(eyeOpenPath));
+        eyeClosedIcon = new ImageIcon(getClass().getResource(eyeClosedPath));
+        btnVer.setIcon(eyeClosedIcon); // Ícono inicial
+        btnVer1.setIcon(eyeClosedIcon); // Ícono inicial para el segundo campo
+        setTitle("Nuevo Material");
+      agregarValidacion();
+      cargarDatosUsuario();
+        
+        // Ocultar etiquetas de error inicialmente
+        tipoidentificacion.setVisible(false);
+        tipoidentificacion1.setVisible(false);
+        tipoidentificacion2.setVisible(false);
+        tipoidentificacion3.setVisible(false);
+        tipoidentificacion4.setVisible(false);
+        tipoidentificacion5.setVisible(false);
+        tipoidentificacion6.setVisible(false);
+        tipoidentificacion7.setVisible(false);
+        tipoidentificacion8.setVisible(false);
+        tipoidentificacion9.setVisible(false);
     }
-
-    setTitle("Nuevo Material");
-    agregarValidacion();
-
-    // Ocultar etiquetas de error
-    tipoidentificacion.setVisible(false);
-    tipoidentificacion1.setVisible(false);
-    tipoidentificacion2.setVisible(false);
-    tipoidentificacion3.setVisible(false);
-    tipoidentificacion4.setVisible(false);
-    tipoidentificacion5.setVisible(false);
-    tipoidentificacion6.setVisible(false);
-    tipoidentificacion7.setVisible(false);
-    tipoidentificacion8.setVisible(false);
-    tipoidentificacion9.setVisible(false);
-}
-
     
         public String[] getDatos() {
         return datos;
@@ -80,6 +78,24 @@ public class crear_usuario extends javax.swing.JDialog {
         return guardado;
     }
     
+      private void cargarDatosUsuario() {
+        Ctrl_Perfil controlUsuario = new Ctrl_Perfil();
+        modelo.UsuarioModelo usuario = controlUsuario.obtenerUsuario(idUsuario);
+
+        if (usuario != null) {
+            nombretxt.setText(usuario.getNombre());
+            apellidotxt.setText(usuario.getApellido());
+            usuariotxt.setText(usuario.getUsuario());
+            correotxt.setText(usuario.getCorreo_electronico());
+            contrasenatxt.setText(usuario.getContrasena());
+            telefonotxt.setText(usuario.getTelefono());
+            roltxt.setSelectedItem(usuario.getRol());
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo cargar la información del usuario.");
+            dispose();
+        }
+    }
+
 
 
 
@@ -150,7 +166,7 @@ public class crear_usuario extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Century751 BT", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Crear Usuario");
+        jLabel1.setText("Editar Usuario");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
 
         btnGuardar1.setBackground(new java.awt.Color(46, 49, 82));
@@ -481,86 +497,51 @@ public class crear_usuario extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-Ctrl_Perfil controladorPerfil = new Ctrl_Perfil();
-        StringBuilder errores = new StringBuilder();
-
-        // Obtener valores de los campos
-        String nombre = nombretxt.getText().trim();
-        String apellido = apellidotxt.getText().trim();
-        String usuario = usuariotxt.getText().trim();
-        String correo = correotxt.getText().trim();
-        String telefono = telefonotxt.getText().trim();
-        String contrasena = new String(contrasenatxt.getPassword()).trim();
-        String contrasenaConfirm = new String(txtcontrasenanueva1.getPassword()).trim();
-        String rol = roltxt.getSelectedItem().toString();
-        String tipoIdentificacion = identificaciontxt.getSelectedItem().toString();
-        String numeroIdentificacion = numerotxt.getText().trim();
-
-        // Validaciones
-        if (nombre.isEmpty()) errores.append("El nombre es obligatorio.\n");
-        if (apellido.isEmpty()) errores.append("El apellido es obligatorio.\n");
-        if (usuario.isEmpty()) errores.append("El usuario es obligatorio.\n");
-        if (correo.isEmpty()) errores.append("El correo electrónico es obligatorio.\n");
-        if (contrasena.isEmpty()) errores.append("La contraseña es obligatoria.\n");
-        if (rol.equals("Escoja el rol:")) errores.append("Debe seleccionar un rol.\n");
-        if (tipoIdentificacion.equals("tipo de identificación")) errores.append("Debe seleccionar un tipo de identificación.\n");
-        if (numeroIdentificacion.isEmpty()) errores.append("El número de identificación es obligatorio.\n");
-
-        // Validaciones adicionales
-        if (!correo.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            errores.append("El correo electrónico no es válido.\n");
-        }
-        if (!telefono.isEmpty() && !telefono.matches("\\d{7,15}")) {
-            errores.append("El teléfono debe contener solo números y tener entre 7 y 15 dígitos.\n");
-        }
-        if (!esContrasenaValida(contrasena)) {
-            errores.append("La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales (@$!%*?&._-).\n");
-        }
-        if (!contrasena.equals(contrasenaConfirm)) {
-            errores.append("Las contraseñas no coinciden.\n");
-        }
-        if (!numeroIdentificacion.matches("\\d+")) {
-            errores.append("El número de identificación debe contener solo números.\n");
-        }
-        if (controladorPerfil.existeUsuario(usuario)) {
-            errores.append("El nombre de usuario ya existe. Por favor, elige otro.\n");
-        }
-        if (controladorPerfil.existeIdUsuario(numeroIdentificacion)) {
-            errores.append("El número de identificación ya está registrado.\n");
-        }
-
-        // Mostrar errores si los hay
-        if (errores.length() > 0) {
-            JOptionPane.showMessageDialog(this, errores.toString(), "Errores de Validación", JOptionPane.ERROR_MESSAGE);
+ if (nombretxt.getText().trim().isEmpty() || apellidotxt.getText().trim().isEmpty() ||
+            usuariotxt.getText().trim().isEmpty() || correotxt.getText().trim().isEmpty() ||
+            contrasenatxt.getText().trim().isEmpty() || telefonotxt.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
             return;
         }
 
-        // Crear y configurar el modelo de usuario
-        UsuarioModelo nuevoUsuario = new UsuarioModelo();
-        nuevoUsuario.setNombre(nombre);
-        nuevoUsuario.setApellido(apellido);
-        nuevoUsuario.setUsuario(usuario);
-        nuevoUsuario.setCorreo_electronico(correo);
-        nuevoUsuario.setContrasena(contrasena);
-        nuevoUsuario.setTelefono(telefono);
-        nuevoUsuario.setRol(rol);
-        nuevoUsuario.setTipodeiden(tipoIdentificacion);
-        try {
-            nuevoUsuario.setId_usuario(Integer.parseInt(numeroIdentificacion));
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El número de identificación debe ser un valor numérico válido.", "Error", JOptionPane.ERROR_MESSAGE);
+        String selectedRol = roltxt.getSelectedItem().toString();
+        if (selectedRol.equals("Escoja el rol:")) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un rol válido.");
             return;
         }
 
-        // Guardar el usuario
-        if (controladorPerfil.guardar(nuevoUsuario)) {
-            JOptionPane.showMessageDialog(this, "Usuario guardado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        // Create and populate the user model
+        UsuarioModelo usuarioEditado = new UsuarioModelo();
+        usuarioEditado.setId_usuario(idUsuario);
+        usuarioEditado.setNombre(nombretxt.getText().trim());
+        usuarioEditado.setApellido(apellidotxt.getText().trim());
+        usuarioEditado.setUsuario(usuariotxt.getText().trim());
+        usuarioEditado.setCorreo_electronico(correotxt.getText().trim());
+        usuarioEditado.setContrasena(contrasenatxt.getText().trim());
+        usuarioEditado.setTelefono(telefonotxt.getText().trim());
+        usuarioEditado.setRol(selectedRol);
+
+        // Update the user via the controller
+        Ctrl_Perfil control = new Ctrl_Perfil();
+        if (control.editar(usuarioEditado, idUsuario)) {
+            JOptionPane.showMessageDialog(this, "Datos actualizados correctamente");
             guardado = true;
-            datos = new String[]{nombre, apellido, usuario, correo, telefono, rol, tipoIdentificacion, numeroIdentificacion};
+
+            if (tableModel != null && selectedRow != -1) {
+                tableModel.setValueAt(usuarioEditado.getNombre(), selectedRow, 1);
+                tableModel.setValueAt(usuarioEditado.getApellido(), selectedRow, 2);
+                tableModel.setValueAt(usuarioEditado.getUsuario(), selectedRow, 3);
+                tableModel.setValueAt(usuarioEditado.getCorreo_electronico(), selectedRow, 4);
+                tableModel.setValueAt(usuarioEditado.getTelefono(), selectedRow, 5);
+                tableModel.setValueAt(usuarioEditado.getRol(), selectedRow, 6);
+            }
+
             dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Error al guardar el usuario", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al actualizar los datos del usuario.");
+            guardado = false;
         }
+
        
 
     }//GEN-LAST:event_btnGuardarActionPerformed
@@ -625,21 +606,23 @@ Ctrl_Perfil controladorPerfil = new Ctrl_Perfil();
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(crear_usuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editar_usuario2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(crear_usuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editar_usuario2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(crear_usuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editar_usuario2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(crear_usuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editar_usuario2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                crear_usuario dialog = new crear_usuario(new javax.swing.JFrame(), true);
+                editar_usuario2 dialog = new editar_usuario2(new javax.swing.JFrame(), true, 1, null, -1);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

@@ -152,11 +152,11 @@ public class catalogo22 extends javax.swing.JPanel {
         panelCards = new javax.swing.JPanel();
         txtBuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
         Añadir1 = new rojeru_san.RSButtonRiple();
-        Añadir4 = new rojeru_san.RSButtonRiple();
         Añadir5 = new rojeru_san.RSButtonRiple();
-        rSCheckBox1 = new rojerusan.RSCheckBox();
-        paginacion = new javax.swing.JLabel();
+        Añadir4 = new rojeru_san.RSButtonRiple();
         rSButtonMaterialRippleIcon1 = new RSMaterialComponent.RSButtonMaterialRippleIcon();
+        paginacion = new javax.swing.JLabel();
+        rSCheckBox1 = new rojerusan.RSCheckBox();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -170,9 +170,11 @@ public class catalogo22 extends javax.swing.JPanel {
         );
 
         setBackground(new java.awt.Color(242, 247, 255));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(242, 247, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(312, 61, 1278, -1));
 
         jPanel2.setBackground(new java.awt.Color(242, 247, 255));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -183,14 +185,14 @@ public class catalogo22 extends javax.swing.JPanel {
         panelCards.setLayout(panelCardsLayout);
         panelCardsLayout.setHorizontalGroup(
             panelCardsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 970, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         panelCardsLayout.setVerticalGroup(
             panelCardsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel2.add(panelCards, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 970, 450));
+        jPanel2.add(panelCards, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 190, 970, 450));
 
         txtBuscar.setBackground(new java.awt.Color(242, 247, 255));
         txtBuscar.setForeground(new java.awt.Color(0, 0, 0));
@@ -204,7 +206,7 @@ public class catalogo22 extends javax.swing.JPanel {
                 txtBuscarActionPerformed(evt);
             }
         });
-        jPanel2.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 430, 40));
+        jPanel2.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 100, 430, 40));
 
         Añadir1.setBackground(new java.awt.Color(46, 49, 82));
         Añadir1.setText("Agregar Categoria");
@@ -215,20 +217,7 @@ public class catalogo22 extends javax.swing.JPanel {
                 Añadir1ActionPerformed(evt);
             }
         });
-        jPanel2.add(Añadir1, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 90, 160, 40));
-
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -50, 1320, 700));
-        jPanel2.getAccessibleContext().setAccessibleName("");
-
-        Añadir4.setBackground(new java.awt.Color(46, 49, 82));
-        Añadir4.setText("Siguiente");
-        Añadir4.setColorHover(new java.awt.Color(0, 153, 51));
-        Añadir4.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        Añadir4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Añadir4ActionPerformed(evt);
-            }
-        });
+        jPanel2.add(Añadir1, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 110, 160, 40));
 
         Añadir5.setBackground(new java.awt.Color(46, 49, 82));
         Añadir5.setText("Anterior");
@@ -239,26 +228,18 @@ public class catalogo22 extends javax.swing.JPanel {
                 Añadir5ActionPerformed(evt);
             }
         });
+        jPanel2.add(Añadir5, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 710, 98, 40));
 
-        rSCheckBox1.setForeground(new java.awt.Color(0, 0, 0));
-        rSCheckBox1.setText("Seleccionar todo");
-        rSCheckBox1.setColorCheck(new java.awt.Color(0, 0, 0));
-        rSCheckBox1.setColorUnCheck(new java.awt.Color(204, 204, 204));
-        rSCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        Añadir4.setBackground(new java.awt.Color(46, 49, 82));
+        Añadir4.setText("Siguiente");
+        Añadir4.setColorHover(new java.awt.Color(0, 153, 51));
+        Añadir4.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
+        Añadir4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSCheckBox1ActionPerformed(evt);
+                Añadir4ActionPerformed(evt);
             }
         });
-
-        paginacion.setBackground(new java.awt.Color(0, 0, 0));
-        paginacion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        paginacion.setForeground(new java.awt.Color(51, 51, 51));
-        paginacion.setText("Escritorio");
-        paginacion.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                paginacionMouseClicked(evt);
-            }
-        });
+        jPanel2.add(Añadir4, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 710, 98, 40));
 
         rSButtonMaterialRippleIcon1.setBackground(new java.awt.Color(242, 247, 255));
         rSButtonMaterialRippleIcon1.setForeground(new java.awt.Color(255, 51, 51));
@@ -273,51 +254,32 @@ public class catalogo22 extends javax.swing.JPanel {
                 rSButtonMaterialRippleIcon1ActionPerformed(evt);
             }
         });
+        jPanel2.add(rSButtonMaterialRippleIcon1, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 710, 40, 40));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(210, 210, 210)
-                .addComponent(rSCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 650, Short.MAX_VALUE)
-                .addComponent(paginacion)
-                .addGap(191, 191, 191)
-                .addComponent(rSButtonMaterialRippleIcon1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Añadir5, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Añadir4, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(199, 199, 199))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(312, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1278, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(126, Short.MAX_VALUE)))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(900, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rSButtonMaterialRippleIcon1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(Añadir4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(Añadir5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(paginacion)))
-                        .addGap(25, 25, 25))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(rSCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39))))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(136, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(182, Short.MAX_VALUE)))
-        );
+        paginacion.setBackground(new java.awt.Color(0, 0, 0));
+        paginacion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        paginacion.setForeground(new java.awt.Color(51, 51, 51));
+        paginacion.setText("Escritorio");
+        paginacion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                paginacionMouseClicked(evt);
+            }
+        });
+        jPanel2.add(paginacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 730, -1, -1));
+
+        rSCheckBox1.setForeground(new java.awt.Color(0, 0, 0));
+        rSCheckBox1.setText("Seleccionar todo");
+        rSCheckBox1.setColorCheck(new java.awt.Color(0, 0, 0));
+        rSCheckBox1.setColorUnCheck(new java.awt.Color(204, 204, 204));
+        rSCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSCheckBox1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(rSCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 730, 158, 29));
+
+        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -50, 1620, 800));
+        jPanel2.getAccessibleContext().setAccessibleName("");
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
@@ -653,7 +615,7 @@ public class catalogo22 extends javax.swing.JPanel {
             } else {
                 // Load default image from resources
                 try {
-                    icono = new ImageIcon(getClass().getResource("/images/default_category.png"));
+                    icono = new ImageIcon(getClass().getResource("/produccionIcono.png"));
                     if (icono.getIconWidth() == -1) { // Check if image failed to load
                         System.err.println("Default image not found or invalid.");
                         icono = new ImageIcon(); // Empty icon fallback

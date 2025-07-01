@@ -484,7 +484,7 @@ public class pedidoNuevo extends javax.swing.JDialog {
         for (Cliente cli : clientes) {
             String nombreCompleto = cli.getNombre() + " " + cli.getApellido();
             if (nombreCompleto.equals(clienteNombreCompleto)) {
-                clienteCodigo = cli.getid_cliente(); // Asegúrate de que Cliente tenga getCodigo()
+//                clienteCodigo = cli.getid_cliente(); // Asegúrate de que Cliente tenga getCodigo()
                 break;
             }
         }

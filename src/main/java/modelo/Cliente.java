@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
 
 /**
@@ -9,43 +5,36 @@ package modelo;
  * @author Personal
  */
 public class Cliente {
-    private int id_cliente;
+    private int codigo; // Cambiado de id_cliente a codigo
     private String identificacion;
-    private int numero;
     private String nombre;
     private String apellido;
     private String telefono;
+    private String telefono2;
+    private String departamento;
+    private String municipio;
     private String direccion;
+    private boolean activo;
 
-   
-    
-      public Cliente() {
-        this.id_cliente = 0;
-        this.identificacion = "";
-        this.numero = 0;
-        this.nombre = "";
-        this.apellido = "";
-        this.telefono = "";
-        this.direccion = "";
-        
-      }
-
-    public Cliente(int id_cliente, String identificacion, int numero, String nombre, String apellido, String telefono, String direccion) {
-        this.id_cliente = id_cliente;
+    public Cliente(int codigo, String identificacion, String nombre, String apellido, String telefono, String telefono2, String departamento, String municipio, String direccion, boolean activo) {
+        this.codigo = codigo; // Cambiado de id_cliente a codigo
         this.identificacion = identificacion;
-        this.numero = numero;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
+        this.telefono2 = telefono2;
+        this.departamento = departamento;
+        this.municipio = municipio;
         this.direccion = direccion;
+        this.activo = activo;
     }
 
-    public int getid_cliente() {
-        return id_cliente;
+    public int getId_cliente() {
+        return codigo; // Mantén getId_cliente() para compatibilidad con la vista, pero usa codigo internamente
     }
 
-    public void setid_cliente(int id_cliente) {
-        this.id_cliente = id_cliente;
+    public void setId_cliente(int codigo) {
+        this.codigo = codigo; // Cambiado de id_cliente a codigo
     }
 
     public String getIdentificacion() {
@@ -54,14 +43,6 @@ public class Cliente {
 
     public void setIdentificacion(String identificacion) {
         this.identificacion = identificacion;
-    }
-
-    public int getNumero() {
-        return numero;
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
     }
 
     public String getNombre() {
@@ -88,6 +69,30 @@ public class Cliente {
         this.telefono = telefono;
     }
 
+    public String getTelefono2() {
+        return telefono2;
+    }
+
+    public void setTelefono2(String telefono2) {
+        this.telefono2 = telefono2;
+    }
+
+    public String getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(String departamento) {
+        this.departamento = departamento;
+    }
+
+    public String getMunicipio() {
+        return municipio;
+    }
+
+    public void setMunicipio(String municipio) {
+        this.municipio = municipio;
+    }
+
     public String getDireccion() {
         return direccion;
     }
@@ -96,13 +101,14 @@ public class Cliente {
         this.direccion = direccion;
     }
 
-    public void setCodigo(int aInt) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean isActivo() {
+        return activo;
     }
 
- 
-   
-    
-   
-    
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public Cliente() {
+    }
 }

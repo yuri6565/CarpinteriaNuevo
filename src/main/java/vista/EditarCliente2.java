@@ -16,6 +16,8 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import modelo.Cliente;
 
 
 
@@ -24,31 +26,44 @@ import javax.swing.JOptionPane;
  * @author ZenBook
  */
 
-public class crear_cliente extends javax.swing.JDialog {
+public class EditarCliente2 extends javax.swing.JDialog {
  
     private String[] datos; // Almacena los datos ingresados
     private boolean guardado = false; // Indica si se presionó "Guardar"
+    private Cliente cliente; // Almacena el cliente que se está editando
+private boolean isEditMode = false; // Indica si está en modo edición
 private HashMap<String, String[]> municipiosPorDepartamento = new HashMap<>();
     /**
      * Creates new form nuevoMateriales
      */
-    public crear_cliente(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-        
-        setTitle("Nuevo Material");
-        tipoidentificacion.setVisible(false);
-    numero.setVisible(false);
-    nombre.setVisible(false);
-    telefono.setVisible(false);
-    dirección1.setVisible(false); // Municipio (optional)
-    labeldireccion.setVisible(false); // Descripción adicional (optional)
-    dirección4.setVisible(false); // Unused
+public EditarCliente2(java.awt.Frame parent, boolean modal) {
+    super(parent, modal);
+    initComponents();
+    setTitle("Nuevo Cliente");
     agregarValidacion();
     inicializarMunicipios();
     agregarListenerDepartamento();
+     tipoidentificacion.setVisible(false);
+    numero.setVisible(false);
+    nombre.setVisible(false);
+    telefono.setVisible(false);
+    dirección1.setVisible(false);
+    labeldireccion.setVisible(false);
+    dirección4.setVisible(false);
+    telefono1.setVisible(false);
+    dirección3.setVisible(false);
+}
+    public EditarCliente2(java.awt.Frame parent, boolean modal, Cliente cliente) {
+        super(parent, modal);
+        this.cliente = cliente;
+        this.isEditMode = true;
+        initComponents();
+        setTitle("Editar Cliente");
+        agregarValidacion();
+        inicializarMunicipios();
+        agregarListenerDepartamento();
+        loadClientData(); // Cargar datos del cliente
     }
-    
         public String[] getDatos() {
         return datos;
     }
@@ -70,6 +85,8 @@ private HashMap<String, String[]> municipiosPorDepartamento = new HashMap<>();
     public void setClienteGuardadoListener(ClienteGuardadoListener listener) {
         this.listener = listener;
     }
+    
+    
     
     private void inicializarMunicipios() {
     // Definir municipios por departamento
@@ -240,121 +257,233 @@ municipiosPorDepartamento.put("Boyacá", new String[]{
     });
     }
  private void agregarValidacion() {
-        // Validación y navegación para identificaciontxt
-        gh.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (gh.getSelectedIndex() == 0) {
-                    tipoidentificacion.setVisible(true);
-                    tipoidentificacion.setText("Seleccione un tipo válido");
-                } else {
-                    tipoidentificacion.setVisible(false);
-                }
+    // Validación para departamento
+    gh1.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusLost(FocusEvent e) {
+            if (gh1.getSelectedIndex() == 0) {
+                dirección3.setVisible(true);
+                dirección3.setText("Seleccione un departamento válido");
+            } else {
+                dirección3.setVisible(false);
             }
-        });
-        gh.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    numerotxt.requestFocusInWindow();
-                }
-                if (gh.getSelectedIndex() != 0) {
-                    tipoidentificacion.setVisible(false);
-                }
+        }
+    });
+    gh1.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                gh.requestFocusInWindow();
             }
-        });
+        }
+    });
 
+    // Validación para municipio
+    gh.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusLost(FocusEvent e) {
+            if (gh.getSelectedIndex() == 0) {
+                dirección1.setVisible(true);
+                dirección1.setText("Seleccione un municipio válido");
+            } else {
+                dirección1.setVisible(false);
+            }
+        }
+    });
+    gh.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                direcciontxt2.requestFocusInWindow();
+            }
+            if (gh.getSelectedIndex() != 0) {
+                dirección1.setVisible(false);
+            }
+        }
+    });
 
-        // Validación y navegación para nombretxt
-        nombretxt.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (nombretxt.getText().trim().isEmpty()) {
-                    nombre.setVisible(true);
-                    nombre.setText("Campo obligatorio");
-                } else {
-                    nombre.setVisible(false);
-                }
+    // Validación para identificaciontxt
+    identificaciontxt.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusLost(FocusEvent e) {
+            if (identificaciontxt.getSelectedIndex() == 0) {
+                tipoidentificacion.setVisible(true);
+                tipoidentificacion.setText("Seleccione un tipo válido");
+            } else {
+                tipoidentificacion.setVisible(false);
             }
-        });
-        nombretxt.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                if (!nombretxt.getText().trim().isEmpty()) {
-                    nombre.setVisible(false);
-                }
+        }
+    });
+    identificaciontxt.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                numerotxt.requestFocusInWindow();
             }
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    apellidotxt.requestFocusInWindow();
-                }
+            if (identificaciontxt.getSelectedIndex() != 0) {
+                tipoidentificacion.setVisible(false);
             }
-        });
+        }
+    });
 
-        // Validación y navegación para apellidotxt (opcional)
-        apellidotxt.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                // Apellido es opcional
-            }
-        });
-        apellidotxt.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    telefonotxt.requestFocusInWindow();
+    // Validación para numerotxt
+    numerotxt.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusLost(FocusEvent e) {
+            if (numerotxt.getText().trim().isEmpty()) {
+                numero.setVisible(true);
+                numero.setText("Campo obligatorio");
+            } else {
+                try {
+                    Integer.parseInt(numerotxt.getText().trim());
+                    numero.setVisible(false);
+                } catch (NumberFormatException ex) {
+                    numero.setVisible(true);
+                    numero.setText("Solo números");
                 }
             }
-        });
+        }
+    });
+    numerotxt.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                nombretxt.requestFocusInWindow();
+            }
+        }
+    });
 
-        // Validación y navegación para telefonotxt
-        telefonotxt.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (telefonotxt.getText().trim().isEmpty()) {
-                    telefono.setVisible(true);
-                    telefono.setText("Campo obligatorio");
-                } else if (!telefonotxt.getText().trim().matches("\\d{7,15}")) {
-                    telefono.setVisible(true);
-                    telefono.setText("7-15 dígitos");
-                } else {
-                    telefono.setVisible(false);
-                }
+    // Validación para nombretxt
+    nombretxt.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusLost(FocusEvent e) {
+            if (nombretxt.getText().trim().isEmpty()) {
+                nombre.setVisible(true);
+                nombre.setText("Campo obligatorio");
+            } else {
+                nombre.setVisible(false);
             }
-        });
-        telefonotxt.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                if (!telefonotxt.getText().trim().isEmpty()) {
-                    telefono.setVisible(false);
-                }
+        }
+    });
+    nombretxt.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyTyped(KeyEvent e) {
+            if (!nombretxt.getText().trim().isEmpty()) {
+                nombre.setVisible(false);
             }
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    direcciontxt.requestFocusInWindow();
-                }
+        }
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                apellidotxt.requestFocusInWindow();
             }
-        });
+        }
+    });
 
-   
-        // Validación y navegación para direcciontxt2 (descripción adicional, opcional)
-        direcciontxt2.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                // Descripción adicional es opcional
+    // Validación para apellidotxt (opcional)
+    apellidotxt.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusLost(FocusEvent e) {
+            // Apellido es opcional
+        }
+    });
+    apellidotxt.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                telefonotxt.requestFocusInWindow();
             }
-        });
-        direcciontxt2.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    btnGuardar.doClick();
-                }
+        }
+    });
+
+    // Validación para telefonotxt
+    telefonotxt.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusLost(FocusEvent e) {
+            if (telefonotxt.getText().trim().isEmpty()) {
+                telefono.setVisible(true);
+                telefono.setText("Campo obligatorio");
+            } else if (!telefonotxt.getText().trim().matches("\\d{7,15}")) {
+                telefono.setVisible(true);
+                telefono.setText("7-15 dígitos");
+            } else {
+                telefono.setVisible(false);
             }
-        });
-    }
+        }
+    });
+    telefonotxt.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyTyped(KeyEvent e) {
+            if (!telefonotxt.getText().trim().isEmpty()) {
+                telefono.setVisible(false);
+            }
+        }
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                telefonotxt1.requestFocusInWindow();
+            }
+        }
+    });
+
+    // Validación para telefonotxt1 (opcional)
+    telefonotxt1.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusLost(FocusEvent e) {
+            if (!telefonotxt1.getText().trim().isEmpty() && !telefonotxt1.getText().trim().matches("\\d{7,15}")) {
+                telefono1.setVisible(true);
+                telefono1.setText("7-15 dígitos");
+            } else {
+                telefono1.setVisible(false);
+            }
+        }
+    });
+    telefonotxt1.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                gh1.requestFocusInWindow();
+            }
+        }
+    });
+
+    // Validación para direcciontxt
+    direcciontxt.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusLost(FocusEvent e) {
+            if (direcciontxt.getText().trim().isEmpty()) {
+                dirección.setVisible(true);
+                dirección.setText("Campo obligatorio");
+            } else {
+                dirección.setVisible(false);
+            }
+        }
+    });
+    direcciontxt.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                direcciontxt2.requestFocusInWindow();
+            }
+        }
+    });
+
+    // Validación para direcciontxt2 (opcional)
+    direcciontxt2.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusLost(FocusEvent e) {
+            // Descripción adicional es opcional
+        }
+    });
+    direcciontxt2.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                btnGuardar.doClick();
+            }
+        }
+    });
+}
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -429,7 +558,7 @@ municipiosPorDepartamento.put("Boyacá", new String[]{
 
         jLabel1.setFont(new java.awt.Font("Century751 BT", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Nuevo Cliente");
+        jLabel1.setText("Editar Cliente");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         btnGuardar3.setBackground(new java.awt.Color(46, 49, 82));
@@ -442,7 +571,7 @@ municipiosPorDepartamento.put("Boyacá", new String[]{
                 btnGuardar3ActionPerformed(evt);
             }
         });
-        jPanel2.add(btnGuardar3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, 40, -1));
+        jPanel2.add(btnGuardar3, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 0, 40, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 580, 70));
 
@@ -742,7 +871,7 @@ guardado = false;
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-    Ctrl_Cliente controlador = new Ctrl_Cliente();
+Ctrl_Cliente controlador = new Ctrl_Cliente();
     StringBuilder errores = new StringBuilder();
 
     // Obtener y limpiar datos
@@ -751,10 +880,10 @@ guardado = false;
     String nombre = nombretxt.getText().trim();
     String apellido = apellidotxt.getText().trim();
     String telefono = telefonotxt.getText().trim();
-    String telefono2 = telefonotxt1.getText().trim(); // Nuevo campo
+    String telefono2 = telefonotxt1.getText().trim();
+    String departamento = gh1.getSelectedItem().toString().trim();
+    String municipio = gh.getSelectedItem().toString().trim();
     String direccion = direcciontxt.getText().trim();
-    String departamento = gh1.getSelectedItem().toString();
-    String municipio = gh.getSelectedItem().toString();
     String descripcionAdicional = direcciontxt2.getText().trim();
 
     // Validar campos obligatorios
@@ -770,20 +899,20 @@ guardado = false;
     if (telefono.isEmpty()) {
         errores.append("El teléfono es obligatorio.\n");
     }
-    if (direccion.isEmpty()) {
-        errores.append("La dirección es obligatoria.\n");
-    }
-    if (departamento.equals("Seleccionar")) {
+    if (departamento.isEmpty() || departamento.equals("Seleccionar")) {
         errores.append("Seleccione un departamento válido.\n");
     }
-    if (municipio.equals("Seleccione")) {
+    if (municipio.isEmpty() || municipio.equals("Seleccione")) {
         errores.append("Seleccione un municipio válido.\n");
+    }
+    if (direccion.isEmpty()) {
+        errores.append("La dirección es obligatoria.\n");
     }
 
     // Validar formato del número
     int numero = 0;
     try {
-        numero = Integer.parseInt(numeroStr);
+        numero = Integer.parseInt(numeroStr); // Corrección: usar numeroStr
     } catch (NumberFormatException e) {
         errores.append("El número de identificación debe ser numérico.\n");
     }
@@ -792,6 +921,9 @@ guardado = false;
     if (!telefono.matches("\\d{7,15}")) {
         errores.append("El teléfono debe contener 7-15 dígitos.\n");
     }
+    if (!telefono2.isEmpty() && !telefono2.matches("\\d{7,15}")) {
+        errores.append("El segundo teléfono debe contener 7-15 dígitos.\n");
+    }
 
     // Mostrar errores si los hay
     if (errores.length() > 0) {
@@ -799,30 +931,41 @@ guardado = false;
         return;
     }
 
-    // Crear objeto Cliente con campos separados
-    modelo.Cliente cliente = new modelo.Cliente();
+    // Crear objeto Cliente
+    Cliente cliente = new Cliente();
     cliente.setIdentificacion(tipoIdentificacion);
     cliente.setId_cliente(numero);
     cliente.setNombre(nombre);
     cliente.setApellido(apellido.isEmpty() ? null : apellido);
     cliente.setTelefono(telefono);
-    cliente.setTelefono2(telefono2.isEmpty() ? null : telefono2); // Nuevo campo
-    cliente.setDepartamento(departamento);
-    cliente.setMunicipio(municipio);
-    cliente.setDireccion(direccion); // Solo la dirección básica
-    cliente.setActivo(true); // Valor predeterminado
+    cliente.setTelefono2(telefono2.isEmpty() ? null : telefono2);
+    cliente.setDepartamento(departamento.isEmpty() ? null : departamento);
+    cliente.setMunicipio(municipio.isEmpty() ? null : municipio);
+    cliente.setDireccion(direccion);
+    cliente.setActivo(true);
 
-    // Guardar cliente
-    if (controlador.guardar(cliente)) {
-        JOptionPane.showMessageDialog(this, "Cliente guardado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    boolean success;
+    String message;
+    if (isEditMode) {
+        // Actualizar cliente existente
+        success = controlador.editar(cliente, numero);
+        message = success ? "Cliente actualizado correctamente" : "Error al actualizar el cliente";
+    } else {
+        // Crear nuevo cliente
+        success = controlador.guardar(cliente);
+        message = success ? "Cliente guardado correctamente" : "Error al guardar el cliente";
+    }
+
+    if (success) {
+        JOptionPane.showMessageDialog(this, message, "Éxito", JOptionPane.INFORMATION_MESSAGE);
         guardado = true;
-        datos = new String[]{tipoIdentificacion, String.valueOf(numero), nombre, apellido, telefono, direccion};
+        datos = new String[]{tipoIdentificacion, String.valueOf(numero), nombre, apellido, telefono, telefono2, departamento, municipio, direccion, descripcionAdicional};
         if (listener != null) {
             listener.onClienteGuardado();
         }
         setVisible(false);
     } else {
-        JOptionPane.showMessageDialog(this, "Error al guardar el cliente", "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, message + " Detalle: " + (controlador.getLastError() != null ? controlador.getLastError() : "Sin detalles"), "Error", JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -886,21 +1029,23 @@ guardado = false;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(crear_cliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarCliente2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(crear_cliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarCliente2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(crear_cliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarCliente2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(crear_cliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarCliente2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                crear_cliente dialog = new crear_cliente(new javax.swing.JFrame(), true);
+                EditarCliente2 dialog = new EditarCliente2(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -962,4 +1107,48 @@ guardado = false;
     private RSMaterialComponent.RSTextFieldMaterial telefonotxt1;
     private javax.swing.JLabel tipoidentificacion;
     // End of variables declaration//GEN-END:variables
+private void loadClientData() {
+    if (cliente != null) {
+        System.out.println("Cargando datos - ID: " + cliente.getId_cliente() + ", Nombre: " + cliente.getNombre() + 
+                          ", Departamento: '" + cliente.getDepartamento() + "', Municipio: '" + cliente.getMunicipio() + 
+                          "', Dirección: '" + cliente.getDireccion() + "'");
+
+        identificaciontxt.setSelectedItem(cliente.getIdentificacion() != null ? cliente.getIdentificacion() : "Seleccionar");
+        numerotxt.setText(String.valueOf(cliente.getId_cliente()));
+        nombretxt.setText(cliente.getNombre() != null ? cliente.getNombre() : "");
+        apellidotxt.setText(cliente.getApellido() != null ? cliente.getApellido() : "");
+        telefonotxt.setText(cliente.getTelefono() != null ? cliente.getTelefono() : "");
+        telefonotxt1.setText(cliente.getTelefono2() != null ? cliente.getTelefono2() : "");
+
+        // Usar valor predeterminado si departamento está vacío
+        String departamento = cliente.getDepartamento() != null && !cliente.getDepartamento().isEmpty() ? 
+                             cliente.getDepartamento() : "Bogotá DC";
+        System.out.println("Seleccionando departamento: '" + departamento + "'");
+        gh1.setSelectedItem(departamento);
+        String[] municipios = municipiosPorDepartamento.getOrDefault(departamento, new String[]{"Seleccione"});
+        if (municipios.length == 1 && municipios[0].equals("Seleccione")) {
+            municipios = new String[]{"Usaquén", "Chapinero"}; // Fallback
+        }
+        System.out.println("Municipios disponibles: " + String.join(", ", municipios));
+        gh.setModel(new javax.swing.DefaultComboBoxModel(municipios));
+
+        // Usar valor predeterminado si municipio está vacío
+        String municipio = cliente.getMunicipio() != null && !cliente.getMunicipio().isEmpty() ? 
+                          cliente.getMunicipio() : "Usaquén";
+        System.out.println("Seleccionando municipio: '" + municipio + "'");
+        gh.setSelectedItem(municipio);
+
+        String direccion = cliente.getDireccion() != null ? cliente.getDireccion() : "";
+        System.out.println("Cargando dirección: '" + direccion + "'");
+        direcciontxt.setText(direccion);
+
+        SwingUtilities.invokeLater(() -> {
+            gh1.repaint();
+            gh.repaint();
+            direcciontxt.repaint();
+        });
+    } else {
+        System.out.println("Cliente es null, no se cargan datos.");
+    }
+}
 }

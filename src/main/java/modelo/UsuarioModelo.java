@@ -7,9 +7,11 @@ package modelo;
 /**
  *
  * @author Yuri 5
- */
+ */ //
 public class UsuarioModelo {
     private int Id_usuario;
+    private String tipodeiden;
+        private byte[] imagen;
     private String Nombre;
     private String Apellido;
     private String Correo_electronico;
@@ -18,20 +20,18 @@ public class UsuarioModelo {
     private String Telefono;
     private String Rol;
 
-    
-    
-public UsuarioModelo(){
-    this.Id_usuario = 0;
-    this.Nombre = "";
-    this.Apellido= "";
-    this.Correo_electronico = "";
-    this.Usuario="";
-    this.Contrasena= "";
-    this.Telefono = "";
-    this.Rol=""; 
-    
-    
-}
+    public UsuarioModelo(int Id_usuario, String tipodeiden, byte[] imagen, String Nombre, String Apellido, String Correo_electronico, String Usuario, String Contrasena, String Telefono, String Rol) {
+        this.Id_usuario = Id_usuario;
+        this.tipodeiden = tipodeiden;
+        this.imagen = imagen;
+        this.Nombre = Nombre;
+        this.Apellido = Apellido;
+        this.Correo_electronico = Correo_electronico;
+        this.Usuario = Usuario;
+        this.Contrasena = Contrasena;
+        this.Telefono = Telefono;
+        this.Rol = Rol;
+    }
 
     public int getId_usuario() {
         return Id_usuario;
@@ -39,6 +39,22 @@ public UsuarioModelo(){
 
     public void setId_usuario(int Id_usuario) {
         this.Id_usuario = Id_usuario;
+    }
+
+    public String getTipodeiden() {
+        return tipodeiden;
+    }
+
+    public void setTipodeiden(String tipodeiden) {
+        this.tipodeiden = tipodeiden;
+    }
+
+    public byte[] getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
     }
 
     public String getNombre() {
@@ -97,6 +113,10 @@ public UsuarioModelo(){
         this.Rol = Rol;
     }
 
+    public UsuarioModelo() {
+    }
 
+    
+    
 
 }
