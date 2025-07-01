@@ -97,12 +97,11 @@ public final class Egresos extends javax.swing.JPanel {
 
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        txtbuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
-        btnNuevoProduc = new rojeru_san.RSButtonRiple();
-        btnEliminar = new rojeru_san.RSButtonRiple();
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         Tabla1 = new RSMaterialComponent.RSTableMetroCustom();
+        txtbuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
+        btnNuevo = new RSMaterialComponent.RSButtonShape();
+        btnEliminar1 = new RSMaterialComponent.RSButtonShape();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -111,41 +110,6 @@ public final class Egresos extends javax.swing.JPanel {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setPreferredSize(new java.awt.Dimension(1250, 630));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        txtbuscar.setBackground(new java.awt.Color(245, 245, 245));
-        txtbuscar.setForeground(new java.awt.Color(0, 0, 0));
-        txtbuscar.setColorIcon(new java.awt.Color(29, 30, 111));
-        txtbuscar.setColorMaterial(new java.awt.Color(29, 30, 111));
-        txtbuscar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
-        txtbuscar.setPlaceholder("Buscar");
-        txtbuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtbuscarActionPerformed(evt);
-            }
-        });
-        jPanel3.add(txtbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 430, 40));
-
-        btnNuevoProduc.setBackground(new java.awt.Color(46, 49, 82));
-        btnNuevoProduc.setText(" Nuevo");
-        btnNuevoProduc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoProducActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnNuevoProduc, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 20, 120, 40));
-
-        btnEliminar.setBackground(new java.awt.Color(46, 49, 82));
-        btnEliminar.setText(" Eliminar");
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 20, 120, 40));
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
-        jLabel1.setText("Egresos");
-        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 20, -1, -1));
 
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -194,7 +158,51 @@ public final class Egresos extends javax.swing.JPanel {
         jScrollPane3.setViewportView(Tabla1);
         Tabla1.getColumnModel().getColumn(0).setPreferredWidth(10);
 
-        jPanel3.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 1130, 500));
+        jPanel3.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 1140, 500));
+
+        txtbuscar.setForeground(new java.awt.Color(0, 0, 0));
+        txtbuscar.setColorIcon(new java.awt.Color(0, 0, 0));
+        txtbuscar.setColorMaterial(new java.awt.Color(153, 153, 153));
+        txtbuscar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
+        txtbuscar.setPhColor(new java.awt.Color(102, 102, 102));
+        txtbuscar.setPlaceholder("Buscar...");
+        txtbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtbuscarActionPerformed(evt);
+            }
+        });
+        jPanel3.add(txtbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 410, 30));
+
+        btnNuevo.setBackground(new java.awt.Color(46, 49, 82));
+        btnNuevo.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnNuevo.setText(" Nuevo");
+        btnNuevo.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnNuevo.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        btnNuevo.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnNuevo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 50, 110, 30));
+
+        btnEliminar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnEliminar1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnEliminar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (1).png"))); // NOI18N
+        btnEliminar1.setText(" Eliminar");
+        btnEliminar1.setToolTipText("");
+        btnEliminar1.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnEliminar1.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        btnEliminar1.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnEliminar1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnEliminar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminar1ActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnEliminar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 50, 110, 30));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -229,18 +237,45 @@ public final class Egresos extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseClicked
+        try {
+            int column = Tabla1.columnAtPoint(evt.getPoint());
+            int viewRow = Tabla1.rowAtPoint(evt.getPoint());
+
+            if (viewRow < 0 || column < 0) {
+                return;
+            }
+
+            int modelRow = Tabla1.convertRowIndexToModel(viewRow);
+            DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+            int idEgreso = (int) model.getValueAt(modelRow, 0);
+
+            if (column == 5) { // Columna "Ver"
+                mostrarDetalleEgreso(model, modelRow, idEgreso);
+            } else if (column == 6) { // Columna "Editar"
+                abrirEditarEgreso(idEgreso); // Nuevo método para abrir el formulario de edición
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al procesar clic: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_Tabla1MouseClicked
+
     private void txtbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarActionPerformed
+        // TODO add your handling code here:
         filtrarTabla();
     }//GEN-LAST:event_txtbuscarActionPerformed
 
-    private void btnNuevoProducActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProducActionPerformed
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         formuEgresos1 dialog = new formuEgresos1(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
         cargarTablaEgresos();
-    }//GEN-LAST:event_btnNuevoProducActionPerformed
+    }//GEN-LAST:event_btnNuevoActionPerformed
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+    private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed
         int[] selectedRows = Tabla1.getSelectedRows();
 
         if (selectedRows.length == 0) {
@@ -282,33 +317,7 @@ public final class Egresos extends javax.swing.JPanel {
                 "Éxito",
                 JOptionPane.INFORMATION_MESSAGE
         );
-    }//GEN-LAST:event_btnEliminarActionPerformed
-
-    private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseClicked
-        try {
-            int column = Tabla1.columnAtPoint(evt.getPoint());
-            int viewRow = Tabla1.rowAtPoint(evt.getPoint());
-
-            if (viewRow < 0 || column < 0) {
-                return;
-            }
-
-            int modelRow = Tabla1.convertRowIndexToModel(viewRow);
-            DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-            int idEgreso = (int) model.getValueAt(modelRow, 0);
-
-            if (column == 5) { // Columna "Ver"
-                mostrarDetalleEgreso(model, modelRow, idEgreso);
-            } else if (column == 6) { // Columna "Editar"
-                abrirEditarEgreso(idEgreso); // Nuevo método para abrir el formulario de edición
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al procesar clic: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_Tabla1MouseClicked
+    }//GEN-LAST:event_btnEliminar1ActionPerformed
     private void abrirEditarEgreso(int idEgreso) {
         try {
             Ctrl_CajaEgresos ctrl = new Ctrl_CajaEgresos();
@@ -379,9 +388,8 @@ public final class Egresos extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSTableMetroCustom Tabla1;
-    private rojeru_san.RSButtonRiple btnEliminar;
-    private rojeru_san.RSButtonRiple btnNuevoProduc;
-    private javax.swing.JLabel jLabel1;
+    private RSMaterialComponent.RSButtonShape btnEliminar1;
+    private RSMaterialComponent.RSButtonShape btnNuevo;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane3;

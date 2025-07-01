@@ -11,6 +11,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -20,8 +21,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,11 +45,16 @@ import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.ComboPopup;
 import modelo.Conexion;
-import vista.Inventario0.nuevoMateriales;
 import vista.Produccion.Error_guardar;
 import vista.Produccion.FormuEtapaProduccion;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
+import vista.Inventario0.herramientasNuevo;
 import vista.proveedor.proveedornuevo;
 
 /**
@@ -72,7 +78,7 @@ public class formuEgresos1 extends javax.swing.JDialog {
 
         cmbMateriales = new CheckedComboBox<>(makeProductModel("material"));
         cmbMateriales.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        jPanel1.add(cmbMateriales, new org.netbeans.lib.awtextra.AbsoluteConstraints(270,360, 170, 30));
+        jPanel1.add(cmbMateriales, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 360, 170, 30));
 
         cmbHerramientas = new CheckedComboBox<>(makeProductModel("herramienta"));
         cmbHerramientas.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -244,6 +250,7 @@ public class formuEgresos1 extends javax.swing.JDialog {
         jLabel3.setVisible(false);
         btnClienteN.setVisible(false);
         jLabel11CC.setVisible(false);
+        btnClienteN2.setVisible(false);
 
         jPanel1.revalidate();
         jPanel1.repaint();
@@ -294,10 +301,11 @@ public class formuEgresos1 extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         btnClienteN1 = new RSMaterialComponent.RSButtonShape();
         btnClienteN = new RSMaterialComponent.RSButtonShape();
-        btnGuardar = new rojeru_san.RSButtonRiple();
-        btnCancelar1 = new rojeru_san.RSButtonRiple();
         rSLabelHora1 = new rojeru_san.rsdate.RSLabelHora();
         jLabel11CC = new javax.swing.JLabel();
+        btnClienteN2 = new RSMaterialComponent.RSButtonShape();
+        btnGuardar1 = new rojeru_san.RSButtonRiple();
+        btnCancelar2 = new rojeru_san.RSButtonRiple();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -329,15 +337,22 @@ public class formuEgresos1 extends javax.swing.JDialog {
         txtPago.setMaxSelectableDate(new java.util.Date(253370786472000L));
         jPanel1.add(txtPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 190, 30));
 
+        txtCantidadnuevo.setForeground(new java.awt.Color(46, 49, 82));
+        txtCantidadnuevo.setColorMaterial(new java.awt.Color(46, 49, 82));
+        txtCantidadnuevo.setPhColor(new java.awt.Color(46, 49, 82));
         txtCantidadnuevo.setPlaceholder("");
+        txtCantidadnuevo.setSelectionColor(new java.awt.Color(46, 49, 82));
         jPanel1.add(txtCantidadnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 420, 30));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jLabel2.setText("Cantidad a Ingresar:");
+        jLabel2.setText("Valor monetario:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, -1, 30));
 
         txtDetallenuevo.setForeground(new java.awt.Color(0, 0, 0));
+        txtDetallenuevo.setColorMaterial(new java.awt.Color(46, 49, 82));
+        txtDetallenuevo.setPhColor(new java.awt.Color(46, 49, 82));
         txtDetallenuevo.setPlaceholder("");
+        txtDetallenuevo.setSelectionColor(new java.awt.Color(46, 49, 82));
         txtDetallenuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDetallenuevoActionPerformed(evt);
@@ -367,14 +382,14 @@ public class formuEgresos1 extends javax.swing.JDialog {
                 comboProveedorActionPerformed(evt);
             }
         });
-        jPanel1.add(comboProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 170, 30));
+        jPanel1.add(comboProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 170, 30));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jLabel8.setText("Proveedor");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
+        jLabel8.setText("Proveedor:");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jLabel3.setText("Producto");
+        jLabel3.setText("Insumos:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 330, -1, -1));
 
         btnClienteN1.setBackground(new java.awt.Color(46, 49, 82));
@@ -389,7 +404,7 @@ public class formuEgresos1 extends javax.swing.JDialog {
                 btnClienteN1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnClienteN1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 330, 20, 20));
+        jPanel1.add(btnClienteN1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 320, 20, 20));
 
         btnClienteN.setBackground(new java.awt.Color(46, 49, 82));
         btnClienteN.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -403,34 +418,52 @@ public class formuEgresos1 extends javax.swing.JDialog {
                 btnClienteNActionPerformed(evt);
             }
         });
-        jPanel1.add(btnClienteN, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, 20, 20));
-
-        btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
-        btnGuardar.setText("Guardar");
-        btnGuardar.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 460, 140, -1));
-
-        btnCancelar1.setBackground(new java.awt.Color(46, 49, 82));
-        btnCancelar1.setText("Volver");
-        btnCancelar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelar1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 460, 140, -1));
+        jPanel1.add(btnClienteN, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 390, 20, 20));
 
         rSLabelHora1.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel1.add(rSLabelHora1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, 120, -1));
+        jPanel1.add(rSLabelHora1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 120, -1));
 
         jLabel11CC.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel11CC.setText("Herramientas:");
         jPanel1.add(jLabel11CC, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, -1, -1));
+
+        btnClienteN2.setBackground(new java.awt.Color(46, 49, 82));
+        btnClienteN2.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnClienteN2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnClienteN2.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnClienteN2.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
+        btnClienteN2.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnClienteN2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnClienteN2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClienteN2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnClienteN2, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, 20, 20));
+
+        btnGuardar1.setBackground(new java.awt.Color(46, 49, 82));
+        btnGuardar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnGuardar1.setText("Guardar");
+        btnGuardar1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        btnGuardar1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnGuardar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardar1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 470, 140, -1));
+
+        btnCancelar2.setBackground(new java.awt.Color(46, 49, 82));
+        btnCancelar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
+        btnCancelar2.setText("Volver");
+        btnCancelar2.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        btnCancelar2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnCancelar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelar2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCancelar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 470, 140, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -449,40 +482,55 @@ public class formuEgresos1 extends javax.swing.JDialog {
 
     private void comboCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCategoriaActionPerformed
         String seleccion = comboCategoria.getSelectedItem().toString();
+        boolean esCompraProductos = seleccion.equals("Compra de Productos e Insumos");
 
-        if (seleccion.equals("Compra de Productos e Insumos")) {
-            jLabel8.setVisible(true);
-            comboProveedor.setVisible(true);
-            btnClienteN1.setVisible(true);
-            jLabel3.setVisible(true);
-            btnClienteN.setVisible(true);
-            jLabel11CC.setVisible(true);
-            cmbMateriales.setVisible(true);
-            cmbHerramientas.setVisible(true);
-        } else {
-            jLabel8.setVisible(false);
-            comboProveedor.setVisible(false);
-            btnClienteN1.setVisible(false);
-            jLabel3.setVisible(false);
-            btnClienteN.setVisible(false);
-            jLabel11CC.setVisible(false);
-            cmbMateriales.setVisible(false);
-            cmbHerramientas.setVisible(false);
-        }
+        jLabel8.setVisible(esCompraProductos);
+        comboProveedor.setVisible(esCompraProductos);
+        btnClienteN1.setVisible(esCompraProductos);
+
+        // Mostrar solo materiales o herramientas según necesidad
+        jLabel3.setVisible(esCompraProductos);
+        btnClienteN.setVisible(esCompraProductos);
+        jLabel11CC.setVisible(esCompraProductos);
+
+        // Mostrar combobox según tipo de producto
+        cmbMateriales.setVisible(esCompraProductos);
+        cmbHerramientas.setVisible(esCompraProductos); // Cambiar según lógica de negocio
+
         jPanel1.revalidate();
-        jPanel1.repaint(); // Forzar actualización de la interfaz
-
+        jPanel1.repaint();
     }//GEN-LAST:event_comboCategoriaActionPerformed
 
     private void txtDetallenuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDetallenuevoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDetallenuevoActionPerformed
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void btnClienteN1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteN1ActionPerformed
+        proveedornuevo dialog = new proveedornuevo(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
+    }//GEN-LAST:event_btnClienteN1ActionPerformed
+
+    private void btnClienteNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteNActionPerformed
+        herramientasNuevo dialog = new herramientasNuevo(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnClienteNActionPerformed
+
+    private void comboProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboProveedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboProveedorActionPerformed
+
+    private void btnClienteN2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteN2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnClienteN2ActionPerformed
+
+    private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
         Connection con = null;
         PreparedStatement ps = null;
         try {
-            // Validaciones existentes
+            // Validaciones básicas
             if (txtPago.getDate() == null) {
                 mostrarError("La fecha de pago es requerida");
                 return;
@@ -500,11 +548,28 @@ public class formuEgresos1 extends javax.swing.JDialog {
                 return;
             }
 
+            // Obtener valores del formulario
             java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
             double monto = Double.parseDouble(txtCantidadnuevo.getText().trim().replace(",", "."));
             String descripcion = txtDetallenuevo.getText();
             String categoria = comboCategoria.getSelectedItem().toString();
 
+            // Recolectar items seleccionados
+            List<CheckableItem> seleccionados = new ArrayList<>();
+            for (int i = 0; i < cmbMateriales.getModel().getSize(); i++) {
+                CheckableItem item = cmbMateriales.getModel().getElementAt(i);
+                if (item.isSelected()) {
+                    seleccionados.add(item);
+                }
+            }
+            for (int i = 0; i < cmbHerramientas.getModel().getSize(); i++) {
+                CheckableItem item = cmbHerramientas.getModel().getElementAt(i);
+                if (item.isSelected()) {
+                    seleccionados.add(item);
+                }
+            }
+
+            // Validar proveedor si es compra de productos
             String proveedorSeleccionado = null;
             if (categoria.equals("Compra de Productos e Insumos")) {
                 if (comboProveedor.getSelectedIndex() <= 0) {
@@ -512,18 +577,20 @@ public class formuEgresos1 extends javax.swing.JDialog {
                     return;
                 }
                 proveedorSeleccionado = comboProveedor.getSelectedItem().toString();
+
+                if (seleccionados.isEmpty()) {
+                    mostrarError("Debe seleccionar al menos un producto o herramienta");
+                    return;
+                }
             }
 
-            if (monto <= 0) {
-                mostrarError("El monto debe ser mayor que cero");
-                return;
-            }
-
+            // Iniciar transacción
             con = Conexion.getConnection();
             con.setAutoCommit(false);
 
+            // Insertar en caja
             String sqlCaja = "INSERT INTO caja (fecha, movimiento, monto, descripcion, categoria) VALUES (?, 'egreso', ?, ?, ?)";
-            ps = con.prepareStatement(sqlCaja);
+            ps = con.prepareStatement(sqlCaja, Statement.RETURN_GENERATED_KEYS);
             ps.setDate(1, fecha);
             ps.setDouble(2, monto);
             ps.setString(3, descripcion);
@@ -531,28 +598,29 @@ public class formuEgresos1 extends javax.swing.JDialog {
             int resultado = ps.executeUpdate();
 
             if (resultado > 0) {
-                con.commit();
-                mostrarMensaje("Egreso registrado correctamente");
-
-                List<CheckableItem> seleccionados = new ArrayList<>();
-                for (int i = 0; i < cmbMateriales.getModel().getSize(); i++) {
-                    CheckableItem item = (CheckableItem) cmbMateriales.getModel().getElementAt(i);
-                    if (item.isSelected()) {
-                        seleccionados.add(item);
-                    }
-                }
-                for (int i = 0; i < cmbHerramientas.getModel().getSize(); i++) {
-                    CheckableItem item = (CheckableItem) cmbHerramientas.getModel().getElementAt(i);
-                    if (item.isSelected()) {
-                        seleccionados.add(item);
-                    }
-                }
-
-                if (categoria.equals("Compra de Productos e Insumos") && !seleccionados.isEmpty()) {
-                    FormularioMH formMH = new FormularioMH((Frame) this.getParent(), true, seleccionados);
+                // Si es compra de productos, actualizar inventario
+                if (categoria.equals("Compra de Productos e Insumos")) {
+                    // Mostrar diálogo para cantidades
+                    double cantidad = Double.parseDouble(txtCantidadnuevo.getText().trim().replace(",", "."));
+                    EgresosMH formMH = new EgresosMH((Frame) this.getParent(), true, seleccionados, cantidad);
                     formMH.setLocationRelativeTo(null);
                     formMH.setVisible(true);
+
+                    if (formMH.isConfirmado()) {
+                        // Procesar cantidades ingresadas
+                        Map<String, String> cantidadesMateriales = formMH.getCantidadesMateriales();
+                        Map<String, String> cantidadesHerramientas = formMH.getCantidadesHerramientas();
+
+                        // Actualizar inventario
+                        actualizarInventario(con, cantidadesMateriales, cantidadesHerramientas);
+                    } else {
+                        con.rollback();
+                        return;
+                    }
                 }
+
+                con.commit();
+                mostrarMensaje("Egreso registrado correctamente");
                 this.dispose();
             } else {
                 con.rollback();
@@ -561,104 +629,72 @@ public class formuEgresos1 extends javax.swing.JDialog {
         } catch (NumberFormatException e) {
             mostrarError("El monto debe ser un número válido con formato '12,50'");
         } catch (SQLException e) {
-            if (con != null) {
-                try {
+            try {
+                if (con != null) {
                     con.rollback();
-                } catch (SQLException ex) {
-                    mostrarError("Error al revertir transacción: " + ex.getMessage());
                 }
+                mostrarError("Error al registrar el egreso: " + e.getMessage());
+            } catch (SQLException ex) {
+                mostrarError("Error al revertir transacción: " + ex.getMessage());
             }
-            mostrarError("Error al registrar el egreso: " + e.getMessage());
         } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    mostrarError("Error al cerrar PreparedStatement: " + e.getMessage());
-                }
+            if (ps != null) try {
+                ps.close();
+            } catch (SQLException e) {
             }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException e) {
-                    mostrarError("Error al cerrar conexión: " + e.getMessage());
+            if (con != null) try {
+                con.close();
+            } catch (SQLException e) {
+            }
+        }
+
+    }//GEN-LAST:event_btnGuardar1ActionPerformed
+    private void actualizarInventario(Connection con, Map<String, String> cantidadesMateriales, Map<String, String> cantidadesHerramientas) throws SQLException {
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
+
+        // Actualizar materiales
+        for (Map.Entry<String, String> entry : cantidadesMateriales.entrySet()) {
+            String nombre = entry.getKey();
+            String cantidadStr = entry.getValue().replace(",", ".");
+
+            try {
+                double cantidad = nf.parse(cantidadStr).doubleValue();
+                if (cantidad > 0) {
+                    String sql = "UPDATE inventario SET cantidad = cantidad + ? WHERE nombre = ? AND tipo = 'material'";
+                    try (PreparedStatement ps = con.prepareStatement(sql)) {
+                        ps.setDouble(1, cantidad);
+                        ps.setString(2, nombre);
+                        ps.executeUpdate();
+                    }
                 }
+            } catch (ParseException e) {
+                throw new SQLException("Formato de cantidad inválido para " + nombre);
+            }
+        }
+
+        // Actualizar herramientas
+        for (Map.Entry<String, String> entry : cantidadesHerramientas.entrySet()) {
+            String nombre = entry.getKey();
+            String cantidadStr = entry.getValue().replace(",", ".");
+
+            try {
+                double cantidad = nf.parse(cantidadStr).doubleValue();
+                if (cantidad > 0) {
+                    String sql = "UPDATE inventario SET cantidad = cantidad + ? WHERE nombre = ? AND tipo = 'herramienta'";
+                    try (PreparedStatement ps = con.prepareStatement(sql)) {
+                        ps.setDouble(1, cantidad);
+                        ps.setString(2, nombre);
+                        ps.executeUpdate();
+                    }
+                }
+            } catch (ParseException e) {
+                throw new SQLException("Formato de cantidad inválido para " + nombre);
             }
         }
     }
-
-    private void actualizarStockInventario(Connection con, int idInventario, double cantidad) throws SQLException {
-        // Obtener la cantidad actual del inventario
-        String sqlSelect = "SELECT cantidad FROM inventario WHERE id_inventario = ?";
-        double cantidadActual = 0.0;
-        try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
-            psSelect.setInt(1, idInventario);
-            try (ResultSet rs = psSelect.executeQuery()) {
-                if (rs.next()) {
-                    String cantidadStr = rs.getString("cantidad").trim();
-                    cantidadActual = parseCantidad(cantidadStr);
-                } else {
-                    throw new SQLException("No se encontró el inventario con ID: " + idInventario);
-                }
-            }
-        }
-
-        // Sumar la nueva cantidad
-        double nuevaCantidad = cantidadActual + cantidad;
-
-        // Formatear la cantidad con coma como separador decimal
-        java.text.NumberFormat numberFormat = java.text.NumberFormat.getNumberInstance(java.util.Locale.forLanguageTag("es-ES"));
-        numberFormat.setMinimumFractionDigits(2);
-        numberFormat.setMaximumFractionDigits(2);
-        String cantidadFormateada = numberFormat.format(nuevaCantidad).replace(".", ",");
-
-        // Actualizar la cantidad en inventario
-        String sqlUpdate = "UPDATE inventario SET cantidad = ? WHERE id_inventario = ?";
-        try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
-            psUpdate.setString(1, cantidadFormateada); // Guardar como VARCHAR con coma
-            psUpdate.setInt(2, idInventario);
-            int affectedRows = psUpdate.executeUpdate();
-
-            if (affectedRows == 0) {
-                throw new SQLException("No se pudo actualizar el stock para el inventario con ID: " + idInventario);
-            }
-            System.out.println("Stock actualizado para id_inventario " + idInventario + ": " + cantidadFormateada);
-        }
-    }
-
-    private double parseCantidad(String cantidadStr) {
-        try {
-            // Normalizar el formato: reemplazar coma por punto y eliminar cualquier separador adicional
-            String normalized = cantidadStr.replace(".", "").replace(",", ".");
-            double cantidad = Double.parseDouble(normalized);
-            return cantidad >= 0 ? cantidad : 0.0;
-        } catch (NumberFormatException e) {
-            System.err.println("Error al parsear cantidad: '" + cantidadStr + "' - " + e.getMessage());
-            return 0.0;
-        }
-
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void btnClienteN1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteN1ActionPerformed
-        proveedornuevo dialog = new proveedornuevo(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-
-    }//GEN-LAST:event_btnClienteN1ActionPerformed
-
-    private void btnClienteNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteNActionPerformed
-        nuevoMateriales dialog = new nuevoMateriales(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-    }//GEN-LAST:event_btnClienteNActionPerformed
-
-    private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
+    private void btnCancelar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar2ActionPerformed
         this.dispose();
-    }//GEN-LAST:event_btnCancelar1ActionPerformed
-
-    private void comboProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboProveedorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboProveedorActionPerformed
+    }//GEN-LAST:event_btnCancelar2ActionPerformed
 
     private void cargarProveedores() {
         try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement("SELECT nombre FROM proveedor"); ResultSet rs = ps.executeQuery()) {
@@ -672,8 +708,6 @@ public class formuEgresos1 extends javax.swing.JDialog {
             e.printStackTrace();
         }
     }
-
-    
 
     /**
      * @param args the command line arguments
@@ -698,10 +732,11 @@ public class formuEgresos1 extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private rojeru_san.RSButtonRiple btnCancelar1;
+    private rojeru_san.RSButtonRiple btnCancelar2;
     private RSMaterialComponent.RSButtonShape btnClienteN;
     private RSMaterialComponent.RSButtonShape btnClienteN1;
-    private rojeru_san.RSButtonRiple btnGuardar;
+    private RSMaterialComponent.RSButtonShape btnClienteN2;
+    private rojeru_san.RSButtonRiple btnGuardar1;
     private RSMaterialComponent.RSComboBoxMaterial comboCategoria;
     private RSMaterialComponent.RSComboBoxMaterial comboProveedor;
     private javax.swing.JLabel jLabel1;
