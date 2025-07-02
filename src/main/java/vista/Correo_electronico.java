@@ -515,6 +515,7 @@ private void updateSuggestions() {
         timer.setRepeats(false);
         timer.start();
     }
+ 
 
 }
         

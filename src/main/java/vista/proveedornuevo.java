@@ -185,6 +185,7 @@ private List<Departamento> departamentos;
         btnCancelar2 = new rojeru_san.RSButtonRiple();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
@@ -547,8 +548,7 @@ proveedor.setNombre(txtNombre12.getText().trim()); // Nombre como texto
     }//GEN-LAST:event_btnguardarrActionPerformed
 
     private void btnCancelar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCancelar2ActionPerformed
+dispose();    }//GEN-LAST:event_btnCancelar2ActionPerformed
 
     /**
      * @param args the command line arguments

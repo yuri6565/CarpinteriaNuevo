@@ -146,8 +146,8 @@ public class Productos extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         panelCards = new javax.swing.JPanel();
         txtBuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
-        Añadir2 = new rojeru_san.RSButtonRiple();
         Añadir3 = new rojeru_san.RSButtonRiple();
+        Añadir2 = new RSMaterialComponent.RSButtonShape();
         Anterior = new rojeru_san.RSButtonRiple();
         Siguiente = new rojeru_san.RSButtonRiple();
         rSCheckBox1 = new rojerusan.RSCheckBox();
@@ -202,17 +202,6 @@ public class Productos extends javax.swing.JPanel {
         });
         jPanel2.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 430, 40));
 
-        Añadir2.setBackground(new java.awt.Color(46, 49, 82));
-        Añadir2.setText("Agregar Categoria");
-        Añadir2.setColorHover(new java.awt.Color(0, 153, 51));
-        Añadir2.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        Añadir2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Añadir2ActionPerformed(evt);
-            }
-        });
-        jPanel2.add(Añadir2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 90, 160, 40));
-
         Añadir3.setBackground(new java.awt.Color(46, 49, 82));
         Añadir3.setText("Filtros");
         Añadir3.setColorHover(new java.awt.Color(0, 153, 51));
@@ -222,7 +211,22 @@ public class Productos extends javax.swing.JPanel {
                 Añadir3ActionPerformed(evt);
             }
         });
-        jPanel2.add(Añadir3, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, 160, 40));
+        jPanel2.add(Añadir3, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, 90, 40));
+
+        Añadir2.setBackground(new java.awt.Color(46, 49, 82));
+        Añadir2.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        Añadir2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        Añadir2.setText(" Nuevo");
+        Añadir2.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        Añadir2.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        Añadir2.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        Añadir2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Añadir2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Añadir2ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(Añadir2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 90, 110, 40));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -50, 1400, 700));
         jPanel2.getAccessibleContext().setAccessibleName("");
@@ -342,13 +346,6 @@ public class Productos extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBuscarActionPerformed
 
-    private void Añadir2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir2ActionPerformed
-        nuevoProducto dialog = new nuevoProducto((JFrame) getTopLevelAncestor(), true, idCategoria, nombreCategoria);
-        dialog.setVisible(true);
-        cargarProductosDesdeBD(); // Recargar productos después de cerrar el diálogo
-
-    }//GEN-LAST:event_Añadir2ActionPerformed
-
     private void SiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SiguienteActionPerformed
         int totalPaginas = (int) Math.ceil((double) todosLosProductos.size() / PRODUCTOS_POR_PAGINA);
         if (currentPage < totalPaginas - 1) {
@@ -452,24 +449,22 @@ public class Productos extends javax.swing.JPanel {
             }
         } else {
             System.out.println("¡Ok, no borramos nada entonces!");
-        }
+        }//
     }//GEN-LAST:event_EliminarMouseClicked
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
       if (parentPanel != null) {
-        // Clear the parent panel
+        // Limpiar el panel padre
         parentPanel.removeAll();
-        
-        // Set the layout for the parent panel
         parentPanel.setLayout(new BorderLayout());
         
-        // Create a new instance of catalogo22 (non-modal)
-        catalogo22 catalogoPanel = new catalogo22((JFrame) getTopLevelAncestor(), false);
+        // Crear una nueva instancia de catalogo22 pasando el parentPanel
+        catalogo22 catalogoPanel = new catalogo22((JFrame) getTopLevelAncestor(), false, parentPanel);
         
-        // Add the catalogo22 panel to the parent panel
+        // Agregar el panel de categorías al panel padre
         parentPanel.add(catalogoPanel, BorderLayout.CENTER);
         
-        // Update the UI
+        // Actualizar la UI
         parentPanel.revalidate();
         parentPanel.repaint();
     } else {
@@ -481,6 +476,12 @@ public class Productos extends javax.swing.JPanel {
     }
     }//GEN-LAST:event_btnVolverActionPerformed
 
+    private void Añadir2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir2ActionPerformed
+          nuevoProducto dialog = new nuevoProducto((JFrame) getTopLevelAncestor(), true, idCategoria, nombreCategoria);
+        dialog.setVisible(true);
+        cargarProductosDesdeBD(); 
+    }//GEN-LAST:event_Añadir2ActionPerformed
+
     private void Añadir3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir3ActionPerformed
         if (filterPopup != null && !filterPopup.isVisible()) {
             filterPopup.show(Añadir3, 0, Añadir3.getHeight());
@@ -490,7 +491,7 @@ public class Productos extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple Anterior;
-    private rojeru_san.RSButtonRiple Añadir2;
+    private RSMaterialComponent.RSButtonShape Añadir2;
     private rojeru_san.RSButtonRiple Añadir3;
     private rojerusan.RSLabelIcon Eliminar;
     private rojeru_san.RSButtonRiple Siguiente;

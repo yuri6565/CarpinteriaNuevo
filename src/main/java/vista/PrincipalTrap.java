@@ -5,6 +5,7 @@
 package vista;
 
 import controlador.Ctrl_Perfil;
+import controlador.Ctrl_productocatalogo;
 import vista.Caja.Caja;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,10 +19,13 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import modelo.UsuarioModelo;
 import rojeru_san.RSButton;
@@ -38,7 +42,11 @@ import vista.catalogo.catalogo22;
  * @author Personal
  */
 public class PrincipalTrap extends javax.swing.JFrame {
-
+ private JScrollPane scrollPane;
+    private int idCategoria; // Guardar el ID de la categoría
+    private String nombreCategoria; // Guardar el nombre de la categoría
+    private Ctrl_productocatalogo controladorProducto; // Controlador para productos
+    private JPanel parentPanel;
     private JPanel submenuInventario;
     private boolean submenuVisible = false;
 // Botón "Materiales" del submenú
@@ -1173,9 +1181,12 @@ getHeight());
         if (!this.nueve.isSelected()) {
             deseleccionar();
             this.nueve.setSelected(true);
-
+   JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        
             // Crear y mostrar el panel de inventario
-            catalogo22 cat = new catalogo22(new javax.swing.JFrame(), true);
+  catalogo22 cat = new catalogo22(parentFrame, false, contenedor);
+
+        
 
             cat.setSize(1290, 730);
             cat.setLocation(0, 0);

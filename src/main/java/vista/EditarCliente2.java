@@ -277,7 +277,29 @@ municipiosPorDepartamento.put("Boyacá", new String[]{
             }
         }
     });
-
+// Validación para estado
+gh3.addFocusListener(new FocusAdapter() {
+    @Override
+    public void focusLost(FocusEvent e) {
+        if (gh3.getSelectedIndex() == 0) {
+            dirección2.setVisible(true);
+            dirección2.setText("Seleccione un estado válido");
+        } else {
+            dirección2.setVisible(false);
+        }
+    }
+});
+gh3.addKeyListener(new KeyAdapter() {
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            btnGuardar.doClick();
+        }
+        if (gh3.getSelectedIndex() != 0) {
+            dirección2.setVisible(false);
+        }
+    }
+});
     // Validación para municipio
     gh.addFocusListener(new FocusAdapter() {
         @Override
@@ -535,6 +557,10 @@ municipiosPorDepartamento.put("Boyacá", new String[]{
         dirección3 = new javax.swing.JLabel();
         identificaciontxt = new RSMaterialComponent.RSComboBoxMaterial();
         gh1 = new RSMaterialComponent.RSComboBoxMaterial();
+        gh3 = new RSMaterialComponent.RSComboBoxMaterial();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        dirección2 = new javax.swing.JLabel();
 
         btnGuardar2.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/x.png"))); // NOI18N
@@ -613,7 +639,7 @@ municipiosPorDepartamento.put("Boyacá", new String[]{
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 590, 140, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 680, 140, -1));
 
         btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar.setText("Guardar");
@@ -624,7 +650,7 @@ municipiosPorDepartamento.put("Boyacá", new String[]{
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 590, 140, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 680, 140, -1));
 
         numerotxt.setForeground(new java.awt.Color(0, 0, 0));
         numerotxt.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -847,15 +873,38 @@ municipiosPorDepartamento.put("Boyacá", new String[]{
         });
         jPanel1.add(gh1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, 200, 30));
 
+        gh3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", " ", " " }));
+        gh3.setColorMaterial(new java.awt.Color(29, 30, 51));
+        gh3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        gh3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gh3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(gh3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 590, 200, 30));
+
+        jLabel24.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel24.setText("Estado:");
+        jPanel1.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 570, -1, -1));
+
+        jLabel25.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel25.setText("*");
+        jPanel1.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 570, 20, -1));
+
+        dirección2.setForeground(new java.awt.Color(255, 51, 51));
+        dirección2.setText("jLabel2");
+        jPanel1.add(dirección2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 620, 200, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 565, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 575, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 661, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
         );
 
         pack();
@@ -885,6 +934,7 @@ Ctrl_Cliente controlador = new Ctrl_Cliente();
     String municipio = gh.getSelectedItem().toString().trim();
     String direccion = direcciontxt.getText().trim();
     String descripcionAdicional = direcciontxt2.getText().trim();
+    String estado = gh3.getSelectedItem().toString();
 
     // Validar campos obligatorios
     if (tipoIdentificacion.equals("Seleccionar")) {
@@ -908,11 +958,14 @@ Ctrl_Cliente controlador = new Ctrl_Cliente();
     if (direccion.isEmpty()) {
         errores.append("La dirección es obligatoria.\n");
     }
+    if (estado.equals("Seleccionar")) {
+        errores.append("Seleccione un estado válido.\n");
+    }
 
     // Validar formato del número
     int numero = 0;
     try {
-        numero = Integer.parseInt(numeroStr); // Corrección: usar numeroStr
+        numero = Integer.parseInt(numeroStr);
     } catch (NumberFormatException e) {
         errores.append("El número de identificación debe ser numérico.\n");
     }
@@ -942,7 +995,7 @@ Ctrl_Cliente controlador = new Ctrl_Cliente();
     cliente.setDepartamento(departamento.isEmpty() ? null : departamento);
     cliente.setMunicipio(municipio.isEmpty() ? null : municipio);
     cliente.setDireccion(direccion);
-    cliente.setActivo(true);
+    cliente.setActivo(estado.equals("Activo"));
 
     boolean success;
     String message;
@@ -1013,6 +1066,10 @@ Ctrl_Cliente controlador = new Ctrl_Cliente();
         // TODO add your handling code here:
     }//GEN-LAST:event_gh1ActionPerformed
 
+    private void gh3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gh3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_gh3ActionPerformed
+
     /**
      */
    public static void main(String args[]) {
@@ -1068,10 +1125,12 @@ Ctrl_Cliente controlador = new Ctrl_Cliente();
     private RSMaterialComponent.RSTextFieldMaterial direcciontxt2;
     private javax.swing.JLabel dirección;
     private javax.swing.JLabel dirección1;
+    private javax.swing.JLabel dirección2;
     private javax.swing.JLabel dirección3;
     private javax.swing.JLabel dirección4;
     private RSMaterialComponent.RSComboBoxMaterial gh;
     private RSMaterialComponent.RSComboBoxMaterial gh1;
+    private RSMaterialComponent.RSComboBoxMaterial gh3;
     private RSMaterialComponent.RSComboBoxMaterial identificaciontxt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1088,6 +1147,8 @@ Ctrl_Cliente controlador = new Ctrl_Cliente();
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
@@ -1111,7 +1172,7 @@ private void loadClientData() {
     if (cliente != null) {
         System.out.println("Cargando datos - ID: " + cliente.getId_cliente() + ", Nombre: " + cliente.getNombre() + 
                           ", Departamento: '" + cliente.getDepartamento() + "', Municipio: '" + cliente.getMunicipio() + 
-                          "', Dirección: '" + cliente.getDireccion() + "'");
+                          "', Dirección: '" + cliente.getDireccion() + "', Estado: " + (cliente.isActivo() ? "Activo" : "Inactivo"));
 
         identificaciontxt.setSelectedItem(cliente.getIdentificacion() != null ? cliente.getIdentificacion() : "Seleccionar");
         numerotxt.setText(String.valueOf(cliente.getId_cliente()));
@@ -1120,19 +1181,17 @@ private void loadClientData() {
         telefonotxt.setText(cliente.getTelefono() != null ? cliente.getTelefono() : "");
         telefonotxt1.setText(cliente.getTelefono2() != null ? cliente.getTelefono2() : "");
 
-        // Usar valor predeterminado si departamento está vacío
         String departamento = cliente.getDepartamento() != null && !cliente.getDepartamento().isEmpty() ? 
                              cliente.getDepartamento() : "Bogotá DC";
         System.out.println("Seleccionando departamento: '" + departamento + "'");
         gh1.setSelectedItem(departamento);
         String[] municipios = municipiosPorDepartamento.getOrDefault(departamento, new String[]{"Seleccione"});
         if (municipios.length == 1 && municipios[0].equals("Seleccione")) {
-            municipios = new String[]{"Usaquén", "Chapinero"}; // Fallback
+            municipios = new String[]{"Usaquén", "Chapinero"};
         }
         System.out.println("Municipios disponibles: " + String.join(", ", municipios));
         gh.setModel(new javax.swing.DefaultComboBoxModel(municipios));
 
-        // Usar valor predeterminado si municipio está vacío
         String municipio = cliente.getMunicipio() != null && !cliente.getMunicipio().isEmpty() ? 
                           cliente.getMunicipio() : "Usaquén";
         System.out.println("Seleccionando municipio: '" + municipio + "'");
@@ -1142,10 +1201,14 @@ private void loadClientData() {
         System.out.println("Cargando dirección: '" + direccion + "'");
         direcciontxt.setText(direccion);
 
+        // Cargar estado
+        gh3.setSelectedItem(cliente.isActivo() ? "Activo" : "Inactivo");
+
         SwingUtilities.invokeLater(() -> {
             gh1.repaint();
             gh.repaint();
             direcciontxt.repaint();
+            gh3.repaint();
         });
     } else {
         System.out.println("Cliente es null, no se cargan datos.");

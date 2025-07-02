@@ -6,6 +6,7 @@ package vista;
 
 import controlador.Ctrl_InventarioMaterial;
 import controlador.Ctrl_Perfil;
+import controlador.Ctrl_productocatalogo;
 import java.awt.BasicStroke;
 import vista.Caja.Caja;
 import java.awt.BorderLayout;
@@ -43,6 +44,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import modelo.MaterialDatos;
@@ -62,7 +64,11 @@ import vista.catalogo.catalogo22;
  * @author Personal
  */
 public class Principal extends javax.swing.JFrame {
-
+ private JScrollPane scrollPane;
+    private int idCategoria; // Guardar el ID de la categoría
+    private String nombreCategoria; // Guardar el nombre de la categoría
+    private Ctrl_productocatalogo controladorProducto; // Controlador para productos
+    private JPanel parentPanel;
     private JPanel submenuInventario;
     private boolean submenuVisible = false;
 // Botón "Materiales" del submenú
@@ -567,7 +573,7 @@ private void cargarImagenAvatar() {
                                                        Image.SCALE_SMOOTH);
             rSLabelCircleImage1.setIcon(new ImageIcon(img));
         } else {
-            rSLabelCircleImage1.setIcon(new ImageIcon(getClass().getResource("/profile_image.png"))); // Imagen por defecto
+          // Imagen por defecto
         }
     }
 
@@ -575,87 +581,85 @@ private void cargarImagenAvatar() {
         cargarImagenAvatar(); // Reutiliza el método para actualizar
     }
 
-    private void configurarPopupMenu() {
-        JPopupMenu userPopupMenu = new JPopupMenu();
-        userPopupMenu.setOpaque(false);
-        userPopupMenu.setBackground(new Color(255, 255, 255));
-        userPopupMenu.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+  private void configurarPopupMenu() {
+    JPopupMenu userPopupMenu = new JPopupMenu();
+    userPopupMenu.setOpaque(false);
+    userPopupMenu.setBackground(new Color(255, 255, 255));
+    userPopupMenu.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
 
-        // Crear los ítems del menú  
-        JMenuItem settingsItem = new JMenuItem("Configuraciones");
-        JMenuItem profileItem = new JMenuItem("Perfil");
-        JMenuItem messagesItem = new JMenuItem("Mensajes");
-        JMenuItem logoutItem = new JMenuItem("Salir");
+    // Crear los ítems del menú  
+    JMenuItem settingsItem = new JMenuItem("Configuraciones");
+    JMenuItem profileItem = new JMenuItem("Perfil");
+    JMenuItem messagesItem = new JMenuItem("Mensajes");
+    JMenuItem logoutItem = new JMenuItem("Salir");
 
-        // Personalizar los ítems
-        Font menuFont = new Font("Arial", Font.PLAIN, 14);
-        Dimension itemSize = new Dimension(150, 30);
+    // Personalizar los ítems
+    Font menuFont = new Font("Arial", Font.PLAIN, 14);
+    Dimension itemSize = new Dimension(150, 30);
 
-        settingsItem.setFont(menuFont);
-        settingsItem.setForeground(new Color(100, 100, 100));
-        settingsItem.setBackground(new Color(255, 255, 255));
-        settingsItem.setOpaque(false);
-        settingsItem.setPreferredSize(itemSize);
-        settingsItem.setBorderPainted(false);
+    settingsItem.setFont(menuFont);
+    settingsItem.setForeground(new Color(100, 100, 100));
+    settingsItem.setBackground(new Color(255, 255, 255));
+    settingsItem.setOpaque(false);
+    settingsItem.setPreferredSize(itemSize);
+    settingsItem.setBorderPainted(false);
 
-        profileItem.setFont(menuFont);
-        profileItem.setForeground(new Color(100, 100, 100));
-        profileItem.setBackground(new Color(255, 255, 255));
-        profileItem.setOpaque(false);
-        profileItem.setPreferredSize(itemSize);
-        profileItem.setBorderPainted(false);
+    profileItem.setFont(menuFont);
+    profileItem.setForeground(new Color(100, 100, 100));
+    profileItem.setBackground(new Color(255, 255, 255));
+    profileItem.setOpaque(false);
+    profileItem.setPreferredSize(itemSize);
+    profileItem.setBorderPainted(false);
 
-        messagesItem.setFont(menuFont);
-        messagesItem.setForeground(new Color(100, 100, 100));
-        messagesItem.setBackground(new Color(255, 255, 255));
-        messagesItem.setOpaque(false);
-        messagesItem.setPreferredSize(itemSize);
-        messagesItem.setBorderPainted(false);
+    messagesItem.setFont(menuFont);
+    messagesItem.setForeground(new Color(100, 100, 100));
+    messagesItem.setBackground(new Color(255, 255, 255));
+    messagesItem.setOpaque(false);
+    messagesItem.setPreferredSize(itemSize);
+    messagesItem.setBorderPainted(false);
 
-        logoutItem.setFont(menuFont);
-        logoutItem.setForeground(new Color(100, 100, 100));
-        logoutItem.setBackground(new Color(255, 255, 255));
-        logoutItem.setOpaque(false);
-        logoutItem.setPreferredSize(itemSize);
-        logoutItem.setBorderPainted(false);
+    logoutItem.setFont(menuFont);
+    logoutItem.setForeground(new Color(100, 100, 100));
+    logoutItem.setBackground(new Color(255, 255, 255));
+    logoutItem.setOpaque(false);
+    logoutItem.setPreferredSize(itemSize);
+    logoutItem.setBorderPainted(false);
 
-        // Agregar ítems al menú  
-        userPopupMenu.add(settingsItem);
-        userPopupMenu.add(profileItem);
-        userPopupMenu.add(messagesItem);
-        userPopupMenu.add(logoutItem);
+    // Agregar ítems al menú  
+    userPopupMenu.add(settingsItem);
+    userPopupMenu.add(profileItem);
+    userPopupMenu.add(messagesItem);
+    userPopupMenu.add(logoutItem);
 
-        // Mostrar el JPopupMenu al hacer clic en rSLabelCircleImage1  
-        rSLabelCircleImage1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cargarImagenAvatar(); // Actualizar imagen antes de mostrar el menú
-                userPopupMenu.show(rSLabelCircleImage1, 0, rSLabelCircleImage1.getHeight());
-            }
-        });
+    // Mostrar el JPopupMenu al hacer clic en rSLabelCircleImage1  
+    rSLabelCircleImage1.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            cargarImagenAvatar(); // Actualizar imagen antes de mostrar el menú
+            userPopupMenu.show(rSLabelCircleImage1, 0, rSLabelCircleImage1.getHeight());
+        }
+    });
 
-        // Acciones de los ítems del menú  
-        settingsItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Abriendo configuración..."));
-        profileItem.addActionListener(e -> {
-            if (perfilPanel == null) {
-                perfilPanel = new perfil1(idUsuario);
-                perfilPanel.setSize(1290, 730);
-                perfilPanel.setLocation(0, 0);
-                contenedor.removeAll();
-                contenedor.add(perfilPanel);
-            } else {
-                perfilPanel.cargarPerfil(); // Recarga los datos
-            }
-            contenedor.revalidate();
-            contenedor.repaint();
-        });
-        messagesItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Abriendo mensajes..."));
-        logoutItem.addActionListener(e -> {
-            dispose(); // Cerrar la ventana actual
-            Login1121 login = new Login1121();
-            login.setVisible(true);
-        });
-    }
+    // Acciones de los ítems del menú  
+    settingsItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Abriendo configuración..."));
+    profileItem.addActionListener(e -> {
+        // Crear una nueva instancia de perfil1 cada vez
+        perfil1 perfilPanel = new perfil1(idUsuario);
+        perfilPanel.setSize(1290, 730);
+        perfilPanel.setLocation(0, 0);
+        contenedor.removeAll();
+        contenedor.add(perfilPanel);
+        contenedor.revalidate();
+        contenedor.repaint();
+        lblTituloPrincipal.setText("Perfil");
+    });
+    messagesItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Abriendo mensajes..."));
+    logoutItem.addActionListener(e -> {
+        dispose(); // Cerrar la ventana actual
+        Login1121 login = new Login1121();
+        login.setVisible(true);
+    });
+}
 
     private void animacion() {
         int posicion = jPanel3.getX();
@@ -1953,9 +1957,11 @@ private void cargarImagenAvatar() {
         if (!this.nueve.isSelected()) {
             deseleccionar();
             this.nueve.setSelected(true);
-
+JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        
             // Crear y mostrar el panel de inventario
-            catalogo22 cat = new catalogo22(new javax.swing.JFrame(), true);
+  catalogo22 cat = new catalogo22(parentFrame, false, contenedor);
+            // Crear y mostrar el panel de inventario
 
             cat.setSize(1290, 730);
             cat.setLocation(0, 0);
@@ -1964,7 +1970,7 @@ private void cargarImagenAvatar() {
             contenedor.add(cat);
             contenedor.revalidate();
             contenedor.repaint();
-            lblTituloPrincipal.setText("Gestión de Usuarios");
+            lblTituloPrincipal.setText("Catálogo");
 
         }
         animacion();

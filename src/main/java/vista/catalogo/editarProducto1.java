@@ -8,6 +8,8 @@ import controlador.Ctrl_productocatalogo;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.MediaTracker;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -35,7 +37,7 @@ import javax.swing.event.DocumentListener;
 import modelo.Catalogocategoria;
 import modelo.Categoria;
 import modelo.catalogoproducto;
-
+import vista.catalogo.Productos;
 public class editarProducto1 extends javax.swing.JDialog {
 
     private String rutaImagenSeleccionada;
@@ -54,6 +56,7 @@ public class editarProducto1 extends javax.swing.JDialog {
         this.nombreCategoria = nombreCategoria != null ? nombreCategoria : "Categoría desconocida";
         this.producto = producto; // Asignar el producto a editar
         initComponents();
+        this.setLocationRelativeTo(null); // Centrar el diálogo
 
         jlabelnombre.setVisible(false);
         jlabelalto.setVisible(false);
@@ -112,6 +115,9 @@ public class editarProducto1 extends javax.swing.JDialog {
         if (producto != null) {
             cargarDatosProducto();
         }
+
+        // Agregar validaciones en tiempo real
+        agregarValidaciones();
 
         System.out.println("etiquetasImagenes inicializado con " + etiquetasImagenes.length + " elementos, etiquetasIconos con " + etiquetasIconos.length + " elementos");
     }
@@ -378,6 +384,207 @@ public class editarProducto1 extends javax.swing.JDialog {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    private void agregarValidaciones() {
+        // Validación para txtNombre
+        txtNombre.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (txtNombre.getText().trim().isEmpty()) {
+                    jlabelnombre.setText("Este campo es obligatorio");
+                    jlabelnombre.setForeground(Color.RED);
+                    jlabelnombre.setVisible(true);
+                } else {
+                    jlabelnombre.setVisible(false);
+                    jlabelnombre.setText("TIPO");
+                }
+            }
+        });
+        txtNombre.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (!txtNombre.getText().trim().isEmpty()) {
+                    jlabelnombre.setVisible(false);
+                    jlabelnombre.setText("TIPO");
+                }
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    txtNombre13.requestFocusInWindow();
+                }
+            }
+        });
+
+        // Validación para txtNombre13 (Alto)
+        txtNombre13.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                String texto = txtNombre13.getText().trim();
+                if (!texto.isEmpty() && !esMedidaValida(texto)) {
+                    jlabelalto.setText("Formato inválido. Ej: '10.5 cm'");
+                    jlabelalto.setForeground(Color.RED);
+                    jlabelalto.setVisible(true);
+                } else {
+                    jlabelalto.setVisible(false);
+                    jlabelalto.setText("TIPO");
+                }
+            }
+        });
+        txtNombre13.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (esMedidaValida(txtNombre13.getText().trim())) {
+                    jlabelalto.setVisible(false);
+                    jlabelalto.setText("TIPO");
+                }
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    txtNombre3.requestFocusInWindow();
+                }
+            }
+        });
+
+        // Validación para txtNombre3 (Ancho)
+        txtNombre3.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                String texto = txtNombre3.getText().trim();
+                if (!texto.isEmpty() && !esMedidaValida(texto)) {
+                    jlabelalto.setText("Formato inválido. Ej: '10.5 cm'");
+                    jlabelalto.setForeground(Color.RED);
+                    jlabelalto.setVisible(true);
+                } else {
+                    jlabelalto.setVisible(false);
+                    jlabelalto.setText("TIPO");
+                }
+            }
+        });
+        txtNombre3.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (esMedidaValida(txtNombre3.getText().trim())) {
+                    jlabelalto.setVisible(false);
+                    jlabelalto.setText("TIPO");
+                }
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    txtNombre1.requestFocusInWindow();
+                }
+            }
+        });
+
+        // Validación para txtNombre1 (Profundidad)
+        txtNombre1.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                String texto = txtNombre1.getText().trim();
+                if (!texto.isEmpty() && !esMedidaValida(texto)) {
+                    jlabelalto.setText("Formato inválido. Ej: '10.5 cm'");
+                    jlabelalto.setForeground(Color.RED);
+                    jlabelalto.setVisible(true);
+                } else {
+                    jlabelalto.setVisible(false);
+                    jlabelalto.setText("TIPO");
+                }
+            }
+        });
+        txtNombre1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (esMedidaValida(txtNombre1.getText().trim())) {
+                    jlabelalto.setVisible(false);
+                    jlabelalto.setText("TIPO");
+                }
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    jTextArea1.requestFocusInWindow();
+                }
+            }
+        });
+
+        // Validación para txtcolor
+        txtcolor.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (txtcolor.getText().trim().isEmpty()) {
+                    jlabelcolor.setText("Este campo es obligatorio");
+                    jlabelcolor.setForeground(Color.RED);
+                    jlabelcolor.setVisible(true);
+                } else {
+                    jlabelcolor.setVisible(false);
+                    jlabelcolor.setText("TIPO");
+                }
+            }
+        });
+        txtcolor.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (!txtcolor.getText().trim().isEmpty()) {
+                    jlabelcolor.setVisible(false);
+                    jlabelcolor.setText("TIPO");
+                }
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    txtmaterial1.requestFocusInWindow();
+                }
+            }
+        });
+
+        // Validación para txtmaterial1
+        txtmaterial1.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (txtmaterial1.getText().trim().isEmpty()) {
+                    jlabelma.setText("Este campo es obligatorio");
+                    jlabelma.setForeground(Color.RED);
+                    jlabelma.setVisible(true);
+                } else {
+                    jlabelma.setVisible(false);
+                    jlabelma.setText("TIPO");
+                }
+            }
+        });
+        txtmaterial1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (!txtmaterial1.getText().trim().isEmpty()) {
+                    jlabelma.setVisible(false);
+                    jlabelma.setText("TIPO");
+                }
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    btnGuardar.doClick();
+                }
+            }
+        });
+
+        // Validación para jTextArea1 (Descripción, opcional)
+        jTextArea1.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                // Descripción es opcional, no se valida
+            }
+        });
+        jTextArea1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    txtcolor.requestFocusInWindow();
+                }
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -697,7 +904,7 @@ public class editarProducto1 extends javax.swing.JDialog {
     }//GEN-LAST:event_txtmaterial1ActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        agregarOcultadorDeErrores(txtNombre, jlabelnombre);
+       agregarOcultadorDeErrores(txtNombre, jlabelnombre);
         agregarOcultadorDeErrores(txtcolor, jlabelcolor);
         agregarOcultadorDeErrores(txtmaterial1, jlabelma);
 
@@ -741,11 +948,10 @@ public class editarProducto1 extends javax.swing.JDialog {
             hayErrores = true;
         }
 
-        if (imagenesBytes.isEmpty()) {
-            int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea continuar sin imágenes?", "Confirmación", JOptionPane.YES_NO_OPTION);
-            if (respuesta != JOptionPane.YES_OPTION) {
-                return;
-            }
+        // Validar mínimo dos imágenes
+        if (imagenesBytes.size() < 2) {
+            JOptionPane.showMessageDialog(this, "Se requieren al menos dos imágenes para guardar el producto.", "Error", JOptionPane.ERROR_MESSAGE);
+            hayErrores = true;
         }
 
         if (hayErrores) {
@@ -772,10 +978,11 @@ public class editarProducto1 extends javax.swing.JDialog {
             if (getParent() instanceof Productos) {
                 ((Productos) getParent()).cargarProductosDesdeBD();
             }
-            dispose();
+dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Error al actualizar el producto.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed

@@ -55,113 +55,105 @@ private int idproveedor;
         TemaManager.getInstance().addThemeChangeListener(this::aplicarTema);
     }
 
-    public void cargartablaproveedores() {
-        tablaclientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+   public void cargartablaproveedores() {
+    tablaclientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        DefaultTableModel model = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int fila, int columna) {
-                return columna == 0 || columna == 8 || columna == 9; // "Seleccionar", "Productos", and "Acciones"
-            }
-
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex == 0) return Boolean.class;
-                if (columnIndex == 8) return ProductCell.class;
-                return String.class;
-            }
-        };
-
-        model.addColumn("Seleccionar");
-        model.addColumn("Código");
-        model.addColumn("Nombres");
-        model.addColumn("Email");
-        model.addColumn("Teléfono");
-        model.addColumn("Dirección");
-        model.addColumn("Estado");
-        model.addColumn("Ubicación");
-        model.addColumn("Productos");
-        model.addColumn("Acciones");
-
-        List<ProveedorDatos> proveedores = proveedorContro.obtenerProveedoresConProductos();
-        todosLosProveedores = new ArrayList<>(proveedores);
-        System.out.println("Número de proveedores cargados: " + todosLosProveedores.size());
-
-        seleccionados = new boolean[todosLosProveedores.size()];
-
-        for (ProveedorDatos proveedor : todosLosProveedores) {
-            System.out.println("Proveedor ID: " + proveedor.getId_proveedor() +
-                    ", Nombre: " + proveedor.getNombre() +
-                    ", Apellido: " + proveedor.getApellido() +
-                    ", Departamento: " + proveedor.getDepartamento() +
-                    ", Municipio: " + proveedor.getMunicipio() +
-                    ", Productos: " + proveedor.getProductos());
-
-            List<String> productos = proveedor.getProductos();
-            if (productos == null || productos.isEmpty()) {
-                productos = proveedorContro.obtenerProductosDeProveedor(proveedor.getId_proveedor());
-                System.out.println("Productos fallback para " + proveedor.getId_proveedor() + ": " + productos);
-            }
-            String productosResumen = (productos != null && !productos.isEmpty()) ? 
-                    (productos.size() > 2 ? String.join(", ", productos.subList(0, 2)) + " + (" + (productos.size() - 2) + " más)" : String.join(", ", productos)) : 
-                    "Sin productos";
-            String ubicacion = (proveedor.getDepartamento() != null ? proveedor.getDepartamento() : "Sin departamento") + "/" +
-                    (proveedor.getMunicipio() != null ? proveedor.getMunicipio() : "Sin municipio");
-            String nombreCompleto = (proveedor.getNombre() != null ? proveedor.getNombre() : "Sin nombre") + " " +
-                    (proveedor.getApellido() != null ? proveedor.getApellido() : "Sin apellido");
-            model.addRow(new Object[]{
-                    false,
-                    proveedor.getId_proveedor(),
-                    nombreCompleto,
-                    proveedor.getCorreo_electronico(),
-                    proveedor.getTelefono(),
-                    proveedor.getDireccion(),
-                    proveedor.getEstado(),
-                    ubicacion,
-                    new ProductCell(productosResumen, productos), // Store ProductCell for editor
-                    "Ver Productos"
-            });
+    DefaultTableModel model = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int fila, int columna) {
+            return columna == 0 || columna == 8 || columna == 9; // "Seleccionar", "Productos", and "Acciones"
         }
 
-        tablaclientes.setModel(model);
-        mostrarPagina(currentPage);
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            if (columnIndex == 0) return Boolean.class;
+            if (columnIndex == 8) return ProductCell.class;
+            return String.class;
+        }
+    };
 
-        // Configurar renderers y editores
-        tablaclientes.getColumnModel().getColumn(0).setCellRenderer(new CustomCheckboxRenderer());
-        tablaclientes.getColumnModel().getColumn(0).setCellEditor(new CustomCheckboxEditor());
-        tablaclientes.getColumnModel().getColumn(8).setCellRenderer(new ProductCellRenderer());
-        tablaclientes.getColumnModel().getColumn(8).setCellEditor(new ProductCellEditor());
-        tablaclientes.getColumnModel().getColumn(9).setCellRenderer(new ButtonPanelRenderer());
-        tablaclientes.getColumnModel().getColumn(9).setCellEditor(new ButtonPanelEditor(new JCheckBox()));
+    model.addColumn("Seleccionar");
+    model.addColumn("Código");
+    model.addColumn("Nombres");
+    model.addColumn("Email");
+    model.addColumn("Teléfono");
+    model.addColumn("Dirección");
+    model.addColumn("Estado");
+    model.addColumn("Ubicación");
+    model.addColumn("Productos");
+    model.addColumn("Acciones");
 
-        // Ajustar anchos basados en la imagen (aproximados en píxeles)
-        tablaclientes.getColumnModel().getColumn(0).setPreferredWidth(120);
-        tablaclientes.getColumnModel().getColumn(1).setPreferredWidth(130);
-        tablaclientes.getColumnModel().getColumn(2).setPreferredWidth(250);
-        tablaclientes.getColumnModel().getColumn(3).setPreferredWidth(240);
-        tablaclientes.getColumnModel().getColumn(4).setPreferredWidth(130);
-        tablaclientes.getColumnModel().getColumn(5).setPreferredWidth(180);
-        tablaclientes.getColumnModel().getColumn(6).setPreferredWidth(80);
-        tablaclientes.getColumnModel().getColumn(7).setPreferredWidth(200);
-        tablaclientes.getColumnModel().getColumn(8).setPreferredWidth(115);
-        tablaclientes.getColumnModel().getColumn(9).setPreferredWidth(80);
-        tablaclientes.setRowHeight(29);
+    List<ProveedorDatos> proveedores = proveedorContro.obtenerProveedoresConProductos();
+    todosLosProveedores = new ArrayList<>(proveedores);
+    System.out.println("Número de proveedores cargados: " + todosLosProveedores.size());
 
-        tablaclientes.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int fila_point = tablaclientes.rowAtPoint(e.getPoint());
-                if (fila_point > -1) {
-                    try {
-                        id_proveedor = Integer.parseInt(tablaclientes.getValueAt(fila_point, 1).toString());
-                    } catch (NumberFormatException ex) {
-                        System.out.println("Error al parsear id_proveedor: " + ex.getMessage());
-                    }
-                }
-            }
+    seleccionados = new boolean[todosLosProveedores.size()];
+
+    for (ProveedorDatos proveedor : todosLosProveedores) {
+        List<String> productos = proveedor.getProductos();
+        if (productos == null || productos.isEmpty()) {
+            productos = proveedorContro.obtenerProductosDeProveedor(proveedor.getId_proveedor());
+        }
+        String productosResumen = (productos != null && !productos.isEmpty()) ? 
+                (productos.size() > 2 ? String.join(", ", productos.subList(0, 2)) + " + (" + (productos.size() - 2) + " más)" : String.join(", ", productos)) : 
+                "Sin productos";
+        String ubicacion = (proveedor.getDepartamento() != null ? proveedor.getDepartamento() : "Sin departamento") + "/" +
+                (proveedor.getMunicipio() != null ? proveedor.getMunicipio() : "Sin municipio");
+        String nombreCompleto = (proveedor.getNombre() != null ? proveedor.getNombre() : "Sin nombre") + " " +
+                (proveedor.getApellido() != null ? proveedor.getApellido() : "Sin apellido");
+        model.addRow(new Object[]{
+            false,
+            proveedor.getId_proveedor(),
+            nombreCompleto,
+            proveedor.getCorreo_electronico(),
+            proveedor.getTelefono(),
+            proveedor.getDireccion(),
+            proveedor.getEstado(), // Ensure this is "Activo" or "Inactivo"
+            ubicacion,
+            new ProductCell(productosResumen, productos),
+            "Ver Productos"
         });
     }
 
+    tablaclientes.setModel(model);
+    mostrarPagina(currentPage);
+
+    // Configurar renderers y editores
+    tablaclientes.getColumnModel().getColumn(0).setCellRenderer(new CustomCheckboxRenderer());
+    tablaclientes.getColumnModel().getColumn(0).setCellEditor(new CustomCheckboxEditor());
+    tablaclientes.getColumnModel().getColumn(6).setCellRenderer(new StateCellRenderer()); // Add renderer for Estado
+    tablaclientes.getColumnModel().getColumn(8).setCellRenderer(new ProductCellRenderer());
+    tablaclientes.getColumnModel().getColumn(8).setCellEditor(new ProductCellEditor());
+    tablaclientes.getColumnModel().getColumn(9).setCellRenderer(new ButtonPanelRenderer());
+    tablaclientes.getColumnModel().getColumn(9).setCellEditor(new ButtonPanelEditor(new JCheckBox()));
+
+    // Ajustar anchos basados en la imagen (aproximados en píxeles)
+    tablaclientes.getColumnModel().getColumn(0).setPreferredWidth(120);
+    tablaclientes.getColumnModel().getColumn(1).setPreferredWidth(130);
+    tablaclientes.getColumnModel().getColumn(2).setPreferredWidth(250);
+    tablaclientes.getColumnModel().getColumn(3).setPreferredWidth(240);
+    tablaclientes.getColumnModel().getColumn(4).setPreferredWidth(130);
+    tablaclientes.getColumnModel().getColumn(5).setPreferredWidth(180);
+    tablaclientes.getColumnModel().getColumn(6).setPreferredWidth(80); // Adjusted for Estado
+    tablaclientes.getColumnModel().getColumn(7).setPreferredWidth(200);
+    tablaclientes.getColumnModel().getColumn(8).setPreferredWidth(115);
+    tablaclientes.getColumnModel().getColumn(9).setPreferredWidth(80);
+    tablaclientes.setRowHeight(29);
+
+    tablaclientes.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            int fila_point = tablaclientes.rowAtPoint(e.getPoint());
+            if (fila_point > -1) {
+                try {
+                    id_proveedor = Integer.parseInt(tablaclientes.getValueAt(fila_point, 1).toString());
+                } catch (NumberFormatException ex) {
+                    System.out.println("Error al parsear id_proveedor: " + ex.getMessage());
+                }
+            }
+        }
+    });
+}
     private void mostrarPagina(int pagina) {
         DefaultTableModel model = (DefaultTableModel) tablaclientes.getModel();
         model.setRowCount(0);
@@ -1102,6 +1094,54 @@ class ProductCellEditor extends DefaultCellEditor {
         return currentCell;
     }
 }
+class StateCellRenderer extends JPanel implements TableCellRenderer {
+    private final javax.swing.JLabel label;
 
+    public StateCellRenderer() {
+        setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        setOpaque(true);
+        label = new javax.swing.JLabel();
+        label.setFont(new Font("Tahoma", Font.BOLD, 12)); // Bold for emphasis
+        add(label);
+
+        updateTheme();
+        TemaManager.getInstance().addThemeChangeListener(this::updateTheme);
+    }
+
+    private void updateTheme() {
+        boolean oscuro = TemaManager.getInstance().isOscuro();
+        Color fondoBase = oscuro ? new Color(21, 21, 33) : Color.WHITE;
+        Color textoActivo = new Color(0, 128, 0); // Green for Activo
+        Color textoInactivo = new Color(100, 100, 100); // Gray for Inactivo
+        setBackground(fondoBase);
+        label.setForeground(textoActivo); // Default to Activo color
+    }
+
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
+            boolean isSelected, boolean hasFocus, int row, int column) {
+        String estado = (value != null) ? value.toString() : "";
+        label.setText(estado);
+
+        if (isSelected) {
+            setBackground(new Color(240, 240, 240));
+            label.setForeground(Color.BLUE); // Highlight selected row
+        } else {
+            updateTheme();
+            if ("Inactivo".equalsIgnoreCase(estado)) {
+                label.setForeground(new Color(100, 100, 100)); // Gray text for Inactivo
+                setBackground(new Color(200, 200, 200, 100)); // Semi-transparent gray background
+            } else if ("Activo".equalsIgnoreCase(estado)) {
+                label.setForeground(new Color(0, 128, 0)); // Green for Activo
+                setBackground(new Color(204, 255, 204, 50)); // Light green background
+            } else {
+                label.setForeground(Color.GRAY); // Default for unknown states
+                setBackground(getBackground()); // Use base theme color
+            }
+        }
+        return this;
+    }
+
+}
 
 }

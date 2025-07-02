@@ -77,10 +77,8 @@ public class Ctrl_Perfil {
         }
         return exito;
     }
-    
-    
-    
-public boolean guardar(UsuarioModelo objeto) {
+
+    public boolean guardar(UsuarioModelo objeto) {
         if (objeto.getId_usuario() <= 0) {
             JOptionPane.showMessageDialog(null, "ID de usuario inválido.");
             return false;
@@ -96,7 +94,6 @@ public boolean guardar(UsuarioModelo objeto) {
             consulta.setString(4, objeto.getNombre());
             consulta.setString(5, objeto.getApellido());
             consulta.setString(6, objeto.getUsuario());
-            // Hash the password before storing
             String hashedPassword = Conexion.hashSHA256(objeto.getContrasena());
             if (hashedPassword == null) {
                 JOptionPane.showMessageDialog(null, "Error al encriptar la contraseña.");
@@ -167,23 +164,17 @@ public boolean guardar(UsuarioModelo objeto) {
         boolean respuesta = false;
         try (Connection con = Conexion.getConnection();
              PreparedStatement consulta = con.prepareStatement(
-                 "UPDATE usuario SET id_usuario = ?, tipodeiden = ?, imagen = ?, nombre = ?, apellido = ?, usuario = ?, contrasena = ?, correo_electronico = ?, telefono = ?, rol = ? WHERE id_usuario = ?")) {
+                 "UPDATE usuario SET id_usuario = ?, tipodeiden = ?, imagen = ?, nombre = ?, apellido = ?, usuario = ?, correo_electronico = ?, telefono = ?, rol = ? WHERE id_usuario = ?")) {
             consulta.setInt(1, objeto.getId_usuario());
             consulta.setString(2, objeto.getTipodeiden());
             consulta.setBytes(3, objeto.getImagen());
             consulta.setString(4, objeto.getNombre());
             consulta.setString(5, objeto.getApellido());
             consulta.setString(6, objeto.getUsuario());
-            String hashedPassword = Conexion.hashSHA256(objeto.getContrasena());
-            if (hashedPassword == null) {
-                JOptionPane.showMessageDialog(null, "Error al encriptar la contraseña.");
-                return false;
-            }
-            consulta.setString(7, hashedPassword);
-            consulta.setString(8, objeto.getCorreo_electronico());
-            consulta.setString(9, objeto.getTelefono());
-            consulta.setString(10, objeto.getRol());
-            consulta.setInt(11, id_usuario);
+            consulta.setString(7, objeto.getCorreo_electronico());
+            consulta.setString(8, objeto.getTelefono());
+            consulta.setString(9, objeto.getRol());
+            consulta.setInt(10, id_usuario);
 
             respuesta = consulta.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -234,4 +225,3 @@ public boolean guardar(UsuarioModelo objeto) {
         return existe;
     }
 }
-

@@ -64,6 +64,49 @@ public class VistaClientes extends javax.swing.JPanel {
     });
     aplicarTema();
     TemaManager.getInstance().addThemeChangeListener(this::aplicarTema);
+
+    // Agregar DocumentListener para búsqueda dinámica
+    txtBuscar.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+        @Override
+        public void insertUpdate(javax.swing.event.DocumentEvent e) {
+            buscarDinamico();
+        }
+
+        @Override
+        public void removeUpdate(javax.swing.event.DocumentEvent e) {
+            buscarDinamico();
+        }
+
+        @Override
+        public void changedUpdate(javax.swing.event.DocumentEvent e) {
+            buscarDinamico();
+        }
+    });
+}
+   
+  private void buscarDinamico() {
+    String textoBusqueda = txtBuscar.getText().trim();
+    if (textoBusqueda.isEmpty()) {
+        todasLasClientes = new ArrayList<>(controlador.obtenerClientes());
+        seleccionados = new boolean[todasLasClientes.size()];
+        currentPage = 0;
+        mostrarPagina(currentPage);
+        return;
+    }
+
+    // Buscar por todos los campos
+    List<Cliente> resultados = controlador.buscarClientePorTodos(textoBusqueda);
+    if (!resultados.isEmpty()) {
+        todasLasClientes = new ArrayList<>(resultados);
+        seleccionados = new boolean[todasLasClientes.size()];
+        currentPage = 0;
+        mostrarPagina(currentPage);
+    } else {
+        JOptionPane.showMessageDialog(this, "No se encontraron clientes con el texto: " + textoBusqueda, "No encontrado", JOptionPane.WARNING_MESSAGE);
+        todasLasClientes = new ArrayList<>();
+        seleccionados = new boolean[todasLasClientes.size()];
+        mostrarPagina(currentPage);
+    }
 }
 public void cargartablaclientes() {
     tablaclientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -700,7 +743,41 @@ rSButtonMaterialRippleIcon1.setBackground(new Color(242, 247, 255));
     }//GEN-LAST:event_btnNuevo1ActionPerformed
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
-        // TODO add your handling code here:
+    String textoBusqueda = txtBuscar.getText().trim();
+    if (textoBusqueda.isEmpty()) {
+        todasLasClientes = new ArrayList<>(controlador.obtenerClientes());
+        currentPage = 0;
+        seleccionados = new boolean[todasLasClientes.size()];
+        mostrarPagina(currentPage);
+        return;
+    }
+
+    try {
+        int codigo = Integer.parseInt(textoBusqueda);
+        Cliente cliente = controlador.buscarClientePorCodigo(codigo);
+        if (cliente != null) {
+            todasLasClientes = new ArrayList<>();
+            todasLasClientes.add(cliente);
+            seleccionados = new boolean[todasLasClientes.size()];
+            currentPage = 0;
+            mostrarPagina(currentPage);
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró cliente con código: " + codigo, "No encontrado", JOptionPane.WARNING_MESSAGE);
+        }
+    } catch (NumberFormatException e) {
+        List<Cliente> resultados = controlador.buscarClientePorNombre(textoBusqueda);
+        if (!resultados.isEmpty()) {
+            todasLasClientes = new ArrayList<>(resultados);
+            seleccionados = new boolean[todasLasClientes.size()];
+            currentPage = 0;
+            mostrarPagina(currentPage);
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontraron clientes con el nombre: " + textoBusqueda, "No encontrado", JOptionPane.WARNING_MESSAGE);
+            todasLasClientes = new ArrayList<>();
+            seleccionados = new boolean[todasLasClientes.size()];
+            mostrarPagina(currentPage);
+        }
+    }
 
     }//GEN-LAST:event_txtBuscarActionPerformed
 

@@ -30,13 +30,8 @@ import vista.alertas.LoginAlertaUsuario;
 public class Login1121 extends javax.swing.JFrame {
 
     private boolean isPasswordVisible = false;
-    // Rutas de las imágenes
-    private final String eyeOpenPath = "/ojo.png";   // Ojo abierto
-    private final String eyeClosedPath = "/ojo2.png"; // Ojo cerrado
-   
 
-    private ImageIcon eyeOpenIcon;
-    private ImageIcon eyeClosedIcon;
+   
 
     /**
      * Creates new form Login1
@@ -74,18 +69,16 @@ public class Login1121 extends javax.swing.JFrame {
         fondo.add(kGradientPanel1, BorderLayout.CENTER);
         setContentPane(fondo);
 
-        eyeOpenIcon = new ImageIcon(getClass().getResource(eyeOpenPath));
-        eyeClosedIcon = new ImageIcon(getClass().getResource(eyeClosedPath));
     }
 
     private void togglePasswordVisibility() {
         if (isPasswordVisible) {
             passtxt.setEchoChar('•');
-            btnVer.setIcon(eyeClosedIcon);
+          
 
         } else {
             passtxt.setEchoChar((char) 0);
-            btnVer.setIcon(eyeOpenIcon);
+           
         }
         isPasswordVisible = !isPasswordVisible;
     }
@@ -103,7 +96,6 @@ public class Login1121 extends javax.swing.JFrame {
         iniciar = new rojerusan.RSMaterialButtonRectangle();
         txt_usuario = new RSMaterialComponent.RSTextFieldIconOne();
         passtxt = new RSMaterialComponent.RSPasswordIconOne();
-        btnVer = new rojeru_san.RSButton();
         rSPanelImage2 = new rojerusan.RSPanelImage();
         rSPanelImage3 = new rojerusan.RSPanelImage();
 
@@ -186,16 +178,6 @@ public class Login1121 extends javax.swing.JFrame {
         passtxt.setPlaceholder("Ingrese su contraseña");
         jPanel6.add(passtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, 360, 30));
 
-        btnVer.setBackground(new java.awt.Color(236, 236, 236));
-        btnVer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ojo (2).png"))); // NOI18N
-        btnVer.setColorHover(new java.awt.Color(247, 247, 247));
-        btnVer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVerActionPerformed(evt);
-            }
-        });
-        jPanel6.add(btnVer, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 370, 30, 30));
-
         kGradientPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 130, 460, 590));
 
         rSPanelImage2.setImagen(new javax.swing.ImageIcon(getClass().getResource("/Vector 6.png"))); // NOI18N
@@ -220,10 +202,6 @@ public class Login1121 extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
-        togglePasswordVisibility();
-    }//GEN-LAST:event_btnVerActionPerformed
 
     private void txt_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usuarioActionPerformed
     }//GEN-LAST:event_txt_usuarioActionPerformed
@@ -292,7 +270,6 @@ public class Login1121 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private rojeru_san.RSButton btnVer;
     private rojerusan.RSMaterialButtonRectangle iniciar;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;

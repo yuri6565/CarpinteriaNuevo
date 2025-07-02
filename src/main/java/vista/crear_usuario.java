@@ -135,8 +135,6 @@ public class crear_usuario extends javax.swing.JDialog {
         numerotxt = new RSMaterialComponent.RSTextFieldMaterial();
         tipoidentificacion8 = new javax.swing.JLabel();
         tipoidentificacion9 = new javax.swing.JLabel();
-        btnVer = new rojeru_san.RSButton();
-        btnVer1 = new rojeru_san.RSButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -438,26 +436,6 @@ public class crear_usuario extends javax.swing.JDialog {
         tipoidentificacion9.setText("TIPO");
         jPanel1.add(tipoidentificacion9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 200, -1));
 
-        btnVer.setBackground(new java.awt.Color(236, 236, 236));
-        btnVer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ojo (2).png"))); // NOI18N
-        btnVer.setColorHover(new java.awt.Color(247, 247, 247));
-        btnVer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVerActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnVer, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 380, 30, 40));
-
-        btnVer1.setBackground(new java.awt.Color(236, 236, 236));
-        btnVer1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ojo (2).png"))); // NOI18N
-        btnVer1.setColorHover(new java.awt.Color(247, 247, 247));
-        btnVer1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVer1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnVer1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 290, 30, 40));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -601,14 +579,6 @@ Ctrl_Perfil controladorPerfil = new Ctrl_Perfil();
         // TODO add your handling code here:
     }//GEN-LAST:event_numerotxtActionPerformed
 
-    private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
-        togglePasswordVisibility();
-    }//GEN-LAST:event_btnVerActionPerformed
-
-    private void btnVer1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVer1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnVer1ActionPerformed
-
     /**
      */
    public static void main(String args[]) {
@@ -656,8 +626,6 @@ Ctrl_Perfil controladorPerfil = new Ctrl_Perfil();
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
     private rojeru_san.RSButtonRiple btnGuardar1;
-    private rojeru_san.RSButton btnVer;
-    private rojeru_san.RSButton btnVer1;
     private RSMaterialComponent.RSPasswordIconOne contrasenatxt;
     private RSMaterialComponent.RSTextFieldMaterial correotxt;
     private RSMaterialComponent.RSComboBoxMaterial identificaciontxt;
@@ -979,27 +947,27 @@ private void agregarValidacion() {
     }
 
 
-private void togglePasswordVisibility() {
-        if (isPasswordVisible) {
-            contrasenatxt.setEchoChar('•');
-            btnVer.setIcon(eyeClosedIcon);
-        } else {
-            contrasenatxt.setEchoChar((char) 0);
-            btnVer.setIcon(eyeOpenIcon);
-        }
-        isPasswordVisible = !isPasswordVisible;
-    }
-
-    private void togglePasswordVisibility1() {
-        if (isPasswordVisible1) {
-            txtcontrasenanueva1.setEchoChar('•');
-            btnVer1.setIcon(eyeClosedIcon);
-        } else {
-            txtcontrasenanueva1.setEchoChar((char) 0);
-            btnVer1.setIcon(eyeOpenIcon);
-        }
-        isPasswordVisible1 = !isPasswordVisible1;
-    }
+//private void togglePasswordVisibility() {
+//        if (isPasswordVisible) {
+//            contrasenatxt.setEchoChar('•');
+//            btnVer.setIcon(eyeClosedIcon);
+//        } else {
+//            contrasenatxt.setEchoChar((char) 0);
+//            btnVer.setIcon(eyeOpenIcon);
+//        }
+//        isPasswordVisible = !isPasswordVisible;
+//    }
+//
+//    private void togglePasswordVisibility1() {
+//        if (isPasswordVisible1) {
+//            txtcontrasenanueva1.setEchoChar('•');
+//            btnVer1.setIcon(eyeClosedIcon);
+//        } else {
+//            txtcontrasenanueva1.setEchoChar((char) 0);
+//            btnVer1.setIcon(eyeOpenIcon);
+//        }
+//        isPasswordVisible1 = !isPasswordVisible1;
+//    }
 
    
 

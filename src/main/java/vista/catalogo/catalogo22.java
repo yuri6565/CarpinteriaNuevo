@@ -54,7 +54,8 @@ public class catalogo22 extends javax.swing.JPanel {
     private String nombreCategoria;
     private JPanel parentPanel;
 
-    public catalogo22(JFrame jFrame, boolean par) {
+  public catalogo22(JFrame jFrame, boolean par, JPanel parentPanel) {
+        this.parentPanel = parentPanel;
         setOpaque(true); // Ensure catalogo22 is opaque
         initComponents();
         jPanel1.setOpaque(true); // Ensure jPanel1 is opaque
@@ -98,49 +99,91 @@ public class catalogo22 extends javax.swing.JPanel {
     }
 
     // ... (keep initComponents, action listeners, and cargartablacliente as they are)
-    public void aplicarTema() {
-        boolean oscuro = TemaManager.getInstance().isOscuro();
+ public void aplicarTema() {
+    boolean oscuro = TemaManager.getInstance().isOscuro();
 
-        if (oscuro) {
-            Color fondo = new Color(21, 21, 33);
-            Color primario = new Color(40, 60, 150);
-            Color texto = Color.WHITE;
+    if (oscuro) {
+        Color fondo = new Color(21, 21, 33);
+        Color primario = new Color(40, 60, 150);
+        Color texto = Color.WHITE;
 
-            // Apply to the main panel (catalogo22)
-            setBackground(fondo);
-            // Apply to nested panels
-            jPanel1.setBackground(fondo);
-            jPanel2.setBackground(new Color(21, 21, 33));
-            panelCards.setBackground(fondo);
-            // Apply to text field
-            txtBuscar.setBackground(fondo);
-            txtBuscar.setForeground(texto);
-            txtBuscar.setColorIcon(texto);
-            txtBuscar.setPhColor(Color.LIGHT_GRAY);
-            //
-        } else {
-            Color fondo = new Color(255, 255, 255);
-            Color texto = Color.BLACK;
-            Color primario = new Color(72, 92, 188);
-
-            // Apply to the main panel (catalogo22)
-            setBackground(fondo);
-            // Apply to nested panels
-            jPanel1.setBackground(new Color(242, 247, 255));
-            jPanel2.setBackground(new Color(242, 247, 255));
-            panelCards.setBackground(fondo);
-            // Apply to text field
-            txtBuscar.setBackground(fondo);
-            txtBuscar.setForeground(texto);
-            txtBuscar.setColorIcon(texto);
-            txtBuscar.setPhColor(Color.GRAY);
-        }
-
-        // Ensure all components are repainted
-        revalidate();
-        repaint();
-
+        // Apply to the main panel (catalogo22)
+        setBackground(fondo);
+        // Apply to nested panels
+        jPanel1.setBackground(fondo);
+        jPanel2.setBackground(fondo);
+        panelCards.setBackground(fondo);
+        // Apply to text field
+        txtBuscar.setOpaque(true);
+        txtBuscar.setBackground(fondo);
+        txtBuscar.setForeground(texto);
+        txtBuscar.setColorIcon(texto);
+        txtBuscar.setPhColor(Color.LIGHT_GRAY);
+        txtBuscar.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        // Apply to checkbox
+        rSButtonMaterialRippleIcon1.setBackground(fondo);
+        rSCheckBox1.setBackground(fondo);
+        rSCheckBox1.setColorUnCheck(texto);
+        rSCheckBox1.setColorCheck(texto);
+        rSCheckBox1.setForeground(texto);
+        // Apply to pagination label
+        paginacion.setForeground(texto);
+        // Apply to dynamic category labels
+        actualizarColoresLabels(texto);
+    } else {
+        Color fondo = new Color(247, 247, 255); // Use the desired light blue-white color
+        Color texto = Color.BLACK;
+        Color primario = new Color(72, 92, 188);
+ rSButtonMaterialRippleIcon1.setBackground(fondo);
+        // Apply to the main panel (catalogo22)
+        setBackground(fondo);
+        // Apply to nested panels
+        jPanel1.setBackground(fondo);
+        jPanel2.setBackground(fondo);
+        panelCards.setBackground(new Color(255,255,255)); 
+        // Apply to text field
+        txtBuscar.setOpaque(true);
+        txtBuscar.setBackground(fondo); // Match the panel background
+        txtBuscar.setForeground(texto);
+        txtBuscar.setColorIcon(texto);
+        txtBuscar.setPhColor(Color.DARK_GRAY); // Contrast with new background
+        txtBuscar.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        // Apply to checkbox
+        rSCheckBox1.setBackground(fondo);
+        rSCheckBox1.setColorUnCheck(texto);
+        rSCheckBox1.setColorCheck(texto);
+        rSCheckBox1.setForeground(texto);
+        // Apply to pagination label
+        paginacion.setForeground(texto);
+        // Apply to dynamic category labels
+        actualizarColoresLabels(texto);
     }
+
+    // Ensure all components are repainted
+    revalidate();
+    repaint();
+}
+
+// Método auxiliar para actualizar el color de los JLabel dinámicos
+private void actualizarColoresLabels(Color color) {
+    for (Component comp : panelCards.getComponents()) {
+        if (comp instanceof JPanel) { // cardWrapper es un JPanel
+            JPanel cardWrapper = (JPanel) comp;
+            for (Component subComp : cardWrapper.getComponents()) {
+                if (subComp instanceof JPanel) {
+                    JPanel subPanel = (JPanel) subComp;
+                    for (Component innerComp : subPanel.getComponents()) {
+                        if (innerComp instanceof JLabel) { // Encontramos el JLabel (tituloCategoria)
+                            ((JLabel) innerComp).setForeground(color);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    panelCards.revalidate();
+    panelCards.repaint();
+}
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -151,12 +194,12 @@ public class catalogo22 extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         panelCards = new javax.swing.JPanel();
         txtBuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
-        Añadir1 = new rojeru_san.RSButtonRiple();
         Añadir5 = new rojeru_san.RSButtonRiple();
         Añadir4 = new rojeru_san.RSButtonRiple();
         rSButtonMaterialRippleIcon1 = new RSMaterialComponent.RSButtonMaterialRippleIcon();
         paginacion = new javax.swing.JLabel();
         rSCheckBox1 = new rojerusan.RSCheckBox();
+        btnNuevo1 = new RSMaterialComponent.RSButtonShape();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -208,17 +251,6 @@ public class catalogo22 extends javax.swing.JPanel {
         });
         jPanel2.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 100, 430, 40));
 
-        Añadir1.setBackground(new java.awt.Color(46, 49, 82));
-        Añadir1.setText("Agregar Categoria");
-        Añadir1.setColorHover(new java.awt.Color(0, 153, 51));
-        Añadir1.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 14)); // NOI18N
-        Añadir1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Añadir1ActionPerformed(evt);
-            }
-        });
-        jPanel2.add(Añadir1, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 110, 160, 40));
-
         Añadir5.setBackground(new java.awt.Color(46, 49, 82));
         Añadir5.setText("Anterior");
         Añadir5.setColorHover(new java.awt.Color(0, 153, 51));
@@ -228,7 +260,7 @@ public class catalogo22 extends javax.swing.JPanel {
                 Añadir5ActionPerformed(evt);
             }
         });
-        jPanel2.add(Añadir5, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 710, 98, 40));
+        jPanel2.add(Añadir5, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 710, 98, 40));
 
         Añadir4.setBackground(new java.awt.Color(46, 49, 82));
         Añadir4.setText("Siguiente");
@@ -239,7 +271,7 @@ public class catalogo22 extends javax.swing.JPanel {
                 Añadir4ActionPerformed(evt);
             }
         });
-        jPanel2.add(Añadir4, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 710, 98, 40));
+        jPanel2.add(Añadir4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 710, 98, 40));
 
         rSButtonMaterialRippleIcon1.setBackground(new java.awt.Color(242, 247, 255));
         rSButtonMaterialRippleIcon1.setForeground(new java.awt.Color(255, 51, 51));
@@ -254,7 +286,7 @@ public class catalogo22 extends javax.swing.JPanel {
                 rSButtonMaterialRippleIcon1ActionPerformed(evt);
             }
         });
-        jPanel2.add(rSButtonMaterialRippleIcon1, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 710, 40, 40));
+        jPanel2.add(rSButtonMaterialRippleIcon1, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 710, 40, 40));
 
         paginacion.setBackground(new java.awt.Color(0, 0, 0));
         paginacion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -265,18 +297,33 @@ public class catalogo22 extends javax.swing.JPanel {
                 paginacionMouseClicked(evt);
             }
         });
-        jPanel2.add(paginacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 730, -1, -1));
+        jPanel2.add(paginacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 710, -1, -1));
 
         rSCheckBox1.setForeground(new java.awt.Color(0, 0, 0));
         rSCheckBox1.setText("Seleccionar todo");
-        rSCheckBox1.setColorCheck(new java.awt.Color(0, 0, 0));
+        rSCheckBox1.setColorCheck(new java.awt.Color(255, 255, 255));
         rSCheckBox1.setColorUnCheck(new java.awt.Color(204, 204, 204));
         rSCheckBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rSCheckBox1ActionPerformed(evt);
             }
         });
-        jPanel2.add(rSCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 730, 158, 29));
+        jPanel2.add(rSCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 700, 158, 29));
+
+        btnNuevo1.setBackground(new java.awt.Color(46, 49, 82));
+        btnNuevo1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnNuevo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
+        btnNuevo1.setText(" Nuevo");
+        btnNuevo1.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnNuevo1.setFont(new java.awt.Font("Roboto Bold", 1, 16)); // NOI18N
+        btnNuevo1.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnNuevo1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnNuevo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevo1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnNuevo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1330, 130, 110, 30));
 
         add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -50, 1620, 800));
         jPanel2.getAccessibleContext().setAccessibleName("");
@@ -285,40 +332,6 @@ public class catalogo22 extends javax.swing.JPanel {
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBuscarActionPerformed
-
-    private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
-        catalogocategoria cat = new catalogocategoria((JFrame) getTopLevelAncestor(), true);
-        cat.setVisible(true);
-
-        String rutaImagen = cat.getRutaImagenSeleccionada();
-        String categoriaNombre = cat.getCategoriaNombre();
-
-        if (!categoriaNombre.isEmpty()) {
-            try {
-                byte[] imagenBytes = null;
-                if (rutaImagen != null && !rutaImagen.isEmpty()) {
-                    java.nio.file.Path path = java.nio.file.Paths.get(rutaImagen);
-                    imagenBytes = java.nio.file.Files.readAllBytes(path);
-                }
-
-                modelo.Catalogocategoria categoria = new modelo.Catalogocategoria();
-                categoria.setNombre(categoriaNombre);
-                categoria.setImagen(imagenBytes);
-
-                boolean guardado = controladorCategoria.guardar(categoria);
-
-                if (guardado) {
-                    cargarCategoriasDesdeBD(); // Will now preserve currentPage
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al guardar la categoría en la base de datos.");
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error al procesar la imagen: " + e.getMessage());
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Debes escribir un nombre para la categoría.");
-        }
-    }//GEN-LAST:event_Añadir1ActionPerformed
 
     private void Añadir4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir4ActionPerformed
         int totalPaginas = (int) Math.ceil((double) todasLasCategorias.size() / CATEGORIAS_POR_PAGINA);
@@ -471,11 +484,45 @@ public class catalogo22 extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_rSButtonMaterialRippleIcon1ActionPerformed
 
+    private void btnNuevo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevo1ActionPerformed
+      catalogocategoria cat = new catalogocategoria((JFrame) getTopLevelAncestor(), true);
+        cat.setVisible(true);
+
+        String rutaImagen = cat.getRutaImagenSeleccionada();
+        String categoriaNombre = cat.getCategoriaNombre();
+
+        if (!categoriaNombre.isEmpty()) {
+            try {
+                byte[] imagenBytes = null;
+                if (rutaImagen != null && !rutaImagen.isEmpty()) {
+                    java.nio.file.Path path = java.nio.file.Paths.get(rutaImagen);
+                    imagenBytes = java.nio.file.Files.readAllBytes(path);
+                }
+
+                modelo.Catalogocategoria categoria = new modelo.Catalogocategoria();
+                categoria.setNombre(categoriaNombre);
+                categoria.setImagen(imagenBytes);
+
+                boolean guardado = controladorCategoria.guardar(categoria);
+
+                if (guardado) {
+                    cargarCategoriasDesdeBD(); // Will now preserve currentPage
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al guardar la categoría en la base de datos.");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error al procesar la imagen: " + e.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Debes escribir un nombre para la categoría.");
+        }
+    }//GEN-LAST:event_btnNuevo1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private rojeru_san.RSButtonRiple Añadir1;
     private rojeru_san.RSButtonRiple Añadir4;
     private rojeru_san.RSButtonRiple Añadir5;
+    private RSMaterialComponent.RSButtonShape btnNuevo1;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -561,6 +608,8 @@ public class catalogo22 extends javax.swing.JPanel {
         tituloCategoria.setFont(new Font("Century751 BT", 0, 16));
         tituloCategoria.setHorizontalAlignment(JLabel.CENTER);
         titlePanel.add(tituloCategoria);
+        tituloCategoria.setForeground(TemaManager.getInstance().isOscuro() ? Color.WHITE : Color.BLACK);
+    titlePanel.add(tituloCategoria);
 
         cardWrapper.add(Box.createVerticalStrut(5));
         cardWrapper.add(checkBoxPanel);

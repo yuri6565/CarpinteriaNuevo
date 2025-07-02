@@ -234,8 +234,7 @@ public class Contrasena3 extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel8MousePressed
 
     private void jLabel6MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MousePressed
-
-    if (correoIngresado == null || correoIngresado.isEmpty()) {
+   if (correoIngresado == null || correoIngresado.isEmpty()) {
             CodigoIncorrectoAlerta confirmDialog = new CodigoIncorrectoAlerta((Frame) this, true);
             confirmDialog.setVisible(true);
             return;

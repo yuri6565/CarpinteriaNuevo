@@ -105,14 +105,17 @@ public class DetallesProducto extends javax.swing.JPanel {
         // Set color
         color1.setText((producto.getColor() != null ? producto.getColor() : "Sin color"));
 
+
         // Set dimensions
         String ancho = producto.getAncho() != null ? producto.getAncho() : "N/A";
         String largo = producto.getAlto() != null ? producto.getAlto() : "N/A";
         String profundidad = producto.getProfundidad() != null ? producto.getProfundidad() : "N/A";
-        jLabelDimensiones.setText(String.format("Ancho: %s, Largo: %s, Profundidad: %s", ancho, largo, profundidad));
-
+//        jLabelDimensiones.setText(String.format("Ancho: %s, Largo: %s, Profundidad: %s", ancho, largo, profundidad));
+material2.setText("Ancho: " + ancho);
+material3.setText("Largo: " + largo);
+material1.setText("Profundidad: " + profundidad);
         // Set material
-        material.setText(producto.getMaterial() != null ? producto.getMaterial() : "Sin material");
+     
 
         // Load images and populate imageList
         imageList.clear();
@@ -368,10 +371,9 @@ public class DetallesProducto extends javax.swing.JPanel {
         descripcion1 = new javax.swing.JLabel();
         material = new javax.swing.JLabel();
         nombre = new javax.swing.JLabel();
-        jLabelDimensiones = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        material1 = new javax.swing.JLabel();
+        material2 = new javax.swing.JLabel();
+        material3 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(1304, 742));
 
@@ -451,13 +453,14 @@ public class DetallesProducto extends javax.swing.JPanel {
         nombre.setFont(new java.awt.Font("Segoe UI", 0, 28)); // NOI18N
         nombre.setText("nombre");
 
-        jLabelDimensiones.setText("jLabel1");
+        material1.setFont(new java.awt.Font("Segoe UI", 0, 28)); // NOI18N
+        material1.setText("Profundidad");
 
-        jLabel1.setText("ANCHO:");
+        material2.setFont(new java.awt.Font("Segoe UI", 0, 28)); // NOI18N
+        material2.setText("Ancho");
 
-        jLabel2.setText("Profundidad:");
-
-        jLabel3.setText("Largo:");
+        material3.setFont(new java.awt.Font("Segoe UI", 0, 28)); // NOI18N
+        material3.setText("Largo");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -470,49 +473,36 @@ public class DetallesProducto extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
                             .addComponent(nombre)
-                            .addComponent(descripcion1)))
+                            .addComponent(descripcion1)
+                            .addComponent(material1)
+                            .addComponent(material3)
+                            .addComponent(material2)
+                            .addComponent(material)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(31, 31, 31)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(material)
-                                .addGap(48, 48, 48)
-                                .addComponent(jLabelDimensiones))
-                            .addComponent(color1)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))))
+                        .addComponent(color1)))
                 .addContainerGap(270, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(descripcion1)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 161, Short.MAX_VALUE)
-                        .addComponent(jLabelDimensiones)
-                        .addContainerGap(231, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(color1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(material)
-                        .addGap(111, 111, 111)
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(76, 76, 76))))
+                .addGap(27, 27, 27)
+                .addComponent(color1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addComponent(material)
+                .addGap(18, 18, 18)
+                .addComponent(material2)
+                .addGap(30, 30, 30)
+                .addComponent(material3)
+                .addGap(35, 35, 35)
+                .addComponent(material1)
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 50, 490, 600));
@@ -546,16 +536,15 @@ public class DetallesProducto extends javax.swing.JPanel {
     private RSMaterialComponent.RSButtonShape btnVolver;
     private javax.swing.JLabel color1;
     private javax.swing.JLabel descripcion1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabelDimensiones;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel material;
+    private javax.swing.JLabel material1;
+    private javax.swing.JLabel material2;
+    private javax.swing.JLabel material3;
     private javax.swing.JLabel nombre;
     private rojerusan.RSLabelIcon rSLabelIcon1;
     private rojerusan.RSLabelIcon rSLabelIcon2;

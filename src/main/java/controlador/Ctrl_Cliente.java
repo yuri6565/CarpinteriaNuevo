@@ -285,4 +285,138 @@ public String getLastError() {
         }
         return respuesta;
     }
+    
+  public Cliente buscarClientePorCodigo(int codigo) {
+    Cliente cliente = null;
+    Connection con = Conexion.getConnection();
+
+    try {
+        String sql = "SELECT codigo, identificacion, nombre, apellido, telefono, telefono2, departamento, municipio, direccion, activo " +
+                     "FROM cliente WHERE codigo = ?";
+        PreparedStatement consulta = con.prepareStatement(sql);
+        consulta.setInt(1, codigo);
+
+        ResultSet rs = consulta.executeQuery();
+
+        if (rs.next()) {
+            cliente = new Cliente();
+            cliente.setId_cliente(rs.getInt("codigo"));
+            cliente.setIdentificacion(rs.getString("identificacion"));
+            cliente.setNombre(rs.getString("nombre"));
+            cliente.setApellido(rs.getString("apellido"));
+            cliente.setTelefono(rs.getString("telefono"));
+            cliente.setTelefono2(rs.getString("telefono2"));
+            cliente.setDepartamento(rs.getString("departamento"));
+            cliente.setMunicipio(rs.getString("municipio"));
+            cliente.setDireccion(rs.getString("direccion"));
+            cliente.setActivo(rs.getBoolean("activo"));
+        }
+
+        rs.close();
+        consulta.close();
+        con.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al buscar cliente por código: " + e.getMessage());
+        e.printStackTrace();
+    } finally {
+        try {
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    return cliente;
+}
+  
+  public List<Cliente> buscarClientePorNombre(String nombre) {
+    List<Cliente> lista = new ArrayList<>();
+    Connection con = Conexion.getConnection();
+
+    try {
+        String sql = "SELECT codigo, identificacion, nombre, apellido, telefono, telefono2, departamento, municipio, direccion, activo " +
+                     "FROM cliente WHERE nombre LIKE ?";
+        PreparedStatement consulta = con.prepareStatement(sql);
+        consulta.setString(1, "%" + nombre + "%"); // Búsqueda parcial con LIKE
+
+        ResultSet rs = consulta.executeQuery();
+
+        while (rs.next()) {
+            Cliente cliente = new Cliente();
+            cliente.setId_cliente(rs.getInt("codigo"));
+            cliente.setIdentificacion(rs.getString("identificacion"));
+            cliente.setNombre(rs.getString("nombre"));
+            cliente.setApellido(rs.getString("apellido"));
+            cliente.setTelefono(rs.getString("telefono"));
+            cliente.setTelefono2(rs.getString("telefono2"));
+            cliente.setDepartamento(rs.getString("departamento"));
+            cliente.setMunicipio(rs.getString("municipio"));
+            cliente.setDireccion(rs.getString("direccion"));
+            cliente.setActivo(rs.getBoolean("activo"));
+            lista.add(cliente);
+        }
+
+        rs.close();
+        consulta.close();
+        con.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al buscar cliente por nombre: " + e.getMessage());
+        e.printStackTrace();
+    } finally {
+        try {
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    return lista;
+}
+  public List<Cliente> buscarClientePorTodos(String textoBusqueda) {
+    List<Cliente> lista = new ArrayList<>();
+    Connection con = Conexion.getConnection();
+
+    try {
+        String sql = "SELECT codigo, identificacion, nombre, apellido, telefono, telefono2, departamento, municipio, direccion, activo " +
+                     "FROM cliente WHERE identificacion LIKE ? OR nombre LIKE ? OR apellido LIKE ? OR telefono LIKE ? OR telefono2 LIKE ? " +
+                     "OR departamento LIKE ? OR municipio LIKE ? OR direccion LIKE ?";
+        PreparedStatement consulta = con.prepareStatement(sql);
+        String patron = "%" + textoBusqueda + "%";
+        for (int i = 1; i <= 8; i++) {
+            consulta.setString(i, patron);
+        }
+
+        ResultSet rs = consulta.executeQuery();
+
+        while (rs.next()) {
+            Cliente cliente = new Cliente();
+            cliente.setId_cliente(rs.getInt("codigo"));
+            cliente.setIdentificacion(rs.getString("identificacion"));
+            cliente.setNombre(rs.getString("nombre"));
+            cliente.setApellido(rs.getString("apellido"));
+            cliente.setTelefono(rs.getString("telefono"));
+            cliente.setTelefono2(rs.getString("telefono2"));
+            cliente.setDepartamento(rs.getString("departamento"));
+            cliente.setMunicipio(rs.getString("municipio"));
+            cliente.setDireccion(rs.getString("direccion"));
+            cliente.setActivo(rs.getBoolean("activo"));
+            lista.add(cliente);
+        }
+
+        rs.close();
+        consulta.close();
+        con.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al buscar cliente por todos los campos: " + e.getMessage());
+        e.printStackTrace();
+    } finally {
+        try {
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    return lista;
+}
 }

@@ -41,41 +41,52 @@ import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.ComboPopup;
 import modelo.ProveedorDatos;
+ // Import your Departamento class if it exists
+
 public class proveedorEditar extends javax.swing.JDialog {
     public boolean guardado = false;
     private CheckedComboBox<CheckableItem> cmbProducto;
     private Ctrl_Proveedor ctrlProveedor;
     private int proveedorId; // To store the ID of the provider being edited
+    private List<Departamento> departamentos; // Add this to store department data
 
-   public proveedorEditar(Frame parent, boolean modal, int idProveedor) {
-    super(parent, modal);
-    initComponents();
-    setTitle(idProveedor == -1 ? "Crear Proveedor" : "Editar Proveedor");
+    public proveedorEditar(Frame parent, boolean modal, int idProveedor) {
+        super(parent, modal);
+        departamentos = Departamento.getTodosDepartamentos(); // Initialize departments
+        initComponents();
+        setTitle(idProveedor == -1 ? "Crear Proveedor" : "Editar Proveedor");
 
-    // Initialize cmbProducto first
-    ctrlProveedor = new Ctrl_Proveedor();
-    cmbProducto = new CheckedComboBox<>(makeProductModel());
-    cmbProducto.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-    jPanel3.add(cmbProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 470, 200, 30));
+        // Initialize cmbProducto first
+        ctrlProveedor = new Ctrl_Proveedor();
+        cmbProducto = new CheckedComboBox<>(makeProductModel());
+        cmbProducto.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        jPanel3.add(cmbProducto,new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 470, 200, 30));
 
-    // Set up navigation ActionListeners
-    txtNombre.addActionListener(e -> txtNombre12.requestFocus());
-    txtNombre12.addActionListener(e -> txtNombre13.requestFocus());
-    txtNombre13.addActionListener(e -> txttelefono.requestFocus());
-    txttelefono.addActionListener(e -> txtcorreo.requestFocus());
-    txtcorreo.addActionListener(e -> txtdireccion.requestFocus());
-    txtdireccion.addActionListener(e -> gh1.requestFocus());
-    gh1.addActionListener(e -> gh.requestFocus());
-    gh.addActionListener(e -> cmbProducto.requestFocus());
-    cmbProducto.addActionListener(e -> btnguardarr.requestFocus()); // Now safe to add
+        // Set up navigation ActionListeners
+        txtNombre.addActionListener(e -> txtNombre12.requestFocus());
+        txtNombre12.addActionListener(e -> txtNombre13.requestFocus());
+        txtNombre13.addActionListener(e -> txttelefono.requestFocus());
+        txttelefono.addActionListener(e -> txtcorreo.requestFocus());
+        txtcorreo.addActionListener(e -> txtdireccion.requestFocus());
+        txtdireccion.addActionListener(e -> gh1.requestFocus());
+        gh1.addActionListener(e -> {
+            actualizarMunicipios();
+            gh.requestFocus();
+        });
+        gh.addActionListener(e -> cmbProducto.requestFocus());
+        cmbProducto.addActionListener(e -> btnguardarr.requestFocus());
 
-    if (idProveedor != -1) {
-        proveedorId = idProveedor;
-        cargarDatosProveedor(idProveedor);
-    } else {
-        txtNombre.setText("");
+        // Load departments
+        cargarDepartamentos();
+
+        if (idProveedor != -1) {
+            proveedorId = idProveedor;
+            cargarDatosProveedor(idProveedor);
+        } else {
+            txtNombre.setText("");
+        }
     }
-}
+
     public boolean isGuardado() {
         return guardado;
     }
@@ -93,6 +104,49 @@ public class proveedorEditar extends javax.swing.JDialog {
         return model;
     }
 
+    private void cargarDepartamentos() {
+        DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
+        modelo.addElement("Seleccionar");
+        
+        // Sort departments alphabetically
+        departamentos.sort((d1, d2) -> d1.getNombre().compareTo(d2.getNombre()));
+        
+        for (Departamento depto : departamentos) {
+            modelo.addElement(depto.getNombre());
+        }
+        
+        gh1.setModel(modelo);
+    }
+
+    private void actualizarMunicipios() {
+        String departamentoSeleccionado = (String) gh1.getSelectedItem();
+        
+        if (departamentoSeleccionado == null || "Seleccionar".equals(departamentoSeleccionado)) {
+            DefaultComboBoxModel<String> modeloVacio = new DefaultComboBoxModel<>();
+            modeloVacio.addElement("Seleccionar");
+            gh.setModel(modeloVacio);
+            return;
+        }
+        
+        for (Departamento depto : departamentos) {
+            if (depto.getNombre().equals(departamentoSeleccionado)) {
+                DefaultComboBoxModel<String> modeloMunicipios = new DefaultComboBoxModel<>();
+                modeloMunicipios.addElement("Seleccionar");
+                
+                // Sort municipalities alphabetically
+                List<String> municipiosOrdenados = depto.getMunicipios();
+                municipiosOrdenados.sort(String::compareTo);
+                
+                for (String municipio : municipiosOrdenados) {
+                    modeloMunicipios.addElement(municipio);
+                }
+                
+                gh.setModel(modeloMunicipios);
+                break;
+            }
+        }
+    }
+
     private void cargarDatosProveedor(int idProveedor) {
         ProveedorDatos proveedor = ctrlProveedor.obtenerProveedorPorid(idProveedor);
         if (proveedor != null) {
@@ -104,6 +158,7 @@ public class proveedorEditar extends javax.swing.JDialog {
             txtcorreo.setText(proveedor.getCorreo_electronico() != null ? proveedor.getCorreo_electronico() : "");
             txtdireccion.setText(proveedor.getDireccion() != null ? proveedor.getDireccion() : "");
             gh1.setSelectedItem(proveedor.getDepartamento() != null ? proveedor.getDepartamento() : "Seleccionar");
+            actualizarMunicipios(); // Update municipalities based on selected department
             gh.setSelectedItem(proveedor.getMunicipio() != null ? proveedor.getMunicipio() : "Seleccionar");
 
             // Cargar productos seleccionados
@@ -495,7 +550,7 @@ public class proveedorEditar extends javax.swing.JDialog {
     }//GEN-LAST:event_identificaciontxtActionPerformed
 
     private void btnguardarrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarrActionPerformed
-  boolean isValid = true;
+ boolean isValid = true;
 
         // Limpiar mensajes de error previos
         tipoidentificacion5.setText("");
@@ -507,7 +562,7 @@ public class proveedorEditar extends javax.swing.JDialog {
         tipoidentificacion4.setText("");
         dirección3.setText("");
         dirección1.setText("");
-        dirección2.setText(""); // Añadido para el campo de estado
+        dirección2.setText("");
 
         // Validar campos obligatorios
         if (identificaciontxt.getSelectedIndex() == 0) {
@@ -549,7 +604,7 @@ public class proveedorEditar extends javax.swing.JDialog {
             dirección1.setText("Este campo es obligatorio");
             isValid = false;
         }
-        if (gh2.getSelectedIndex() == 0) { // Validar estado
+        if (gh2.getSelectedIndex() == 0) {
             dirección2.setText("Este campo es obligatorio");
             isValid = false;
         }
@@ -574,7 +629,7 @@ public class proveedorEditar extends javax.swing.JDialog {
         proveedor.setTelefono(txttelefono.getText().trim());
         proveedor.setCorreo_electronico(txtcorreo.getText().trim());
         proveedor.setDireccion(txtdireccion.getText().trim());
-        proveedor.setEstado(gh2.getSelectedItem().toString()); // Usar el valor de gh2 para estado
+        proveedor.setEstado(gh2.getSelectedItem().toString());
         proveedor.setDepartamento(gh1.getSelectedItem().toString());
         proveedor.setMunicipio(gh.getSelectedItem().toString());
         List<String> productos = IntStream.range(0, cmbProducto.getModel().getSize())
@@ -713,7 +768,7 @@ public class proveedorEditar extends javax.swing.JDialog {
     private RSMaterialComponent.RSTextFieldMaterial txttelefono;
     // End of variables declaration//GEN-END:variables
 // Clases internas para el CheckedComboBox
- class CheckableItem {
+class CheckableItem {
         private final String text;
         private boolean selected;
 
@@ -862,5 +917,4 @@ public class proveedorEditar extends javax.swing.JDialog {
             g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 10, 10);
         }
     }
-
 }

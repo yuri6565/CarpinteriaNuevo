@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static modelo.Conexion.getConnection;
 
 public class Consulta_Usuarios extends Conexion {
     
@@ -165,6 +166,8 @@ public boolean actualizarContrasena(String correo, String nuevaContrasena) {
     return actualizado;
 
 }
+
+
 }
 
 

@@ -28,6 +28,7 @@ public class catalogocategoria extends javax.swing.JDialog {
     public catalogocategoria(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+          this.setLocationRelativeTo(null); // Centrar el diálogo
         jLabel2.setVisible(false);
         lblImagen.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -110,6 +111,7 @@ public class catalogocategoria extends javax.swing.JDialog {
         panelP = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        btnGuardar2 = new rojeru_san.RSButtonRiple();
         jLabel3 = new javax.swing.JLabel();
         txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
         btnCancelar = new rojeru_san.RSButtonRiple();
@@ -132,6 +134,18 @@ public class catalogocategoria extends javax.swing.JDialog {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Agregar Categoria");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        btnGuardar2.setBackground(new java.awt.Color(46, 49, 82));
+        btnGuardar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/x.png"))); // NOI18N
+        btnGuardar2.setColorHover(new java.awt.Color(204, 0, 0));
+        btnGuardar2.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        btnGuardar2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnGuardar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardar2ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnGuardar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 0, 40, 30));
 
         panelP.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 80));
 
@@ -265,6 +279,10 @@ public class catalogocategoria extends javax.swing.JDialog {
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 
+    private void btnGuardar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar2ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnGuardar2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -310,6 +328,7 @@ public class catalogocategoria extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
+    private rojeru_san.RSButtonRiple btnGuardar2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -8,6 +8,8 @@ import controlador.Ctrl_productocatalogo;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.MediaTracker;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -44,19 +46,17 @@ public class nuevoProducto extends javax.swing.JDialog {
     private int idCategoria;
     private String nombreCategoria;
     private static final List<String> UNIDADES = Arrays.asList("cm", "m", "mm", "cm²", "cm³", "m²", "m³", "in", "ft");
-    
-    
-   public nuevoProducto(java.awt.Frame parent, boolean modal, int idCategoria, String nombreCategoria) {
+
+    public nuevoProducto(java.awt.Frame parent, boolean modal, int idCategoria, String nombreCategoria) {
         super(parent, modal);
         this.idCategoria = idCategoria;
         this.nombreCategoria = nombreCategoria != null ? nombreCategoria : "Categoría desconocida";
         initComponents();
-         
-    jlabelnombre.setVisible(false);
-    jlabelalto.setVisible(false);
-    jlabelcolor.setVisible(false);
-    jlabelma.setVisible(false);
-        
+        this.setLocationRelativeTo(null); // Centrar el diálogo
+        jlabelnombre.setVisible(false);
+        jlabelalto.setVisible(false);
+        jlabelcolor.setVisible(false);
+        jlabelma.setVisible(false);
 
         configurarAutocompletadoUnidades();
         List<rojeru_san.rspanel.RSPanelImage> imagenesList = new ArrayList<>();
@@ -74,14 +74,15 @@ public class nuevoProducto extends javax.swing.JDialog {
         agregarListenersAImagenes();
         jLabel14.setText("Agregar Producto a " + this.nombreCategoria);
         System.out.println("etiquetasImagenes inicializado con " + etiquetasImagenes.length + " elementos, etiquetasIconos con " + etiquetasIconos.length + " elementos");
+
+        // Agregar validaciones en tiempo real
+        agregarValidaciones();
     }
-   
-   
+
     public String getRutaImagenSeleccionada() {
         return rutaImagenSeleccionada;
     }
 
-   
     public String getNombre() {
         return txtNombre.getText().trim();
     }
@@ -180,77 +181,76 @@ public class nuevoProducto extends javax.swing.JDialog {
         }
     }
 
-   private void agregarListenersAImagenes() {
-    if (etiquetasImagenes != null && etiquetasImagenes.length > 0) {
-        for (int i = 0; i < etiquetasImagenes.length; i++) {
-            if (etiquetasImagenes[i] != null) {
-                final int indice = i;
-                etiquetasImagenes[i].addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        ThumbnailFileChooser fileChooser = new ThumbnailFileChooser(); // CAMBIO HECHO AQUÍ
-                        fileChooser.setMultiSelectionEnabled(true);
-                        fileChooser.setCurrentDirectory(new File("C:\\Users\\yuriiii\\Escritorio\\yuriiii"));
+    private void agregarListenersAImagenes() {
+        if (etiquetasImagenes != null && etiquetasImagenes.length > 0) {
+            for (int i = 0; i < etiquetasImagenes.length; i++) {
+                if (etiquetasImagenes[i] != null) {
+                    final int indice = i;
+                    etiquetasImagenes[i].addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            ThumbnailFileChooser fileChooser = new ThumbnailFileChooser();
+                            fileChooser.setMultiSelectionEnabled(true);
+                            fileChooser.setCurrentDirectory(new File("C:\\Users\\yuriiii\\Escritorio\\yuriiii"));
 
-                        int resultado = fileChooser.showOpenDialog(nuevoProducto.this);
-                        if (resultado == JFileChooser.APPROVE_OPTION) {
-                            File[] archivosSeleccionados = fileChooser.getSelectedFiles();
-                            for (int j = 0; j < archivosSeleccionados.length && (indice + j) < etiquetasImagenes.length; j++) {
-                                File archivoSeleccionado = archivosSeleccionados[j];
-                                if (archivoSeleccionado.length() > 5 * 1024 * 1024) {
-                                    JOptionPane.showMessageDialog(nuevoProducto.this,
-                                            "La imagen " + archivoSeleccionado.getName() + " excede el tamaño máximo de 5 MB.",
-                                            "Error",
-                                            JOptionPane.ERROR_MESSAGE);
-                                    continue;
-                                }
-                                try {
-                                    byte[] imagenBytes = Files.readAllBytes(archivoSeleccionado.toPath());
-                                    imagenesBytes.add(imagenBytes);
-                                    ImageIcon icono = new ImageIcon(imagenBytes);
-                                    MediaTracker mt = new MediaTracker(etiquetasImagenes[indice + j]);
-                                    mt.addImage(icono.getImage(), 0);
-                                    mt.waitForID(0);
-                                    Image scaledImage = icono.getImage().getScaledInstance(
-                                            etiquetasImagenes[indice + j].getWidth(),
-                                            etiquetasImagenes[indice + j].getHeight(),
-                                            Image.SCALE_SMOOTH
-                                    );
-                                    etiquetasImagenes[indice + j].setImagen(new ImageIcon(scaledImage));
-                                    if (indice + j < etiquetasIconos.length && etiquetasIconos[indice + j] != null) {
-                                        etiquetasIconos[indice + j].setVisible(false);
+                            int resultado = fileChooser.showOpenDialog(nuevoProducto.this);
+                            if (resultado == JFileChooser.APPROVE_OPTION) {
+                                File[] archivosSeleccionados = fileChooser.getSelectedFiles();
+                                for (int j = 0; j < archivosSeleccionados.length && (indice + j) < etiquetasImagenes.length; j++) {
+                                    File archivoSeleccionado = archivosSeleccionados[j];
+                                    if (archivoSeleccionado.length() > 5 * 1024 * 1024) {
+                                        JOptionPane.showMessageDialog(nuevoProducto.this,
+                                                "La imagen " + archivoSeleccionado.getName() + " excede el tamaño máximo de 5 MB.",
+                                                "Error",
+                                                JOptionPane.ERROR_MESSAGE);
+                                        continue;
                                     }
-                                    System.out.println("Imagen cargada en índice " + (indice + j) + " con tamaño " + scaledImage.getWidth(null) + "x" + scaledImage.getHeight(null));
-                                } catch (IOException ex) {
-                                    JOptionPane.showMessageDialog(nuevoProducto.this,
-                                            "Error al cargar la imagen: " + ex.getMessage(),
-                                            "Error",
-                                            JOptionPane.ERROR_MESSAGE);
-                                } catch (InterruptedException ex) {
-                                    JOptionPane.showMessageDialog(nuevoProducto.this,
-                                            "Error al procesar la imagen: " + ex.getMessage(),
-                                            "Error",
-                                            JOptionPane.ERROR_MESSAGE);
+                                    try {
+                                        byte[] imagenBytes = Files.readAllBytes(archivoSeleccionado.toPath());
+                                        imagenesBytes.add(imagenBytes);
+                                        ImageIcon icono = new ImageIcon(imagenBytes);
+                                        MediaTracker mt = new MediaTracker(etiquetasImagenes[indice + j]);
+                                        mt.addImage(icono.getImage(), 0);
+                                        mt.waitForID(0);
+                                        Image scaledImage = icono.getImage().getScaledInstance(
+                                                etiquetasImagenes[indice + j].getWidth(),
+                                                etiquetasImagenes[indice + j].getHeight(),
+                                                Image.SCALE_SMOOTH
+                                        );
+                                        etiquetasImagenes[indice + j].setImagen(new ImageIcon(scaledImage));
+                                        if (indice + j < etiquetasIconos.length && etiquetasIconos[indice + j] != null) {
+                                            etiquetasIconos[indice + j].setVisible(false);
+                                        }
+                                        System.out.println("Imagen cargada en índice " + (indice + j) + " con tamaño " + scaledImage.getWidth(null) + "x" + scaledImage.getHeight(null));
+                                    } catch (IOException ex) {
+                                        JOptionPane.showMessageDialog(nuevoProducto.this,
+                                                "Error al cargar la imagen: " + ex.getMessage(),
+                                                "Error",
+                                                JOptionPane.ERROR_MESSAGE);
+                                    } catch (InterruptedException ex) {
+                                        JOptionPane.showMessageDialog(nuevoProducto.this,
+                                                "Error al procesar la imagen: " + ex.getMessage(),
+                                                "Error",
+                                                JOptionPane.ERROR_MESSAGE);
+                                    }
                                 }
-                            }
-                            if (archivosSeleccionados.length > etiquetasImagenes.length - indice) {
-                                JOptionPane.showMessageDialog(nuevoProducto.this,
-                                        "Solo se pueden mostrar " + (etiquetasImagenes.length - indice) + " imágenes en la interfaz.",
-                                        "Información",
-                                        JOptionPane.INFORMATION_MESSAGE);
+                                if (archivosSeleccionados.length > etiquetasImagenes.length - indice) {
+                                    JOptionPane.showMessageDialog(nuevoProducto.this,
+                                            "Solo se pueden mostrar " + (etiquetasImagenes.length - indice) + " imágenes en la interfaz.",
+                                            "Información",
+                                            JOptionPane.INFORMATION_MESSAGE);
+                                }
                             }
                         }
-                    }
-                });
-            } else {
-                System.out.println("Error: etiquetasImagenes[" + i + "] es null");
+                    });
+                } else {
+                    System.out.println("Error: etiquetasImagenes[" + i + "] es null");
+                }
             }
+        } else {
+            System.out.println("Error: etiquetasImagenes no está inicializado o está vacío.");
         }
-    } else {
-        System.out.println("Error: etiquetasImagenes no está inicializado o está vacío.");
     }
-}
-
 
     private void configurarAutocompletadoUnidades() {
         configurarCampoConAutocompletado(txtNombre13);
@@ -268,7 +268,6 @@ public class nuevoProducto extends javax.swing.JDialog {
                     String[] partes = text.split("\\s+");
                     if (partes.length == 1 && isNumeric(partes[0])) {
                         popupMenu.removeAll();
-                        String letra = "";
                         for (String unidad : UNIDADES) {
                             JMenuItem item = new JMenuItem(unidad);
                             item.addActionListener(evt -> {
@@ -323,7 +322,207 @@ public class nuevoProducto extends javax.swing.JDialog {
         } catch (NumberFormatException e) {
             return false;
         }
-    
+    }
+
+    private void agregarValidaciones() {
+        // Validación para txtNombre
+        txtNombre.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (txtNombre.getText().trim().isEmpty()) {
+                    jlabelnombre.setText("Este campo es obligatorio");
+                    jlabelnombre.setForeground(Color.RED);
+                    jlabelnombre.setVisible(true);
+                } else {
+                    jlabelnombre.setVisible(false);
+                    jlabelnombre.setText("TIPO");
+                }
+            }
+        });
+        txtNombre.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (!txtNombre.getText().trim().isEmpty()) {
+                    jlabelnombre.setVisible(false);
+                    jlabelnombre.setText("TIPO");
+                }
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    txtNombre13.requestFocusInWindow();
+                }
+            }
+        });
+
+        // Validación para txtNombre13 (Alto)
+        txtNombre13.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                String texto = txtNombre13.getText().trim();
+                if (!texto.isEmpty() && !esMedidaValida(texto)) {
+                    jlabelalto.setText("Formato inválido. Ej: '10.5 cm'");
+                    jlabelalto.setForeground(Color.RED);
+                    jlabelalto.setVisible(true);
+                } else {
+                    jlabelalto.setVisible(false);
+                    jlabelalto.setText("TIPO");
+                }
+            }
+        });
+        txtNombre13.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (esMedidaValida(txtNombre13.getText().trim())) {
+                    jlabelalto.setVisible(false);
+                    jlabelalto.setText("TIPO");
+                }
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    txtNombre3.requestFocusInWindow();
+                }
+            }
+        });
+
+        // Validación para txtNombre3 (Ancho)
+        txtNombre3.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                String texto = txtNombre3.getText().trim();
+                if (!texto.isEmpty() && !esMedidaValida(texto)) {
+                    jlabelalto.setText("Formato inválido. Ej: '10.5 cm'");
+                    jlabelalto.setForeground(Color.RED);
+                    jlabelalto.setVisible(true);
+                } else {
+                    jlabelalto.setVisible(false);
+                    jlabelalto.setText("TIPO");
+                }
+            }
+        });
+        txtNombre3.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (esMedidaValida(txtNombre3.getText().trim())) {
+                    jlabelalto.setVisible(false);
+                    jlabelalto.setText("TIPO");
+                }
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    txtNombre1.requestFocusInWindow();
+                }
+            }
+        });
+
+        // Validación para txtNombre1 (Profundidad)
+        txtNombre1.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                String texto = txtNombre1.getText().trim();
+                if (!texto.isEmpty() && !esMedidaValida(texto)) {
+                    jlabelalto.setText("Formato inválido. Ej: '10.5 cm'");
+                    jlabelalto.setForeground(Color.RED);
+                    jlabelalto.setVisible(true);
+                } else {
+                    jlabelalto.setVisible(false);
+                    jlabelalto.setText("TIPO");
+                }
+            }
+        });
+        txtNombre1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (esMedidaValida(txtNombre1.getText().trim())) {
+                    jlabelalto.setVisible(false);
+                    jlabelalto.setText("TIPO");
+                }
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    jTextArea1.requestFocusInWindow();
+                }
+            }
+        });
+
+        // Validación para txtcolor
+        txtcolor.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (txtcolor.getText().trim().isEmpty()) {
+                    jlabelcolor.setText("Este campo es obligatorio");
+                    jlabelcolor.setForeground(Color.RED);
+                    jlabelcolor.setVisible(true);
+                } else {
+                    jlabelcolor.setVisible(false);
+                    jlabelcolor.setText("TIPO");
+                }
+            }
+        });
+        txtcolor.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (!txtcolor.getText().trim().isEmpty()) {
+                    jlabelcolor.setVisible(false);
+                    jlabelcolor.setText("TIPO");
+                }
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    txtmaterial1.requestFocusInWindow();
+                }
+            }
+        });
+
+        // Validación para txtmaterial1
+        txtmaterial1.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (txtmaterial1.getText().trim().isEmpty()) {
+                    jlabelma.setText("Este campo es obligatorio");
+                    jlabelma.setForeground(Color.RED);
+                    jlabelma.setVisible(true);
+                } else {
+                    jlabelma.setVisible(false);
+                    jlabelma.setText("TIPO");
+                }
+            }
+        });
+        txtmaterial1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (!txtmaterial1.getText().trim().isEmpty()) {
+                    jlabelma.setVisible(false);
+                    jlabelma.setText("TIPO");
+                }
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    btnGuardar.doClick();
+                }
+            }
+        });
+
+        // Validación para jTextArea1 (Descripción, opcional)
+        jTextArea1.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                // Descripción es opcional, no se valida
+            }
+        });
+        jTextArea1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    txtcolor.requestFocusInWindow();
+                }
+            }
+        });
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -334,8 +533,7 @@ public class nuevoProducto extends javax.swing.JDialog {
         panelP2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        rSLabelIcon1 = new rojerusan.RSLabelIcon();
-        jLabel16 = new javax.swing.JLabel();
+        btnGuardar2 = new rojeru_san.RSButtonRiple();
         txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
         txtNombre1 = new RSMaterialComponent.RSTextFieldMaterial();
         jLabel18 = new javax.swing.JLabel();
@@ -368,6 +566,11 @@ public class nuevoProducto extends javax.swing.JDialog {
         jlabelma = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jlabelcolor = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
 
         txtNombre4.setForeground(new java.awt.Color(0, 0, 0));
         txtNombre4.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -400,20 +603,19 @@ public class nuevoProducto extends javax.swing.JDialog {
         jLabel14.setText("Agregar Producto");
         jPanel4.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
 
-        rSLabelIcon1.setForeground(new java.awt.Color(255, 0, 0));
-        rSLabelIcon1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.CLOSE);
-        rSLabelIcon1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rSLabelIcon1MouseClicked(evt);
+        btnGuardar2.setBackground(new java.awt.Color(46, 49, 82));
+        btnGuardar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/x.png"))); // NOI18N
+        btnGuardar2.setColorHover(new java.awt.Color(204, 0, 0));
+        btnGuardar2.setFont(new java.awt.Font("Humnst777 BlkCn BT", 1, 18)); // NOI18N
+        btnGuardar2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnGuardar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardar2ActionPerformed(evt);
             }
         });
-        jPanel4.add(rSLabelIcon1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 0, -1, -1));
+        jPanel4.add(btnGuardar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 0, 40, 30));
 
         panelP2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 70));
-
-        jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel16.setText("*");
-        panelP2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 10, 10));
 
         txtNombre.setForeground(new java.awt.Color(0, 0, 0));
         txtNombre.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -617,6 +819,31 @@ public class nuevoProducto extends javax.swing.JDialog {
         jlabelcolor.setText("jLabel1");
         panelP2.add(jlabelcolor, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 486, 240, 20));
 
+        jLabel22.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel22.setText("*");
+        panelP2.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, 20, -1));
+
+        jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel23.setText("*");
+        panelP2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 430, 10, 10));
+
+        jLabel24.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel24.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel24.setText("*");
+        panelP2.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 10, 10));
+
+        jLabel25.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel25.setText("*");
+        panelP2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, 10, 10));
+
+        jLabel26.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel26.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel26.setText("*");
+        panelP2.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 430, 10, 10));
+
         panelP.add(panelP2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 600));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -643,89 +870,92 @@ public class nuevoProducto extends javax.swing.JDialog {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
 agregarOcultadorDeErrores(txtNombre, jlabelnombre);
-    
-    boolean hayErrores = false;
-    if (txtNombre.getText().trim().isEmpty()) {
-        jlabelnombre.setText("Este campo es obligatorio");
-        jlabelnombre.setForeground(Color.RED);
-        jlabelnombre.setVisible(true);
-        hayErrores = true;
-    }
 
-    // Validar Color
-    if (txtcolor.getText().trim().isEmpty()) {
-        jlabelcolor.setText("Campo obligatorio");
-        jlabelcolor.setForeground(Color.RED);
-        jlabelcolor.setVisible(true);
-        hayErrores = true;
-    }
+        boolean hayErrores = false;
+        // Validar Nombre
+        if (txtNombre.getText().trim().isEmpty()) {
+            jlabelnombre.setText("Este campo es obligatorio");
+            jlabelnombre.setForeground(Color.RED);
+            jlabelnombre.setVisible(true);
+            hayErrores = true;
+        }
 
-    // Validar Material
-    if (txtmaterial1.getText().trim().isEmpty()) {
-        jlabelma.setText("Campo obligatorio");
-        jlabelma.setForeground(Color.RED);
-        jlabelma.setVisible(true);
-        hayErrores = true;
-    }
+        // Validar Color
+        if (txtcolor.getText().trim().isEmpty()) {
+            jlabelcolor.setText("Campo obligatorio");
+            jlabelcolor.setForeground(Color.RED);
+            jlabelcolor.setVisible(true);
+            hayErrores = true;
+        }
 
-    // Validar medidas
-    if (!txtNombre13.getText().trim().isEmpty() && !esMedidaValida(txtNombre13.getText().trim())) {
-        jlabelalto.setText("Formato inválido. Ej: '10.5 cm'");
-        jlabelalto.setVisible(true);
-        hayErrores = true;
-    }
+        // Validar Material
+        if (txtmaterial1.getText().trim().isEmpty()) {
+            jlabelma.setText("Campo obligatorio");
+            jlabelma.setForeground(Color.RED);
+            jlabelma.setVisible(true);
+            hayErrores = true;
+        }
 
- 
+        // Validar medidas
+        if (!txtNombre13.getText().trim().isEmpty() && !esMedidaValida(txtNombre13.getText().trim())) {
+            jlabelalto.setText("Formato inválido. Ej: '10.5 cm'");
+            jlabelalto.setVisible(true);
+            hayErrores = true;
+        }
 
-    if (!txtNombre1.getText().trim().isEmpty() && !esMedidaValida(txtNombre1.getText().trim())) {
-        jlabelalto.setText("Formato inválido. Ej: '10.5 cm'");
-        jlabelalto.setVisible(true);
-        hayErrores = true;
-    }
+        if (!txtNombre3.getText().trim().isEmpty() && !esMedidaValida(txtNombre3.getText().trim())) {
+            jlabelalto.setText("Formato inválido. Ej: '10.5 cm'");
+            jlabelalto.setVisible(true);
+            hayErrores = true;
+        }
 
-    // Validar imágenes
-    if (imagenesBytes.isEmpty()) {
-        int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea continuar sin imágenes?", "Confirmación", JOptionPane.YES_NO_OPTION);
-        if (respuesta != JOptionPane.YES_OPTION) {
+        if (!txtNombre1.getText().trim().isEmpty() && !esMedidaValida(txtNombre1.getText().trim())) {
+            jlabelalto.setText("Formato inválido. Ej: '10.5 cm'");
+            jlabelalto.setVisible(true);
+            hayErrores = true;
+        }
+
+        // Validar mínimo dos imágenes
+        if (imagenesBytes.size() < 2) {
+            JOptionPane.showMessageDialog(this, "Se requieren al menos dos imágenes para guardar el producto.", "Error", JOptionPane.ERROR_MESSAGE);
+            hayErrores = true;
+        }
+
+        // Si hay errores, no continúes
+        if (hayErrores) {
             return;
         }
-    }
 
-    // Si hay errores, no continúes
-    if (hayErrores) {
-        return;
-    }
+        // Si todo está bien, crear el producto y guardar
+        String alto = txtNombre13.getText().trim();
+        String ancho = txtNombre3.getText().trim();
+        String profundidad = txtNombre1.getText().trim();
 
-    // Si todo está bien, crear el producto y guardar
-    String alto = txtNombre13.getText().trim();
-    String ancho = txtNombre3.getText().trim();
-    String profundidad = txtNombre1.getText().trim();
+        catalogoproducto producto = new catalogoproducto();
+        producto.setNombre(txtNombre.getText().trim());
+        producto.setAlto(alto);
+        producto.setAncho(ancho);
+        producto.setProfundidad(profundidad);
+        producto.setMaterial(txtmaterial1.getText().trim());
+        producto.setColor(txtcolor.getText().trim());
+        producto.setDescripcion(jTextArea1.getText().trim());
+        producto.setImagen(imagenesBytes.size() > 0 ? imagenesBytes.get(0) : null);
+        producto.setImagen2(imagenesBytes.size() > 1 ? imagenesBytes.get(1) : null);
+        producto.setImagen3(imagenesBytes.size() > 2 ? imagenesBytes.get(2) : null);
+        producto.setImagen4(imagenesBytes.size() > 3 ? imagenesBytes.get(3) : null);
+        producto.setIdCategoria(idCategoria);
 
-    catalogoproducto producto = new catalogoproducto();
-    producto.setNombre(txtNombre.getText().trim());
-    producto.setAlto(alto);
-    producto.setAncho(ancho);
-    producto.setProfundidad(profundidad);
-    producto.setMaterial(txtmaterial1.getText().trim());
-    producto.setColor(txtcolor.getText().trim());
-    producto.setDescripcion(jTextArea1.getText().trim());
-    producto.setImagen(imagenesBytes.size() > 0 ? imagenesBytes.get(0) : null);
-    producto.setImagen2(imagenesBytes.size() > 1 ? imagenesBytes.get(1) : null);
-    producto.setImagen3(imagenesBytes.size() > 2 ? imagenesBytes.get(2) : null);
-    producto.setImagen4(imagenesBytes.size() > 3 ? imagenesBytes.get(3) : null);
-    producto.setIdCategoria(idCategoria);
-
-    Ctrl_productocatalogo ctrlProducto = new Ctrl_productocatalogo();
-    if (ctrlProducto.guardar(producto)) {
-        JOptionPane.showMessageDialog(this, "Producto guardado exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        if (getParent() instanceof Productos) {
-            ((Productos) getParent()).cargarProductosDesdeBD();
+        Ctrl_productocatalogo ctrlProducto = new Ctrl_productocatalogo();
+        if (ctrlProducto.guardar(producto)) {
+            JOptionPane.showMessageDialog(this, "Producto guardado exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            if (getParent() instanceof Productos) {
+                ((Productos) getParent()).cargarProductosDesdeBD();
+            }
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al guardar el producto. Verifique los campos y las imágenes.", "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Error al guardar producto con idCategoria: " + idCategoria);
         }
-        dispose();
-    } else {
-        JOptionPane.showMessageDialog(this, "Error al guardar el producto. Verifique los campos y las imágenes.", "Error", JOptionPane.ERROR_MESSAGE);
-        System.out.println("Error al guardar producto con idCategoria: " + idCategoria);
-    }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
@@ -752,10 +982,9 @@ agregarOcultadorDeErrores(txtNombre, jlabelnombre);
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombre2ActionPerformed
 
-    private void rSLabelIcon1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rSLabelIcon1MouseClicked
-
-dispose();
-    }//GEN-LAST:event_rSLabelIcon1MouseClicked
+    private void btnGuardar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar2ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnGuardar2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -792,14 +1021,19 @@ public static void main(String args[]) {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar1;
     private rojeru_san.RSButtonRiple btnGuardar;
+    private rojeru_san.RSButtonRiple btnGuardar2;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
@@ -810,7 +1044,6 @@ public static void main(String args[]) {
     private javax.swing.JLabel jlabelnombre;
     private javax.swing.JPanel panelP;
     private javax.swing.JPanel panelP2;
-    private rojerusan.RSLabelIcon rSLabelIcon1;
     private rojerusan.RSLabelIcon rSLabelIcon6;
     private rojerusan.RSLabelIcon rSLabelIcon7;
     private rojerusan.RSLabelIcon rSLabelIcon8;
