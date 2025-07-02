@@ -29,6 +29,14 @@ public class Cliente {
         this.activo = activo;
     }
 
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
     public int getId_cliente() {
         return codigo; // Mantén getId_cliente() para compatibilidad con la vista, pero usa codigo internamente
     }

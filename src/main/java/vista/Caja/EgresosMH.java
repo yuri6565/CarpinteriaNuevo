@@ -14,6 +14,8 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -172,7 +174,6 @@ public class EgresosMH extends javax.swing.JDialog {
         formatter.setMinimumFractionDigits(2);
         formatter.setMaximumFractionDigits(2);
 
-        // Buscar en inventario de materiales
         String claveCompleta = inventarioMateriales.keySet().stream()
                 .filter(k -> k.startsWith(nombreMaterial + "|"))
                 .findFirst()
@@ -183,7 +184,6 @@ public class EgresosMH extends javax.swing.JDialog {
         String unidad = partes.length > 1 ? partes[1] : "unidad";
         double stockActual = inventarioMateriales.getOrDefault(claveCompleta, 0.0);
 
-        // Crear fila con estilo original
         JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
         fila.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         fila.setBackground(Color.WHITE);
@@ -197,7 +197,6 @@ public class EgresosMH extends javax.swing.JDialog {
         txtCantidad.setForeground(Color.BLACK);
         txtCantidad.setPreferredSize(new Dimension(100, 30));
 
-        // Aplicar filtro de números
         ((AbstractDocument) txtCantidad.getDocument()).setDocumentFilter(new NumberFilter());
 
         fila.add(label);
@@ -238,84 +237,83 @@ public class EgresosMH extends javax.swing.JDialog {
 
         fila.add(label);
         fila.add(txtCantidad);
-        panelHerramientas.add(fila); // CORRECCIÓN: Ahora se agrega al panel correcto
+        panelHerramientas.add(fila);
         panelHerramientas.add(Box.createVerticalStrut(5));
     }
 
-    private void actualizarStockInventario(Connection con, int idInventario, double cantidad) throws SQLException {
-        // Validar que la cantidad sea positiva
-        if (cantidad <= 0) {
-            throw new SQLException("La cantidad debe ser mayor que cero");
-        }
-
-        // Obtener la cantidad actual del inventario
-        String sqlSelect = "SELECT cantidad FROM inventario WHERE id_inventario = ?";
-        double cantidadActual = 0.0;
-        try (PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
-            psSelect.setInt(1, idInventario);
-            try (ResultSet rs = psSelect.executeQuery()) {
-                if (rs.next()) {
-                    String cantidadStr = rs.getString("cantidad").trim();
-                    cantidadActual = parseCantidad(cantidadStr);
-                } else {
-                    throw new SQLException("No se encontró el inventario con ID: " + idInventario);
-                }
+    private void actualizarStockVisual(JLabel label, JTextField txtCantidad, double stockActual, NumberFormat formatter) {
+        try {
+            String cantidadStr = txtCantidad.getText().trim().replace(",", ".");
+            System.out.println("Cantidad ingresada: " + cantidadStr + ", Stock actual: " + stockActual); // Depuración
+            if (!cantidadStr.isEmpty() && !cantidadStr.equals("0.0") && !cantidadStr.equals("0,00")) {
+                BigDecimal cantidad = new BigDecimal(cantidadStr)
+                        .setScale(2, BigDecimal.ROUND_HALF_UP);
+                BigDecimal stock = BigDecimal.valueOf(stockActual).setScale(2, BigDecimal.ROUND_HALF_UP);
+                BigDecimal nuevoStock = stock.add(cantidad).setScale(2, BigDecimal.ROUND_HALF_UP);
+                System.out.println("Nuevo stock calculado: " + nuevoStock); // Depuración
+                label.setText(String.format("<html><b>%s</b> (Stock: %s %s)</html>",
+                        label.getText().split("<b>")[1].split("</b>")[0].trim(), formatter.format(nuevoStock.doubleValue()),
+                        label.getText().split("\\(")[1].split(" ")[2]));
+            } else {
+                label.setText(String.format("<html><b>%s</b> (Stock: %s %s)</html>",
+                        label.getText().split("<b>")[1].split("</b>")[0].trim(), formatter.format(stockActual),
+                        label.getText().split("\\(")[1].split(" ")[2]));
             }
-        }
-
-        // Sumar la nueva cantidad (sin restricciones de máximo)
-        double nuevaCantidad = cantidadActual + cantidad;
-
-        // Formatear la cantidad
-        java.text.NumberFormat numberFormat = java.text.NumberFormat.getNumberInstance(java.util.Locale.forLanguageTag("es-ES"));
-        numberFormat.setMinimumFractionDigits(2);
-        numberFormat.setMaximumFractionDigits(2);
-        String cantidadFormateada = numberFormat.format(nuevaCantidad).replace(".", ",");
-
-        // Actualizar el inventario
-        String sqlUpdate = "UPDATE inventario SET cantidad = ? WHERE id_inventario = ?";
-        try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
-            psUpdate.setString(1, cantidadFormateada);
-            psUpdate.setInt(2, idInventario);
-            int affectedRows = psUpdate.executeUpdate();
-
-            if (affectedRows == 0) {
-                throw new SQLException("No se pudo actualizar el stock");
-            }
+        } catch (NumberFormatException e) {
+            System.out.println("Error al parsear cantidad: " + txtCantidad.getText() + " - " + e.getMessage());
+            label.setText(String.format("<html><b>%s</b> (Stock: %s %s)</html>",
+                    label.getText().split("<b>")[1].split("</b>")[0].trim(), formatter.format(stockActual),
+                    label.getText().split("\\(")[1].split(" ")[2]));
         }
     }
 
     private double parseCantidad(String cantidadStr) {
         try {
-            String normalized = cantidadStr.replace(".", "").replace(",", ".");
-            return Double.parseDouble(normalized);
+            // Reemplazar coma por punto antes de parsear
+            return Double.parseDouble(cantidadStr.replace(",", "."));
         } catch (NumberFormatException e) {
             return 0.0;
         }
     }
 
-    private void actualizarInventario(Connection con, List<CheckableItem> seleccionados) throws SQLException {
-        try {
-            // Validar que haya seleccionados
-            if (seleccionados == null || seleccionados.isEmpty()) {
-                throw new SQLException("No hay ítems seleccionados para actualizar");
+    private void actualizarInventario(Connection con, Map<String, String> cantidadesMateriales,
+            Map<String, String> cantidadesHerramientas) throws SQLException {
+        // Cambiar el formato de números (de "3,50" a "3.50")
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
+
+        for (Map.Entry<String, String> entry : cantidadesMateriales.entrySet()) {
+            try {
+                String cantidadStr = entry.getValue().replace(",", ".");
+                double cantidad = Double.parseDouble(cantidadStr);
+
+                if (cantidad > 0) {
+                    String sql = "UPDATE inventario SET cantidad = cantidad + ? WHERE nombre = ? AND tipo = 'material'";
+                    try (PreparedStatement ps = con.prepareStatement(sql)) {
+                        ps.setDouble(1, cantidad); // Usar setDouble en lugar de setString
+                        ps.setString(2, entry.getKey());
+                        ps.executeUpdate();
+                    }
+                }
+            } catch (NumberFormatException e) {
+                throw new SQLException("Formato de cantidad inválido para " + entry.getKey());
             }
+        }
+        for (Map.Entry<String, String> entry : cantidadesHerramientas.entrySet()) {
+            try {
+                String cantidadStr = entry.getValue().replace(",", ".");
+                double cantidad = Double.parseDouble(cantidadStr);
 
-            // Obtener la cantidad del campo (asumiendo que es la misma para todos)
-            double cantidad = Double.parseDouble(txtCantidadnuevo.getText().trim().replace(",", "."));
-
-            // Validar cantidad positiva
-            if (cantidad <= 0) {
-                throw new SQLException("La cantidad debe ser mayor que cero");
+                if (cantidad > 0) {
+                    String sql = "UPDATE inventario SET cantidad = cantidad + ? WHERE nombre = ? AND tipo = 'herramienta'";
+                    try (PreparedStatement ps = con.prepareStatement(sql)) {
+                        ps.setDouble(1, cantidad); // Usar setDouble en lugar de setString
+                        ps.setString(2, entry.getKey());
+                        ps.executeUpdate();
+                    }
+                }
+            } catch (NumberFormatException e) {
+                throw new SQLException("Formato de cantidad inválido para " + entry.getKey());
             }
-
-            // Actualizar cada ítem seleccionado
-            for (CheckableItem item : seleccionados) {
-                actualizarStockInventario(con, item.getId(), cantidad);
-            }
-
-        } catch (NumberFormatException e) {
-            throw new SQLException("Formato de cantidad inválido: " + e.getMessage());
         }
     }
 
@@ -331,12 +329,6 @@ public class EgresosMH extends javax.swing.JDialog {
     public List<String> getHerramientasAEliminar() {
         return herramientasAEliminar;
     }
-
-    private void mostrarError(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    
 
     public boolean isConfirmado() {
         return confirmado;
@@ -502,123 +494,142 @@ public class EgresosMH extends javax.swing.JDialog {
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
         Connection con = null;
         try {
-            NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
-            numberFormat.setMinimumFractionDigits(2);
-            numberFormat.setMaximumFractionDigits(2);
-
-            // Obtener conexión y comenzar transacción
             con = Conexion.getConnection();
-            con.setAutoCommit(false);
+            con.setAutoCommit(false); // Iniciar transacción
 
-            // Procesar MATERIALES (SUMAR al inventario)
+            // Procesar materiales
             for (Component comp : panelMateriales.getComponents()) {
                 if (comp instanceof JPanel) {
                     JPanel fila = (JPanel) comp;
                     JLabel label = (JLabel) fila.getComponent(0);
                     JTextField txtCantidad = (JTextField) fila.getComponent(1);
 
-                    String textoLabel = label.getText();
-                    String nombreMaterial = textoLabel.split("<b>")[1].split("</b>")[0].trim();
-                    String cantidadStr = txtCantidad.getText().trim();
+                    String nombreMaterial = label.getText().split("<b>")[1].split("</b>")[0].trim();
+                    String cantidadStr = txtCantidad.getText().trim().replace(",", ".");
 
-                    if (cantidadStr.isEmpty() || cantidadStr.equals("0,00")) {
-                        continue;
-                    }
+                    if (!cantidadStr.isEmpty() && !cantidadStr.equals("0.00")) {
+                        // Validar y parsear cantidad
+                        BigDecimal cantidad = new BigDecimal(cantidadStr).setScale(2, RoundingMode.HALF_UP);
+                        if (cantidad.compareTo(BigDecimal.ZERO) <= 0) {
+                            throw new IllegalArgumentException("La cantidad de " + nombreMaterial + " debe ser mayor que cero");
+                        }
 
-                    double cantidad = numberFormat.parse(cantidadStr).doubleValue();
+                        // Obtener stock actual desde BD
+                        BigDecimal stockActual = obtenerStockDesdeBD(con, nombreMaterial, "material");
+                        BigDecimal nuevoStock = stockActual.add(cantidad).setScale(2, RoundingMode.HALF_UP);
 
-                    if (cantidad <= 0) {
-                        con.rollback();
-                        JOptionPane.showMessageDialog(this,
-                                "La cantidad de " + nombreMaterial + " debe ser mayor que cero",
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
+                        System.out.println("[Material] " + nombreMaterial + " | Stock actual: " + stockActual + " + " + cantidad + " = " + nuevoStock);
 
-                    // SUMAR la cantidad al inventario (cambió el - por +)
-                    String sql = "UPDATE inventario SET cantidad = cantidad + ? WHERE nombre = ? AND tipo = 'material'";
-                    try (PreparedStatement ps = con.prepareStatement(sql)) {
-                        ps.setDouble(1, cantidad);
-                        ps.setString(2, nombreMaterial);
-                        ps.executeUpdate();
+                        // Actualizar BD (Opción 1: SET cantidad = nuevoStock)
+                        String sql = "UPDATE inventario SET cantidad = ? WHERE nombre = ? AND tipo = 'material'";
+                        try (PreparedStatement ps = con.prepareStatement(sql)) {
+                            ps.setString(1, nuevoStock.toString()); // Usar BigDecimal para precisión
+                            ps.setString(2, nombreMaterial);
+                            ps.executeUpdate();
+                        }
                     }
                 }
             }
 
-            // Procesar HERRAMIENTAS (SUMAR al inventario)
+            // Procesar herramientas (misma lógica que materiales)
             for (Component comp : panelHerramientas.getComponents()) {
                 if (comp instanceof JPanel) {
                     JPanel fila = (JPanel) comp;
                     JLabel label = (JLabel) fila.getComponent(0);
                     JTextField txtCantidad = (JTextField) fila.getComponent(1);
 
-                    String textoLabel = label.getText();
-                    String nombreHerramienta = textoLabel.split("<b>")[1].split("</b>")[0].trim();
-                    String cantidadStr = txtCantidad.getText().trim();
+                    String nombreHerramienta = label.getText().split("<b>")[1].split("</b>")[0].trim();
+                    String cantidadStr = txtCantidad.getText().trim().replace(".", ",");
 
-                    if (cantidadStr.isEmpty() || cantidadStr.equals("0,00")) {
-                        continue;
-                    }
+                    if (!cantidadStr.isEmpty() && !cantidadStr.equals("0.00")) {
+                        BigDecimal cantidad = new BigDecimal(cantidadStr).setScale(2, RoundingMode.HALF_UP);
+                        if (cantidad.compareTo(BigDecimal.ZERO) <= 0) {
+                            throw new IllegalArgumentException("La cantidad de " + nombreHerramienta + " debe ser mayor que cero");
+                        }
 
-                    double cantidad = numberFormat.parse(cantidadStr).doubleValue();
+                        BigDecimal stockActual = obtenerStockDesdeBD(con, nombreHerramienta, "herramienta");
+                        BigDecimal nuevoStock = stockActual.add(cantidad).setScale(2, RoundingMode.HALF_UP);
 
-                    if (cantidad <= 0) {
-                        con.rollback();
-                        JOptionPane.showMessageDialog(this,
-                                "La cantidad de " + nombreHerramienta + " debe ser mayor que cero",
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
+                        System.out.println("[Herramienta] " + nombreHerramienta + " | Stock actual: " + stockActual + " + " + cantidad + " = " + nuevoStock);
 
-                    // SUMAR la cantidad al inventario (cambió el - por +)
-                    String sql = "UPDATE inventario SET cantidad = cantidad + ? WHERE nombre = ? AND tipo = 'herramienta'";
-                    try (PreparedStatement ps = con.prepareStatement(sql)) {
-                        ps.setDouble(1, cantidad);
-                        ps.setString(2, nombreHerramienta);
-                        ps.executeUpdate();
+                        String sql = "UPDATE inventario SET cantidad = ? WHERE nombre = ? AND tipo = 'herramienta'";
+                        try (PreparedStatement ps = con.prepareStatement(sql)) {
+                            ps.setString(1, nuevoStock.toString());
+                            ps.setString(2, nombreHerramienta);
+                            ps.executeUpdate();
+                        }
                     }
                 }
             }
 
-            // Confirmar transacción
-            con.commit();
+            con.commit(); // Confirmar transacción
             confirmado = true;
-            JOptionPane.showMessageDialog(this,
-                    "Ingresos al inventario registrados correctamente",
-                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "¡Inventario actualizado correctamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
 
-        } catch (ParseException | NumberFormatException e) {
-            try {
-                if (con != null) {
-                    con.rollback();
-                }
-            } catch (SQLException ex) {
-            }
-            JOptionPane.showMessageDialog(this,
-                    "Error en formato de números: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            rollbackTransaction(con);
         } catch (SQLException e) {
-            try {
-                if (con != null) {
-                    con.rollback();
-                }
-            } catch (SQLException ex) {
-            }
-            JOptionPane.showMessageDialog(this,
-                    "Error al actualizar inventario: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            rollbackTransaction(con);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            rollbackTransaction(con);
         } finally {
-            try {
-                if (con != null) {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
                     con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException e) {
+            }
+        }
+        dispose();
+    }
+
+// Método auxiliar para obtener stock desde BD (usando BigDecimal)
+    private BigDecimal obtenerStockDesdeBD(Connection con, String nombre, String tipo) throws SQLException {
+        String sql = "SELECT cantidad FROM inventario WHERE nombre = ? AND tipo = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, nombre);
+            ps.setString(2, tipo);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String cantidadStr = rs.getString("cantidad").replace(",", ".");
+                    return new BigDecimal(cantidadStr).setScale(2, RoundingMode.HALF_UP);
+                }
+            }
+        }
+        return BigDecimal.ZERO; // Si no existe, retorna 0
+    }
+
+// Método auxiliar para rollback
+    private void rollbackTransaction(Connection con) {
+        if (con != null) {
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
         }
 
 
     }//GEN-LAST:event_btnGuardar1ActionPerformed
+    private void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this,
+                mensaje,
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this,
+                mensaje,
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
 
     public Map<String, Double> getMaterialesActualizados() {
         Map<String, Double> materiales = new HashMap<>();
@@ -760,21 +771,11 @@ private void generarCamposDinamicos() {
 
     private class NumberFilter extends DocumentFilter {
 
-        private Double maxQuantity = null; // Ahora es opcional
         private final NumberFormat numberFormat;
 
-        // Constructor original (para compatibilidad)
-        public NumberFilter(double maxQuantity) {
-            this.maxQuantity = maxQuantity;
-            this.numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
-            numberFormat.setMinimumFractionDigits(0);
-            numberFormat.setMaximumFractionDigits(2);
-        }
-
-        // Nuevo constructor sin restricciones
         public NumberFilter() {
-            this.numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
-            numberFormat.setMinimumFractionDigits(0);
+            numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
+            numberFormat.setMinimumFractionDigits(2);
             numberFormat.setMaximumFractionDigits(2);
         }
 
@@ -789,28 +790,40 @@ private void generarCamposDinamicos() {
             }
         }
 
-        @Override
-        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
-                throws BadLocationException {
-            String newStr = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
-            if (isValidInput(newStr)) {
-                super.replace(fb, offset, length, text, attrs);
-            } else {
-                Toolkit.getDefaultToolkit().beep();
-            }
-        }
-
         private boolean isValidInput(String input) {
             if (input.isEmpty()) {
                 return true;
             }
             try {
-                Number parsed = numberFormat.parse(input.replace(",", "."));
-                double value = parsed.doubleValue();
-                // Solo verifica el máximo si maxQuantity no es null
-                return value >= 0 && (maxQuantity == null || value <= maxQuantity);
+                numberFormat.parse(input);
+                return true;
             } catch (ParseException e) {
                 return false;
+            }
+        }
+    }
+
+    private void actualizarStockInventario(Connection con, int idInventario, double cantidad) throws SQLException {
+        // Validar que la cantidad sea positiva
+        if (cantidad <= 0) {
+            throw new SQLException("La cantidad debe ser mayor que cero");
+        }
+
+        // Formatear la cantidad
+        java.text.NumberFormat numberFormat = java.text.NumberFormat.getNumberInstance(java.util.Locale.forLanguageTag("es-ES"));
+        numberFormat.setMinimumFractionDigits(2);
+        numberFormat.setMaximumFractionDigits(2);
+        String cantidadFormateada = numberFormat.format(cantidad).replace(".", ",");
+
+        // Actualizar el inventario (SUMAR cantidad)
+        String sqlUpdate = "UPDATE inventario SET cantidad = cantidad + ? WHERE id_inventario = ?";
+        try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
+            psUpdate.setString(1, cantidadFormateada);
+            psUpdate.setInt(2, idInventario);
+            int affectedRows = psUpdate.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("No se pudo actualizar el stock");
             }
         }
     }

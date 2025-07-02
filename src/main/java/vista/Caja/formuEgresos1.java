@@ -487,7 +487,7 @@ public class formuEgresos1 extends javax.swing.JDialog {
         jLabel8.setVisible(esCompraProductos);
         comboProveedor.setVisible(esCompraProductos);
         btnClienteN1.setVisible(esCompraProductos);
-
+        btnClienteN2.setVisible(esCompraProductos);
         // Mostrar solo materiales o herramientas según necesidad
         jLabel3.setVisible(esCompraProductos);
         btnClienteN.setVisible(esCompraProductos);
@@ -527,33 +527,47 @@ public class formuEgresos1 extends javax.swing.JDialog {
     }//GEN-LAST:event_btnClienteN2ActionPerformed
 
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
-        Connection con = null;
-        PreparedStatement ps = null;
-        try {
-            // Validaciones básicas
-            if (txtPago.getDate() == null) {
-                mostrarError("La fecha de pago es requerida");
-                return;
-            }
-            if (txtCantidadnuevo.getText().trim().isEmpty()) {
-                mostrarError("El monto es requerido");
-                return;
-            }
-            if (txtDetallenuevo.getText().trim().isEmpty()) {
-                mostrarError("La descripción es requerida");
-                return;
-            }
-            if (comboCategoria.getSelectedIndex() == 0) {
-                mostrarError("Debe seleccionar una categoría");
-                return;
-            }
+    Connection con = null;
+    try {
+        // ===== 1. VALIDACIONES BÁSICAS =====
+        if (txtPago.getDate() == null) {
+            mostrarError("Debe seleccionar una fecha de pago");
+            return;
+        }
+        
+        if (txtCantidadnuevo.getText().trim().isEmpty()) {
+            mostrarError("El monto es requerido");
+            return;
+        }
+        
+        if (txtDetallenuevo.getText().trim().isEmpty()) {
+            mostrarError("La descripción es requerida");
+            return;
+        }
+        
+        if (comboCategoria.getSelectedIndex() == 0) {
+            mostrarError("Debe seleccionar una categoría");
+            return;
+        }
 
-            // Obtener valores del formulario
-            java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
-            double monto = Double.parseDouble(txtCantidadnuevo.getText().trim().replace(",", "."));
-            String descripcion = txtDetallenuevo.getText();
-            String categoria = comboCategoria.getSelectedItem().toString();
+        // ===== 2. OBTENER VALORES =====
+        java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
+        double monto = Double.parseDouble(txtCantidadnuevo.getText().trim().replace(",", "."));
+        String descripcion = txtDetallenuevo.getText();
+        String categoria = comboCategoria.getSelectedItem().toString();
 
+        // ===== 3. PREPARAR CONEXIÓN =====
+        con = Conexion.getConnection();
+        con.setAutoCommit(false);
+
+        // ===== 4. MANEJAR COMPRA DE PRODUCTOS =====
+        if (categoria.equals("Compra de Productos e Insumos")) {
+            // Validar proveedor
+            if (comboProveedor.getSelectedIndex() <= 0) {
+                mostrarError("Debe seleccionar un proveedor");
+                return;
+            }
+            
             // Recolectar items seleccionados
             List<CheckableItem> seleccionados = new ArrayList<>();
             for (int i = 0; i < cmbMateriales.getModel().getSize(); i++) {
@@ -562,6 +576,7 @@ public class formuEgresos1 extends javax.swing.JDialog {
                     seleccionados.add(item);
                 }
             }
+            
             for (int i = 0; i < cmbHerramientas.getModel().getSize(); i++) {
                 CheckableItem item = cmbHerramientas.getModel().getElementAt(i);
                 if (item.isSelected()) {
@@ -569,129 +584,155 @@ public class formuEgresos1 extends javax.swing.JDialog {
                 }
             }
 
-            // Validar proveedor si es compra de productos
-            String proveedorSeleccionado = null;
-            if (categoria.equals("Compra de Productos e Insumos")) {
-                if (comboProveedor.getSelectedIndex() <= 0) {
-                    mostrarError("Debe seleccionar un proveedor");
-                    return;
-                }
-                proveedorSeleccionado = comboProveedor.getSelectedItem().toString();
-
-                if (seleccionados.isEmpty()) {
-                    mostrarError("Debe seleccionar al menos un producto o herramienta");
-                    return;
-                }
+            if (seleccionados.isEmpty()) {
+                mostrarError("Debe seleccionar al menos un producto");
+                return;
             }
 
-            // Iniciar transacción
-            con = Conexion.getConnection();
-            con.setAutoCommit(false);
+            // Mostrar diálogo para cantidades
+            EgresosMH formMH = new EgresosMH((Frame) this.getParent(), true, seleccionados, monto);
+            formMH.setLocationRelativeTo(null);
+            formMH.setVisible(true);
 
-            // Insertar en caja
-            String sqlCaja = "INSERT INTO caja (fecha, movimiento, monto, descripcion, categoria) VALUES (?, 'egreso', ?, ?, ?)";
-            ps = con.prepareStatement(sqlCaja, Statement.RETURN_GENERATED_KEYS);
-            ps.setDate(1, fecha);
-            ps.setDouble(2, monto);
-            ps.setString(3, descripcion);
-            ps.setString(4, categoria);
-            int resultado = ps.executeUpdate();
-
-            if (resultado > 0) {
-                // Si es compra de productos, actualizar inventario
-                if (categoria.equals("Compra de Productos e Insumos")) {
-                    // Mostrar diálogo para cantidades
-                    double cantidad = Double.parseDouble(txtCantidadnuevo.getText().trim().replace(",", "."));
-                    EgresosMH formMH = new EgresosMH((Frame) this.getParent(), true, seleccionados, cantidad);
-                    formMH.setLocationRelativeTo(null);
-                    formMH.setVisible(true);
-
-                    if (formMH.isConfirmado()) {
-                        // Procesar cantidades ingresadas
-                        Map<String, String> cantidadesMateriales = formMH.getCantidadesMateriales();
-                        Map<String, String> cantidadesHerramientas = formMH.getCantidadesHerramientas();
-
-                        // Actualizar inventario
-                        actualizarInventario(con, cantidadesMateriales, cantidadesHerramientas);
-                    } else {
-                        con.rollback();
-                        return;
-                    }
+            if (formMH.isConfirmado()) {
+                // Insertar en caja
+                String sqlCaja = "INSERT INTO caja (fecha, movimiento, monto, descripcion, categoria) " +
+                               "VALUES (?, 'egreso', ?, ?, ?)";
+                try (PreparedStatement ps = con.prepareStatement(sqlCaja)) {
+                    ps.setDate(1, fecha);
+                    ps.setDouble(2, monto);
+                    ps.setString(3, descripcion);
+                    ps.setString(4, categoria);
+                    ps.executeUpdate();
                 }
 
                 con.commit();
-                mostrarMensaje("Egreso registrado correctamente");
-                this.dispose();
-            } else {
-                con.rollback();
-                mostrarError("No se pudo registrar el egreso");
+                mostrarMensaje("Registro guardado exitosamente");
+                this.dispose(); // Cerrar la ventana actual
             }
-        } catch (NumberFormatException e) {
-            mostrarError("El monto debe ser un número válido con formato '12,50'");
-        } catch (SQLException e) {
+        } 
+        // ===== 5. OTRAS CATEGORÍAS =====
+        else {
+            // Insertar directamente en caja
+            String sqlCaja = "INSERT INTO caja (fecha, movimiento, monto, descripcion, categoria) " +
+                           "VALUES (?, 'egreso', ?, ?, ?)";
+            try (PreparedStatement ps = con.prepareStatement(sqlCaja)) {
+                ps.setDate(1, fecha);
+                ps.setDouble(2, monto);
+                ps.setString(3, descripcion);
+                ps.setString(4, categoria);
+                ps.executeUpdate();
+            }
+
+            con.commit();
+            mostrarMensaje("Registro guardado exitosamente");
+            this.dispose(); // Cerrar la ventana actual
+        }
+    } catch (NumberFormatException e) {
+        mostrarError("Formato de monto inválido. Use números con punto decimal (ej: 1500.50)");
+    } catch (SQLException e) {
+        try {
+            if (con != null) con.rollback();
+            mostrarError("Error al guardar: " + e.getMessage());
+        } catch (SQLException ex) {
+            mostrarError("Error al revertir cambios: " + ex.getMessage());
+        }
+    } catch (Exception e) {
+        mostrarError("Error inesperado: " + e.getMessage());
+    } finally {
+        if (con != null) {
             try {
-                if (con != null) {
-                    con.rollback();
-                }
-                mostrarError("Error al registrar el egreso: " + e.getMessage());
-            } catch (SQLException ex) {
-                mostrarError("Error al revertir transacción: " + ex.getMessage());
-            }
-        } finally {
-            if (ps != null) try {
-                ps.close();
-            } catch (SQLException e) {
-            }
-            if (con != null) try {
+                con.setAutoCommit(true);
                 con.close();
             } catch (SQLException e) {
-            }
-        }
-
-    }//GEN-LAST:event_btnGuardar1ActionPerformed
-    private void actualizarInventario(Connection con, Map<String, String> cantidadesMateriales, Map<String, String> cantidadesHerramientas) throws SQLException {
-        NumberFormat nf = NumberFormat.getNumberInstance(Locale.forLanguageTag("es-ES"));
-
-        // Actualizar materiales
-        for (Map.Entry<String, String> entry : cantidadesMateriales.entrySet()) {
-            String nombre = entry.getKey();
-            String cantidadStr = entry.getValue().replace(",", ".");
-
-            try {
-                double cantidad = nf.parse(cantidadStr).doubleValue();
-                if (cantidad > 0) {
-                    String sql = "UPDATE inventario SET cantidad = cantidad + ? WHERE nombre = ? AND tipo = 'material'";
-                    try (PreparedStatement ps = con.prepareStatement(sql)) {
-                        ps.setDouble(1, cantidad);
-                        ps.setString(2, nombre);
-                        ps.executeUpdate();
-                    }
-                }
-            } catch (ParseException e) {
-                throw new SQLException("Formato de cantidad inválido para " + nombre);
-            }
-        }
-
-        // Actualizar herramientas
-        for (Map.Entry<String, String> entry : cantidadesHerramientas.entrySet()) {
-            String nombre = entry.getKey();
-            String cantidadStr = entry.getValue().replace(",", ".");
-
-            try {
-                double cantidad = nf.parse(cantidadStr).doubleValue();
-                if (cantidad > 0) {
-                    String sql = "UPDATE inventario SET cantidad = cantidad + ? WHERE nombre = ? AND tipo = 'herramienta'";
-                    try (PreparedStatement ps = con.prepareStatement(sql)) {
-                        ps.setDouble(1, cantidad);
-                        ps.setString(2, nombre);
-                        ps.executeUpdate();
-                    }
-                }
-            } catch (ParseException e) {
-                throw new SQLException("Formato de cantidad inválido para " + nombre);
+                e.printStackTrace();
             }
         }
     }
+
+    }//GEN-LAST:event_btnGuardar1ActionPerformed
+    private int obtenerIdProveedor(Connection con, String nombreProveedor) throws SQLException {
+        String sql = "SELECT id_proveedor FROM proveedor WHERE nombre = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, nombreProveedor);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_proveedor");
+                }
+            }
+        }
+        throw new SQLException("Proveedor no encontrado: " + nombreProveedor);
+    }
+
+    private int insertarSuministra(Connection con, int idInventario, int idProveedor) throws SQLException {
+        String sql = "INSERT INTO suministra (inventario_id_inventario, proveedor_id_proveedor) VALUES (?, ?)";
+        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, idInventario);
+            ps.setInt(2, idProveedor);
+            ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        throw new SQLException("No se pudo insertar en suministra");
+    }
+
+    private void actualizarInventario(Connection con, Map<String, String> cantidadesMateriales,
+            Map<String, String> cantidadesHerramientas) throws SQLException {
+        NumberFormat nf = NumberFormat.getNumberInstance(new Locale("es", "ES"));
+
+        // Materiales
+        for (Map.Entry<String, String> entry : cantidadesMateriales.entrySet()) {
+            try {
+                double cantidad = nf.parse(entry.getValue()).doubleValue();
+
+                if (cantidad <= 0) {
+                    throw new SQLException("La cantidad para " + entry.getKey() + " debe ser mayor que cero");
+                }
+
+                String sql = "UPDATE inventario SET cantidad = ? WHERE nombre = ? AND tipo = 'material'";
+                try (PreparedStatement ps = con.prepareStatement(sql)) {
+                    ps.setDouble(1, cantidad);
+                    ps.setString(2, entry.getKey());
+                    ps.executeUpdate();
+                }
+            } catch (ParseException e) {
+                throw new SQLException("Formato inválido para " + entry.getKey() + ": " + entry.getValue());
+            }
+        }
+
+        // Herramientas
+        for (Map.Entry<String, String> entry : cantidadesHerramientas.entrySet()) {
+            try {
+                double cantidad = nf.parse(entry.getValue()).doubleValue();
+
+                if (cantidad <= 0) {
+                    throw new SQLException("La cantidad para " + entry.getKey() + " debe ser mayor que cero");
+                }
+
+                String sql = "UPDATE inventario SET cantidad = ? WHERE nombre = ? AND tipo = 'herramienta'";
+                try (PreparedStatement ps = con.prepareStatement(sql)) {
+                    ps.setDouble(1, cantidad);
+                    ps.setString(2, entry.getKey());
+                    ps.executeUpdate();
+                }
+            } catch (ParseException e) {
+                throw new SQLException("Formato inválido para " + entry.getKey() + ": " + entry.getValue());
+            }
+        }
+    }
+
+    private void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
     private void btnCancelar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar2ActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelar2ActionPerformed
@@ -805,34 +846,6 @@ public class formuEgresos1 extends javax.swing.JDialog {
         }
     }
 
-    private int insertarSuministra(Connection con, int idInventario, int idProveedor) throws SQLException {
-        String sql = "INSERT INTO suministra (inventario_id_inventario, proveedor_id_proveedor) VALUES (?, ?)";
-        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, idInventario);
-            ps.setInt(2, idProveedor);
-            ps.executeUpdate();
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
-            }
-        }
-        throw new SQLException("No se pudo insertar en suministra");
-    }
-
-    private int obtenerIdProveedor(Connection con, String nombreProveedor) throws SQLException {
-        String sql = "SELECT id_proveedor FROM proveedor WHERE nombre = ?";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, nombreProveedor);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("id_proveedor");
-                }
-            }
-        }
-        throw new SQLException("Proveedor no encontrado: " + nombreProveedor);
-    }
-
     private int obtenerIdInventario(Connection con, String nombreProducto) throws SQLException {
         String sql = "SELECT id_inventario FROM inventario WHERE nombre = ?";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -845,13 +858,4 @@ public class formuEgresos1 extends javax.swing.JDialog {
         }
         throw new SQLException("Producto no encontrado: " + nombreProducto);
     }
-
-    private void mostrarError(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    private void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
-    }
-
 }
