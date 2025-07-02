@@ -211,6 +211,7 @@ private perfil1 perfilPanel;
         submenuInventario.add(item2);
 //submenu inventario------------------
 
+
 //submenu ventas------------------
 // Inicializar el submenú de Ventas
         submenuVentas = new JPanel();

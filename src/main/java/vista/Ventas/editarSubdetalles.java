@@ -486,7 +486,7 @@ public class editarSubdetalles extends javax.swing.JDialog {
     }//GEN-LAST:event_txtPrecioActionPerformed
 
     private void txtPrecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyReleased
-        formatCantidadField();
+        formatNumberField();
     }//GEN-LAST:event_txtPrecioKeyReleased
 
     private void txtProfundidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProfundidadActionPerformed

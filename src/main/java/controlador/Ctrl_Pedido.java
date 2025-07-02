@@ -81,14 +81,14 @@ public class Ctrl_Pedido {
 
 // Método auxiliar para obtener el número del cliente (INT)
     public String obtenerNumeroCliente(int idCliente) {
-        String sql = "SELECT numero FROM cliente WHERE codigo = ?";
+        String sql = "SELECT codigo FROM cliente WHERE codigo = ?";
         try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setInt(1, idCliente);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return String.valueOf(rs.getInt("numero")); // Convertir INT a String
+                return String.valueOf(rs.getInt("codigo")); // Convertir INT a String
             }
         } catch (SQLException e) {
             e.printStackTrace();

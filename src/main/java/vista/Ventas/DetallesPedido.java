@@ -72,7 +72,7 @@ public class DetallesPedido extends javax.swing.JPanel {
         cantidadColumn.setPreferredWidth(30); // Ajustar el ancho de la columna
 
         TableColumn dimensionesColumn = tablaDetalles.getColumnModel().getColumn(2);
-        dimensionesColumn.setPreferredWidth(110); // Ajustar el ancho de la columna
+        dimensionesColumn.setPreferredWidth(120); // Ajustar el ancho de la columna
 
         TableColumn subtotalColumn = tablaDetalles.getColumnModel().getColumn(4);
         subtotalColumn.setPreferredWidth(60); // Ajustar el ancho de la columna
@@ -491,7 +491,7 @@ public class DetallesPedido extends javax.swing.JPanel {
         }
 
         if (clienteSeleccionadoObj != null) {
-//            pedido.setIdCliente(clienteSeleccionadoObj.getid_cliente());
+            pedido.setIdCliente(clienteSeleccionadoObj.getId_cliente());
         } else {
             JOptionPane.showMessageDialog(this, "Error al obtener el cliente seleccionado.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -711,7 +711,7 @@ public class DetallesPedido extends javax.swing.JPanel {
         dateFinicio.setBackground(new java.awt.Color(153, 0, 0));
         dateFinicio.setForeground(new java.awt.Color(102, 255, 51));
         dateFinicio.setToolTipText("");
-        jPanel2.add(dateFinicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 140, 160, 25));
+        jPanel2.add(dateFinicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 140, 160, 25));
 
         btnVolver.setBackground(new java.awt.Color(46, 49, 82));
         btnVolver.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -730,7 +730,7 @@ public class DetallesPedido extends javax.swing.JPanel {
 
         dateFfin.setBackground(new java.awt.Color(255, 255, 255));
         dateFfin.setToolTipText("");
-        jPanel2.add(dateFfin, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 180, 160, 25));
+        jPanel2.add(dateFfin, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 180, 160, 25));
 
         txtNombrePedido.setForeground(new java.awt.Color(0, 0, 0));
         txtNombrePedido.setText("fyy");
@@ -744,7 +744,7 @@ public class DetallesPedido extends javax.swing.JPanel {
                 txtNombrePedidoActionPerformed(evt);
             }
         });
-        jPanel2.add(txtNombrePedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 140, 180, 21));
+        jPanel2.add(txtNombrePedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 140, 180, 21));
 
         tablaDetalles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -792,17 +792,17 @@ public class DetallesPedido extends javax.swing.JPanel {
         jScrollPane2.setViewportView(tablaDetalles);
         tablaDetalles.getColumnModel().getColumn(0).setPreferredWidth(10);
 
-        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 290, 900, 250));
-        jPanel2.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 600, 910, 10));
-        jPanel2.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 220, 910, 10));
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 290, 920, 250));
+        jPanel2.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 600, 930, 10));
+        jPanel2.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, 930, 10));
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel16.setText("Total del pedido:");
-        jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 550, -1, -1));
+        jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 550, -1, -1));
 
         cmbCliente.setColorMaterial(new java.awt.Color(0, 0, 0));
         cmbCliente.setFont(new java.awt.Font("Roboto Bold", 0, 16)); // NOI18N
-        jPanel2.add(cmbCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, 163, 26));
+        jPanel2.add(cmbCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 180, 163, 26));
 
         btnEditar1.setBackground(new java.awt.Color(46, 49, 82));
         btnEditar1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -817,11 +817,11 @@ public class DetallesPedido extends javax.swing.JPanel {
                 btnEditar1ActionPerformed(evt);
             }
         });
-        jPanel2.add(btnEditar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 620, 160, 30));
+        jPanel2.add(btnEditar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 620, 160, 30));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel11.setText("Pedido: ");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 140, 80, 20));
+        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 140, 80, 20));
 
         btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -835,18 +835,19 @@ public class DetallesPedido extends javax.swing.JPanel {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 620, 160, 30));
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 620, 160, 30));
 
         lblEstado.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblEstado.setText("jlabel");
-        jPanel2.add(lblEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 140, 160, 20));
+        jPanel2.add(lblEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 140, 160, 20));
 
         jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel19.setText("Cliente: ");
-        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 180, 80, 20));
+        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 80, 20));
 
         btnAñadir.setBackground(new java.awt.Color(46, 49, 82));
         btnAñadir.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnAñadir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
         btnAñadir.setText(" Añadir");
         btnAñadir.setBackgroundHover(new java.awt.Color(67, 150, 209));
         btnAñadir.setFont(new java.awt.Font("Roboto Bold", 1, 15)); // NOI18N
@@ -869,23 +870,23 @@ public class DetallesPedido extends javax.swing.JPanel {
         lblNumeroPedido.setText("jlabel");
         jPanel1.add(lblNumeroPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 10, 170, 20));
 
-        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 90, 910, 40));
+        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 90, 930, 40));
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel17.setText("Productos incluidos:");
-        jPanel2.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 230, 190, 20));
+        jPanel2.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 230, 190, 20));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setText("Fecha fin:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 180, 90, 20));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 180, 90, 20));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel9.setText("Fecha inicio:");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 140, 110, 20));
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 140, 110, 20));
 
         lblTotal.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblTotal.setText("0.00");
-        jPanel2.add(lblTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 550, -1, -1));
+        jPanel2.add(lblTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 550, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel10.setText("Estado:");
