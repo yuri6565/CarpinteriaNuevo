@@ -423,7 +423,7 @@ public class cotizacion extends javax.swing.JPanel {
 
             Cliente cliente = new Cliente();
             cliente.setIdentificacion(identificaciontxt.getSelectedItem().toString());
-            cliente.setNumero(numero);
+            cliente.setId_cliente(numero);
             cliente.setNombre(txt_NombreCliente.getText().trim());
             cliente.setApellido(txt_ApellidoCliente.getText().trim());
             cliente.setTelefono(telefonotxt.getText().trim());
@@ -432,8 +432,8 @@ public class cotizacion extends javax.swing.JPanel {
             Ctrl_Cliente contro = new Ctrl_Cliente();
             if (contro.guardar(cliente)) {
                 clienteIngresado = true;
-                clienteCodigo = cliente.getNumero();
-                datos = new String[]{"", cliente.getIdentificacion(), String.valueOf(cliente.getNumero()),
+                clienteCodigo = cliente.getId_cliente();
+                datos = new String[]{"", cliente.getIdentificacion(), String.valueOf(cliente.getId_cliente()),
                     cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getDireccion()};
                 JOptionPane.showMessageDialog(null, "Cliente guardado Exitosamente");
 
@@ -750,7 +750,7 @@ public class cotizacion extends javax.swing.JPanel {
         try {
             Cliente cliente = new Cliente();
             cliente.setIdentificacion(identificaciontxt.getSelectedItem().toString());
-            cliente.setNumero(Integer.parseInt(numeroidtxt.getText().trim()));
+            cliente.setId_cliente(Integer.parseInt(numeroidtxt.getText().trim()));
             cliente.setNombre(txt_NombreCliente.getText().trim());
             cliente.setApellido(txt_ApellidoCliente.getText().trim());
             cliente.setTelefono(telefonotxt.getText().trim());
@@ -759,7 +759,7 @@ public class cotizacion extends javax.swing.JPanel {
             Ctrl_Cliente contro = new Ctrl_Cliente();
             if (contro.guardar(cliente)) {
                 clienteIngresado = true;
-                clienteCodigo = cliente.getNumero();
+                clienteCodigo = cliente.getId_cliente();
                 bloquearCamposCliente();
                 return true;
             } else {
@@ -869,7 +869,7 @@ public class cotizacion extends javax.swing.JPanel {
         try {
             Cliente cliente = new Cliente();
             cliente.setIdentificacion(identificaciontxt.getSelectedItem().toString());
-            cliente.setNumero(Integer.parseInt(numeroidtxt.getText().trim()));
+            cliente.setId_cliente(Integer.parseInt(numeroidtxt.getText().trim()));
             cliente.setNombre(txt_NombreCliente.getText().trim());
             cliente.setApellido(txt_ApellidoCliente.getText().trim());
             cliente.setTelefono(telefonotxt.getText().trim());
@@ -878,7 +878,7 @@ public class cotizacion extends javax.swing.JPanel {
             Ctrl_Cliente contro = new Ctrl_Cliente();
             if (contro.guardar(cliente)) {
                 clienteIngresado = true;
-                clienteCodigo = cliente.getNumero();
+                clienteCodigo = cliente.getId_cliente();
                 bloquearCamposCliente();
                 return true;
             }

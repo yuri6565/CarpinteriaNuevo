@@ -4,30 +4,53 @@
  */
 package vista.Caja;
 
+import javax.swing.JPanel;
 import vista.TemaManager;
-
 
 /**
  *
  * @author ADSO
  */
 public class Caja extends javax.swing.JPanel {
+
     /**
      * Creates new form caja
      */
-    public Caja() {
+    public Caja() {        
         initComponents();
-        
-        
-            ingresos es = new ingresos();
+        mostrarIngresos();
+    }
+
+    private void mostrarIngresos() {
+        if (!this.btnIngresos.isSelected()) {
+            this.btnIngresos.setSelected(true);
+            this.btnEgresos2.setSelected(false);
+
+            ingresos es = new ingresos(panelP1);
             es.setSize(1260, 730);
-            es.setLocation(0,0);
-            
+            es.setLocation(0, 0);
+
             panelP1.removeAll();
             panelP1.add(es);
             panelP1.revalidate();
             panelP1.repaint();
-      
+        }
+    }
+
+    private void mostrarEgresos() {
+        if (!this.btnEgresos2.isSelected()) {
+            this.btnIngresos.setSelected(false);
+            this.btnEgresos2.setSelected(true);
+
+            Egresos as = new Egresos();
+            as.setSize(1260, 730);
+            as.setLocation(0, 0);
+
+            panelP1.removeAll();
+            panelP1.add(as);
+            panelP1.revalidate();
+            panelP1.repaint();
+        }
     }
 
     /**
@@ -39,28 +62,17 @@ public class Caja extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelP1 = new javax.swing.JPanel();
+        contenedorPrincipal = new javax.swing.JPanel();
         btnEgresos2 = new RSMaterialComponent.RSButtonShapeIcon();
         btnIngresos = new RSMaterialComponent.RSButtonShapeIcon();
+        panelP1 = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(1290, 730));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panelP1.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout panelP1Layout = new javax.swing.GroupLayout(panelP1);
-        panelP1.setLayout(panelP1Layout);
-        panelP1Layout.setHorizontalGroup(
-            panelP1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1240, Short.MAX_VALUE)
-        );
-        panelP1Layout.setVerticalGroup(
-            panelP1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 590, Short.MAX_VALUE)
-        );
-
-        add(panelP1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 1240, 590));
+        contenedorPrincipal.setBackground(new java.awt.Color(255, 255, 255));
+        contenedorPrincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnEgresos2.setBackground(new java.awt.Color(0, 0, 0));
         btnEgresos2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wrench.png"))); // NOI18N
@@ -73,7 +85,7 @@ public class Caja extends javax.swing.JPanel {
                 btnEgresos2ActionPerformed(evt);
             }
         });
-        add(btnEgresos2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, 168, -1));
+        contenedorPrincipal.add(btnEgresos2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 168, -1));
 
         btnIngresos.setBackground(new java.awt.Color(0, 0, 0));
         btnIngresos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (1).png"))); // NOI18N
@@ -86,52 +98,40 @@ public class Caja extends javax.swing.JPanel {
                 btnIngresosActionPerformed(evt);
             }
         });
-        add(btnIngresos, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 177, -1));
+        contenedorPrincipal.add(btnIngresos, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 177, -1));
+
+        panelP1.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout panelP1Layout = new javax.swing.GroupLayout(panelP1);
+        panelP1.setLayout(panelP1Layout);
+        panelP1Layout.setHorizontalGroup(
+            panelP1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1230, Short.MAX_VALUE)
+        );
+        panelP1Layout.setVerticalGroup(
+            panelP1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 640, Short.MAX_VALUE)
+        );
+
+        contenedorPrincipal.add(panelP1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 1230, 640));
+
+        add(contenedorPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 730));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIngresosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresosActionPerformed
-         if(!this.btnIngresos.isSelected()) {
-            this.btnIngresos.setSelected(true);
-            this.btnEgresos2.setSelected(false);
-
-            ingresos es = new ingresos();
-            es.setSize(1260, 730);
-            es.setLocation(0,0);
-            
-            panelP1.removeAll();
-            panelP1.add(es);
-            panelP1.revalidate();
-            panelP1.repaint();
-        
-
-        }
+        mostrarIngresos();
     }//GEN-LAST:event_btnIngresosActionPerformed
 
     private void btnEgresos2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEgresos2ActionPerformed
-        
-        // TODO add your handling code here:
-        if(!this.btnEgresos2.isSelected()) {
-            this.btnIngresos.setSelected(false);
-            this.btnEgresos2.setSelected(true);
-
-            Egresos as = new Egresos();
-            as.setSize(1260, 730);
-            as.setLocation(0,0);
-            
-            panelP1.removeAll();
-            panelP1.add(as);
-            panelP1.revalidate();
-            panelP1.repaint();
-        }
+        mostrarEgresos();
     }//GEN-LAST:event_btnEgresos2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonShapeIcon btnEgresos2;
     private RSMaterialComponent.RSButtonShapeIcon btnIngresos;
+    private javax.swing.JPanel contenedorPrincipal;
     private javax.swing.JPanel panelP1;
     // End of variables declaration//GEN-END:variables
 
-    
 }
-
